@@ -1,0 +1,164 @@
+{
+  "name": "Button Components",
+  "description": "Filo button system including Pills, Labels, and special buttons",
+  "figma": {
+    "pills": {
+      "nodeId": "1419-6638",
+      "url": "https://www.figma.com/design/Pmns0wqmroGCQmqFPeSrwd/Components?node-id=1419-6638"
+    },
+    "labels": {
+      "nodeId": "1414-6625",
+      "url": "https://www.figma.com/design/Pmns0wqmroGCQmqFPeSrwd/Components?node-id=1414-6625"
+    },
+    "others": {
+      "nodeId": "1419-6641",
+      "url": "https://www.figma.com/design/Pmns0wqmroGCQmqFPeSrwd/Components?node-id=1419-6641"
+    }
+  },
+  "pills": {
+    "description": "Action buttons with pill shape",
+    "sizes": {
+      "small": {
+        "paddingX": 12,
+        "paddingY": 8,
+        "fontSize": 15,
+        "fontWeight": 510,
+        "lineHeight": 1.3,
+        "letterSpacing": -0.2
+      },
+      "medium": {
+        "paddingX": 30,
+        "paddingY": 12,
+        "fontSize": 15,
+        "fontWeight": 510,
+        "lineHeight": 1.3,
+        "letterSpacing": -0.2
+      },
+      "large": {
+        "paddingX": 34,
+        "paddingY": 16,
+        "fontSize": 15,
+        "fontWeight": 700,
+        "lineHeight": 1.35,
+        "letterSpacing": -0.2,
+        "width": 350
+      }
+    },
+    "variants": {
+      "outlined": {
+        "light": {
+          "background": "#FFFFFF",
+          "border": "0.5px solid #D5D5D5",
+          "textColor": "#000000"
+        },
+        "dark": {
+          "background": "#1D1D21",
+          "border": "0.5px solid #414149",
+          "textColor": "#FFFFFF"
+        }
+      },
+      "ghost": {
+        "light": {
+          "background": "rgba(0, 0, 0, 0.04)",
+          "textColor": "#22A0FB"
+        },
+        "dark": {
+          "background": "rgba(255, 255, 255, 0.06)",
+          "textColor": "#45B1FF"
+        }
+      },
+      "tinted": {
+        "light": {
+          "background": "rgba(76, 180, 255, 0.12)",
+          "textColor": "#22A0FB"
+        },
+        "dark": {
+          "background": "rgba(76, 180, 255, 0.16)",
+          "textColor": "#45B1FF"
+        }
+      },
+      "filled": {
+        "light": {
+          "background": "#22A0FB",
+          "textColor": "#FFFFFF"
+        },
+        "dark": {
+          "background": "#45B1FF",
+          "textColor": "#000000"
+        }
+      }
+    },
+    "borderRadius": 100
+  },
+  "labels": {
+    "description": "Smart filter labels / tags",
+    "sizes": {
+      "mobile": {
+        "paddingX": 8,
+        "paddingY": 4,
+        "fontSize": 13,
+        "fontWeight": 700,
+        "lineHeight": 1.2
+      },
+      "desktop": {
+        "paddingX": 10,
+        "paddingY": 6,
+        "fontSize": 15,
+        "fontWeight": 700,
+        "lineHeight": 1.35,
+        "letterSpacing": -0.2
+      }
+    },
+    "colors": {
+      "blue": { "light": "#22A0FB", "dark": "#45B1FF" },
+      "green": { "light": "#7EBA02", "dark": "#9AD803" },
+      "yellow": { "light": "#F7A501", "dark": "#FFBA2E" },
+      "red": { "light": "#EF4A68", "dark": "#FF6B85" },
+      "purple": { "light": "#6450F9", "dark": "#8577FF" },
+      "cyan": { "light": "#BF3EE2", "dark": "#D65FF7" },
+      "gray": { "light": "#707070", "dark": "#8B8B8B" }
+    },
+    "background": {
+      "light": "rgba(0, 0, 0, 0.04)",
+      "dark": "rgba(255, 255, 255, 0.06)"
+    },
+    "borderRadius": 100
+  },
+  "others": {
+    "labelPrompt": {
+      "description": "Label with icon for prompts",
+      "padding": "6px 12px 6px 8px",
+      "gap": 2,
+      "fontSize": 15,
+      "fontWeight": 510,
+      "lineHeight": 1.3,
+      "letterSpacing": -0.2,
+      "iconSize": 16,
+      "icon": "friendly",
+      "borderRadius": 100,
+      "background": {
+        "light": "rgba(0, 0, 0, 0.04)",
+        "dark": "rgba(255, 255, 255, 0.06)"
+      }
+    },
+    "googleSignIn": {
+      "description": "Sign in with Google button",
+      "padding": "16px 34px",
+      "gap": 8,
+      "width": 350,
+      "fontSize": 15,
+      "fontWeight": 700,
+      "lineHeight": 1.35,
+      "letterSpacing": -0.2,
+      "iconSize": 20,
+      "borderRadius": 100,
+      "variant": "outlined"
+    }
+  },
+  "states": {
+    "default": { "opacity": 1 },
+    "hover": { "opacity": 0.9 },
+    "pressed": { "opacity": 0.8, "scale": 0.98 },
+    "disabled": { "opacity": 0.5 }
+  }
+}

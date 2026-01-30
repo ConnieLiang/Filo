@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filo Icons Library</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #F5F5F5;
+            --card-bg: #FFFFFF;
+            --text-primary: #000000;
+            --text-secondary: #707070;
+            --border: #E0E0E0;
+            --accent: #22A0FB;
+            --icon-color: #000000;
+        }
+
+        body.dark-mode {
+            --bg: #000000;
+            --card-bg: #1D1D21;
+            --text-primary: #FFFFFF;
+            --text-secondary: #8B8B8B;
+            --border: #333333;
+            --accent: #45B1FF;
+            --icon-color: #FFFFFF;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            padding: 40px;
+            color: var(--text-primary);
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .mode-toggle {
+            display: flex;
+            gap: 8px;
+            background: var(--card-bg);
+            padding: 4px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .mode-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            background: transparent;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .mode-btn.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .search-box {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            width: 200px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-box::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .stats {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+        }
+
+        .icon-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .icon-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .icon-card.hidden {
+            display: none;
+        }
+
+        .icon-card svg {
+            width: 24px;
+            height: 24px;
+            color: var(--icon-color);
+        }
+
+        .icon-card svg path,
+        .icon-card svg circle,
+        .icon-card svg rect {
+            fill: var(--icon-color);
+        }
+
+        .icon-name {
+            font-size: 10px;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--text-primary);
+            color: var(--bg);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <input type="text" class="search-box" placeholder="Search icons..." oninput="filterIcons(this.value)">
+        <div class="mode-toggle">
+            <button class="mode-btn active" onclick="setMode('light')">Light</button>
+            <button class="mode-btn" onclick="setMode('dark')">Dark</button>
+        </div>
+    </div>
+
+    <h1>Filo Icons</h1>
+    <p class="subtitle">184 icons from Resources/Icons/Library/</p>
+    <p class="stats">Click any icon to copy its name</p>
+
+    <div id="icons-container"></div>
+    <div class="toast" id="toast">Copied!</div>
+
+    <script>
+        const iconCategories = {
+            "Navigation": [
+                "inbox-before", "inbox-after", "todo", "todo-off", "compose", 
+                "ai-main", "ai-2nd", "search", "search-ai", "menu-expand", 
+                "filter", "settings", "history"
+            ],
+            "Actions": [
+                "reply", "reply-all", "forward", "archive", "delete", 
+                "delete-permanently", "spam", "discard", "edit", "save", 
+                "share", "download", "refresh", "copy"
+            ],
+            "Email": [
+                "envelope", "envelope-check", "envelope-ai", "send-email", "sent",
+                "scheduled", "draft", "allmail", "read", "unread", "attachment",
+                "star-before", "star-after"
+            ],
+            "Labels": [
+                "label", "label-gmail", "label-important", "label-unimportant",
+                "label-updates", "label-promotions"
+            ],
+            "AI Features": [
+                "generate-ai", "summary", "proofread", "translate", "style",
+                "professional", "friendly", "sad", "longer", "shorter", "smartfilter"
+            ],
+            "Formatting": [
+                "boldtext", "italic", "underline", "strikethrough", "fontsize",
+                "align-left", "align-center", "align-right", "bulletlist", 
+                "numberlist", "link", "format"
+            ],
+            "Media": [
+                "image", "camera", "video-pause", "video-replay", "play", "pause",
+                "stop", "audio", "microphone", "microphone-circle", "file", "pdf",
+                "document-1", "document-2", "zip"
+            ],
+            "UI Controls": [
+                "close-minimal", "close-weak", "close-strong", "add", "subtract",
+                "add-circle", "minus-circle", "checkmark", "check-circle", 
+                "check-fillcircle", "checkbox-unchecked", "checkbox-checked",
+                "checkbox-mono", "expand", "collapse", "fullscreen-enter",
+                "fullscreen-exit", "minimizescreen", "more-horizontal", 
+                "more-vertical", "reorder", "select-circle"
+            ],
+            "Arrows": [
+                "goforward", "gobackward", "previous", "next", "scrollup",
+                "arrow-dual-left", "arrow-dual-right", "cursor-begin", "cursor-end"
+            ],
+            "Communication": [
+                "chat", "send-message", "imessage", "support", "clearchat"
+            ],
+            "Feedback": [
+                "thumbsup-before", "thumbsup-after", "thumbsdown-before", 
+                "thumbsdown-after", "like", "clap", "reportissue"
+            ],
+            "Settings": [
+                "customize", "notification-on", "notification-off", "darkmode",
+                "lightmode", "theme", "language", "privacy", "security",
+                "encryption", "terms", "billing", "signature"
+            ],
+            "Social": [
+                "twitter", "discord", "telegram", "youtube", "google"
+            ],
+            "Volume": [
+                "volume-high", "volume-medium", "volume-low", "volume-off"
+            ],
+            "Misc": [
+                "calendar", "clock", "coffee", "lightbulb", "info", "question",
+                "error", "bullet", "swipe", "cancel", "eye", "eye-slash",
+                "link-external", "shortcut", "changelog", "insert", "loading",
+                "pencil", "filoplus", "filoplus-mono", "appicon", "markasdone",
+                "gift", "switch", "signout", "window-floating", "window-sidebar",
+                "reply-line", "replyall-line", "forward-line", "reply-mini",
+                "forward-mini", "replyall-mini"
+            ]
+        };
+
+        const iconBasePath = "../Resources/Icons/Library/Property 1=";
+
+        function createIconCard(iconName) {
+            const card = document.createElement('div');
+            card.className = 'icon-card';
+            card.setAttribute('data-name', iconName.toLowerCase());
+            card.onclick = () => copyIconName(iconName);
+            
+            const img = document.createElement('img');
+            img.src = `${iconBasePath}${iconName}.svg`;
+            img.alt = iconName;
+            img.style.width = '24px';
+            img.style.height = '24px';
+            img.style.filter = 'var(--icon-filter, none)';
+            img.onerror = () => {
+                card.style.display = 'none';
+            };
+            
+            const name = document.createElement('span');
+            name.className = 'icon-name';
+            name.textContent = iconName;
+            
+            card.appendChild(img);
+            card.appendChild(name);
+            
+            return card;
+        }
+
+        function renderIcons() {
+            const container = document.getElementById('icons-container');
+            container.innerHTML = '';
+            
+            for (const [category, icons] of Object.entries(iconCategories)) {
+                const section = document.createElement('div');
+                section.className = 'section';
+                
+                const title = document.createElement('h2');
+                title.className = 'section-title';
+                title.textContent = `${category} (${icons.length})`;
+                
+                const grid = document.createElement('div');
+                grid.className = 'icon-grid';
+                
+                icons.forEach(iconName => {
+                    grid.appendChild(createIconCard(iconName));
+                });
+                
+                section.appendChild(title);
+                section.appendChild(grid);
+                container.appendChild(section);
+            }
+        }
+
+        function filterIcons(query) {
+            const cards = document.querySelectorAll('.icon-card');
+            const lowerQuery = query.toLowerCase();
+            
+            cards.forEach(card => {
+                const name = card.getAttribute('data-name');
+                if (name.includes(lowerQuery)) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        function copyIconName(name) {
+            navigator.clipboard.writeText(name);
+            const toast = document.getElementById('toast');
+            toast.textContent = `Copied: ${name}`;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        function setMode(mode) {
+            document.body.classList.toggle('dark-mode', mode === 'dark');
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.toLowerCase() === mode);
+            });
+            
+            // Invert icons in dark mode
+            const filter = mode === 'dark' ? 'invert(1)' : 'none';
+            document.querySelectorAll('.icon-card img').forEach(img => {
+                img.style.filter = filter;
+            });
+        }
+
+        // Initialize
+        renderIcons();
+    </script>
+</body>
+</html>

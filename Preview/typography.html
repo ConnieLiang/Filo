@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filo Typography</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #F5F5F5;
+            --card-bg: #FFFFFF;
+            --text-primary: #000000;
+            --text-secondary: #707070;
+            --border: #E0E0E0;
+            --accent: #22A0FB;
+        }
+
+        body.dark-mode {
+            --bg: #000000;
+            --card-bg: #1D1D21;
+            --text-primary: #FFFFFF;
+            --text-secondary: #8B8B8B;
+            --border: #333333;
+            --accent: #45B1FF;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            padding: 40px;
+            color: var(--text-primary);
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 8px;
+            background: var(--card-bg);
+            padding: 4px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .mode-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            background: transparent;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .mode-btn.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .section {
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .type-row {
+            display: flex;
+            align-items: baseline;
+            gap: 24px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .type-row:last-child {
+            border-bottom: none;
+        }
+
+        .type-name {
+            width: 120px;
+            flex-shrink: 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .type-sample {
+            flex: 1;
+            color: var(--text-primary);
+        }
+
+        .type-meta {
+            width: 280px;
+            flex-shrink: 0;
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-align: right;
+        }
+
+        /* Typography Styles */
+        .h1 {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            font-weight: 700;
+            font-size: 40px;
+            line-height: 52px;
+            letter-spacing: 0.2px;
+        }
+
+        .h2 {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            font-weight: 700;
+            font-size: 32px;
+            line-height: 42px;
+            letter-spacing: 0.2px;
+        }
+
+        .h3 {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            font-weight: 700;
+            font-size: 28px;
+            line-height: 36px;
+            letter-spacing: 0.1px;
+        }
+
+        .h4 {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            font-weight: 700;
+            font-size: 26px;
+            line-height: 32px;
+            letter-spacing: 0;
+        }
+
+        .h5 {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            font-weight: 700;
+            font-size: 22px;
+            line-height: 24px;
+            letter-spacing: 0;
+        }
+
+        .p1-b {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            font-weight: 700;
+            font-size: 19px;
+            line-height: 26px;
+            letter-spacing: -0.2px;
+        }
+
+        .p1-m {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            font-weight: 500;
+            font-size: 19px;
+            line-height: 26px;
+            letter-spacing: -0.2px;
+        }
+
+        .p1_1-b {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            font-weight: 700;
+            font-size: 17px;
+            line-height: 24px;
+            letter-spacing: -0.2px;
+        }
+
+        .p1_1-r {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            font-weight: 400;
+            font-size: 17px;
+            line-height: 24px;
+            letter-spacing: -0.2px;
+        }
+
+        .p1_1-r-italic {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            font-weight: 400;
+            font-style: italic;
+            font-size: 17px;
+            line-height: 24px;
+            letter-spacing: -0.2px;
+        }
+
+        .p1s-b {
+            font-family: 'New York', Georgia, 'Times New Roman', serif;
+            font-weight: 700;
+            font-size: 18px;
+            line-height: 27px;
+            letter-spacing: 0;
+        }
+
+        .p1s-m {
+            font-family: 'New York', Georgia, 'Times New Roman', serif;
+            font-weight: 500;
+            font-size: 18px;
+            line-height: 27px;
+            letter-spacing: 0;
+        }
+
+        .p2-b {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 20px;
+            letter-spacing: -0.2px;
+        }
+
+        .p2-m {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 20px;
+            letter-spacing: -0.2px;
+        }
+
+        .p2-r {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 20px;
+            letter-spacing: -0.2px;
+        }
+
+        .p2s-b {
+            font-family: 'New York', Georgia, 'Times New Roman', serif;
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 20px;
+            letter-spacing: 0;
+        }
+
+        .p2s-r {
+            font-family: 'New York', Georgia, 'Times New Roman', serif;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 20px;
+            letter-spacing: 0;
+        }
+
+        .p3-b {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            font-weight: 700;
+            font-size: 15px;
+            line-height: 20px;
+            letter-spacing: -0.2px;
+        }
+
+        .p3-m {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            font-weight: 500;
+            font-size: 15px;
+            line-height: 20px;
+            letter-spacing: -0.2px;
+        }
+
+        .p3-r {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            font-weight: 400;
+            font-size: 15px;
+            line-height: 20px;
+            letter-spacing: -0.2px;
+        }
+
+        .p3_1-m {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 18px;
+            letter-spacing: -0.2px;
+        }
+
+        .p4-b {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            line-height: 15px;
+            letter-spacing: 0;
+        }
+
+        .p4-r {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            font-weight: 400;
+            font-size: 13px;
+            line-height: 15px;
+            letter-spacing: 0;
+        }
+
+        .p5-b {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            font-weight: 700;
+            font-size: 10px;
+            line-height: 12px;
+            letter-spacing: 0;
+        }
+
+        .p5-r {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            font-weight: 400;
+            font-size: 10px;
+            line-height: 12px;
+            letter-spacing: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="mode-toggle">
+        <button class="mode-btn active" onclick="setMode('light')">Light</button>
+        <button class="mode-btn" onclick="setMode('dark')">Dark</button>
+    </div>
+
+    <h1>Filo Typography</h1>
+    <p class="subtitle">SF Pro (Sans-serif) + New York Small (Serif)</p>
+
+    <div class="section">
+        <h2 class="section-title">Headers</h2>
+        
+        <div class="type-row">
+            <span class="type-name">H1</span>
+            <span class="type-sample h1">The quick brown fox</span>
+            <span class="type-meta">SF Pro Bold · 40px · LH 52 · K 0.2</span>
+        </div>
+        
+        <div class="type-row">
+            <span class="type-name">H2</span>
+            <span class="type-sample h2">The quick brown fox</span>
+            <span class="type-meta">SF Pro Bold · 32px · LH 42 · K 0.2</span>
+        </div>
+        
+        <div class="type-row">
+            <span class="type-name">H3</span>
+            <span class="type-sample h3">The quick brown fox</span>
+            <span class="type-meta">SF Pro Bold · 28px · LH 36 · K 0.1</span>
+        </div>
+        
+        <div class="type-row">
+            <span class="type-name">H4</span>
+            <span class="type-sample h4">The quick brown fox</span>
+            <span class="type-meta">SF Pro Bold · 26px · LH 32 · K 0</span>
+        </div>
+        
+        <div class="type-row">
+            <span class="type-name">H5</span>
+            <span class="type-sample h5">The quick brown fox</span>
+            <span class="type-meta">SF Pro Bold · 22px · LH 24 · K 0</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Paragraph Large (P1)</h2>
+        
+        <div class="type-row">
+            <span class="type-name">P1_B</span>
+            <span class="type-sample p1-b">The quick brown fox jumps over the lazy dog</span>
+            <span class="type-meta">SF Pro Bold · 19px · LH 26 · K -0.2</span>
+        </div>
+        
+        <div class="type-row">
+            <span class="type-name">P1_M</span>
+            <span class="type-sample p1-m">The quick brown fox jumps over the lazy dog</span>
+            <span class="type-meta">SF Pro Medium · 19px · LH 26 · K -0.2</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Paragraph Body (P1.1)</h2>
+        
+        <div class="type-row">
+            <span class="type-name">P1.1_B</span>
+            <span class="type-sample p1_1-b">The quick brown fox jumps over the lazy dog</span>
+            <span class="type-meta">SF Pro Bold · 17px · LH 24 · K -0.2</span>
+        </div>
+        
+        <div class="type-row">
+            <span class="type-name">P1.1_R</span>
+            <span class="type-sample p1_1-r">The quick brown fox jumps over the lazy dog</span>
+            <span class="type-meta">SF Pro Regular · 17px · LH 24 · K -0.2</span>
+        </div>
+        
+        <div class="type-row">
+            <span class="type-name">P1.1_R_Italic</span>
+            <span class="type-sample p1_1-r-italic">The quick brown fox jumps over the lazy dog</span>
+            <span class="type-meta">SF Pro Regular Italic · 17px · LH 24 · K -0.2</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Paragraph Serif (P1S) - New York Small</h2>
+        
+        <div class="type-row">
+            <span class="type-name">P1S_B</span>
+            <span class="type-sample p1s-b">The quick brown fox jumps over the lazy dog</span>
+            <span class="type-meta">New York Small Bold · 18px · LH 27 · K 0</span>
+        </div>
+        
+        <div class="type-row">
+            <span class="type-name">P1S_M</span>
+            <span class="type-sample p1s-m">The quick brown fox jumps over the lazy dog</span>
+            <span class="type-meta">New York Small Medium · 18px · LH 27 · K 0</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Paragraph Standard (P2)</h2>
+        
+        <div class="type-row">
+            <span class="type-name">P2_B</span>
+            <span class="type-sample p2-b">The quick brown fox jumps over the lazy dog</span>
+            <span class="type-meta">SF Pro Bold · 16px · LH 20 · K -0.2</span>
+        </div>
+        
+        <div class="type-row">
+            <span class="type-name">P2_M</span>
+            <span class="type-sample p2-m">The quick brown fox jumps over the lazy dog</span>
+            <span class="type-meta">SF Pro Medium · 16px · LH 20 · K -0.2</span>
+        </div>
+        
+        <div class="type-row">
+            <span class="type-name">P2_R</span>
+            <span class="type-sample p2-r">The quick brown fox jumps over the lazy dog</span>
+            <span class="type-meta">SF Pro Regular · 16px · LH 20 · K -0.2</span>
+        </div>
+        
+        <div class="type-row">
+            <span class="type-name">P2S_B</span>
+            <span class="type-sample p2s-b">The quick brown fox jumps over the lazy dog</span>
+            <span class="type-meta">New York Small Bold · 16px · LH 20 · K 0</span>
+        </div>
+        
+        <div class="type-row">
+            <span class="type-name">P2S_R</span>
+            <span class="type-sample p2s-r">The quick brown fox jumps over the lazy dog</span>
+            <span class="type-meta">New York Small Regular · 16px · LH 20 · K 0</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Paragraph Small (P3)</h2>
+        
+        <div class="type-row">
+            <span class="type-name">P3_B</span>
+            <span class="type-sample p3-b">The quick brown fox jumps over the lazy dog</span>
+            <span class="type-meta">SF Pro Bold · 15px · LH 20 · K -0.2</span>
+        </div>
+        
+        <div class="type-row">
+            <span class="type-name">P3_M</span>
+            <span class="type-sample p3-m">The quick brown fox jumps over the lazy dog</span>
+            <span class="type-meta">SF Pro Medium · 15px · LH 20 · K -0.2</span>
+        </div>
+        
+        <div class="type-row">
+            <span class="type-name">P3_R</span>
+            <span class="type-sample p3-r">The quick brown fox jumps over the lazy dog</span>
+            <span class="type-meta">SF Pro Regular · 15px · LH 20 · K -0.2</span>
+        </div>
+        
+        <div class="type-row">
+            <span class="type-name">P3.1_M</span>
+            <span class="type-sample p3_1-m">The quick brown fox jumps over the lazy dog</span>
+            <span class="type-meta">SF Pro Medium · 14px · LH 18 · K -0.2</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Caption & Micro (P4, P5)</h2>
+        
+        <div class="type-row">
+            <span class="type-name">P4_B</span>
+            <span class="type-sample p4-b">The quick brown fox jumps over the lazy dog</span>
+            <span class="type-meta">SF Pro Bold · 13px · LH 15 · K 0</span>
+        </div>
+        
+        <div class="type-row">
+            <span class="type-name">P4_R</span>
+            <span class="type-sample p4-r">The quick brown fox jumps over the lazy dog</span>
+            <span class="type-meta">SF Pro Regular · 13px · LH 15 · K 0</span>
+        </div>
+        
+        <div class="type-row">
+            <span class="type-name">P5_B</span>
+            <span class="type-sample p5-b">The quick brown fox jumps over the lazy dog</span>
+            <span class="type-meta">SF Pro Bold · 10px · LH 12 · K 0</span>
+        </div>
+        
+        <div class="type-row">
+            <span class="type-name">P5_R</span>
+            <span class="type-sample p5-r">The quick brown fox jumps over the lazy dog</span>
+            <span class="type-meta">SF Pro Regular · 10px · LH 12 · K 0</span>
+        </div>
+    </div>
+
+    <script>
+        function setMode(mode) {
+            document.body.classList.toggle('dark-mode', mode === 'dark');
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.toLowerCase() === mode);
+            });
+        }
+    </script>
+</body>
+</html>

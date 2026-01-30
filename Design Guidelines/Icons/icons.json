@@ -1,0 +1,283 @@
+{
+  "name": "Filo Icon Library",
+  "version": "1.0.0",
+  "description": "Complete icon set for Filo apps - sourced from local library",
+  "source": "Resources/Icons/Library/",
+  "format": "SVG",
+  "namingConvention": "Property 1={icon-name}.svg",
+  "categories": {
+    "navigation": {
+      "description": "Tab bar and navigation icons",
+      "icons": [
+        "inbox-before",
+        "inbox-after",
+        "todo",
+        "todo-off",
+        "compose",
+        "ai-main",
+        "ai-2nd",
+        "search",
+        "search-ai",
+        "menu-expand",
+        "filter",
+        "settings",
+        "history"
+      ]
+    },
+    "actions": {
+      "description": "Common action icons",
+      "icons": [
+        "reply",
+        "reply-all",
+        "forward",
+        "archive",
+        "delete",
+        "delete-permanently",
+        "spam",
+        "discard",
+        "edit",
+        "save",
+        "share",
+        "download",
+        "refresh",
+        "copy"
+      ]
+    },
+    "email": {
+      "description": "Email-specific icons",
+      "icons": [
+        "envelope",
+        "envelope-check",
+        "envelop-ai",
+        "send-email",
+        "sent",
+        "scheduled",
+        "draft",
+        "allmail",
+        "read",
+        "unread",
+        "attachment",
+        "star-before",
+        "star-after"
+      ]
+    },
+    "labels": {
+      "description": "Label and category icons",
+      "icons": [
+        "label",
+        "label-gmail",
+        "label-important",
+        "label-unimportant",
+        "label-updates",
+        "label-promotions"
+      ]
+    },
+    "ai": {
+      "description": "AI and smart feature icons",
+      "icons": [
+        "ai-main",
+        "ai-2nd",
+        "generate-ai",
+        "search-ai",
+        "envelop-ai",
+        "summary",
+        "proofread",
+        "translate",
+        "stytle",
+        "professional",
+        "friendly",
+        "sad",
+        "longer",
+        "shorter",
+        "smartfilter"
+      ]
+    },
+    "formatting": {
+      "description": "Text formatting icons",
+      "icons": [
+        "boldtext",
+        "italic",
+        "underline",
+        "strikethrough",
+        "fontsize",
+        "align-left",
+        "align-center",
+        "align-right",
+        "bulletlist",
+        "numberlist",
+        "link",
+        "format"
+      ]
+    },
+    "media": {
+      "description": "Media and file icons",
+      "icons": [
+        "image",
+        "camera",
+        "video-pause",
+        "video-replay",
+        "play",
+        "pause",
+        "stop",
+        "audio",
+        "microphone",
+        "microphone-circle",
+        "file",
+        "pdf",
+        "document-1",
+        "document-2",
+        "zip"
+      ]
+    },
+    "ui": {
+      "description": "UI control icons",
+      "icons": [
+        "close-minimal",
+        "close-weak",
+        "close-strong",
+        "add",
+        "subtract",
+        "add-circle",
+        "minus-circle",
+        "checkmark",
+        "check-circle",
+        "check-fillcircle",
+        "checkbox-unchecked",
+        "checkbox-checked",
+        "checkbox-mono",
+        "expand",
+        "collapse",
+        "fullscreen-enter",
+        "fullscreen-exit",
+        "minimizescreen",
+        "more-horizontal",
+        "more-vertical",
+        "reorder"
+      ]
+    },
+    "arrows": {
+      "description": "Arrow and direction icons",
+      "icons": [
+        "goforward",
+        "gobackward",
+        "previous",
+        "next",
+        "scrollup",
+        "arrow-dual-left",
+        "arrow-dual-right",
+        "cursor-begin",
+        "cursor-end"
+      ]
+    },
+    "communication": {
+      "description": "Chat and messaging icons",
+      "icons": [
+        "chat",
+        "send-message",
+        "imessage",
+        "support",
+        "clearchat"
+      ]
+    },
+    "feedback": {
+      "description": "Feedback and rating icons",
+      "icons": [
+        "thumbsup-before",
+        "thumbsup-after",
+        "thumbsdown-before",
+        "thumbsdown-after",
+        "like",
+        "clap",
+        "reportissue"
+      ]
+    },
+    "settings": {
+      "description": "Settings and preferences icons",
+      "icons": [
+        "settings",
+        "customize",
+        "notification-on",
+        "notification-off",
+        "darkmode",
+        "lightmode",
+        "theme",
+        "language",
+        "privacy",
+        "security",
+        "encryption",
+        "terms",
+        "billing",
+        "signature"
+      ]
+    },
+    "social": {
+      "description": "Social media icons",
+      "icons": [
+        "twitter",
+        "discord",
+        "telegram",
+        "youtube"
+      ]
+    },
+    "misc": {
+      "description": "Miscellaneous icons",
+      "icons": [
+        "calendar",
+        "clock",
+        "coffee",
+        "lightbulb",
+        "info",
+        "question",
+        "error",
+        "bullet",
+        "swipe",
+        "block",
+        "eye",
+        "eye-slash",
+        "link-external",
+        "shortcut",
+        "changelog",
+        "insert",
+        "loading",
+        "pencil",
+        "filoplus",
+        "filoplus-mono",
+        "appicon",
+        "markasdone",
+        "fift",
+        "select-circle",
+        "switch",
+        "signout",
+        "window-floating",
+        "window-sidebar"
+      ]
+    },
+    "volume": {
+      "description": "Volume control icons",
+      "icons": [
+        "Volumn_High",
+        "Volumn_Medium",
+        "Volumn_Low",
+        "Volumn_Off"
+      ]
+    }
+  },
+  "stateVariants": {
+    "description": "Icons with before/after or on/off states",
+    "pairs": [
+      { "inactive": "inbox-before", "active": "inbox-after" },
+      { "inactive": "star-before", "active": "star-after" },
+      { "inactive": "thumbsup-before", "active": "thumbsup-after" },
+      { "inactive": "thumbsdown-before", "active": "thumbsdown-after" },
+      { "inactive": "todo", "active": "todo-off" },
+      { "inactive": "notification-on", "active": "notification-off" },
+      { "inactive": "checkbox-unchecked", "active": "checkbox-checked" },
+      { "inactive": "eye", "active": "eye-slash" },
+      { "inactive": "fullscreen-enter", "active": "fullscreen-exit" }
+    ]
+  },
+  "usage": {
+    "pathTemplate": "Resources/Icons/Library/Property 1={icon-name}.svg",
+    "example": "Resources/Icons/Library/Property 1=inbox-before.svg"
+  }
+}

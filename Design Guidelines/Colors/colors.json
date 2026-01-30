@@ -1,0 +1,188 @@
+{
+  "name": "Filo Color Palette",
+  "version": "2.0.0",
+  "description": "Complete color system with 25 color tokens for light and dark modes",
+  "figma": {
+    "file": "Pmns0wqmroGCQmqFPeSrwd",
+    "lightNode": "1-1187",
+    "darkNode": "1-1263"
+  },
+  "colors": {
+    "01": {
+      "name": "Primary Light",
+      "light": "#1F9EFA",
+      "dark": "#6CC1FF",
+      "usage": "Primary accent, lighter variant"
+    },
+    "02": {
+      "name": "Primary",
+      "light": "#22A0FB",
+      "dark": "#45B1FF",
+      "usage": "Primary brand color, active states, links"
+    },
+    "03": {
+      "name": "Primary Dark",
+      "light": "#4BACF5",
+      "dark": "#213D51",
+      "usage": "Primary accent backgrounds"
+    },
+    "04": {
+      "name": "Primary Darker",
+      "light": "#5ABEFF",
+      "dark": "#2E5168",
+      "usage": "Darker primary accent"
+    },
+    "05": {
+      "name": "Surface Secondary",
+      "light": "#E8EEF2",
+      "dark": "#344352",
+      "usage": "Secondary surface color"
+    },
+    "06": {
+      "name": "Text Primary",
+      "light": "#000000",
+      "dark": "#FFFFFF",
+      "usage": "Primary text color"
+    },
+    "07": {
+      "name": "Text Secondary",
+      "light": "#707070",
+      "dark": "#8B8B8B",
+      "usage": "Secondary text, placeholders"
+    },
+    "08": {
+      "name": "Text Tertiary",
+      "light": "#999999",
+      "dark": "#414149",
+      "usage": "Tertiary text, disabled"
+    },
+    "09": {
+      "name": "Surface Tertiary",
+      "light": "#F5F5F5",
+      "dark": "#2A2A30",
+      "usage": "Tertiary surface"
+    },
+    "10": {
+      "name": "Background",
+      "light": "#FFFFFF",
+      "dark": "#1D1D21",
+      "usage": "Primary background"
+    },
+    "11": {
+      "name": "Error",
+      "light": "#E53935",
+      "dark": "#BE424D",
+      "usage": "Error states, destructive actions"
+    },
+    "12": {
+      "name": "Warning",
+      "light": "#FFB800",
+      "dark": "#FFDC84",
+      "usage": "Warning states, caution"
+    },
+    "13": {
+      "name": "Info",
+      "light": "#22A0FB",
+      "dark": "#3DAEFF",
+      "usage": "Information, links"
+    },
+    "14": {
+      "name": "Overlay Light",
+      "light": "rgba(0, 0, 0, 0.04)",
+      "dark": "rgba(255, 255, 255, 0.06)",
+      "usage": "Light overlays, selection backgrounds"
+    },
+    "15": {
+      "name": "Overlay Primary",
+      "light": "rgba(34, 160, 251, 0.08)",
+      "dark": "rgba(76, 180, 255, 0.12)",
+      "usage": "Primary color overlays"
+    },
+    "16": {
+      "name": "Overlay Subtle",
+      "light": "rgba(0, 0, 0, 0.02)",
+      "dark": "rgba(75, 91, 103, 0.08)",
+      "usage": "Subtle overlays"
+    },
+    "17": {
+      "name": "Success Light",
+      "light": "#E8F5CE",
+      "dark": "#9BB26C",
+      "usage": "Success backgrounds"
+    },
+    "18": {
+      "name": "Success",
+      "light": "#7EBA02",
+      "dark": "#7EBA02",
+      "usage": "Success states"
+    },
+    "19": {
+      "name": "Warning Alt",
+      "light": "#F7A501",
+      "dark": "#F7A501",
+      "usage": "Alternative warning"
+    },
+    "20": {
+      "name": "Error Light",
+      "light": "#FFE5E7",
+      "dark": "#461D21",
+      "usage": "Error backgrounds"
+    },
+    "21": {
+      "name": "Purple Light",
+      "light": "#E8E6F5",
+      "dark": "#B4AEDC",
+      "usage": "Purple accent light"
+    },
+    "22": {
+      "name": "Purple",
+      "light": "#7F6EFF",
+      "dark": "#7F6EFF",
+      "usage": "Purple accent"
+    },
+    "23": {
+      "name": "Pink Light",
+      "light": "#FFF0F5",
+      "dark": "#F6D4FF",
+      "usage": "Pink accent light"
+    },
+    "24": {
+      "name": "Pink",
+      "light": "#BF3EE2",
+      "dark": "#BF3EE2",
+      "usage": "Pink accent"
+    },
+    "25": {
+      "name": "Neutral",
+      "light": "#9E9E9E",
+      "dark": "#727272",
+      "usage": "Neutral gray"
+    }
+  },
+  "semanticAliases": {
+    "filoPrimary": "02",
+    "filoSecondary": "01",
+    "background": "10",
+    "surface": "09",
+    "textPrimary": "06",
+    "textSecondary": "07",
+    "textTertiary": "08",
+    "error": "11",
+    "warning": "12",
+    "success": "18",
+    "info": "13",
+    "overlay": "14"
+  },
+  "glassEffect": {
+    "light": {
+      "background": "rgba(247, 247, 247, 0.85)",
+      "border": "rgba(255, 255, 255, 0.5)",
+      "blur": "20px"
+    },
+    "dark": {
+      "background": "rgba(40, 40, 40, 0.85)",
+      "border": "rgba(255, 255, 255, 0.1)",
+      "blur": "20px"
+    }
+  }
+}

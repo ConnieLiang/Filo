@@ -1,0 +1,54 @@
+{
+  "name": "Filo Corner Radius System",
+  "version": "1.0.0",
+  "description": "Consistent corner radius scale for all Filo apps",
+  "unit": "px",
+  "scale": {
+    "01": {
+      "value": 16,
+      "usage": "Small radius - buttons, inputs, small cards"
+    },
+    "02": {
+      "value": 20,
+      "usage": "Medium radius - cards, modals, containers"
+    },
+    "03": {
+      "value": 24,
+      "usage": "Large radius - large cards, sheets"
+    },
+    "04": {
+      "value": 30,
+      "usage": "Extra large radius - feature cards, hero elements"
+    },
+    "pill": {
+      "value": 999,
+      "usage": "Pill shape - single-line cells, tags, chips, tab bars"
+    }
+  },
+  "tokens": {
+    "radius-1": 16,
+    "radius-2": 20,
+    "radius-3": 24,
+    "radius-4": 30,
+    "radius-pill": 999
+  },
+  "rules": {
+    "singleLineCell": "Always use pill (999) for single-line content cells",
+    "multiLineCell": "Use radius-1 (16) or radius-2 (20) for multi-line cells",
+    "nestedRadius": "Inner radius should be smaller than outer radius"
+  },
+  "commonUseCases": {
+    "button": 16,
+    "buttonPill": 999,
+    "input": 16,
+    "card": 20,
+    "modal": 24,
+    "sheet": 30,
+    "tag": 999,
+    "chip": 999,
+    "tabBar": 999,
+    "suggestionPill": 999,
+    "avatar": 999,
+    "badge": 999
+  }
+}

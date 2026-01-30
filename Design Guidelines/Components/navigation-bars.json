@@ -1,0 +1,210 @@
+{
+  "name": "Navigation Bars",
+  "description": "iOS 26 Liquid Glass navigation bars for Filo mobile app following Apple HIG",
+  "platform": {
+    "iOS": "SwiftUI with native Liquid Glass (iOS 26+) and legacy fallback (iOS 15-25)",
+    "android": "Material 3 TopAppBar equivalents"
+  },
+  "appleHIG": {
+    "minTouchTarget": 44,
+    "note": "All interactive elements meet 44pt minimum touch target requirement",
+    "accessibility": "Automatic adaptation for Reduced Transparency, Increased Contrast, and Reduced Motion"
+  },
+  "filoBrandColors": {
+    "primary": "#22A0FB",
+    "secondary": "#1F9EFA",
+    "usage": "Use for tinted glass elements (send button, primary actions)"
+  },
+  "variants": [
+    {
+      "id": "readEmail",
+      "name": "Read Email",
+      "description": "Navigation for viewing a single email",
+      "layout": {
+        "width": 390,
+        "height": 50,
+        "padding": { "horizontal": 20, "bottom": 8 },
+        "arrangement": "space-between"
+      },
+      "elements": {
+        "left": {
+          "type": "iconButton",
+          "icon": "chevron.left",
+          "size": 42,
+          "style": "glass"
+        },
+        "center": {
+          "type": "actionBar",
+          "width": 132,
+          "height": 42,
+          "style": "glass",
+          "icons": ["archivebox", "square.and.arrow.up", "tag"],
+          "iconSize": 20,
+          "gap": 20
+        },
+        "right": {
+          "type": "iconButton",
+          "icon": "ellipsis",
+          "size": 42,
+          "style": "glass"
+        }
+      }
+    },
+    {
+      "id": "selectEmail",
+      "name": "Select Email",
+      "description": "Navigation when emails are selected for batch actions",
+      "layout": {
+        "width": 390,
+        "height": 52,
+        "padding": { "horizontal": 20 },
+        "arrangement": "space-between"
+      },
+      "elements": {
+        "left": {
+          "type": "iconButtonWithBadge",
+          "icon": "chevron.left",
+          "size": 42,
+          "style": "glass",
+          "badge": {
+            "type": "count",
+            "font": "P3_M",
+            "fontSize": 15,
+            "fontWeight": 510,
+            "color": "#000000"
+          }
+        },
+        "center": {
+          "type": "actionBar",
+          "width": 172,
+          "height": 42,
+          "style": "glass",
+          "icons": ["archivebox", "square.and.arrow.up", "tag", "envelope", "ellipsis"],
+          "iconSize": 20,
+          "gap": 20
+        },
+        "right": {
+          "type": "iconButton",
+          "icon": "ellipsis",
+          "size": 42,
+          "style": "glass"
+        }
+      }
+    },
+    {
+      "id": "compose",
+      "name": "Compose",
+      "description": "Navigation for composing/writing emails",
+      "layout": {
+        "width": 390,
+        "height": 52,
+        "padding": { "horizontal": 20 },
+        "arrangement": "space-between"
+      },
+      "elements": {
+        "left": {
+          "type": "iconButton",
+          "icon": "xmark",
+          "size": 42,
+          "style": "glass"
+        },
+        "right": {
+          "type": "actionBar",
+          "width": 96,
+          "height": 42,
+          "style": "glass",
+          "items": [
+            {
+              "type": "icon",
+              "icon": "paperclip",
+              "size": 20,
+              "color": "#000000"
+            },
+            {
+              "type": "sendButton",
+              "size": 24,
+              "backgroundColor": "#22A0FB",
+              "iconColor": "#FFFFFF",
+              "icon": "arrow.up"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "subpage",
+      "name": "Subpage",
+      "description": "Navigation for subpages with title",
+      "layout": {
+        "width": 390,
+        "height": 52,
+        "padding": { "horizontal": 20 },
+        "arrangement": "flex-start",
+        "gap": 16,
+        "bottomBorder": {
+          "width": 1,
+          "color": "rgba(0, 0, 0, 0.05)",
+          "style": "inset"
+        }
+      },
+      "elements": {
+        "left": {
+          "type": "iconButton",
+          "icon": "chevron.left",
+          "size": 42,
+          "style": "glass"
+        },
+        "center": {
+          "type": "title",
+          "font": "P1.1_B",
+          "fontSize": 17,
+          "fontWeight": 700,
+          "lineHeight": "140%",
+          "letterSpacing": -0.2,
+          "color": "#000000",
+          "alignment": "center"
+        },
+        "right": {
+          "type": "placeholder",
+          "size": 42,
+          "visible": false
+        }
+      }
+    }
+  ],
+  "styles": {
+    "glass": {
+      "background": {
+        "layers": [
+          { "color": "#F7F7F7", "blendMode": "plus-darker" },
+          { "color": "rgba(255, 255, 255, 0.5)", "blendMode": "normal" },
+          { "color": "#333333", "blendMode": "color-dodge" }
+        ]
+      },
+      "blur": {
+        "amount": 12.7332,
+        "opacity": 0.67
+      },
+      "borderRadius": 188.451,
+      "glassOverlay": "rgba(0, 0, 0, 0.004)"
+    },
+    "iconButton": {
+      "size": 42,
+      "iconSize": 20,
+      "padding": 7.875,
+      "borderRadius": 65.625
+    }
+  },
+  "typography": {
+    "P1.1_B": { "fontSize": 17, "fontWeight": 700, "lineHeight": 1.4, "letterSpacing": -0.2 },
+    "P2_R": { "fontSize": 16, "fontWeight": 400, "lineHeight": 1.3, "letterSpacing": -0.2 },
+    "P3_M": { "fontSize": 15, "fontWeight": 510, "lineHeight": 1.3, "letterSpacing": -0.2 }
+  },
+  "colors": {
+    "primary": "#22A0FB",
+    "iconDefault": "#000000",
+    "textPrimary": "#000000",
+    "textSecondary": "#707070",
+    "border": "rgba(0, 0, 0, 0.05)"
+  }
+}

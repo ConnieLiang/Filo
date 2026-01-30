@@ -1,0 +1,151 @@
+{
+  "name": "Filo Icons Figma Sync",
+  "description": "Configuration for syncing icons from Figma to project",
+  "figmaSource": {
+    "fileKey": "Pmns0wqmroGCQmqFPeSrwd",
+    "fileName": "🫚 Components",
+    "frameId": "3:950",
+    "frameName": "Icons",
+    "url": "https://www.figma.com/design/Pmns0wqmroGCQmqFPeSrwd/%F0%9F%AB%9A-Components?node-id=3-950"
+  },
+  "exportSettings": {
+    "format": "SVG",
+    "size": "24x24",
+    "naming": "kebab-case",
+    "destination": "Resources/Icons/"
+  },
+  "iconMapping": {
+    "navigation": [
+      { "figmaName": "Back", "exportName": "back", "nodeId": "3:1066" },
+      { "figmaName": "Close", "exportName": "close", "nodeId": "3:1206" },
+      { "figmaName": "Close_X", "exportName": "close-x", "nodeId": "3:1204" },
+      { "figmaName": "More_Horizontal", "exportName": "more-horizontal", "nodeId": "3:1083" },
+      { "figmaName": "More_Vertical", "exportName": "more-vertical", "nodeId": "3:1089" },
+      { "figmaName": "Menu", "exportName": "menu", "nodeId": "3:951" },
+      { "figmaName": "Expand", "exportName": "expand", "nodeId": "3:1072" },
+      { "figmaName": "Collapse", "exportName": "collapse", "nodeId": "3:1074" },
+      { "figmaName": "Next Page", "exportName": "next-page", "nodeId": "3:1068" },
+      { "figmaName": "Search", "exportName": "search", "nodeId": "3:1016" }
+    ],
+    "actions": [
+      { "figmaName": "Star_Before", "exportName": "star", "nodeId": "3:1044" },
+      { "figmaName": "Star_After", "exportName": "star-fill", "nodeId": "3:1052" },
+      { "figmaName": "Archive", "exportName": "archive", "nodeId": "3:1047" },
+      { "figmaName": "Trash", "exportName": "trash", "nodeId": "3:1049" },
+      { "figmaName": "Delete Forever", "exportName": "delete-forever", "nodeId": "3:1035" },
+      { "figmaName": "Share", "exportName": "share", "nodeId": "3:1420" },
+      { "figmaName": "Copy", "exportName": "copy", "nodeId": "3:1058" },
+      { "figmaName": "Edit", "exportName": "edit", "nodeId": "3:1133" },
+      { "figmaName": "Download", "exportName": "download", "nodeId": "3:1154" },
+      { "figmaName": "Settings", "exportName": "settings", "nodeId": "3:1055" }
+    ],
+    "email": [
+      { "figmaName": "Inbox_Before", "exportName": "inbox", "nodeId": "3:983" },
+      { "figmaName": "Inbox_After", "exportName": "inbox-active", "nodeId": "3:986" },
+      { "figmaName": "Envelope", "exportName": "envelope", "nodeId": "3:1375" },
+      { "figmaName": "Read", "exportName": "read", "nodeId": "3:1378" },
+      { "figmaName": "Unread", "exportName": "unread", "nodeId": "3:1381" },
+      { "figmaName": "Compose", "exportName": "compose", "nodeId": "3:1008" },
+      { "figmaName": "Reply", "exportName": "reply", "nodeId": "3:1022" },
+      { "figmaName": "Reply_Main", "exportName": "reply-main", "nodeId": "3:1020" },
+      { "figmaName": "Reply All", "exportName": "reply-all", "nodeId": "3:1024" },
+      { "figmaName": "Forward", "exportName": "forward", "nodeId": "3:1026" },
+      { "figmaName": "Send", "exportName": "send", "nodeId": "3:1031" },
+      { "figmaName": "Send Now", "exportName": "send-now", "nodeId": "3:978" },
+      { "figmaName": "Attachment", "exportName": "attachment", "nodeId": "3:976" },
+      { "figmaName": "Draft", "exportName": "draft", "nodeId": "3:1033" },
+      { "figmaName": "All Mail", "exportName": "all-mail", "nodeId": "3:1306" },
+      { "figmaName": "Spam", "exportName": "spam", "nodeId": "3:1126" },
+      { "figmaName": "Not Spam", "exportName": "not-spam", "nodeId": "493:269" }
+    ],
+    "labels": [
+      { "figmaName": "Label", "exportName": "label", "nodeId": "3:1040" },
+      { "figmaName": "Gmail Label", "exportName": "gmail-label", "nodeId": "1198:1015" },
+      { "figmaName": "Edit lable", "exportName": "edit-label", "nodeId": "3:1417" },
+      { "figmaName": "Important_Before", "exportName": "important", "nodeId": "3:1302" },
+      { "figmaName": "Important_After", "exportName": "important-fill", "nodeId": "3:1304" }
+    ],
+    "ai": [
+      { "figmaName": "AI", "exportName": "ai", "nodeId": "3:994" },
+      { "figmaName": "AI_remake", "exportName": "ai-remake", "nodeId": "3:1004" },
+      { "figmaName": "Email AI", "exportName": "email-ai", "nodeId": "3:998" },
+      { "figmaName": "AI Search", "exportName": "ai-search", "nodeId": "1173:1108" },
+      { "figmaName": "AI Envelop", "exportName": "ai-envelope", "nodeId": "3:1422" },
+      { "figmaName": "Generate with AI", "exportName": "generate-ai", "nodeId": "627:1074" },
+      { "figmaName": "Summary", "exportName": "summary", "nodeId": "3:1411" },
+      { "figmaName": "Translate", "exportName": "translate", "nodeId": "3:1168" },
+      { "figmaName": "Rewrite", "exportName": "rewrite", "nodeId": "3:1137" },
+      { "figmaName": "Proofread", "exportName": "proofread", "nodeId": "3:1130" },
+      { "figmaName": "Tone", "exportName": "tone", "nodeId": "3:1166" }
+    ],
+    "status": [
+      { "figmaName": "Check", "exportName": "check", "nodeId": "3:1244" },
+      { "figmaName": "Check_Outline", "exportName": "check-outline", "nodeId": "3:1152" },
+      { "figmaName": "Circle", "exportName": "circle", "nodeId": "164:315" },
+      { "figmaName": "Circle Check", "exportName": "circle-check", "nodeId": "3:1181" },
+      { "figmaName": "Uncheck", "exportName": "uncheck", "nodeId": "3:1241" },
+      { "figmaName": "Info", "exportName": "info", "nodeId": "3:1123" },
+      { "figmaName": "Error", "exportName": "error", "nodeId": "3:1428" },
+      { "figmaName": "Loading", "exportName": "loading", "nodeId": "3:1406" }
+    ],
+    "media": [
+      { "figmaName": "Play", "exportName": "play", "nodeId": "3:1289" },
+      { "figmaName": "Pause", "exportName": "pause", "nodeId": "3:1286" },
+      { "figmaName": "Stop", "exportName": "stop", "nodeId": "3:1294" },
+      { "figmaName": "Microphone", "exportName": "microphone", "nodeId": "3:1183" },
+      { "figmaName": "Speak_Circle", "exportName": "speak", "nodeId": "3:1296" }
+    ],
+    "formatting": [
+      { "figmaName": "Bold", "exportName": "bold", "nodeId": "3:1519" },
+      { "figmaName": "Italic", "exportName": "italic", "nodeId": "114:312" },
+      { "figmaName": "Underline", "exportName": "underline", "nodeId": "3:1523" },
+      { "figmaName": "Strike through", "exportName": "strikethrough", "nodeId": "3:1525" },
+      { "figmaName": "Link", "exportName": "link", "nodeId": "3:1527" },
+      { "figmaName": "Align Left", "exportName": "align-left", "nodeId": "3:1529" },
+      { "figmaName": "Align Center", "exportName": "align-center", "nodeId": "3:1531" },
+      { "figmaName": "Align Right", "exportName": "align-right", "nodeId": "3:1533" },
+      { "figmaName": "Bullet List", "exportName": "bullet-list", "nodeId": "3:1536" },
+      { "figmaName": "Number List", "exportName": "number-list", "nodeId": "3:1538" }
+    ],
+    "social": [
+      { "figmaName": "Twitter", "exportName": "twitter", "nodeId": "3:1450" },
+      { "figmaName": "Discord", "exportName": "discord", "nodeId": "3:1448" },
+      { "figmaName": "Telegram", "exportName": "telegram", "nodeId": "3:1446" },
+      { "figmaName": "iMessage", "exportName": "imessage", "nodeId": "3:1453" },
+      { "figmaName": "Youtube", "exportName": "youtube", "nodeId": "96:509" }
+    ],
+    "misc": [
+      { "figmaName": "Plus", "exportName": "plus", "nodeId": "3:1250" },
+      { "figmaName": "Minus", "exportName": "minus", "nodeId": "3:1254" },
+      { "figmaName": "Calendar", "exportName": "calendar", "nodeId": "3:1326" },
+      { "figmaName": "Clock", "exportName": "clock", "nodeId": "3:1401" },
+      { "figmaName": "Lock", "exportName": "lock", "nodeId": "634:252" },
+      { "figmaName": "Eye", "exportName": "eye", "nodeId": "3:1391" },
+      { "figmaName": "Eye Slash", "exportName": "eye-slash", "nodeId": "1109:1060" },
+      { "figmaName": "Noti On", "exportName": "notification-on", "nodeId": "3:1462" },
+      { "figmaName": "Noti Off", "exportName": "notification-off", "nodeId": "3:1459" }
+    ]
+  },
+  "howToExport": {
+    "method1_individual": [
+      "1. Open Figma file",
+      "2. Select icon component",
+      "3. Right-click > Copy/Paste > Copy as SVG",
+      "4. Paste into Resources/Icons/[category]/[name].svg"
+    ],
+    "method2_batch": [
+      "1. Select the Icons frame (3:950)",
+      "2. File > Export (or Cmd/Ctrl + Shift + E)",
+      "3. Choose SVG format",
+      "4. Export to Resources/Icons/"
+    ],
+    "method3_plugin": [
+      "1. Install 'SVG Export' or 'Iconify' plugin",
+      "2. Select icons to export",
+      "3. Configure naming to kebab-case",
+      "4. Export to Resources/Icons/"
+    ]
+  },
+  "totalIcons": 213,
+  "lastUpdated": "2026-01-23"
+}

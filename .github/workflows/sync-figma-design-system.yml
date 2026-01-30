@@ -1,0 +1,58 @@
+name: Sync Figma Design System
+
+on:
+  # Run every 6 hours to check for updates
+  schedule:
+    - cron: '0 */6 * * *'
+  
+  # Allow manual trigger from GitHub Actions UI
+  workflow_dispatch:
+
+jobs:
+  sync-design-system:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Sync Icons from Figma
+        env:
+          FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }}
+        run: node "Design Guidelines/Icons/sync-figma-icons.js"
+      
+      - name: Sync Typography from Figma
+        env:
+          FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }}
+        run: node "Design Guidelines/Typography/sync-figma-typography.js"
+      
+      - name: Sync Colors from Figma
+        env:
+          FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }}
+        run: node "Design Guidelines/Colors/sync-figma-colors.js"
+      
+      - name: Check for changes
+        id: changes
+        run: |
+          git add -A
+          if git diff --staged --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Commit and push changes
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: sync design system from Figma
+
+          Automated sync of icons, typography, and colors from Figma.
+          Source: https://www.figma.com/design/Pmns0wqmroGCQmqFPeSrwd"
+          git push

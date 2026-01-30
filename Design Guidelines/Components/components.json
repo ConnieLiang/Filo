@@ -1,0 +1,23 @@
+{
+  "name": "Filo Components",
+  "description": "UI component specifications for Filo",
+  "spacing": {
+    "unit": 4,
+    "scale": [0, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64]
+  },
+  "cornerRadius": {
+    "none": 0,
+    "small": 4,
+    "medium": 8,
+    "large": 12,
+    "xlarge": 16,
+    "full": 9999
+  },
+  "components": [
+    "Button",
+    "Card",
+    "Input",
+    "EmailRow",
+    "Label"
+  ]
+}

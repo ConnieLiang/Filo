@@ -1,0 +1,72 @@
+# Filo Project Rules
+
+## Important References
+
+**Always consult these files before implementing features or drawing UI:**
+- `About Filo.md` — Product vision, principles, and feature definitions
+- `Design Guidelines/` — Visual design system (colors, typography, icons, components)
+
+## Project Description
+
+Filo is an AI-native email client designed to reduce cognitive load. It helps people understand, act on, and move past email without wasting attention.
+
+**Core belief:** Email overload is not a volume problem. It's a decision fatigue problem.
+
+## Product Principles (from About Filo.md)
+
+1. **Reduce cognitive friction** — Every feature must reduce thinking, not shift it elsewhere
+2. **AI as infrastructure, not spectacle** — AI runs quietly in the background, no forced prompts
+3. **Opinionated defaults** — Filo makes decisions so users don't have to
+4. **Respect attention** — No dopamine-driven UI, no fake urgency, no dark patterns
+
+**Internal reminder:** If a feature adds options, decisions, visual weight, or explanation — it needs to justify itself. **Less is the feature.**
+
+## Architecture
+
+### Platforms
+- iOS: Swift/SwiftUI
+- macOS: Swift/SwiftUI
+- Android: TBD
+- Windows: TBD
+
+### Key Directories
+- `Shared/` - Cross-platform Swift code (models, view models)
+- `iOS/` - iOS-specific implementations
+- `macOS/` - macOS-specific implementations
+- `Android/` - Android-specific code
+- `Windows/` - Windows-specific code
+- `Resources/` - Asset catalogs, shared resources
+- `Design Guidelines/` - Visual design system (synced from Figma)
+
+## Coding Conventions
+
+### Swift (iOS/macOS)
+- Use SwiftUI for all new views
+- Follow MVVM pattern
+- Use `@Observable` macro for view models (iOS 17+/macOS 14+)
+- Prefer async/await over completion handlers
+
+### Naming
+- Views: `*View.swift` (e.g., `HomeView.swift`)
+- View Models: `*ViewModel.swift`
+- Models: Plain name (e.g., `User.swift`, `Item.swift`)
+
+## UI/UX Guidelines
+
+When drawing UI:
+- Keep interfaces calm and minimal
+- Prioritize clarity over customization
+- Use the design system from `Design Guidelines/` (colors, typography, icons)
+- No visual clutter or unnecessary elements
+- Design for scanning, not reading
+
+## Things to Avoid
+- Don't use UIKit/AppKit unless absolutely necessary
+- Don't hardcode strings (use localization)
+- Don't commit API keys or secrets
+- Don't add features that increase cognitive load
+- Don't create dopamine-driven or attention-grabbing UI patterns
+
+## Current Focus
+- iOS MVP
+- macOS MVP

@@ -1,0 +1,156 @@
+{
+  "name": "Sign In Screen",
+  "description": "iOS launch/sign-in screen for Filo",
+  "figma": {
+    "fileKey": "7tXBqwb5MkT6wIwnjgeA4g",
+    "fileName": "🍎 Mobile",
+    "nodeId": "3997-92820",
+    "url": "https://www.figma.com/design/7tXBqwb5MkT6wIwnjgeA4g/%F0%9F%8D%8E-Mobile?node-id=3997-92820"
+  },
+  "frame": {
+    "width": 390,
+    "height": 844,
+    "platform": "iPhone 14/15"
+  },
+  "background": {
+    "type": "linearGradient",
+    "direction": "180deg",
+    "stops": [
+      { "color": "#EFF8FF", "position": 0 },
+      { "color": "#E9F6FF", "position": 0.2698 },
+      { "color": "#84CBFF", "position": 0.747 },
+      { "color": "#71C3FF", "position": 1 }
+    ]
+  },
+  "elements": {
+    "appIcon": {
+      "asset": "AppIcon-Official",
+      "size": { "width": 72, "height": 72 },
+      "position": { "centerX": true, "top": 280 },
+      "cornerRadius": 19.2,
+      "border": {
+        "width": 0.6,
+        "color": "rgba(0, 0, 0, 0.04)"
+      },
+      "shadow": {
+        "x": 0,
+        "y": 1.44,
+        "blur": 14.4,
+        "color": "rgba(0, 0, 0, 0.04)"
+      }
+    },
+    "logo": {
+      "asset": "Logos/Default-Horizontal",
+      "size": { "width": 130, "height": 26 },
+      "position": { "centerX": true, "top": 372 },
+      "gradient": {
+        "type": "linearGradient",
+        "direction": "180deg",
+        "stops": [
+          { "color": "#000000", "position": 0 },
+          { "color": "#002346", "position": 1 }
+        ]
+      }
+    },
+    "aiBadge": {
+      "size": { "width": 37.2, "height": 20 },
+      "position": { "left": 268, "top": 372 },
+      "background": "#1F9EFA",
+      "cornerRadius": 100,
+      "content": {
+        "layout": "horizontal",
+        "gap": 1.2,
+        "items": [
+          {
+            "type": "icon",
+            "name": "sparkle",
+            "size": { "width": 10, "height": 9.54 },
+            "opacity": 0.6,
+            "color": "#FFFFFF"
+          },
+          {
+            "type": "text",
+            "text": "AI",
+            "font": "P4_B",
+            "fontFamily": "SF Pro",
+            "fontWeight": 700,
+            "fontSize": 13,
+            "lineHeight": "120%",
+            "color": "#FFFFFF"
+          }
+        ]
+      }
+    },
+    "signInButton": {
+      "size": { "width": 280, "height": 52 },
+      "position": { "centerX": true, "centerY": true, "offsetY": 42 },
+      "background": "#FFFFFF",
+      "cornerRadius": 100,
+      "content": {
+        "layout": "horizontal",
+        "gap": 8,
+        "items": [
+          {
+            "type": "icon",
+            "name": "Google",
+            "size": { "width": 20, "height": 20 },
+            "colors": {
+              "blue": "#4285F4",
+              "green": "#34A853",
+              "yellow": "#FBBC05",
+              "red": "#EA4335"
+            }
+          },
+          {
+            "type": "text",
+            "content": "Sign in with Google",
+            "font": "P3_B",
+            "fontFamily": "SF Pro",
+            "fontWeight": 700,
+            "fontSize": 15,
+            "lineHeight": "135%",
+            "letterSpacing": -0.2,
+            "color": "#000000"
+          }
+        ]
+      }
+    },
+    "legalText": {
+      "position": { "centerX": true, "bottom": 74 },
+      "size": { "width": 270, "height": 32 },
+      "font": "P4_R",
+      "fontFamily": "SF Pro",
+      "fontWeight": 400,
+      "fontSize": 13,
+      "lineHeight": "120%",
+      "textAlign": "center",
+      "color": "#000000",
+      "content": "By signing in, you agree to our Terms of Service and Privacy Policy.",
+      "links": {
+        "Terms of Service": "https://www.filomail.com/terms-of-service",
+        "Privacy Policy": "https://www.filomail.com/privacy-policy"
+      }
+    },
+    "contactIcons": {
+      "position": { "centerX": true, "bottom": 42 },
+      "layout": "horizontal",
+      "gap": 33,
+      "items": [
+        { "type": "icon", "name": "mail", "size": 22, "strokeWidth": 1.65, "color": "#000000" },
+        { "type": "icon", "name": "x-twitter", "size": 22, "color": "#000000" },
+        { "type": "icon", "name": "instagram", "size": 22, "color": "#000000" }
+      ]
+    }
+  },
+  "statusBar": {
+    "style": "dark",
+    "height": 50,
+    "timeFont": {
+      "fontFamily": "SF Pro",
+      "fontWeight": 590,
+      "fontSize": 17,
+      "lineHeight": 22,
+      "color": "#000000"
+    }
+  }
+}

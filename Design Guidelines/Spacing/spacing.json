@@ -1,0 +1,57 @@
+{
+  "name": "Filo Spacing System",
+  "version": "1.0.0",
+  "description": "Consistent spacing scale for all Filo apps",
+  "unit": "px",
+  "scale": {
+    "01": {
+      "value": 4,
+      "usage": "Micro spacing - icon padding, tight gaps"
+    },
+    "02": {
+      "value": 8,
+      "usage": "Small spacing - between related elements, button padding"
+    },
+    "03": {
+      "value": 12,
+      "usage": "Medium-small spacing - list item gaps, card padding"
+    },
+    "04": {
+      "value": 16,
+      "usage": "Medium spacing - section padding, standard gaps"
+    },
+    "05": {
+      "value": 20,
+      "usage": "Medium-large spacing - container padding, between sections"
+    },
+    "06": {
+      "value": 30,
+      "usage": "Large spacing - major section gaps"
+    },
+    "07": {
+      "value": 40,
+      "usage": "Extra large spacing - page margins, hero sections"
+    }
+  },
+  "tokens": {
+    "space-1": 4,
+    "space-2": 8,
+    "space-3": 12,
+    "space-4": 16,
+    "space-5": 20,
+    "space-6": 30,
+    "space-7": 40
+  },
+  "commonUseCases": {
+    "iconPadding": 4,
+    "buttonPaddingX": 16,
+    "buttonPaddingY": 8,
+    "cardPadding": 16,
+    "listItemGap": 12,
+    "sectionGap": 20,
+    "pageMargin": 20,
+    "modalPadding": 20,
+    "headerPadding": 16,
+    "inputPadding": 12
+  }
+}

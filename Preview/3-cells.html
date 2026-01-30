@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filo - 3 Cells Loading</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --filo-02: #22A0FB;
+            --filo-06: #000000;
+            --filo-07: #707070;
+            --filo-08: #D5D5D5;
+            --filo-09: #F5F5F5;
+            --filo-10: #FFFFFF;
+            --filo-14: rgba(0, 0, 0, 0.04);
+            --filo-25: #9E9E9E;
+            
+            --skeleton-base: rgba(34, 160, 251, 0.04);
+            --skeleton-shine: rgba(34, 160, 251, 0.07);
+            
+            --font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+        }
+
+        body.dark-mode {
+            --filo-02: #45B1FF;
+            --filo-06: #FFFFFF;
+            --filo-07: #8B8B8B;
+            --filo-08: #414149;
+            --filo-09: #121214;
+            --filo-10: #1D1D21;
+            --filo-14: rgba(255, 255, 255, 0.06);
+            --filo-25: #727272;
+            
+            --skeleton-base: rgba(69, 177, 255, 0.05);
+            --skeleton-shine: rgba(69, 177, 255, 0.09);
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--filo-09);
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--filo-06);
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--filo-07);
+            margin-bottom: 40px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .toggle-group {
+            display: flex;
+            gap: 8px;
+            background: var(--filo-10);
+            padding: 4px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            background: transparent;
+            color: var(--filo-07);
+            transition: all 0.2s ease;
+        }
+
+        .toggle-btn.active {
+            background: var(--filo-02);
+            color: white;
+        }
+
+        /* ============================================
+           PHONE FRAME
+           ============================================ */
+        .phone-frame {
+            width: 390px;
+            height: 844px;
+            background: var(--filo-10);
+            border-radius: 44px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .dynamic-island {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 126px;
+            height: 36px;
+            background: #000;
+            border-radius: 20px;
+        }
+
+        /* ============================================
+           AI SCREEN
+           ============================================ */
+        .ai-screen {
+            position: absolute;
+            top: 60px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Nav Bar */
+        .ai-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+        }
+
+        .ai-nav-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--filo-02);
+        }
+
+        .ai-nav-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .ai-nav-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--filo-14);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .ai-nav-btn svg {
+            width: 20px;
+            height: 20px;
+            color: var(--filo-06);
+        }
+
+        /* Greeting */
+        .ai-greeting {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 40px;
+        }
+
+        .ai-greeting-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--filo-06);
+            margin-bottom: 8px;
+        }
+
+        .ai-greeting-subtitle {
+            font-size: 17px;
+            color: var(--filo-07);
+        }
+
+        /* ============================================
+           SUGGESTION CELLS
+           ============================================ */
+        .ai-suggestions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 0 20px;
+            margin-bottom: 12px;
+        }
+
+        .ai-suggestion {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--filo-14);
+            border-radius: 100px;
+            padding: 14px 18px;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+            width: fit-content;
+            position: relative;
+        }
+
+        .ai-suggestion svg {
+            width: 20px;
+            height: 20px;
+            color: var(--filo-02);
+            flex-shrink: 0;
+        }
+
+        .ai-suggestion-text {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--filo-06);
+        }
+
+        /* ============================================
+           SKELETON LOADING STATE - Shimmer
+           ============================================ */
+        @keyframes shimmer {
+            0% {
+                background-position: 100% 0;
+            }
+            100% {
+                background-position: -100% 0;
+            }
+        }
+
+        .ai-suggestion.skeleton {
+            pointer-events: none;
+            background: linear-gradient(
+                90deg,
+                var(--skeleton-base) 0%,
+                var(--skeleton-base) 35%,
+                var(--skeleton-shine) 50%,
+                var(--skeleton-base) 65%,
+                var(--skeleton-base) 100%
+            );
+            background-size: 300% 100%;
+            animation: shimmer 3s ease-in-out infinite;
+            height: 40px;
+            padding: 0;
+            margin-left: auto;
+        }
+
+        .ai-suggestion.skeleton:nth-child(1) {
+            width: 260px;
+        }
+
+        .ai-suggestion.skeleton:nth-child(2) {
+            width: 300px;
+            animation-delay: 0.4s;
+        }
+
+        .ai-suggestion.skeleton:nth-child(3) {
+            width: 320px;
+            animation-delay: 0.8s;
+        }
+
+        .ai-suggestion.skeleton .content {
+            visibility: hidden;
+        }
+
+        .ai-suggestion.skeleton .skeleton-content {
+            display: none;
+        }
+
+        .ai-suggestion:not(.skeleton) .skeleton-content {
+            display: none;
+        }
+
+        .ai-suggestion .content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* ============================================
+           INPUT AREA
+           ============================================ */
+        .ai-input-area {
+            padding: 0 20px 40px 20px;
+        }
+
+        .ai-input {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--filo-14);
+            border-radius: 20px;
+            padding: 16px;
+            min-height: 100px;
+            align-items: flex-start;
+        }
+
+        .ai-input-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .ai-input-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ai-input-placeholder {
+            font-size: 15px;
+            color: var(--filo-25);
+        }
+
+        .ai-input-btn {
+            width: 30px;
+            height: 30px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            align-self: flex-end;
+        }
+
+        .ai-input-btn svg {
+            width: 30px;
+            height: 30px;
+            opacity: 0.2;
+            color: var(--filo-06);
+        }
+    </style>
+</head>
+<body>
+    <h1>3 Cells</h1>
+    <p class="subtitle">Suggestion cells with shimmer loading state</p>
+
+    <div class="controls">
+        <div class="toggle-group">
+            <button class="toggle-btn active" onclick="setMode('light')">Light</button>
+            <button class="toggle-btn" onclick="setMode('dark')">Dark</button>
+        </div>
+        <div class="toggle-group">
+            <button class="toggle-btn" onclick="setState('loading')">Loading</button>
+            <button class="toggle-btn active" onclick="setState('loaded')">Loaded</button>
+        </div>
+    </div>
+
+    <div class="phone-frame">
+        <div class="dynamic-island"></div>
+        
+        <div class="ai-screen">
+            <!-- Nav Bar -->
+            <div class="ai-nav">
+                <span class="ai-nav-title">Filo AI</span>
+                <div class="ai-nav-actions">
+                    <button class="ai-nav-btn">
+                        <!-- history icon -->
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M12 6V12L16 14M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                    <button class="ai-nav-btn">
+                        <!-- window icon -->
+                        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 9H21" stroke="currentColor" stroke-width="2"/></svg>
+                    </button>
+                    <button class="ai-nav-btn">
+                        <!-- close icon -->
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Greeting -->
+            <div class="ai-greeting">
+                <div class="ai-greeting-title">Hi Liang Xi</div>
+                <div class="ai-greeting-subtitle">Need help with an email?</div>
+            </div>
+            
+            <!-- Suggestions -->
+            <div class="ai-suggestions" id="suggestions">
+                <div class="ai-suggestion" id="suggestion-1">
+                    <div class="content">
+                        <!-- summary icon -->
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M12.876 17.7998C13.3727 17.8002 13.7754 18.2034 13.7754 18.7002C13.7754 19.197 13.3727 19.6002 12.876 19.6006H7.10059C6.60355 19.6006 6.20023 19.1972 6.2002 18.7002C6.2002 18.2031 6.60353 17.7998 7.10059 17.7998H12.876Z" fill="currentColor"/><path d="M15.501 14.125C15.9977 14.1254 16.4004 14.5286 16.4004 15.0254C16.4003 15.5221 15.9976 15.9254 15.501 15.9258H7.10059C6.60361 15.9258 6.20033 15.5223 6.2002 15.0254C6.2002 14.5283 6.60353 14.125 7.10059 14.125H15.501Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M14.9756 1C16.2191 1.00013 17.2454 1.91832 17.4209 3.11328C18.1853 3.13106 18.8543 3.17441 19.4307 3.28027C20.2406 3.4291 20.9415 3.71508 21.5137 4.28711C22.1699 4.94344 22.4484 5.76719 22.5771 6.72461C22.7023 7.65617 22.7002 8.84169 22.7002 10.3008V16.6006C22.7002 18.0598 22.7024 19.2461 22.5771 20.1777C22.4484 21.1349 22.1698 21.9581 21.5137 22.6143C20.8573 23.2705 20.0336 23.549 19.0762 23.6777C18.1446 23.8029 16.9592 23.8008 15.5 23.8008H9.2002C7.74083 23.8008 6.55567 23.803 5.62402 23.6777C4.66656 23.549 3.84288 23.2705 3.18652 22.6143C2.53052 21.9582 2.2528 21.1348 2.12402 20.1777C1.99878 19.2461 2 18.0598 2 16.6006V10.3008C2 8.84169 1.99883 7.65617 2.12402 6.72461C2.25276 5.76722 2.53034 4.94342 3.18652 4.28711C3.75877 3.71489 4.46035 3.4291 5.27051 3.28027C5.84664 3.17447 6.51531 3.13108 7.2793 3.11328C7.45487 1.91824 8.4819 1 9.72559 1H14.9756ZM17.416 4.91504C17.2289 6.09639 16.2095 6.99987 14.9756 7H9.72559C8.49142 7 7.47037 6.09654 7.2832 4.91504C6.57937 4.93216 6.03553 4.97002 5.5957 5.05078C5.01495 5.15747 4.69348 5.32605 4.45898 5.56055C4.19314 5.82673 4.00905 6.2075 3.90723 6.96484C3.80195 7.74858 3.80078 8.79108 3.80078 10.3008V16.6006C3.80078 18.1107 3.80185 19.1537 3.90723 19.9375C4.00912 20.695 4.19298 21.0757 4.45898 21.3418C4.72519 21.6079 5.10651 21.7917 5.86426 21.8936C6.64806 21.9989 7.69019 22.001 9.2002 22.001H15.5C17.0103 22.001 18.0531 21.9989 18.8369 21.8936C19.5945 21.7917 19.975 21.6079 20.2412 21.3418L20.3369 21.2363C20.5518 20.9749 20.7038 20.6006 20.793 19.9375C20.8983 19.1537 20.9004 18.1107 20.9004 16.6006V10.3008C20.9004 8.79104 20.8983 7.74859 20.793 6.96484C20.6911 6.20732 20.5072 5.82674 20.2412 5.56055C20.0067 5.32608 19.686 5.15747 19.1055 5.05078C18.6654 4.96994 18.1207 4.93214 17.416 4.91504ZM9.72559 2.80078C9.3528 2.80078 9.05078 3.1028 9.05078 3.47559V4.52539C9.0508 4.89816 9.35281 5.2002 9.72559 5.2002H14.9756C15.3482 5.20005 15.6504 4.89807 15.6504 4.52539V3.47559C15.6504 3.1029 15.3482 2.80092 14.9756 2.80078H9.72559Z" fill="currentColor"/></svg>
+                        <span class="ai-suggestion-text">Summarize Filo Support <span style="color: var(--filo-02);">✉</span> emails.</span>
+                    </div>
+                    <div class="skeleton-content"></div>
+                </div>
+                <div class="ai-suggestion" id="suggestion-2">
+                    <div class="content">
+                        <!-- compose/draft icon -->
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M17.71 13.7982C17.8755 13.3135 18.5601 13.3135 18.7256 13.7982L19.21 15.2162C19.5324 16.1603 20.2746 16.9025 21.2188 17.2249L22.6367 17.7093C23.1214 17.8748 23.1214 18.5594 22.6367 18.7249L21.2188 19.2093C20.2746 19.5317 19.5324 20.274 19.21 21.2181L18.7256 22.6361C18.5601 23.1207 17.8755 23.1207 17.71 22.6361L17.2256 21.2181C16.9032 20.274 16.1609 19.5317 15.2168 19.2093L13.7988 18.7249C13.3142 18.5594 13.3142 17.8748 13.7988 17.7093L15.2168 17.2249C16.1609 16.9025 16.9032 16.1603 17.2256 15.2162L17.71 13.7982ZM14.458 1.97299C15.7559 0.675233 17.8603 0.675256 19.1582 1.97299C20.456 3.27086 20.456 5.3753 19.1582 6.67319L7.77734 18.054L7.58594 18.2249C7.38489 18.3839 7.15646 18.5067 6.91211 18.5882L2.45996 20.0726L2.29785 20.1136C1.49528 20.257 0.788402 19.4817 1.05859 18.6703L2.54297 14.2201C2.62446 13.9756 2.74822 13.7474 2.90723 13.5462L3.07812 13.3539L14.458 1.97299ZM3.16016 17.971L6.3252 16.9164L4.21484 14.805L3.16016 17.971ZM17.9053 3.22592C17.2997 2.62052 16.3176 2.62074 15.7119 3.22592L5.40918 13.5277L7.60254 15.722L17.9053 5.42026C18.5109 4.81458 18.5109 3.83158 17.9053 3.22592Z" fill="currentColor"/></svg>
+                        <span class="ai-suggestion-text">Draft a response to Mohamed Baccouch.</span>
+                    </div>
+                    <div class="skeleton-content"></div>
+                </div>
+                <div class="ai-suggestion" id="suggestion-3">
+                    <div class="content">
+                        <!-- add/plus icon -->
+                        <svg viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 4C12.5523 4 13 4.44772 13 5V11H19C19.5523 11 20 11.4477 20 12C20 12.5523 19.5523 13 19 13H13V19C13 19.5523 12.5523 20 12 20C11.4477 20 11 19.5523 11 19V13H5C4.44772 13 4 12.5523 4 12C4 11.4477 4.44772 11 5 11H11V5C11 4.44772 11.4477 4 12 4Z" fill="currentColor"/></svg>
+                        <span class="ai-suggestion-text">Create task for replying Patrick's inquiry.</span>
+                    </div>
+                    <div class="skeleton-content"></div>
+                </div>
+            </div>
+            
+            <!-- Input Area -->
+            <div class="ai-input-area">
+                <div class="ai-input">
+                    <div class="ai-input-icon">
+                        <!-- ai-main icon -->
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M16.2696 13.8423C16.4148 13.418 17.0145 13.418 17.1597 13.8423L17.5843 15.0853C17.8668 15.9125 18.5168 16.5625 19.344 16.845L20.5871 17.2696C21.0112 17.4148 21.0112 18.0145 20.5871 18.1597L19.344 18.5843C18.5168 18.8668 17.8668 19.5168 17.5843 20.344L17.1597 21.5871C17.0145 22.0112 16.4148 22.0112 16.2696 21.5871L15.845 20.344C15.5625 19.5168 14.9125 18.8668 14.0853 18.5843L12.8422 18.1597C12.418 18.0145 12.418 17.4148 12.8422 17.2696L14.0853 16.845C14.9125 16.5625 15.5625 15.9125 15.845 15.0853L16.2696 13.8423Z" fill="#22A0FB"/><path d="M6.61775 2.47774C6.83527 1.84076 7.73639 1.84076 7.95391 2.47774L8.59027 4.34182C9.01401 5.58266 9.98901 6.55766 11.2299 6.98139L13.0939 7.61776C13.7309 7.83528 13.7309 8.7364 13.0939 8.95392L11.2299 9.59028C9.98901 10.014 9.01401 10.989 8.59027 12.2299L7.95391 14.0939C7.73639 14.7309 6.83527 14.7309 6.61775 14.0939L5.98139 12.2299C5.55766 10.989 4.58266 10.014 3.34181 9.59028L1.47774 8.95392C0.840755 8.7364 0.840755 7.83528 1.47774 7.61776L3.34181 6.98139C4.58266 6.55766 5.55766 5.58266 5.98139 4.34182L6.61775 2.47774Z" fill="#22A0FB"/><path d="M19.5241 2.23834C19.6331 1.92056 20.0821 1.92054 20.1911 2.23834L20.5103 3.1714C20.7222 3.79142 21.2091 4.27828 21.8291 4.49016L22.7611 4.80937C23.0796 4.91813 23.0796 5.36766 22.7611 5.47642L21.8291 5.79563C21.209 6.00753 20.7222 6.49434 20.5103 7.1144L20.1911 8.04643C20.0824 8.36492 19.6328 8.36492 19.5241 8.04643L19.2049 7.1144C18.993 6.49436 18.5061 6.00755 17.8861 5.79563L16.953 5.47642C16.6352 5.36742 16.6353 4.9184 16.953 4.80937L17.8861 4.49016C18.5061 4.27826 18.993 3.79141 19.2049 3.1714L19.5241 2.23834Z" fill="#22A0FB"/></svg>
+                    </div>
+                    <div class="ai-input-content">
+                        <span class="ai-input-placeholder">Search, write, or ask anything...</span>
+                    </div>
+                    <button class="ai-input-btn">
+                        <!-- send icon -->
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M12 24C10.3451 24 8.79216 23.6863 7.34118 23.0588C5.8902 22.4392 4.61569 21.5804 3.51765 20.4824C2.41961 19.3765 1.55686 18.102 0.929412 16.6588C0.309804 15.2078 0 13.6549 0 12C0 10.3451 0.309804 8.79216 0.929412 7.34118C1.55686 5.8902 2.41961 4.61569 3.51765 3.51765C4.61569 2.41961 5.8902 1.56078 7.34118 0.941176C8.79216 0.313726 10.3451 0 12 0C13.6549 0 15.2078 0.313726 16.6588 0.941176C18.1098 1.56078 19.3843 2.41961 20.4824 3.51765C21.5804 4.61569 22.4392 5.8902 23.0588 7.34118C23.6863 8.79216 24 10.3451 24 12C24 13.6549 23.6863 15.2078 23.0588 16.6588C22.4392 18.102 21.5804 19.3765 20.4824 20.4824C19.3843 21.5804 18.1098 22.4392 16.6588 23.0588C15.2078 23.6863 13.6549 24 12 24ZM12.0118 5.88235C11.8863 5.88235 11.7686 5.90588 11.6588 5.95294C11.549 5.99216 11.4314 6.07451 11.3059 6.2L7.30588 10.0588C7.21176 10.1451 7.14118 10.2431 7.09412 10.3529C7.04706 10.4549 7.02353 10.5725 7.02353 10.7059C7.02353 10.949 7.10588 11.1529 7.27059 11.3176C7.43529 11.4745 7.64314 11.5529 7.89412 11.5529C8.17647 11.5529 8.4 11.4549 8.56471 11.2588L10.4118 9.29412L11.1176 8.55294L11.0353 10.3647V17.1765C11.0353 17.4353 11.1294 17.6588 11.3176 17.8471C11.5137 18.0275 11.7451 18.1176 12.0118 18.1176C12.2784 18.1176 12.5059 18.0275 12.6941 17.8471C12.8824 17.6588 12.9765 17.4353 12.9765 17.1765V10.3647L12.9059 8.55294L13.6118 9.29412L15.4588 11.2588C15.6157 11.4549 15.8353 11.5529 16.1176 11.5529C16.3686 11.5529 16.5765 11.4745 16.7412 11.3176C16.9137 11.1529 17 10.949 17 10.7059C17 10.5725 16.9725 10.4549 16.9176 10.3529C16.8706 10.2431 16.8 10.1451 16.7059 10.0588L12.7176 6.2C12.5922 6.07451 12.4745 5.99216 12.3647 5.95294C12.2549 5.90588 12.1373 5.88235 12.0118 5.88235Z" fill="currentColor"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentState = 'loaded';
+
+        function setMode(mode) {
+            document.body.classList.toggle('dark-mode', mode === 'dark');
+            document.querySelectorAll('.controls .toggle-group:first-child .toggle-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.toLowerCase() === mode);
+            });
+        }
+
+        function setState(state) {
+            currentState = state;
+            const suggestions = document.querySelectorAll('.ai-suggestion');
+            
+            if (state === 'loading') {
+                suggestions.forEach(s => s.classList.add('skeleton'));
+            } else {
+                suggestions.forEach(s => s.classList.remove('skeleton'));
+            }
+            
+            document.querySelectorAll('.controls .toggle-group:last-child .toggle-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.toLowerCase() === state);
+            });
+        }
+
+        // Demo: Auto-transition from loading to loaded
+        function demoLoadingTransition() {
+            setState('loading');
+            setTimeout(() => {
+                setState('loaded');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

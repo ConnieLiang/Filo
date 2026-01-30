@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filo Color Palette</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --filo-01: #1F9EFA;
+            --filo-02: #22A0FB;
+            --filo-03: #4BACF5;
+            --filo-04: #5ABEFF;
+            --filo-05: #E8EEF2;
+            --filo-06: #000000;
+            --filo-07: #707070;
+            --filo-08: #999999;
+            --filo-09: #F5F5F5;
+            --filo-10: #FFFFFF;
+            --filo-11: #E53935;
+            --filo-12: #FFB800;
+            --filo-13: #22A0FB;
+            --filo-14: rgba(0, 0, 0, 0.04);
+            --filo-15: rgba(34, 160, 251, 0.08);
+            --filo-16: rgba(0, 0, 0, 0.02);
+            --filo-17: #E8F5CE;
+            --filo-18: #7EBA02;
+            --filo-19: #F7A501;
+            --filo-20: #FFE5E7;
+            --filo-21: #E8E6F5;
+            --filo-22: #7F6EFF;
+            --filo-23: #FFF0F5;
+            --filo-24: #BF3EE2;
+            --filo-25: #9E9E9E;
+            --bg: #F5F5F5;
+        }
+
+        body.dark-mode {
+            --filo-01: #6CC1FF;
+            --filo-02: #45B1FF;
+            --filo-03: #213D51;
+            --filo-04: #2E5168;
+            --filo-05: #344352;
+            --filo-06: #FFFFFF;
+            --filo-07: #8B8B8B;
+            --filo-08: #414149;
+            --filo-09: #2A2A30;
+            --filo-10: #1D1D21;
+            --filo-11: #BE424D;
+            --filo-12: #FFDC84;
+            --filo-13: #3DAEFF;
+            --filo-14: rgba(255, 255, 255, 0.06);
+            --filo-15: rgba(76, 180, 255, 0.12);
+            --filo-16: rgba(75, 91, 103, 0.08);
+            --filo-17: #9BB26C;
+            --filo-18: #7EBA02;
+            --filo-19: #F7A501;
+            --filo-20: #461D21;
+            --filo-21: #B4AEDC;
+            --filo-22: #7F6EFF;
+            --filo-23: #F6D4FF;
+            --filo-24: #BF3EE2;
+            --filo-25: #727272;
+            --bg: #000000;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            padding: 40px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--filo-06);
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--filo-07);
+            margin-bottom: 32px;
+        }
+
+        .mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 8px;
+            background: var(--filo-10);
+            padding: 4px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .mode-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            background: transparent;
+            color: var(--filo-07);
+            transition: all 0.2s ease;
+        }
+
+        .mode-btn.active {
+            background: var(--filo-02);
+            color: white;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--filo-06);
+            margin-bottom: 16px;
+        }
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .color-card {
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--filo-10);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .color-swatch {
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .color-swatch.bordered {
+            border: 1px solid var(--filo-07);
+        }
+
+        .color-info {
+            padding: 12px;
+        }
+
+        .color-number {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--filo-06);
+        }
+
+        .color-name {
+            font-size: 12px;
+            color: var(--filo-07);
+            margin-top: 2px;
+        }
+
+        .color-hex {
+            font-size: 11px;
+            font-family: monospace;
+            color: var(--filo-08);
+            margin-top: 4px;
+        }
+
+        .text-light {
+            color: white;
+        }
+
+        .text-dark {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="mode-toggle">
+        <button class="mode-btn active" onclick="setMode('light')">Light</button>
+        <button class="mode-btn" onclick="setMode('dark')">Dark</button>
+    </div>
+
+    <h1>Filo Color Palette</h1>
+    <p class="subtitle">25 color tokens with light and dark mode support</p>
+
+    <div class="section">
+        <h2 class="section-title">Primary Colors</h2>
+        <div class="color-grid">
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--filo-01);">
+                    <span class="text-dark">Aa</span>
+                </div>
+                <div class="color-info">
+                    <div class="color-number">01</div>
+                    <div class="color-name">Primary Light</div>
+                    <div class="color-hex">Light: #1F9EFA / Dark: #6CC1FF</div>
+                </div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--filo-02);">
+                    <span class="text-light">Aa</span>
+                </div>
+                <div class="color-info">
+                    <div class="color-number">02 - Primary</div>
+                    <div class="color-name">Filo Brand Blue</div>
+                    <div class="color-hex">Light: #22A0FB / Dark: #45B1FF</div>
+                </div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--filo-03);">
+                    <span class="text-light">Aa</span>
+                </div>
+                <div class="color-info">
+                    <div class="color-number">03</div>
+                    <div class="color-name">Primary Dark</div>
+                    <div class="color-hex">Light: #4BACF5 / Dark: #213D51</div>
+                </div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--filo-04);">
+                    <span class="text-light">Aa</span>
+                </div>
+                <div class="color-info">
+                    <div class="color-number">04</div>
+                    <div class="color-name">Primary Darker</div>
+                    <div class="color-hex">Light: #5ABEFF / Dark: #2E5168</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Text & Background</h2>
+        <div class="color-grid">
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--filo-06);">
+                    <span class="text-light">Aa</span>
+                </div>
+                <div class="color-info">
+                    <div class="color-number">06</div>
+                    <div class="color-name">Text Primary</div>
+                    <div class="color-hex">Light: #000000 / Dark: #FFFFFF</div>
+                </div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--filo-07);">
+                    <span class="text-light">Aa</span>
+                </div>
+                <div class="color-info">
+                    <div class="color-number">07</div>
+                    <div class="color-name">Text Secondary</div>
+                    <div class="color-hex">Light: #707070 / Dark: #8B8B8B</div>
+                </div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--filo-08);">
+                    <span class="text-light">Aa</span>
+                </div>
+                <div class="color-info">
+                    <div class="color-number">08</div>
+                    <div class="color-name">Text Tertiary</div>
+                    <div class="color-hex">Light: #999999 / Dark: #414149</div>
+                </div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch bordered" style="background: var(--filo-10);">
+                    <span class="text-dark">Aa</span>
+                </div>
+                <div class="color-info">
+                    <div class="color-number">10</div>
+                    <div class="color-name">Background</div>
+                    <div class="color-hex">Light: #FFFFFF / Dark: #1D1D21</div>
+                </div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--filo-09);">
+                    <span class="text-dark">Aa</span>
+                </div>
+                <div class="color-info">
+                    <div class="color-number">09</div>
+                    <div class="color-name">Surface Tertiary</div>
+                    <div class="color-hex">Light: #F5F5F5 / Dark: #2A2A30</div>
+                </div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--filo-05);">
+                    <span class="text-dark">Aa</span>
+                </div>
+                <div class="color-info">
+                    <div class="color-number">05</div>
+                    <div class="color-name">Surface Secondary</div>
+                    <div class="color-hex">Light: #E8EEF2 / Dark: #344352</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Semantic Colors</h2>
+        <div class="color-grid">
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--filo-11);">
+                    <span class="text-light">Aa</span>
+                </div>
+                <div class="color-info">
+                    <div class="color-number">11</div>
+                    <div class="color-name">Error</div>
+                    <div class="color-hex">Light: #E53935 / Dark: #BE424D</div>
+                </div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--filo-12);">
+                    <span class="text-dark">Aa</span>
+                </div>
+                <div class="color-info">
+                    <div class="color-number">12</div>
+                    <div class="color-name">Warning</div>
+                    <div class="color-hex">Light: #FFB800 / Dark: #FFDC84</div>
+                </div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--filo-18);">
+                    <span class="text-light">Aa</span>
+                </div>
+                <div class="color-info">
+                    <div class="color-number">18</div>
+                    <div class="color-name">Success</div>
+                    <div class="color-hex">#7EBA02 (both modes)</div>
+                </div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--filo-13);">
+                    <span class="text-light">Aa</span>
+                </div>
+                <div class="color-info">
+                    <div class="color-number">13</div>
+                    <div class="color-name">Info</div>
+                    <div class="color-hex">Light: #22A0FB / Dark: #3DAEFF</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Accent Colors</h2>
+        <div class="color-grid">
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--filo-22);">
+                    <span class="text-light">Aa</span>
+                </div>
+                <div class="color-info">
+                    <div class="color-number">22</div>
+                    <div class="color-name">Purple</div>
+                    <div class="color-hex">#7F6EFF (both modes)</div>
+                </div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--filo-24);">
+                    <span class="text-light">Aa</span>
+                </div>
+                <div class="color-info">
+                    <div class="color-number">24</div>
+                    <div class="color-name">Pink</div>
+                    <div class="color-hex">#BF3EE2 (both modes)</div>
+                </div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--filo-19);">
+                    <span class="text-light">Aa</span>
+                </div>
+                <div class="color-info">
+                    <div class="color-number">19</div>
+                    <div class="color-name">Orange</div>
+                    <div class="color-hex">#F7A501 (both modes)</div>
+                </div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--filo-25);">
+                    <span class="text-light">Aa</span>
+                </div>
+                <div class="color-info">
+                    <div class="color-number">25</div>
+                    <div class="color-name">Neutral</div>
+                    <div class="color-hex">Light: #9E9E9E / Dark: #727272</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function setMode(mode) {
+            document.body.classList.toggle('dark-mode', mode === 'dark');
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.toLowerCase() === mode);
+            });
+        }
+    </script>
+</body>
+</html>

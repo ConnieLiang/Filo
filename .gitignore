@@ -1,0 +1,17 @@
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Thumbnails
+Thumbs.db
+
+# IDE
+.idea/
+*.xcworkspace/
+xcuserdata/
+
+# Build outputs
+build/
+DerivedData/

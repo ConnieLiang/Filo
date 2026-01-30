@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filo Buttons</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --filo-02: #22A0FB;
+            --filo-06: #000000;
+            --filo-07: #707070;
+            --filo-08: #D5D5D5;
+            --filo-09: #FCFAFA;
+            --filo-10: #FFFFFF;
+            --filo-11: #EF4A68;
+            --filo-14: rgba(0, 0, 0, 0.04);
+            --filo-15: rgba(76, 180, 255, 0.12);
+            --filo-18: #7EBA02;
+            --filo-19: #F7A501;
+            --filo-22: #6450F9;
+            --filo-24: #BF3EE2;
+            
+            --font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            
+            /* Filo Typography Tokens Used:
+               P3_M: 15px, 500, 20px line-height, -0.2px letter-spacing (pills small/medium, label-prompt)
+               P3_B: 15px, 700, 20px line-height, -0.2px letter-spacing (pills large, labels desktop, google btn)
+               P4_B: 13px, 700, 15px line-height, 0 letter-spacing (labels mobile)
+            */
+        }
+
+        body.dark-mode {
+            --filo-02: #45B1FF;
+            --filo-06: #FFFFFF;
+            --filo-07: #8B8B8B;
+            --filo-08: #414149;
+            --filo-09: #121214;
+            --filo-10: #1D1D21;
+            --filo-11: #FF6B85;
+            --filo-14: rgba(255, 255, 255, 0.06);
+            --filo-15: rgba(76, 180, 255, 0.16);
+            --filo-18: #9AD803;
+            --filo-19: #FFBA2E;
+            --filo-22: #8577FF;
+            --filo-24: #D65FF7;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--filo-09);
+            min-height: 100vh;
+            padding: 60px 80px;
+            color: var(--filo-06);
+        }
+
+        .mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 8px;
+            background: var(--filo-10);
+            padding: 4px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .mode-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            background: transparent;
+            color: var(--filo-07);
+            transition: all 0.2s ease;
+        }
+
+        .mode-btn.active {
+            background: var(--filo-02);
+            color: white;
+        }
+
+        .header {
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: var(--filo-07);
+            margin-bottom: 8px;
+        }
+
+        .hint {
+            font-size: 13px;
+            color: var(--filo-07);
+        }
+
+        /* ============================================
+           SECTION LAYOUT
+           ============================================ */
+        .sections {
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+        }
+
+        .section {
+            background: var(--filo-14);
+            border-radius: 24px;
+            padding: 40px;
+            border: 1px dashed var(--filo-08);
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--filo-07);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 32px;
+        }
+
+        /* ============================================
+           PILLS (BUTTONS)
+           ============================================ */
+        .pills-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .pills-row {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .pill-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 100px;
+            font-family: var(--font-family);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            outline: none;
+        }
+
+        .pill-btn:active {
+            transform: scale(0.98);
+            opacity: 0.8;
+        }
+
+        /* Sizes - Using Filo Typography P3_M */
+        .pill-small {
+            padding: 8px 12px;
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 20px;
+            letter-spacing: -0.2px;
+        }
+
+        .pill-medium {
+            padding: 12px 30px;
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 20px;
+            letter-spacing: -0.2px;
+        }
+
+        /* Large uses P3_B */
+        .pill-large {
+            padding: 16px 34px;
+            width: 350px;
+            font-size: 15px;
+            font-weight: 700;
+            line-height: 20px;
+            letter-spacing: -0.2px;
+            text-align: center;
+        }
+
+        /* Variants */
+        .pill-outlined {
+            background: var(--filo-10);
+            border: 0.5px solid var(--filo-08);
+            color: var(--filo-06);
+        }
+
+        .pill-ghost {
+            background: var(--filo-14);
+            color: var(--filo-02);
+        }
+
+        .pill-tinted {
+            background: var(--filo-15);
+            color: var(--filo-02);
+        }
+
+        .pill-filled {
+            background: var(--filo-02);
+            color: var(--filo-10);
+        }
+
+        body.dark-mode .pill-filled {
+            color: #000000;
+        }
+
+        /* ============================================
+           LABELS
+           ============================================ */
+        .labels-grid {
+            display: flex;
+            gap: 80px;
+        }
+
+        .label-column {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .smart-label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--filo-14);
+            border-radius: 100px;
+            font-family: var(--font-family);
+            cursor: pointer;
+            width: fit-content;
+        }
+
+        /* Mobile Labels - Using Filo Typography P4_B */
+        .smart-label-mobile {
+            padding: 4px 8px;
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 15px;
+            letter-spacing: 0;
+        }
+
+        /* Desktop Labels - Using Filo Typography P3_B */
+        .smart-label-desktop {
+            padding: 6px 10px;
+            font-size: 15px;
+            font-weight: 700;
+            line-height: 20px;
+            letter-spacing: -0.2px;
+        }
+
+        /* Label Colors */
+        .smart-label-blue { color: var(--filo-02); }
+        .smart-label-green { color: var(--filo-18); }
+        .smart-label-yellow { color: var(--filo-19); }
+        .smart-label-red { color: var(--filo-11); }
+        .smart-label-purple { color: var(--filo-22); }
+        .smart-label-cyan { color: var(--filo-24); }
+        .smart-label-gray { color: var(--filo-07); }
+
+        /* ============================================
+           OTHERS
+           ============================================ */
+        .others-grid {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        /* label-prompt - Using Filo Typography P3_M */
+        .label-prompt {
+            display: inline-flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            padding: 6px 12px 6px 8px;
+            gap: 2px;
+            background: rgba(0, 0, 0, 0.04);
+            border-radius: 100px;
+            font-family: var(--font-family);
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 20px;
+            letter-spacing: -0.2px;
+            color: var(--filo-06);
+            cursor: pointer;
+            border: none;
+            width: auto;
+        }
+
+        body.dark-mode .label-prompt {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .label-prompt-icon {
+            width: 16px;
+            height: 16px;
+            color: var(--filo-06);
+        }
+
+        /* Google Sign In - Using Filo Typography P3_B */
+        .google-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: var(--filo-10);
+            border: 0.5px solid var(--filo-08);
+            border-radius: 100px;
+            padding: 16px 34px;
+            width: 350px;
+            font-family: var(--font-family);
+            font-size: 15px;
+            font-weight: 700;
+            line-height: 20px;
+            letter-spacing: -0.2px;
+            color: var(--filo-06);
+            cursor: pointer;
+        }
+
+        .google-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Button with name */
+        .btn-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .btn-item:hover {
+            border-color: var(--filo-02);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-name {
+            font-size: 11px;
+            color: var(--filo-07);
+            font-weight: 400;
+        }
+
+        .pills-row .btn-item:last-child {
+            align-items: flex-start;
+        }
+
+        /* Label with name */
+        .label-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .label-item:hover {
+            border-color: var(--filo-02);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .label-name {
+            font-size: 11px;
+            color: var(--filo-07);
+            font-weight: 400;
+        }
+
+        /* Others with name */
+        .other-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .other-item:hover {
+            border-color: var(--filo-02);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .other-name {
+            font-size: 11px;
+            color: var(--filo-07);
+            font-weight: 400;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--filo-06);
+            color: var(--filo-10);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="mode-toggle">
+        <button class="mode-btn active" onclick="setMode('light')">Light</button>
+        <button class="mode-btn" onclick="setMode('dark')">Dark</button>
+    </div>
+
+    <div class="header">
+        <h1>Filo Buttons</h1>
+        <p class="subtitle">28 buttons — Pills, Labels, and Others</p>
+        <p class="hint">Click any button to copy its name</p>
+    </div>
+
+    <div class="sections">
+        <!-- Pills Section -->
+        <div class="section">
+            <div class="section-title">Pills</div>
+            <div class="pills-grid">
+                <!-- Row 1: White (Outlined) -->
+                <div class="pills-row">
+                    <div class="btn-item" onclick="copyName('button-small-white')">
+                        <button class="pill-btn pill-small pill-outlined">button-small</button>
+                        <span class="btn-name">button-small-white</span>
+                    </div>
+                    <div class="btn-item" onclick="copyName('button-medium-white')">
+                        <button class="pill-btn pill-medium pill-outlined">button-medium</button>
+                        <span class="btn-name">button-medium-white</span>
+                    </div>
+                    <div class="btn-item" onclick="copyName('button-large-white')">
+                        <button class="pill-btn pill-large pill-outlined">button-large</button>
+                        <span class="btn-name">button-large-white</span>
+                    </div>
+                </div>
+                <!-- Row 2: Gray (Ghost) -->
+                <div class="pills-row">
+                    <div class="btn-item" onclick="copyName('button-small-gray')">
+                        <button class="pill-btn pill-small pill-ghost">button-small</button>
+                        <span class="btn-name">button-small-gray</span>
+                    </div>
+                    <div class="btn-item" onclick="copyName('button-medium-gray')">
+                        <button class="pill-btn pill-medium pill-ghost">button-medium</button>
+                        <span class="btn-name">button-medium-gray</span>
+                    </div>
+                    <div class="btn-item" onclick="copyName('button-large-gray')">
+                        <button class="pill-btn pill-large pill-ghost">button-large</button>
+                        <span class="btn-name">button-large-gray</span>
+                    </div>
+                </div>
+                <!-- Row 3: Blue-lite (Tinted) -->
+                <div class="pills-row">
+                    <div class="btn-item" onclick="copyName('button-small-blue-lite')">
+                        <button class="pill-btn pill-small pill-tinted">button-small</button>
+                        <span class="btn-name">button-small-blue-lite</span>
+                    </div>
+                    <div class="btn-item" onclick="copyName('button-medium-blue-lite')">
+                        <button class="pill-btn pill-medium pill-tinted">button-medium</button>
+                        <span class="btn-name">button-medium-blue-lite</span>
+                    </div>
+                    <div class="btn-item" onclick="copyName('button-large-blue-lite')">
+                        <button class="pill-btn pill-large pill-tinted">button-large</button>
+                        <span class="btn-name">button-large-blue-lite</span>
+                    </div>
+                </div>
+                <!-- Row 4: Blue (Filled) -->
+                <div class="pills-row">
+                    <div class="btn-item" onclick="copyName('button-small-blue')">
+                        <button class="pill-btn pill-small pill-filled">button-small</button>
+                        <span class="btn-name">button-small-blue</span>
+                    </div>
+                    <div class="btn-item" onclick="copyName('button-medium-blue')">
+                        <button class="pill-btn pill-medium pill-filled">button-medium</button>
+                        <span class="btn-name">button-medium-blue</span>
+                    </div>
+                    <div class="btn-item" onclick="copyName('button-large-blue')">
+                        <button class="pill-btn pill-large pill-filled">button-large</button>
+                        <span class="btn-name">button-large-blue</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Labels Section -->
+        <div class="section">
+            <div class="section-title">Labels</div>
+            <div class="labels-grid">
+                <!-- Mobile Labels -->
+                <div class="label-column">
+                    <div class="label-item" onclick="copyName('label-mobile-blue')">
+                        <span class="smart-label smart-label-mobile smart-label-blue">label-mobile-blue</span>
+                        <span class="label-name">label-mobile-blue</span>
+                    </div>
+                    <div class="label-item" onclick="copyName('label-mobile-green')">
+                        <span class="smart-label smart-label-mobile smart-label-green">label-mobile-green</span>
+                        <span class="label-name">label-mobile-green</span>
+                    </div>
+                    <div class="label-item" onclick="copyName('label-mobile-yellow')">
+                        <span class="smart-label smart-label-mobile smart-label-yellow">label-mobile-yellow</span>
+                        <span class="label-name">label-mobile-yellow</span>
+                    </div>
+                    <div class="label-item" onclick="copyName('label-mobile-red')">
+                        <span class="smart-label smart-label-mobile smart-label-red">label-mobile-red</span>
+                        <span class="label-name">label-mobile-red</span>
+                    </div>
+                    <div class="label-item" onclick="copyName('label-mobile-purple')">
+                        <span class="smart-label smart-label-mobile smart-label-purple">label-mobile-purple</span>
+                        <span class="label-name">label-mobile-purple</span>
+                    </div>
+                    <div class="label-item" onclick="copyName('label-mobile-cyan')">
+                        <span class="smart-label smart-label-mobile smart-label-cyan">label-mobile-cyan</span>
+                        <span class="label-name">label-mobile-cyan</span>
+                    </div>
+                    <div class="label-item" onclick="copyName('label-mobile-gray')">
+                        <span class="smart-label smart-label-mobile smart-label-gray">label-mobile-gray</span>
+                        <span class="label-name">label-mobile-gray</span>
+                    </div>
+                </div>
+                <!-- Desktop Labels -->
+                <div class="label-column">
+                    <div class="label-item" onclick="copyName('label-desktop-blue')">
+                        <span class="smart-label smart-label-desktop smart-label-blue">label-desktop-blue</span>
+                        <span class="label-name">label-desktop-blue</span>
+                    </div>
+                    <div class="label-item" onclick="copyName('label-desktop-green')">
+                        <span class="smart-label smart-label-desktop smart-label-green">label-desktop-green</span>
+                        <span class="label-name">label-desktop-green</span>
+                    </div>
+                    <div class="label-item" onclick="copyName('label-desktop-yellow')">
+                        <span class="smart-label smart-label-desktop smart-label-yellow">label-desktop-yellow</span>
+                        <span class="label-name">label-desktop-yellow</span>
+                    </div>
+                    <div class="label-item" onclick="copyName('label-desktop-red')">
+                        <span class="smart-label smart-label-desktop smart-label-red">label-desktop-red</span>
+                        <span class="label-name">label-desktop-red</span>
+                    </div>
+                    <div class="label-item" onclick="copyName('label-desktop-purple')">
+                        <span class="smart-label smart-label-desktop smart-label-purple">label-desktop-purple</span>
+                        <span class="label-name">label-desktop-purple</span>
+                    </div>
+                    <div class="label-item" onclick="copyName('label-desktop-cyan')">
+                        <span class="smart-label smart-label-desktop smart-label-cyan">label-desktop-cyan</span>
+                        <span class="label-name">label-desktop-cyan</span>
+                    </div>
+                    <div class="label-item" onclick="copyName('label-desktop-gray')">
+                        <span class="smart-label smart-label-desktop smart-label-gray">label-desktop-gray</span>
+                        <span class="label-name">label-desktop-gray</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Others Section -->
+        <div class="section">
+            <div class="section-title">Others</div>
+            <div class="others-grid">
+                <div class="other-item" onclick="copyName('input-pompt')">
+                    <button class="label-prompt">
+                        <svg class="label-prompt-icon" viewBox="0 0 24 24" fill="none">
+                            <path d="M11.9952 22C10.6147 22 9.3214 21.7386 8.11514 21.2159C6.90889 20.6996 5.84777 19.9832 4.93179 19.0668C4.0158 18.1568 3.29657 17.0984 2.77407 15.8916C2.25802 14.6783 2 13.3811 2 12C2 10.6189 2.25802 9.32494 2.77407 8.1181C3.29657 6.90481 4.0158 5.83995 4.93179 4.92352C5.84777 4.0071 6.90889 3.29074 8.11514 2.77444C9.3214 2.25815 10.6147 2 11.9952 2C13.3756 2 14.6689 2.25815 15.8752 2.77444C17.0879 3.29074 18.1522 4.0071 19.0682 4.92352C19.9842 5.83995 20.7002 6.90481 21.2163 8.1181C21.7388 9.32494 22 10.6189 22 12C22 13.3811 21.7388 14.6783 21.2163 15.8916C20.7002 17.0984 19.9842 18.1568 19.0682 19.0668C18.1522 19.9832 17.0879 20.6996 15.8752 21.2159C14.6689 21.7386 13.3756 22 11.9952 22ZM11.9952 20.0252C13.1047 20.0252 14.1432 19.8154 15.1108 19.3959C16.0784 18.9829 16.9298 18.4085 17.6652 17.6728C18.407 16.9371 18.9844 16.0852 19.3972 15.1171C19.81 14.1491 20.0164 13.11 20.0164 12C20.0164 10.89 19.81 9.85092 19.3972 8.88287C18.9844 7.90836 18.407 7.05647 17.6652 6.3272C16.9298 5.59148 16.0784 5.0171 15.1108 4.60407C14.1432 4.18458 13.1047 3.97483 11.9952 3.97483C10.8921 3.97483 9.85357 4.18458 8.87954 4.60407C7.91195 5.0171 7.06047 5.59148 6.32511 6.3272C5.58974 7.05647 5.01242 7.90836 4.59313 8.88287C4.18029 9.85092 3.97388 10.89 3.97388 12C3.97388 13.11 4.18029 14.1491 4.59313 15.1171C5.01242 16.0852 5.58974 16.9371 6.32511 17.6728C7.06047 18.4085 7.91195 18.9829 8.87954 19.3959C9.85357 19.8154 10.8921 20.0252 11.9952 20.0252ZM11.9855 16.7628C11.3146 16.7628 10.7212 16.6434 10.2051 16.4046C9.69553 16.1594 9.29882 15.8787 9.015 15.5624C8.73762 15.2462 8.59894 14.9816 8.59894 14.7686C8.59894 14.6525 8.64409 14.5718 8.7344 14.5266C8.83116 14.475 8.93437 14.475 9.04402 14.5266C9.39881 14.7138 9.80197 14.8945 10.2535 15.0687C10.705 15.243 11.2824 15.3301 11.9855 15.3301C12.6886 15.3301 13.2659 15.243 13.7175 15.0687C14.1755 14.8945 14.5786 14.7138 14.9269 14.5266C15.0366 14.475 15.1398 14.475 15.2366 14.5266C15.3333 14.5718 15.3817 14.6525 15.3817 14.7686C15.3817 14.9816 15.2398 15.2462 14.956 15.5624C14.6721 15.8787 14.2754 16.1594 13.7658 16.4046C13.2562 16.6434 12.6628 16.7628 11.9855 16.7628ZM9.13111 11.1288C8.82793 11.1288 8.56346 11.0061 8.33769 10.7609C8.11837 10.5156 8.00871 10.1994 8.00871 9.8122C8.00871 9.43143 8.11837 9.11843 8.33769 8.87318C8.56346 8.62149 8.82793 8.49564 9.13111 8.49564C9.43428 8.49564 9.70198 8.62149 9.9342 8.87318C10.1664 9.11843 10.2825 9.43143 10.2825 9.8122C10.2825 10.1994 10.1664 10.5156 9.9342 10.7609C9.70198 11.0061 9.43428 11.1288 9.13111 11.1288ZM14.8399 11.1288C14.5367 11.1288 14.2722 11.0061 14.0464 10.7609C13.8271 10.5156 13.7175 10.1994 13.7175 9.8122C13.7175 9.43143 13.8271 9.11843 14.0464 8.87318C14.2722 8.62149 14.5367 8.49564 14.8399 8.49564C15.143 8.49564 15.4107 8.62149 15.643 8.87318C15.8752 9.11843 15.9913 9.43143 15.9913 9.8122C15.9913 10.1994 15.8752 10.5156 15.643 10.7609C15.4107 11.0061 15.143 11.1288 14.8399 11.1288Z" fill="currentColor"/>
+                        </svg>
+                        label-prompt
+                    </button>
+                    <span class="other-name">input-pompt</span>
+                </div>
+                
+                <div class="other-item" onclick="copyName('signin')">
+                    <button class="google-btn">
+                        <svg class="google-icon" viewBox="0 0 24 24" fill="none">
+                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                        </svg>
+                        Sign in with Google
+                    </button>
+                    <span class="other-name">signin</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">Copied!</div>
+
+    <script>
+        function setMode(mode) {
+            document.body.classList.toggle('dark-mode', mode === 'dark');
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.toLowerCase() === mode);
+            });
+        }
+
+        function copyName(name) {
+            navigator.clipboard.writeText(name);
+            const toast = document.getElementById('toast');
+            toast.textContent = `Copied: ${name}`;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+    </script>
+</body>
+</html>

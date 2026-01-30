@@ -1,0 +1,246 @@
+{
+  "name": "Filo Typography System",
+  "version": "1.0.0",
+  "description": "Complete typography scale with SF Pro and New York Small fonts",
+  "figma": {
+    "file": "Pmns0wqmroGCQmqFPeSrwd",
+    "node": "1-1339"
+  },
+  "fonts": {
+    "primary": "SF Pro",
+    "serif": "New York Small"
+  },
+  "weights": {
+    "regular": 400,
+    "medium": 500,
+    "bold": 700
+  },
+  "styles": {
+    "H1": {
+      "font": "SF Pro",
+      "weight": "Bold",
+      "weightValue": 700,
+      "size": 40,
+      "lineHeight": 52,
+      "letterSpacing": 0.2,
+      "usage": "Main page titles, hero sections"
+    },
+    "H2": {
+      "font": "SF Pro",
+      "weight": "Bold",
+      "weightValue": 700,
+      "size": 32,
+      "lineHeight": 42,
+      "letterSpacing": 0.2,
+      "usage": "Section headers"
+    },
+    "H3": {
+      "font": "SF Pro",
+      "weight": "Bold",
+      "weightValue": 700,
+      "size": 28,
+      "lineHeight": 36,
+      "letterSpacing": 0.1,
+      "usage": "Sub-section headers"
+    },
+    "H4": {
+      "font": "SF Pro",
+      "weight": "Bold",
+      "weightValue": 700,
+      "size": 26,
+      "lineHeight": 32,
+      "letterSpacing": 0,
+      "usage": "Card titles, modal headers"
+    },
+    "H5": {
+      "font": "SF Pro",
+      "weight": "Bold",
+      "weightValue": 700,
+      "size": 22,
+      "lineHeight": 24,
+      "letterSpacing": 0,
+      "usage": "Small headers, labels"
+    },
+    "P1_B": {
+      "font": "SF Pro",
+      "weight": "Bold",
+      "weightValue": 700,
+      "size": 19,
+      "lineHeight": 26,
+      "letterSpacing": -0.2,
+      "usage": "Large body text bold"
+    },
+    "P1_M": {
+      "font": "SF Pro",
+      "weight": "Medium",
+      "weightValue": 500,
+      "size": 19,
+      "lineHeight": 26,
+      "letterSpacing": -0.2,
+      "usage": "Large body text medium"
+    },
+    "P1.1_B": {
+      "font": "SF Pro",
+      "weight": "Bold",
+      "weightValue": 700,
+      "size": 17,
+      "lineHeight": 24,
+      "letterSpacing": -0.2,
+      "usage": "Body text bold"
+    },
+    "P1.1_R": {
+      "font": "SF Pro",
+      "weight": "Regular",
+      "weightValue": 400,
+      "size": 17,
+      "lineHeight": 24,
+      "letterSpacing": -0.2,
+      "usage": "Body text regular"
+    },
+    "P1.1_R_Italic": {
+      "font": "SF Pro",
+      "weight": "Regular Italic",
+      "weightValue": 400,
+      "size": 17,
+      "lineHeight": 24,
+      "letterSpacing": -0.2,
+      "isItalic": true,
+      "usage": "Body text italic"
+    },
+    "P1S_B": {
+      "font": "New York Small",
+      "weight": "Bold",
+      "weightValue": 700,
+      "size": 18,
+      "lineHeight": 27,
+      "letterSpacing": 0,
+      "usage": "Serif body text bold"
+    },
+    "P1S_M": {
+      "font": "New York Small",
+      "weight": "Medium",
+      "weightValue": 500,
+      "size": 18,
+      "lineHeight": 27,
+      "letterSpacing": 0,
+      "usage": "Serif body text medium"
+    },
+    "P2_B": {
+      "font": "SF Pro",
+      "weight": "Bold",
+      "weightValue": 700,
+      "size": 16,
+      "lineHeight": 20,
+      "letterSpacing": -0.2,
+      "usage": "Standard body bold"
+    },
+    "P2_M": {
+      "font": "SF Pro",
+      "weight": "Medium",
+      "weightValue": 500,
+      "size": 16,
+      "lineHeight": 20,
+      "letterSpacing": -0.2,
+      "usage": "Standard body medium"
+    },
+    "P2_R": {
+      "font": "SF Pro",
+      "weight": "Regular",
+      "weightValue": 400,
+      "size": 16,
+      "lineHeight": 20,
+      "letterSpacing": -0.2,
+      "usage": "Standard body regular"
+    },
+    "P2S_B": {
+      "font": "New York Small",
+      "weight": "Bold",
+      "weightValue": 700,
+      "size": 16,
+      "lineHeight": 20,
+      "letterSpacing": 0,
+      "usage": "Serif standard body bold"
+    },
+    "P2S_R": {
+      "font": "New York Small",
+      "weight": "Regular",
+      "weightValue": 400,
+      "size": 16,
+      "lineHeight": 20,
+      "letterSpacing": 0,
+      "usage": "Serif standard body regular"
+    },
+    "P3_B": {
+      "font": "SF Pro",
+      "weight": "Bold",
+      "weightValue": 700,
+      "size": 15,
+      "lineHeight": 20,
+      "letterSpacing": -0.2,
+      "usage": "Small body bold"
+    },
+    "P3_M": {
+      "font": "SF Pro",
+      "weight": "Medium",
+      "weightValue": 500,
+      "size": 15,
+      "lineHeight": 20,
+      "letterSpacing": -0.2,
+      "usage": "Small body medium"
+    },
+    "P3_R": {
+      "font": "SF Pro",
+      "weight": "Regular",
+      "weightValue": 400,
+      "size": 15,
+      "lineHeight": 20,
+      "letterSpacing": -0.2,
+      "usage": "Small body regular"
+    },
+    "P3.1_M": {
+      "font": "SF Pro",
+      "weight": "Medium",
+      "weightValue": 500,
+      "size": 14,
+      "lineHeight": 18,
+      "letterSpacing": -0.2,
+      "usage": "Extra small body medium"
+    },
+    "P4_B": {
+      "font": "SF Pro",
+      "weight": "Bold",
+      "weightValue": 700,
+      "size": 13,
+      "lineHeight": 15,
+      "letterSpacing": 0,
+      "usage": "Caption bold"
+    },
+    "P4_R": {
+      "font": "SF Pro",
+      "weight": "Regular",
+      "weightValue": 400,
+      "size": 13,
+      "lineHeight": 15,
+      "letterSpacing": 0,
+      "usage": "Caption regular"
+    },
+    "P5_B": {
+      "font": "SF Pro",
+      "weight": "Bold",
+      "weightValue": 700,
+      "size": 10,
+      "lineHeight": 12,
+      "letterSpacing": 0,
+      "usage": "Micro text bold"
+    },
+    "P5_R": {
+      "font": "SF Pro",
+      "weight": "Regular",
+      "weightValue": 400,
+      "size": 10,
+      "lineHeight": 12,
+      "letterSpacing": 0,
+      "usage": "Micro text regular"
+    }
+  }
+}
