@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html> -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Filo Icons Library</title>
+    <title>Icons</title>
     <style>
         * {
             margin: 0;
@@ -190,6 +190,10 @@
 <body>
     <div class="controls">
         <input type="text" class="search-box" placeholder="Search icons..." oninput="filterIcons(this.value)">
+        <div class="mode-toggle">
+            <button class="mode-btn active" onclick="setMode('light')">Light</button>
+            <button class="mode-btn" onclick="setMode('dark')">Dark</button>
+        </div>
     </div>
 
     <h1>Filo Icons</h1>
@@ -200,15 +204,6 @@
     <div class="toast" id="toast">Copied!</div>
 
     <script>
-        // Check URL parameter for mode and apply on load
-        (function() {
-            const params = new URLSearchParams(window.location.search);
-            const mode = params.get('mode');
-            if (mode === 'dark') {
-                document.body.classList.add('dark-mode');
-            }
-        })();
-
         const iconCategories = {
             "Navigation": [
                 "inbox-before", "inbox-after", "todo", "todo-off", "compose", 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Filo Bars</title>
+    <title>Bars</title>
     <style>
         * {
             margin: 0;
@@ -118,38 +118,6 @@
             transform: translateY(-2px);
         }
 
-        .item:hover .tooltip {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        /* ============================================
-           TOOLTIP
-           ============================================ */
-        .tooltip {
-            position: absolute;
-            bottom: calc(100% + 8px);
-            left: 50%;
-            transform: translateX(-50%) translateY(4px);
-            background: var(--filo-10);
-            color: var(--filo-07);
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 400;
-            line-height: 1.5;
-            max-width: 280px;
-            text-align: left;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.15s ease, transform 0.15s ease;
-            z-index: 100;
-            pointer-events: none;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            border: 0.5px solid var(--filo-08);
-        }
-
         .item-name {
             font-size: 13px;
             color: var(--filo-07);
@@ -163,9 +131,9 @@
             width: 390px;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-            background: var(--filo-10);
+            background: transparent;
         }
+
 
         /* ============================================
            BOTTOM TAB BAR
@@ -401,27 +369,26 @@
         <div class="section">
             <h2 class="section-title">Bottom Tab</h2>
             <div class="items-grid">
-                <!-- Bottom Tab Bar -->
-                <div class="item" onclick="copyName('bottom-tab')">
-                    <div class="tooltip">Main navigation with 4 tabs: Inbox, To-do, AI, and Compose. Uses iOS 26 Liquid Glass style with frosted blur effect.</div>
+                <!-- Interactive Bottom Tab -->
+                <div class="item" id="bottom-tab-item">
                     <div class="bar-frame">
                         <div class="tab-bar-container">
                             <div class="tab-bar">
-                                <div class="glass-pill-tabs">
-                                    <div class="tab-item" data-tab="Inbox">
+                                <div class="glass-pill-tabs" id="interactive-tabs">
+                                    <div class="tab-item active" data-tab="inbox" onclick="selectBottomTab('inbox', event)">
                                         <div class="tab-icon">
                                             <svg class="icon-inactive" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M23 5.99979V17.9998C23 19.6521 21.6523 20.9998 20 20.9998H4C2.34772 20.9998 1 19.6521 1 17.9998V5.99979C1 4.34294 2.34315 2.99979 4 2.99979H20C21.6569 2.99979 23 4.34294 23 5.99979ZM3.24859 5.65315C3.16709 5.5961 3.13831 5.48631 3.19771 5.40651C3.38079 5.16057 3.67343 4.99979 4 4.99979H20C20.3266 4.99979 20.6192 5.16057 20.8023 5.40651C20.8617 5.48631 20.8329 5.5961 20.7514 5.65315L12.2867 11.5784C12.1146 11.6989 11.8854 11.6989 11.7133 11.5784L3.24859 5.65315ZM3 8.11251C3 8.03161 3.09107 7.98419 3.15735 8.03059L10.8531 13.4176C11.5417 13.8997 12.4583 13.8997 13.1469 13.4176L20.8427 8.03059C20.9089 7.98419 21 8.03161 21 8.11251V17.9998C21 18.5475 20.5477 18.9998 20 18.9998H4C3.45228 18.9998 3 18.5475 3 17.9998V8.11251Z" fill="currentColor"/></svg>
                                             <svg class="icon-active" viewBox="0 0 24 24" fill="none"><path d="M22.8408 6.35156C22.9069 6.30354 22.9998 6.35104 23 6.43262V18C23 19.6523 21.6523 21 20 21H4C2.34772 21 1.00001 19.6523 1 18V6.43262C1.00019 6.35104 1.09315 6.30354 1.15918 6.35156L10.8232 13.3809C11.5245 13.8909 12.4755 13.8909 13.1768 13.3809L22.8408 6.35156Z" fill="currentColor"/><path d="M20 3C20.9056 3 21.7197 3.40498 22.2705 4.04297C22.3435 4.12754 22.3238 4.2546 22.2334 4.32031L13.1768 10.9082C12.4755 11.4182 11.5245 11.4182 10.8232 10.9082L1.7666 4.32031C1.67624 4.2546 1.65647 4.12754 1.72949 4.04297C2.28034 3.40497 3.09438 3.00002 4 3H20Z" fill="currentColor"/></svg>
                                         </div>
                                         <span class="tab-label">Inbox</span>
                                     </div>
-                                    <div class="tab-item" data-tab="To-do">
+                                    <div class="tab-item" data-tab="todo" onclick="selectBottomTab('todo', event)">
                                         <div class="tab-icon">
                                             <svg viewBox="0 0 24 24" fill="none"><path d="M2.04466 4C1.5073 4 1.07168 4.49055 1.07168 5.09565C1.07168 5.70076 1.5073 6.1913 2.04466 6.1913H21.0987C21.636 6.1913 22.0717 5.70076 22.0717 5.09565C22.0717 4.49055 21.636 4 21.0987 4H2.04466Z" fill="currentColor"/><path d="M15.0177 11.1043C14.4803 11.1043 14.0447 11.5949 14.0447 12.2C14.0447 12.8051 14.4803 13.2957 15.0177 13.2957H21.0987C21.6361 13.2957 22.0717 12.8051 22.0717 12.2C22.0717 11.5949 21.6361 11.1043 21.0987 11.1043H15.0177Z" fill="currentColor"/><path d="M15.0177 18.2087C14.4803 18.2087 14.0447 18.6993 14.0447 19.3043C14.0447 19.9094 14.4803 20.4 15.0177 20.4H21.0987C21.6361 20.4 22.0717 19.9094 22.0717 19.3043C22.0717 18.6993 21.6361 18.2087 21.0987 18.2087H15.0177Z" fill="currentColor"/><path d="M11.5716 12.589C11.9383 12.1066 11.8545 11.4105 11.3842 11.0344C10.9139 10.658 10.2353 10.7441 9.86835 11.2265L5.07288 17.5322L2.90699 14.8875C2.52337 14.4192 1.84211 14.3583 1.38535 14.7519C0.928725 15.1454 0.869397 15.8441 1.25301 16.3124L4.277 20.0047C4.48666 20.2607 4.7977 20.4059 5.12357 20.3998C5.44944 20.3938 5.75515 20.2372 5.9556 19.9736L11.5716 12.589Z" fill="currentColor"/></svg>
                                         </div>
                                         <span class="tab-label">To-do</span>
                                     </div>
-                                    <div class="tab-item active" data-tab="AI">
+                                    <div class="tab-item" data-tab="ai" onclick="selectBottomTab('ai', event)">
                                         <div class="tab-icon">
                                             <svg viewBox="0 0 24 24" fill="none"><path d="M16.2696 13.8423C16.4148 13.418 17.0145 13.418 17.1597 13.8423L17.5843 15.0853C17.8668 15.9125 18.5168 16.5625 19.344 16.845L20.5871 17.2696C21.0112 17.4148 21.0112 18.0145 20.5871 18.1597L19.344 18.5843C18.5168 18.8668 17.8668 19.5168 17.5843 20.344L17.1597 21.5871C17.0145 22.0112 16.4148 22.0112 16.2696 21.5871L15.845 20.344C15.5625 19.5168 14.9125 18.8668 14.0853 18.5843L12.8422 18.1597C12.418 18.0145 12.418 17.4148 12.8422 17.2696L14.0853 16.845C14.9125 16.5625 15.5625 15.9125 15.845 15.0853L16.2696 13.8423Z" fill="currentColor"/><path d="M6.61775 2.47774C6.83527 1.84076 7.73639 1.84076 7.95391 2.47774L8.59027 4.34182C9.01401 5.58266 9.98901 6.55766 11.2299 6.98139L13.0939 7.61776C13.7309 7.83528 13.7309 8.7364 13.0939 8.95392L11.2299 9.59028C9.98901 10.014 9.01401 10.989 8.59027 12.2299L7.95391 14.0939C7.73639 14.7309 6.83527 14.7309 6.61775 14.0939L5.98139 12.2299C5.55766 10.989 4.58266 10.014 3.34181 9.59028L1.47774 8.95392C0.840755 8.7364 0.840755 7.83528 1.47774 7.61776L3.34181 6.98139C4.58266 6.55766 5.55766 5.58266 5.98139 4.34182L6.61775 2.47774Z" fill="currentColor"/><path d="M19.5241 2.23834C19.6331 1.92056 20.0821 1.92054 20.1911 2.23834L20.5103 3.1714C20.7222 3.79142 21.2091 4.27828 21.8291 4.49016L22.7611 4.80937C23.0796 4.91813 23.0796 5.36766 22.7611 5.47642L21.8291 5.79563C21.209 6.00753 20.7222 6.49434 20.5103 7.1144L20.1911 8.04643C20.0824 8.36492 19.6328 8.36492 19.5241 8.04643L19.2049 7.1144C18.993 6.49436 18.5061 6.00755 17.8861 5.79563L16.953 5.47642C16.6352 5.36742 16.6353 4.9184 16.953 4.80937L17.8861 4.49016C18.5061 4.27826 18.993 3.79141 19.2049 3.1714L19.5241 2.23834Z" fill="currentColor"/></svg>
                                         </div>
@@ -434,7 +401,7 @@
                             </div>
                         </div>
                     </div>
-                    <span class="item-name">bottom-tab</span>
+                    <span class="item-name" id="bottom-tab-name">bottom-tab-inbox</span>
                 </div>
             </div>
         </div>
@@ -445,7 +412,6 @@
             <div class="items-grid">
                 <!-- Read Email -->
                 <div class="item" onclick="copyName('nav-read-email')">
-                    <div class="tooltip">Navigation bar for reading emails. Features back button, action pills (star, archive, delete), and more options button.</div>
                     <div class="bar-frame bg-gradient">
                         <nav class="nav-bar">
                             <button class="glass-btn" title="Back">
@@ -466,7 +432,6 @@
 
                 <!-- Compose -->
                 <div class="item" onclick="copyName('nav-compose')">
-                    <div class="tooltip">Navigation bar for composing emails. Features close button, attachment button, and send button with Filo blue accent.</div>
                     <div class="bar-frame bg-white">
                         <nav class="nav-bar">
                             <div class="glass-pill single">
@@ -485,7 +450,6 @@
 
                 <!-- Subpage -->
                 <div class="item" onclick="copyName('nav-settings')">
-                    <div class="tooltip">Navigation bar for subpages like Settings. Features back button and centered title with subtle bottom border.</div>
                     <div class="bar-frame bg-white">
                         <nav class="nav-bar with-border">
                             <button class="glass-btn" title="Back"><svg viewBox="0 0 24 24" fill="none"><path d="M7 12.1782C7.00507 12.0098 7.04059 11.8558 7.10654 11.7162C7.1725 11.5767 7.27397 11.442 7.41096 11.312L15.0365 4.31038C15.2547 4.10346 15.5236 4 15.8432 4C16.0563 4 16.2491 4.04812 16.4216 4.14436C16.5992 4.24061 16.7387 4.37053 16.8402 4.53415C16.9467 4.69776 17 4.88062 17 5.08273C17 5.38108 16.8808 5.64334 16.6423 5.86951L9.74734 12.171L16.6423 18.4797C16.8808 18.7107 17 18.9729 17 19.2665C17 19.4734 16.9467 19.6587 16.8402 19.8223C16.7387 19.9859 16.5992 20.1158 16.4216 20.2121C16.2491 20.3131 16.0563 20.3636 15.8432 20.3636C15.5236 20.3636 15.2547 20.2578 15.0365 20.046L7.41096 13.0444C7.2689 12.9145 7.16489 12.7797 7.09893 12.6402C7.03298 12.4958 7 12.3418 7 12.1782Z" fill="currentColor"/></svg></button>
@@ -519,6 +483,25 @@
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 2000);
         }
+
+        function selectBottomTab(tab, event) {
+            event.stopPropagation();
+            
+            // Update active tab
+            const tabs = document.querySelectorAll('#interactive-tabs .tab-item');
+            tabs.forEach(t => t.classList.remove('active'));
+            document.querySelector(`#interactive-tabs .tab-item[data-tab="${tab}"]`).classList.add('active');
+            
+            // Update item name
+            const nameMap = { inbox: 'bottom-tab-inbox', todo: 'bottom-tab-todo', ai: 'bottom-tab-ai' };
+            document.getElementById('bottom-tab-name').textContent = nameMap[tab];
+        }
+
+        // Copy name when clicking on the bottom tab item (outside tabs)
+        document.getElementById('bottom-tab-item').addEventListener('click', function() {
+            const name = document.getElementById('bottom-tab-name').textContent;
+            copyName(name);
+        });
     </script>
 </body>
 </html>
