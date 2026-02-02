@@ -1,0 +1,31 @@
+{
+  "dividers": {
+    "standard": {
+      "description": "Standard divider for separating content sections",
+      "color": "--filo-08",
+      "height": "0.5px",
+      "width": "100%",
+      "usage": "Use between list items, sections, or content blocks"
+    },
+    "subtle": {
+      "description": "Subtle divider for overlapping frames and edge differentiation",
+      "color": "--filo-14",
+      "height": "0.5px",
+      "width": "100%",
+      "usage": "Use on frame edges when overlapping another frame to create subtle depth separation"
+    }
+  },
+  "css": {
+    "standard": {
+      "border-bottom": "0.5px solid var(--filo-08)"
+    },
+    "subtle": {
+      "border-bottom": "0.5px solid var(--filo-14)"
+    }
+  },
+  "notes": [
+    "Both divider types work for mobile and desktop versions",
+    "Standard (#08) is for general content separation",
+    "Subtle (#14) is for frame edge differentiation when layering UI elements"
+  ]
+}

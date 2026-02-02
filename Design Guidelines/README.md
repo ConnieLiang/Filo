@@ -12,10 +12,16 @@ Design Guidelines/
 │   └── typography.json       # Type scale and font specifications
 ├── Icons/
 │   └── icons.json            # Icon system guidelines
+├── Spacing/
+│   └── spacing.json          # Spacing scale
+├── Radius/
+│   └── radius.json           # Border radius values
+├── Dividers/
+│   └── dividers.json         # Divider rules (standard #08, subtle #14)
 ├── Components/
 │   └── components.json       # UI component specifications
-└── Screens/
-    └── sign-in-screen.json   # Sign-in/launch screen specifications
+└── Modules/
+    └── sign-in-screen.json   # Screen/module specifications
 ```
 
 ---
