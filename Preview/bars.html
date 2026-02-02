@@ -92,6 +92,13 @@
             color: var(--filo-07);
             text-transform: uppercase;
             letter-spacing: 1px;
+            margin-bottom: 24px;
+        }
+
+        .section-divider {
+            width: 100%;
+            height: 1px;
+            background: var(--filo-08);
             margin-bottom: 32px;
         }
 
@@ -122,6 +129,21 @@
             font-size: 13px;
             color: var(--filo-07);
             text-align: center;
+        }
+
+        .group-label {
+            width: 100%;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--filo-07);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 16px;
+            margin-bottom: -24px;
+        }
+
+        .group-label:first-child {
+            margin-top: 0;
         }
 
         /* ============================================
@@ -182,7 +204,7 @@
         .tab-item.active::before {
             content: '';
             position: absolute;
-            inset: 4px;
+            inset: 0px;
             background: var(--filo-14);
             border-radius: 100px;
         }
@@ -270,6 +292,23 @@
 
         .glass-btn svg { width: 20px; height: 20px; }
 
+        .tinted-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--filo-02);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 2px 8px var(--glass-shadow), inset 0 1px 0 var(--glass-border);
+        }
+
+        .tinted-btn svg { width: 22px; height: 22px; fill: var(--filo-10); }
+
         .glass-pill {
             display: flex;
             align-items: center;
@@ -332,6 +371,195 @@
         .bg-gradient { background: linear-gradient(180deg, #ABDCFF 0%, #6FC2FF 50%, #48AEFA 100%); }
         .bg-white { background: var(--filo-10); }
 
+        /* ============================================
+           MATERIAL 3 STYLES (Android, iOS 18 or lower)
+           ============================================ */
+        
+        /* M3 Navigation Bar */
+        .m3-nav-bar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 80px;
+            background: transparent;
+            padding: 12px 8px 16px;
+            width: 390px;
+            border-radius: 0;
+        }
+
+        .m3-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .m3-nav-item .m3-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .m3-nav-item.active .m3-indicator {
+            width: 64px;
+            background: color-mix(in srgb, var(--filo-02) 20%, transparent);
+        }
+
+        .m3-nav-item svg {
+            width: 24px;
+            height: 24px;
+            color: var(--filo-06);
+        }
+
+        .m3-nav-item.active svg {
+            color: var(--filo-02);
+        }
+
+        .m3-nav-item .m3-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--filo-06);
+        }
+
+        .m3-nav-item.active .m3-label {
+            color: var(--filo-02);
+            font-weight: 600;
+        }
+
+        /* M3 Extended FAB */
+        .m3-fab {
+            position: absolute;
+            right: 16px;
+            top: -64px;
+            height: 56px;
+            padding: 0 20px;
+            border-radius: 28px;
+            background: var(--filo-02);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2), 0 6px 10px rgba(0, 0, 0, 0.14);
+        }
+
+        .m3-fab svg {
+            width: 24px;
+            height: 24px;
+            color: var(--filo-10);
+            fill: var(--filo-10);
+        }
+
+        .m3-fab-label {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--filo-10);
+        }
+
+        .m3-nav-container {
+            position: relative;
+            width: 390px;
+            margin-top: 40px;
+        }
+
+        /* M3 Top App Bar */
+        .m3-top-bar {
+            display: flex;
+            align-items: center;
+            height: 64px;
+            padding: 0 4px;
+            background: transparent;
+            width: 390px;
+        }
+
+        .m3-icon-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 24px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--filo-06);
+        }
+
+        .m3-icon-btn:hover {
+            background: var(--filo-09);
+        }
+
+        .m3-icon-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .m3-top-bar-title {
+            flex: 1;
+            font-size: 22px;
+            font-weight: 400;
+            color: var(--filo-06);
+            margin-left: 4px;
+        }
+
+        .m3-top-bar-actions {
+            display: flex;
+            gap: 0;
+        }
+
+        /* M3 Tinted Icon Button */
+        .m3-tinted-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 24px;
+            border: none;
+            background: var(--filo-02);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .m3-tinted-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .m3-tinted-btn svg path {
+            fill: var(--filo-10);
+        }
+
+        /* Dark mode adjustments */
+        body.dark-mode .m3-nav-item svg,
+        body.dark-mode .m3-nav-item .m3-label {
+            color: var(--filo-10);
+        }
+
+        body.dark-mode .m3-nav-item.active svg,
+        body.dark-mode .m3-nav-item.active .m3-label {
+            color: var(--filo-02);
+        }
+
+        body.dark-mode .m3-icon-btn {
+            color: var(--filo-10);
+        }
+
+        body.dark-mode .m3-icon-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-mode .m3-top-bar-title {
+            color: var(--filo-10);
+        }
+
         /* Toast */
         .toast {
             position: fixed;
@@ -365,10 +593,14 @@
     </div>
 
     <div class="sections">
-        <!-- BOTTOM TAB SECTION -->
+        <!-- iOS 26 AND ABOVE SECTION -->
         <div class="section">
-            <h2 class="section-title">Bottom Tab</h2>
+            <h2 class="section-title">iOS 26 and above</h2>
+            <div class="section-divider"></div>
             <div class="items-grid">
+                <!-- Bottom Tab Group -->
+                <div class="group-label">Bottom Tab</div>
+                
                 <!-- Interactive Bottom Tab -->
                 <div class="item" id="bottom-tab-item">
                     <div class="bar-frame">
@@ -403,16 +635,13 @@
                     </div>
                     <span class="item-name" id="bottom-tab-name">bottom-tab-inbox</span>
                 </div>
-            </div>
-        </div>
 
-        <!-- NAVIGATION BARS SECTION -->
-        <div class="section">
-            <h2 class="section-title">Navigation Bars</h2>
-            <div class="items-grid">
-                <!-- Read Email -->
-                <div class="item" onclick="copyName('nav-read-email')">
-                    <div class="bar-frame bg-gradient">
+                <!-- Tool Bars Group -->
+                <div class="group-label">Tool Bars</div>
+
+                <!-- Email Toolbar -->
+                <div class="item" onclick="copyName('toolbar-email')">
+                    <div class="bar-frame">
                         <nav class="nav-bar">
                             <button class="glass-btn" title="Back">
                                 <svg viewBox="0 0 24 24" fill="none"><path d="M7 12.1782C7.00507 12.0098 7.04059 11.8558 7.10654 11.7162C7.1725 11.5767 7.27397 11.442 7.41096 11.312L15.0365 4.31038C15.2547 4.10346 15.5236 4 15.8432 4C16.0563 4 16.2491 4.04812 16.4216 4.14436C16.5992 4.24061 16.7387 4.37053 16.8402 4.53415C16.9467 4.69776 17 4.88062 17 5.08273C17 5.38108 16.8808 5.64334 16.6423 5.86951L9.74734 12.171L16.6423 18.4797C16.8808 18.7107 17 18.9729 17 19.2665C17 19.4734 16.9467 19.6587 16.8402 19.8223C16.7387 19.9859 16.5992 20.1158 16.4216 20.2121C16.2491 20.3131 16.0563 20.3636 15.8432 20.3636C15.5236 20.3636 15.2547 20.2578 15.0365 20.046L7.41096 13.0444C7.2689 12.9145 7.16489 12.7797 7.09893 12.6402C7.03298 12.4958 7 12.3418 7 12.1782Z" fill="currentColor"/></svg>
@@ -425,14 +654,13 @@
                             </div>
                             <button class="glass-btn" title="More"><svg viewBox="0 0 24 24" fill="none"><circle cx="5" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="19" cy="12" r="2" fill="currentColor"/></svg></button>
                         </nav>
-                        <div class="nav-content-area">Email content area</div>
                     </div>
-                    <span class="item-name">nav-read-email</span>
+                    <span class="item-name">toolbar-email</span>
                 </div>
 
-                <!-- Compose -->
-                <div class="item" onclick="copyName('nav-compose')">
-                    <div class="bar-frame bg-white">
+                <!-- Compose Toolbar -->
+                <div class="item" onclick="copyName('toolbar-compose')">
+                    <div class="bar-frame">
                         <nav class="nav-bar">
                             <div class="glass-pill single">
                                 <button title="Close"><svg viewBox="0 0 24 24" fill="none"><path d="M5.28235 18.7174C5.15493 18.5957 5.07095 18.4507 5.03041 18.2826C4.98986 18.1145 4.98986 17.9464 5.03041 17.7783C5.07674 17.6101 5.16072 17.4681 5.28235 17.3522L10.6165 11.9957L5.28235 6.64783C5.16072 6.53188 5.07964 6.38986 5.03909 6.22174C4.99855 6.05362 4.99855 5.88551 5.03909 5.71739C5.07964 5.54928 5.16072 5.40435 5.28235 5.28261C5.40976 5.15507 5.55745 5.07101 5.72541 5.03043C5.89337 4.98986 6.06133 4.98986 6.22929 5.03043C6.39725 5.07101 6.54204 5.15217 6.66367 5.27391L12.0065 10.6217L17.3407 5.27391C17.4623 5.14638 17.6071 5.06522 17.7751 5.03043C17.943 4.98986 18.1081 4.98986 18.2702 5.03043C18.4382 5.07101 18.5888 5.15507 18.722 5.28261C18.8436 5.40435 18.9247 5.54928 18.9652 5.71739C19.0116 5.88551 19.0116 6.05362 18.9652 6.22174C18.9247 6.38406 18.8436 6.52899 18.722 6.65652L13.3878 11.9957L18.722 17.3435C18.8436 17.471 18.9247 17.6188 18.9652 17.787C19.0058 17.9493 19.0058 18.1145 18.9652 18.2826C18.9247 18.4507 18.8436 18.5957 18.722 18.7174C18.5946 18.8449 18.4469 18.929 18.2789 18.9696C18.111 19.0101 17.943 19.0101 17.7751 18.9696C17.6071 18.929 17.4623 18.8478 17.3407 18.7261L12.0065 13.3783L6.66367 18.7261C6.54204 18.8478 6.39725 18.929 6.22929 18.9696C6.06712 19.0101 5.89916 19.0101 5.72541 18.9696C5.55745 18.929 5.40976 18.8449 5.28235 18.7174Z" fill="currentColor"/></svg></button>
@@ -441,24 +669,113 @@
                             <div class="glass-pill">
                                 <button title="Attach"><svg viewBox="0 0 24 24" fill="none"><path d="M19 10.1667V16C19 17.8565 18.2625 19.637 16.9497 20.9497C15.637 22.2625 13.8565 23 12 23C10.1435 23 8.36301 22.2625 7.05025 20.9497C5.7375 19.637 5 17.8565 5 16L5 6.66667C5 5.42899 5.49167 4.242 6.36683 3.36683C7.242 2.49167 8.42899 2 9.66667 2C10.9043 2 12.0913 2.49167 12.9665 3.36683C13.8417 4.242 14.3333 5.42899 14.3333 6.66667V16C14.3333 16.6188 14.0875 17.2123 13.6499 17.6499C13.2123 18.0875 12.6188 18.3333 12 18.3333C11.3812 18.3333 10.7877 18.0875 10.3501 17.6499C9.9125 17.2123 9.66667 16.6188 9.66667 16V10.1667" stroke="currentColor" stroke-width="1.86667" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
                                 <button class="send-btn" title="Send"><svg viewBox="0 0 25 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.1006 0C18.728 0 24.1006 5.37258 24.1006 12C24.1006 18.6274 18.728 24 12.1006 24C5.47317 24 0.100586 18.6274 0.100586 12C0.100586 5.37258 5.47317 0 12.1006 0ZM12.1006 6C11.5329 6 11.1915 6.75668 10.5098 8.27051L8.12695 13.5625C7.25862 15.4905 6.82463 16.4542 7.29102 16.8613C7.75741 17.2684 8.69809 16.7463 10.5791 15.7021L11.2393 15.3359C11.6598 15.1025 11.87 14.9854 12.1006 14.9854C12.3311 14.9854 12.5414 15.1025 12.9619 15.3359L13.6221 15.7021C15.503 16.7463 16.4438 17.2684 16.9102 16.8613C17.3765 16.4542 16.9426 15.4905 16.0742 13.5625L13.6914 8.27051C13.0096 6.75668 12.6682 6.00001 12.1006 6Z" fill="#22A0FB"/></svg></button>
+                                <button title="More"><svg viewBox="0 0 24 24" fill="none"><circle cx="5" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="19" cy="12" r="2" fill="currentColor"/></svg></button>
                             </div>
                         </nav>
-                        <div class="nav-content-area">Compose email editor</div>
                     </div>
-                    <span class="item-name">nav-compose</span>
+                    <span class="item-name">toolbar-compose</span>
                 </div>
 
-                <!-- Subpage -->
-                <div class="item" onclick="copyName('nav-settings')">
-                    <div class="bar-frame bg-white">
-                        <nav class="nav-bar with-border">
+                <!-- Subpage Toolbar -->
+                <div class="item" onclick="copyName('toolbar-subpage')">
+                    <div class="bar-frame">
+                        <nav class="nav-bar">
                             <button class="glass-btn" title="Back"><svg viewBox="0 0 24 24" fill="none"><path d="M7 12.1782C7.00507 12.0098 7.04059 11.8558 7.10654 11.7162C7.1725 11.5767 7.27397 11.442 7.41096 11.312L15.0365 4.31038C15.2547 4.10346 15.5236 4 15.8432 4C16.0563 4 16.2491 4.04812 16.4216 4.14436C16.5992 4.24061 16.7387 4.37053 16.8402 4.53415C16.9467 4.69776 17 4.88062 17 5.08273C17 5.38108 16.8808 5.64334 16.6423 5.86951L9.74734 12.171L16.6423 18.4797C16.8808 18.7107 17 18.9729 17 19.2665C17 19.4734 16.9467 19.6587 16.8402 19.8223C16.7387 19.9859 16.5992 20.1158 16.4216 20.2121C16.2491 20.3131 16.0563 20.3636 15.8432 20.3636C15.5236 20.3636 15.2547 20.2578 15.0365 20.046L7.41096 13.0444C7.2689 12.9145 7.16489 12.7797 7.09893 12.6402C7.03298 12.4958 7 12.3418 7 12.1782Z" fill="currentColor"/></svg></button>
-                            <span class="nav-title">Settings</span>
-                            <div class="spacer"></div>
+                            <span class="nav-title">Title</span>
+                            <button class="tinted-btn" title="Done"><svg viewBox="0 0 24 24" fill="none"><path d="M10.1267 19.7574C9.69231 19.7574 9.32127 19.5643 9.01358 19.1782L4.32579 13.3139C4.21116 13.1752 4.1267 13.0394 4.0724 12.9067C4.02413 12.7739 4 12.6382 4 12.4994C4 12.1857 4.10256 11.9263 4.30769 11.7212C4.51885 11.516 4.78431 11.4135 5.10407 11.4135C5.4721 11.4135 5.78281 11.5794 6.0362 11.9112L10.0905 17.1148L17.9457 4.63519C18.0845 4.42402 18.2262 4.27621 18.371 4.19175C18.5158 4.10125 18.7029 4.056 18.9321 4.056C19.2459 4.056 19.5023 4.15555 19.7014 4.35464C19.9005 4.5477 20 4.8011 20 5.11482C20 5.24152 19.9789 5.37123 19.9367 5.50396C19.8944 5.63066 19.8281 5.76641 19.7376 5.9112L11.2308 19.1691C10.9653 19.5613 10.5973 19.7574 10.1267 19.7574Z"/></svg></button>
                         </nav>
-                        <div class="nav-content-area">Settings content</div>
                     </div>
-                    <span class="item-name">nav-settings</span>
+                    <span class="item-name">toolbar-subpage</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ANDROID, iOS 18 OR LOWER SECTION -->
+        <div class="section">
+            <h2 class="section-title">Android, iOS 18 or lower</h2>
+            <div class="section-divider"></div>
+            <div class="items-grid">
+                <!-- Bottom Navigation Group -->
+                <div class="group-label">Bottom Navigation</div>
+                
+                <!-- M3 Navigation Bar -->
+                <div class="item" id="legacy-bottom-tab-item">
+                    <div class="m3-nav-container">
+                        <nav class="m3-nav-bar" id="legacy-interactive-tabs">
+                            <div class="m3-nav-item active" data-tab="inbox" onclick="selectLegacyBottomTab('inbox', event)">
+                                <div class="m3-indicator">
+                                    <svg viewBox="0 0 24 24" fill="none"><path d="M22.8408 6.35156C22.9069 6.30354 22.9998 6.35104 23 6.43262V18C23 19.6523 21.6523 21 20 21H4C2.34772 21 1.00001 19.6523 1 18V6.43262C1.00019 6.35104 1.09315 6.30354 1.15918 6.35156L10.8232 13.3809C11.5245 13.8909 12.4755 13.8909 13.1768 13.3809L22.8408 6.35156Z" fill="currentColor"/><path d="M20 3C20.9056 3 21.7197 3.40498 22.2705 4.04297C22.3435 4.12754 22.3238 4.2546 22.2334 4.32031L13.1768 10.9082C12.4755 11.4182 11.5245 11.4182 10.8232 10.9082L1.7666 4.32031C1.67624 4.2546 1.65647 4.12754 1.72949 4.04297C2.28034 3.40497 3.09438 3.00002 4 3H20Z" fill="currentColor"/></svg>
+                                </div>
+                                <span class="m3-label">Inbox</span>
+                            </div>
+                            <div class="m3-nav-item" data-tab="todo" onclick="selectLegacyBottomTab('todo', event)">
+                                <div class="m3-indicator">
+                                    <svg viewBox="0 0 24 24" fill="none"><path d="M2.04466 4C1.5073 4 1.07168 4.49055 1.07168 5.09565C1.07168 5.70076 1.5073 6.1913 2.04466 6.1913H21.0987C21.636 6.1913 22.0717 5.70076 22.0717 5.09565C22.0717 4.49055 21.636 4 21.0987 4H2.04466Z" fill="currentColor"/><path d="M15.0177 11.1043C14.4803 11.1043 14.0447 11.5949 14.0447 12.2C14.0447 12.8051 14.4803 13.2957 15.0177 13.2957H21.0987C21.6361 13.2957 22.0717 12.8051 22.0717 12.2C22.0717 11.5949 21.6361 11.1043 21.0987 11.1043H15.0177Z" fill="currentColor"/><path d="M15.0177 18.2087C14.4803 18.2087 14.0447 18.6993 14.0447 19.3043C14.0447 19.9094 14.4803 20.4 15.0177 20.4H21.0987C21.6361 20.4 22.0717 19.9094 22.0717 19.3043C22.0717 18.6993 21.6361 18.2087 21.0987 18.2087H15.0177Z" fill="currentColor"/><path d="M11.5716 12.589C11.9383 12.1066 11.8545 11.4105 11.3842 11.0344C10.9139 10.658 10.2353 10.7441 9.86835 11.2265L5.07288 17.5322L2.90699 14.8875C2.52337 14.4192 1.84211 14.3583 1.38535 14.7519C0.928725 15.1454 0.869397 15.8441 1.25301 16.3124L4.277 20.0047C4.48666 20.2607 4.7977 20.4059 5.12357 20.3998C5.44944 20.3938 5.75515 20.2372 5.9556 19.9736L11.5716 12.589Z" fill="currentColor"/></svg>
+                                </div>
+                                <span class="m3-label">To-do</span>
+                            </div>
+                            <div class="m3-nav-item" data-tab="ai" onclick="selectLegacyBottomTab('ai', event)">
+                                <div class="m3-indicator">
+                                    <svg viewBox="0 0 24 24" fill="none"><path d="M16.2696 13.8423C16.4148 13.418 17.0145 13.418 17.1597 13.8423L17.5843 15.0853C17.8668 15.9125 18.5168 16.5625 19.344 16.845L20.5871 17.2696C21.0112 17.4148 21.0112 18.0145 20.5871 18.1597L19.344 18.5843C18.5168 18.8668 17.8668 19.5168 17.5843 20.344L17.1597 21.5871C17.0145 22.0112 16.4148 22.0112 16.2696 21.5871L15.845 20.344C15.5625 19.5168 14.9125 18.8668 14.0853 18.5843L12.8422 18.1597C12.418 18.0145 12.418 17.4148 12.8422 17.2696L14.0853 16.845C14.9125 16.5625 15.5625 15.9125 15.845 15.0853L16.2696 13.8423Z" fill="currentColor"/><path d="M6.61775 2.47774C6.83527 1.84076 7.73639 1.84076 7.95391 2.47774L8.59027 4.34182C9.01401 5.58266 9.98901 6.55766 11.2299 6.98139L13.0939 7.61776C13.7309 7.83528 13.7309 8.7364 13.0939 8.95392L11.2299 9.59028C9.98901 10.014 9.01401 10.989 8.59027 12.2299L7.95391 14.0939C7.73639 14.7309 6.83527 14.7309 6.61775 14.0939L5.98139 12.2299C5.55766 10.989 4.58266 10.014 3.34181 9.59028L1.47774 8.95392C0.840755 8.7364 0.840755 7.83528 1.47774 7.61776L3.34181 6.98139C4.58266 6.55766 5.55766 5.58266 5.98139 4.34182L6.61775 2.47774Z" fill="currentColor"/><path d="M19.5241 2.23834C19.6331 1.92056 20.0821 1.92054 20.1911 2.23834L20.5103 3.1714C20.7222 3.79142 21.2091 4.27828 21.8291 4.49016L22.7611 4.80937C23.0796 4.91813 23.0796 5.36766 22.7611 5.47642L21.8291 5.79563C21.209 6.00753 20.7222 6.49434 20.5103 7.1144L20.1911 8.04643C20.0824 8.36492 19.6328 8.36492 19.5241 8.04643L19.2049 7.1144C18.993 6.49436 18.5061 6.00755 17.8861 5.79563L16.953 5.47642C16.6352 5.36742 16.6353 4.9184 16.953 4.80937L17.8861 4.49016C18.5061 4.27826 18.993 3.79141 19.2049 3.1714L19.5241 2.23834Z" fill="currentColor"/></svg>
+                                </div>
+                                <span class="m3-label">AI</span>
+                            </div>
+                        </nav>
+                        <button class="m3-fab">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="M17.71 13.7982C17.8755 13.3135 18.5601 13.3135 18.7256 13.7982L19.21 15.2162C19.5324 16.1603 20.2746 16.9025 21.2188 17.2249L22.6367 17.7093C23.1214 17.8748 23.1214 18.5594 22.6367 18.7249L21.2188 19.2093C20.2746 19.5317 19.5324 20.274 19.21 21.2181L18.7256 22.6361C18.5601 23.1207 17.8755 23.1207 17.71 22.6361L17.2256 21.2181C16.9032 20.274 16.1609 19.5317 15.2168 19.2093L13.7988 18.7249C13.3142 18.5594 13.3142 17.8748 13.7988 17.7093L15.2168 17.2249C16.1609 16.9025 16.9032 16.1603 17.2256 15.2162L17.71 13.7982ZM14.458 1.97299C15.7559 0.675233 17.8603 0.675256 19.1582 1.97299C20.456 3.27086 20.456 5.3753 19.1582 6.67319L7.77734 18.054L7.58594 18.2249C7.38489 18.3839 7.15646 18.5067 6.91211 18.5882L2.45996 20.0726L2.29785 20.1136C1.49528 20.257 0.788402 19.4817 1.05859 18.6703L2.54297 14.2201C2.62446 13.9756 2.74822 13.7474 2.90723 13.5462L3.07812 13.3539L14.458 1.97299ZM3.16016 17.971L6.3252 16.9164L4.21484 14.805L3.16016 17.971ZM17.9053 3.22592C17.2997 2.62052 16.3176 2.62074 15.7119 3.22592L5.40918 13.5277L7.60254 15.722L17.9053 5.42026C18.5109 4.81458 18.5109 3.83158 17.9053 3.22592Z" fill="currentColor"/></svg>
+                            <span class="m3-fab-label">Compose</span>
+                        </button>
+                    </div>
+                    <span class="item-name" id="legacy-bottom-tab-name">bottom-nav-inbox</span>
+                </div>
+
+                <!-- Top App Bars Group -->
+                <div class="group-label">Top App Bars</div>
+
+                <!-- M3 Email Top Bar -->
+                <div class="item" onclick="copyName('appbar-email')">
+                    <div class="m3-top-bar">
+                        <button class="m3-icon-btn" title="Back">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="M7 12.1782C7.00507 12.0098 7.04059 11.8558 7.10654 11.7162C7.1725 11.5767 7.27397 11.442 7.41096 11.312L15.0365 4.31038C15.2547 4.10346 15.5236 4 15.8432 4C16.0563 4 16.2491 4.04812 16.4216 4.14436C16.5992 4.24061 16.7387 4.37053 16.8402 4.53415C16.9467 4.69776 17 4.88062 17 5.08273C17 5.38108 16.8808 5.64334 16.6423 5.86951L9.74734 12.171L16.6423 18.4797C16.8808 18.7107 17 18.9729 17 19.2665C17 19.4734 16.9467 19.6587 16.8402 19.8223C16.7387 19.9859 16.5992 20.1158 16.4216 20.2121C16.2491 20.3131 16.0563 20.3636 15.8432 20.3636C15.5236 20.3636 15.2547 20.2578 15.0365 20.046L7.41096 13.0444C7.2689 12.9145 7.16489 12.7797 7.09893 12.6402C7.03298 12.4958 7 12.3418 7 12.1782Z" fill="currentColor"/></svg>
+                        </button>
+                        <span class="m3-top-bar-title"></span>
+                        <div class="m3-top-bar-actions">
+                            <button class="m3-icon-btn" title="Star"><svg viewBox="0 0 24 24" fill="none"><path d="M11.1639 3.2736C11.42 2.53678 11.5481 2.16839 11.7375 2.06628C11.9013 1.97791 12.0986 1.97791 12.2626 2.06628C12.4519 2.16839 12.5799 2.53678 12.8361 3.2736L14.5293 8.14471C14.6022 8.35442 14.6386 8.45926 14.7044 8.53735C14.7623 8.60632 14.8364 8.66009 14.9199 8.69395C15.0144 8.73228 15.1254 8.73454 15.3473 8.73907L20.5033 8.84414C21.2832 8.86003 21.6731 8.86798 21.8288 9.01653C21.9635 9.14509 22.0244 9.33278 21.991 9.51595C21.9525 9.72763 21.6417 9.9632 21.0201 10.4346L16.9106 13.55C16.7336 13.6842 16.6452 13.7513 16.5912 13.8378C16.5435 13.9144 16.5153 14.0014 16.5089 14.0912C16.5017 14.193 16.5338 14.2992 16.5981 14.5118L18.0915 19.4478C18.3173 20.1945 18.4303 20.5678 18.3371 20.7617C18.2565 20.9295 18.0968 21.0455 17.9122 21.0704C17.699 21.099 17.3789 20.8763 16.7386 20.4307L12.5056 17.4852C12.3234 17.3584 12.2323 17.295 12.1333 17.2703C12.0457 17.2486 11.9542 17.2486 11.8668 17.2703C11.7678 17.295 11.6766 17.3584 11.4944 17.4852L7.26143 20.4307C6.62114 20.8763 6.301 21.099 6.08778 21.0704C5.90325 21.0455 5.74359 20.9295 5.66294 20.7617C5.56975 20.5678 5.6827 20.1945 5.90859 19.4478L7.40193 14.5118C7.46622 14.2992 7.49836 14.193 7.49112 14.0912C7.48473 14.0014 7.45647 13.9144 7.40879 13.8378C7.35483 13.7513 7.26637 13.6842 7.08945 13.55L2.97999 10.4346C2.35837 9.9632 2.04757 9.72763 2.00898 9.51595C1.97558 9.33278 2.03657 9.14509 2.17126 9.01653C2.32687 8.86798 2.71682 8.86004 3.49672 8.84414L8.65265 8.73907C8.87461 8.73454 8.9856 8.73228 9.08016 8.69395C9.16368 8.66009 9.23768 8.60632 9.2957 8.53735C9.36138 8.45926 9.39782 8.35442 9.47072 8.14471L11.1639 3.2736Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                            <button class="m3-icon-btn" title="Archive"><svg viewBox="0 0 24 24" fill="none"><path d="M6.51226 22.4192C5.5251 22.4192 4.77472 22.1691 4.26113 21.6688C3.74754 21.1686 3.49075 20.4249 3.49075 19.4377V8.75238H5.10155V19.5178C5.10155 19.9646 5.22161 20.3082 5.46173 20.5483C5.70185 20.7884 6.04536 20.9085 6.49225 20.9085H17.5078C17.948 20.9085 18.2881 20.7884 18.5283 20.5483C18.7751 20.3082 18.8984 19.9646 18.8984 19.5178V8.75238H20.5093V19.4377C20.5093 20.4182 20.2525 21.1586 19.7389 21.6588C19.2253 22.1658 18.4749 22.4192 17.4877 22.4192H6.51226ZM8.70335 13.5348C8.48991 13.5348 8.31649 13.4681 8.18309 13.3347C8.05636 13.2013 7.993 13.0245 7.993 12.8044V12.4842C7.993 12.2641 8.05636 12.0907 8.18309 11.964C8.31649 11.8306 8.48991 11.7639 8.70335 11.7639H15.3067C15.5201 11.7639 15.6935 11.8306 15.8269 11.964C15.9603 12.0907 16.027 12.2641 16.027 12.4842V12.8044C16.027 13.0245 15.9603 13.2013 15.8269 13.3347C15.6935 13.4681 15.5201 13.5348 15.3067 13.5348H8.70335ZM3.90095 9.50275C3.28731 9.50275 2.81708 9.32266 2.49025 8.96248C2.16342 8.6023 2 8.11873 2 7.51176V5.991C2 5.37736 2.17009 4.89378 2.51026 4.54027C2.85043 4.18009 3.31399 4 3.90095 4H20.0991C20.7127 4 21.1829 4.18009 21.5098 4.54027C21.8366 4.89378 22 5.37736 22 5.991V7.51176C22 8.11873 21.8366 8.6023 21.5098 8.96248C21.1829 9.32266 20.7127 9.50275 20.0991 9.50275H3.90095ZM4.31116 7.992H19.6989C19.9523 7.992 20.1291 7.9353 20.2291 7.82191C20.3358 7.70852 20.3892 7.52843 20.3892 7.28164V6.22111C20.3892 5.96765 20.3358 5.78756 20.2291 5.68084C20.1291 5.56745 19.9523 5.51076 19.6989 5.51076H4.31116C4.0577 5.51076 3.87761 5.56745 3.77089 5.68084C3.66417 5.78756 3.61081 5.96765 3.61081 6.22111V7.28164C3.61081 7.52843 3.66417 7.70852 3.77089 7.82191C3.87761 7.9353 4.0577 7.992 4.31116 7.992Z" fill="currentColor"/></svg></button>
+                            <button class="m3-icon-btn" title="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M9.1001 10.8999C9.1001 10.4028 9.50293 10 10 10C10.4971 10 10.9001 10.4028 10.9001 10.8999V16.1001C10.9001 16.5972 10.4971 17 10 17C9.50293 17 9.1001 16.5972 9.1001 16.1001V10.8999Z" fill="currentColor"/><path d="M14 10C13.5029 10 13.1001 10.4028 13.1001 10.8999V16.1001C13.1001 16.5972 13.5029 17 14 17C14.4971 17 14.9001 16.5972 14.9001 16.1001V10.8999C14.9001 10.4028 14.4971 10 14 10Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M21 5H17V3.5C17 2.11938 15.8806 1 14.5 1H9.5C8.11938 1 7 2.11938 7 3.5V5H3C2.44775 5 2 5.44775 2 6C2 6.55225 2.44775 7 3 7H4.1001V19C4.1001 21.1538 5.84619 22.8999 8 22.8999H16C18.1541 22.8999 19.9001 21.1538 19.9001 19V7H21C21.5522 7 22 6.55225 22 6C22 5.44775 21.5522 5 21 5ZM18.1001 7H5.90015V19C5.90015 20.1599 6.84033 21.1001 8 21.1001H16C17.1599 21.1001 18.1001 20.1599 18.1001 19V7ZM9.5 2.80005H14.5C14.8867 2.80005 15.2 3.11328 15.2 3.5V5H8.80005V3.5C8.80005 3.11328 9.11328 2.80005 9.5 2.80005Z" fill="currentColor"/></svg></button>
+                            <button class="m3-icon-btn" title="More"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="5" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="19" r="2" fill="currentColor"/></svg></button>
+                        </div>
+                    </div>
+                    <span class="item-name">appbar-email</span>
+                </div>
+
+                <!-- M3 Compose Top Bar -->
+                <div class="item" onclick="copyName('appbar-compose')">
+                    <div class="m3-top-bar">
+                        <button class="m3-icon-btn" title="Close">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="M5.28235 18.7174C5.15493 18.5957 5.07095 18.4507 5.03041 18.2826C4.98986 18.1145 4.98986 17.9464 5.03041 17.7783C5.07674 17.6101 5.16072 17.4681 5.28235 17.3522L10.6165 11.9957L5.28235 6.64783C5.16072 6.53188 5.07964 6.38986 5.03909 6.22174C4.99855 6.05362 4.99855 5.88551 5.03909 5.71739C5.07964 5.54928 5.16072 5.40435 5.28235 5.28261C5.40976 5.15507 5.55745 5.07101 5.72541 5.03043C5.89337 4.98986 6.06133 4.98986 6.22929 5.03043C6.39725 5.07101 6.54204 5.15217 6.66367 5.27391L12.0065 10.6217L17.3407 5.27391C17.4623 5.14638 17.6071 5.06522 17.7751 5.03043C17.943 4.98986 18.1081 4.98986 18.2702 5.03043C18.4382 5.07101 18.5888 5.15507 18.722 5.28261C18.8436 5.40435 18.9247 5.54928 18.9652 5.71739C19.0116 5.88551 19.0116 6.05362 18.9652 6.22174C18.9247 6.38406 18.8436 6.52899 18.722 6.65652L13.3878 11.9957L18.722 17.3435C18.8436 17.471 18.9247 17.6188 18.9652 17.787C19.0058 17.9493 19.0058 18.1145 18.9652 18.2826C18.9247 18.4507 18.8436 18.5957 18.722 18.7174C18.5946 18.8449 18.4469 18.929 18.2789 18.9696C18.111 19.0101 17.943 19.0101 17.7751 18.9696C17.6071 18.929 17.4623 18.8478 17.3407 18.7261L12.0065 13.3783L6.66367 18.7261C6.54204 18.8478 6.39725 18.929 6.22929 18.9696C6.06712 19.0101 5.89916 19.0101 5.72541 18.9696C5.55745 18.929 5.40976 18.8449 5.28235 18.7174Z" fill="currentColor"/></svg>
+                        </button>
+                        <span class="m3-top-bar-title"></span>
+                        <div class="m3-top-bar-actions">
+                            <button class="m3-icon-btn" title="Attach"><svg viewBox="0 0 24 24" fill="none"><path d="M19 10.1667V16C19 17.8565 18.2625 19.637 16.9497 20.9497C15.637 22.2625 13.8565 23 12 23C10.1435 23 8.36301 22.2625 7.05025 20.9497C5.7375 19.637 5 17.8565 5 16L5 6.66667C5 5.42899 5.49167 4.242 6.36683 3.36683C7.242 2.49167 8.42899 2 9.66667 2C10.9043 2 12.0913 2.49167 12.9665 3.36683C13.8417 4.242 14.3333 5.42899 14.3333 6.66667V16C14.3333 16.6188 14.0875 17.2123 13.6499 17.6499C13.2123 18.0875 12.6188 18.3333 12 18.3333C11.3812 18.3333 10.7877 18.0875 10.3501 17.6499C9.9125 17.2123 9.66667 16.6188 9.66667 16V10.1667" stroke="currentColor" stroke-width="1.86667" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                            <button class="m3-tinted-btn" title="Send"><svg viewBox="0 0 25 24" fill="none"><path d="M12.1006 6C11.5329 6 11.1915 6.75668 10.5098 8.27051L8.12695 13.5625C7.25862 15.4905 6.82463 16.4542 7.29102 16.8613C7.75741 17.2684 8.69809 16.7463 10.5791 15.7021L11.2393 15.3359C11.6598 15.1025 11.87 14.9854 12.1006 14.9854C12.3311 14.9854 12.5414 15.1025 12.9619 15.3359L13.6221 15.7021C15.503 16.7463 16.4438 17.2684 16.9102 16.8613C17.3765 16.4542 16.9426 15.4905 16.0742 13.5625L13.6914 8.27051C13.0096 6.75668 12.6682 6.00001 12.1006 6Z" fill="currentColor"/></svg></button>
+                        </div>
+                    </div>
+                    <span class="item-name">appbar-compose</span>
+                </div>
+
+                <!-- M3 Subpage Top Bar -->
+                <div class="item" onclick="copyName('appbar-subpage')">
+                    <div class="m3-top-bar">
+                        <button class="m3-icon-btn" title="Back">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="M7 12.1782C7.00507 12.0098 7.04059 11.8558 7.10654 11.7162C7.1725 11.5767 7.27397 11.442 7.41096 11.312L15.0365 4.31038C15.2547 4.10346 15.5236 4 15.8432 4C16.0563 4 16.2491 4.04812 16.4216 4.14436C16.5992 4.24061 16.7387 4.37053 16.8402 4.53415C16.9467 4.69776 17 4.88062 17 5.08273C17 5.38108 16.8808 5.64334 16.6423 5.86951L9.74734 12.171L16.6423 18.4797C16.8808 18.7107 17 18.9729 17 19.2665C17 19.4734 16.9467 19.6587 16.8402 19.8223C16.7387 19.9859 16.5992 20.1158 16.4216 20.2121C16.2491 20.3131 16.0563 20.3636 15.8432 20.3636C15.5236 20.3636 15.2547 20.2578 15.0365 20.046L7.41096 13.0444C7.2689 12.9145 7.16489 12.7797 7.09893 12.6402C7.03298 12.4958 7 12.3418 7 12.1782Z" fill="currentColor"/></svg>
+                        </button>
+                        <span class="m3-top-bar-title">Title</span>
+                        <div class="m3-top-bar-actions">
+                            <button class="m3-tinted-btn" title="Done"><svg viewBox="0 0 24 24" fill="none"><path d="M10.1267 19.7574C9.69231 19.7574 9.32127 19.5643 9.01358 19.1782L4.32579 13.3139C4.21116 13.1752 4.1267 13.0394 4.0724 12.9067C4.02413 12.7739 4 12.6382 4 12.4994C4 12.1857 4.10256 11.9263 4.30769 11.7212C4.51885 11.516 4.78431 11.4135 5.10407 11.4135C5.4721 11.4135 5.78281 11.5794 6.0362 11.9112L10.0905 17.1148L17.9457 4.63519C18.0845 4.42402 18.2262 4.27621 18.371 4.19175C18.5158 4.10125 18.7029 4.056 18.9321 4.056C19.2459 4.056 19.5023 4.15555 19.7014 4.35464C19.9005 4.5477 20 4.8011 20 5.11482C20 5.24152 19.9789 5.37123 19.9367 5.50396C19.8944 5.63066 19.8281 5.76641 19.7376 5.9112L11.2308 19.1691C10.9653 19.5613 10.5973 19.7574 10.1267 19.7574Z" fill="currentColor"/></svg></button>
+                        </div>
+                    </div>
+                    <span class="item-name">appbar-subpage</span>
                 </div>
             </div>
         </div>
@@ -497,9 +814,39 @@
             document.getElementById('bottom-tab-name').textContent = nameMap[tab];
         }
 
+        // Icon SVGs for before (outline) and after (filled) states
+        const inboxIcons = {
+            before: '<path fill-rule="evenodd" clip-rule="evenodd" d="M23 5.99979V17.9998C23 19.6521 21.6523 20.9998 20 20.9998H4C2.34772 20.9998 1 19.6521 1 17.9998V5.99979C1 4.34294 2.34315 2.99979 4 2.99979H20C21.6569 2.99979 23 4.34294 23 5.99979ZM3.24859 5.65315C3.16709 5.5961 3.13831 5.48631 3.19771 5.40651C3.38079 5.16057 3.67343 4.99979 4 4.99979H20C20.3266 4.99979 20.6192 5.16057 20.8023 5.40651C20.8617 5.48631 20.8329 5.5961 20.7514 5.65315L12.2867 11.5784C12.1146 11.6989 11.8854 11.6989 11.7133 11.5784L3.24859 5.65315ZM3 8.11251C3 8.03161 3.09107 7.98419 3.15735 8.03059L10.8531 13.4176C11.5417 13.8997 12.4583 13.8997 13.1469 13.4176L20.8427 8.03059C20.9089 7.98419 21 8.03161 21 8.11251V17.9998C21 18.5475 20.5477 18.9998 20 18.9998H4C3.45228 18.9998 3 18.5475 3 17.9998V8.11251Z" fill="currentColor"/>',
+            after: '<path d="M22.8408 6.35156C22.9069 6.30354 22.9998 6.35104 23 6.43262V18C23 19.6523 21.6523 21 20 21H4C2.34772 21 1.00001 19.6523 1 18V6.43262C1.00019 6.35104 1.09315 6.30354 1.15918 6.35156L10.8232 13.3809C11.5245 13.8909 12.4755 13.8909 13.1768 13.3809L22.8408 6.35156Z" fill="currentColor"/><path d="M20 3C20.9056 3 21.7197 3.40498 22.2705 4.04297C22.3435 4.12754 22.3238 4.2546 22.2334 4.32031L13.1768 10.9082C12.4755 11.4182 11.5245 11.4182 10.8232 10.9082L1.7666 4.32031C1.67624 4.2546 1.65647 4.12754 1.72949 4.04297C2.28034 3.40497 3.09438 3.00002 4 3H20Z" fill="currentColor"/>'
+        };
+
+        function selectLegacyBottomTab(tab, event) {
+            event.stopPropagation();
+            
+            // Update active tab
+            const tabs = document.querySelectorAll('#legacy-interactive-tabs .m3-nav-item');
+            tabs.forEach(t => t.classList.remove('active'));
+            document.querySelector(`#legacy-interactive-tabs .m3-nav-item[data-tab="${tab}"]`).classList.add('active');
+            
+            // Update inbox icon based on selection state
+            const inboxItem = document.querySelector('#legacy-interactive-tabs .m3-nav-item[data-tab="inbox"]');
+            const inboxSvg = inboxItem.querySelector('.m3-indicator svg');
+            inboxSvg.innerHTML = tab === 'inbox' ? inboxIcons.after : inboxIcons.before;
+            
+            // Update item name
+            const nameMap = { inbox: 'bottom-nav-inbox', todo: 'bottom-nav-todo', ai: 'bottom-nav-ai' };
+            document.getElementById('legacy-bottom-tab-name').textContent = nameMap[tab];
+        }
+
         // Copy name when clicking on the bottom tab item (outside tabs)
         document.getElementById('bottom-tab-item').addEventListener('click', function() {
             const name = document.getElementById('bottom-tab-name').textContent;
+            copyName(name);
+        });
+
+        // Copy name when clicking on the legacy bottom tab item (outside tabs)
+        document.getElementById('legacy-bottom-tab-item').addEventListener('click', function() {
+            const name = document.getElementById('legacy-bottom-tab-name').textContent;
             copyName(name);
         });
     </script>
