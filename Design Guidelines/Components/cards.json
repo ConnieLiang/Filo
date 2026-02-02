@@ -1,0 +1,132 @@
+{
+  "cards": {
+    "summary": {
+      "description": "AI-powered email summaries that appear at the top of each email",
+      "purpose": "Help users quickly understand email content without reading the full message",
+      "features": [
+        "Auto-loaded, short, precise, action-oriented summaries",
+        "Language based on user preference (adjustable in Settings)",
+        "Embedded actions (e.g., 'Check in' buttons) included in summary",
+        "Thumbs up/down feedback icons for user experience improvement",
+        "Daily free usage limit with manual trigger option when exceeded"
+      ],
+      "variants": {
+        "summary-ghost": {
+          "description": "Collapsed state prompting user to generate summary",
+          "usage": "Shown when daily limit reached or summary not yet generated"
+        },
+        "summary-ghost-caption": {
+          "description": "Collapsed state with upgrade/limit message",
+          "usage": "Shown when daily free limit is reached"
+        },
+        "summary-generating": {
+          "description": "Loading state while AI generates summary",
+          "usage": "Shown during summary generation"
+        },
+        "summary-default": {
+          "description": "Full summary with bullet points and actions",
+          "usage": "Primary display state showing email summary"
+        }
+      },
+      "helpDoc": "https://filo-mail.gitbook.io/filo-mail-docs/core-features/ai-summary"
+    },
+    "todo": {
+      "description": "Auto-converted action items from emails requiring user response",
+      "purpose": "Ensure users never miss important tasks from their emails",
+      "features": [
+        "Auto-converts actionable emails into clear, structured memos",
+        "Checkbox for marking completion",
+        "Detail menu (view details, report incorrect, delete)",
+        "Tag & time display for context"
+      ],
+      "statuses": [
+        "To respond",
+        "Awaiting Reply",
+        "Meeting Update",
+        "Suggested Done"
+      ],
+      "variants": {
+        "todo-inmail": {
+          "description": "In-email todo card with task description",
+          "usage": "Displayed within email view for actionable items"
+        }
+      }
+    },
+    "tips": {
+      "description": "System notifications and helpful tips",
+      "purpose": "Guide users on app status and recommended actions",
+      "variants": {
+        "tips": {
+          "description": "Dismissible tip with close button",
+          "usage": "Account disconnection alerts, feature tips, etc."
+        }
+      }
+    },
+    "spam": {
+      "description": "Security warning for potentially risky emails",
+      "purpose": "Alert users about phishing or scam attempts",
+      "variants": {
+        "spam": {
+          "description": "Risk detection warning with report option",
+          "usage": "Shown when email has phishing/scam characteristics"
+        }
+      }
+    },
+    "tracker": {
+      "description": "Email tracker detection and blocking notification",
+      "purpose": "Inform users about invisible trackers in promotional emails",
+      "features": [
+        "Shows blocked tracker count",
+        "Lists tracker domains when expanded",
+        "Learn More link for education"
+      ],
+      "variants": {
+        "tracker-collapsed": {
+          "description": "Compact pill showing blocked count",
+          "usage": "Default state showing tracker summary"
+        },
+        "tracker-expanded": {
+          "description": "Expanded view with tracker details",
+          "usage": "Shows full list of blocked tracker domains"
+        }
+      }
+    },
+    "ai-actions": {
+      "description": "AI-generated action cards for specific tasks",
+      "purpose": "Frame AI results in focused, actionable card format",
+      "variants": {
+        "ai-draft": {
+          "description": "Email draft preview with send/edit options",
+          "usage": "AI-composed email reply ready for review"
+        },
+        "ai-label": {
+          "description": "Smart label creation suggestion",
+          "usage": "AI suggests new label based on email patterns"
+        },
+        "ai-filter": {
+          "description": "Email filter creation with conditions and actions",
+          "usage": "AI suggests automated email management rules"
+        },
+        "ai-todo": {
+          "description": "Todo item creation with date and priority",
+          "usage": "AI extracts task from email for confirmation"
+        },
+        "ai-select": {
+          "description": "Multi-select checklist for bulk actions",
+          "usage": "Batch operations on multiple AI-generated items"
+        }
+      }
+    }
+  },
+  "design": {
+    "backgrounds": {
+      "blue": "var(--filo-05) - Used for summary and todo cards",
+      "gray": "var(--filo-14) - Used for AI actions, tips, spam, trackers"
+    },
+    "shapes": {
+      "rounded": "24px border-radius for standard cards",
+      "pill": "999px border-radius for compact/generating states"
+    },
+    "width": "350px standard width for all cards"
+  }
+}

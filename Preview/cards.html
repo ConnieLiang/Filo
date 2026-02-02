@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filo Cards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --filo-02: #22A0FB;
+            --filo-05: #E9F6FF;
+            --filo-06: #000000;
+            --filo-07: #707070;
+            --filo-08: #D5D5D5;
+            --filo-09: #FCFAFA;
+            --filo-10: #FFFFFF;
+            --filo-14: rgba(0, 0, 0, 0.04);
+            --filo-15: rgba(76, 180, 255, 0.12);
+            
+            --font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+        }
+
+        body.dark-mode {
+            --filo-02: #45B1FF;
+            --filo-05: rgba(34, 160, 251, 0.15);
+            --filo-06: #FFFFFF;
+            --filo-07: #8B8B8B;
+            --filo-08: #414149;
+            --filo-09: #121214;
+            --filo-10: #1D1D21;
+            --filo-14: rgba(255, 255, 255, 0.06);
+            --filo-15: rgba(76, 180, 255, 0.16);
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--filo-09);
+            min-height: 100vh;
+            padding: 60px 80px;
+            color: var(--filo-06);
+        }
+
+        .mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 8px;
+            background: var(--filo-10);
+            padding: 4px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .mode-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            background: transparent;
+            color: var(--filo-07);
+            transition: all 0.2s ease;
+        }
+
+        .mode-btn.active {
+            background: var(--filo-02);
+            color: white;
+        }
+
+        .header {
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: var(--filo-07);
+            margin-bottom: 8px;
+        }
+
+        .hint {
+            font-size: 13px;
+            color: var(--filo-07);
+        }
+
+        /* ============================================
+           SECTION LAYOUT
+           ============================================ */
+        .sections {
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+        }
+
+        .section {
+            background: var(--filo-14);
+            border-radius: 24px;
+            padding: 40px;
+            border: 1px dashed var(--filo-08);
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--filo-07);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 32px;
+        }
+
+        /* ============================================
+           CARDS GRID
+           ============================================ */
+        .cards-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .card-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            position: relative;
+        }
+
+        .card-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .card-item:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ============================================
+           TOOLTIP
+           ============================================ */
+        .tooltip {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%) translateY(4px);
+            background: var(--filo-10);
+            color: var(--filo-07);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 1.5;
+            max-width: 240px;
+            text-align: left;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.15s ease, transform 0.15s ease;
+            z-index: 100;
+            pointer-events: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 0.5px solid var(--filo-08);
+        }
+
+        .card-name {
+            font-size: 13px;
+            color: var(--filo-07);
+            text-align: center;
+        }
+
+        /* ============================================
+           BASE CARD STYLES
+           ============================================ */
+        .card {
+            width: 350px;
+            border-radius: 24px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .card-blue {
+            background: var(--filo-05);
+        }
+
+        .card-gray {
+            background: var(--filo-14);
+        }
+
+        .card-pill {
+            border-radius: 999px;
+        }
+
+        /* ============================================
+           TYPOGRAPHY (Using Filo Typography System)
+           P1_B: 19px, 700, 26px line-height, -0.2px
+           P1.1_B: 17px, 700, 24px line-height, -0.2px
+           P1.1_R: 17px, 400, 24px line-height, -0.2px
+           P2_R: 16px, 400, 20px line-height, -0.2px
+           P2_B: 16px, 700, 20px line-height, -0.2px
+           P3.1_M: 14px, 500, 18px line-height, -0.2px
+           P4_B: 13px, 700, 15px line-height, 0
+           ============================================ */
+        .title-blue {
+            font-size: 19px;
+            font-weight: 700;
+            line-height: 26px;
+            letter-spacing: -0.2px;
+            color: var(--filo-02);
+        }
+
+        .title-black {
+            font-size: 19px;
+            font-weight: 700;
+            line-height: 26px;
+            letter-spacing: -0.2px;
+            color: var(--filo-06);
+        }
+
+        .body-text {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 20px;
+            letter-spacing: -0.2px;
+            color: var(--filo-06);
+        }
+
+        .body-bold {
+            font-size: 17px;
+            font-weight: 700;
+            line-height: 24px;
+            letter-spacing: -0.2px;
+            color: var(--filo-06);
+        }
+
+        .body-regular {
+            font-size: 17px;
+            font-weight: 400;
+            line-height: 24px;
+            letter-spacing: -0.2px;
+            color: var(--filo-06);
+        }
+
+        .caption-bold {
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 20px;
+            letter-spacing: -0.2px;
+            color: var(--filo-07);
+        }
+
+        .caption-medium {
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 18px;
+            letter-spacing: -0.2px;
+            color: var(--filo-07);
+        }
+
+        .label-gray {
+            color: var(--filo-07);
+        }
+
+        .link-blue {
+            color: var(--filo-02);
+        }
+
+        /* ============================================
+           ACTION BUTTONS (Using Filo Typography P3_M)
+           Small pill buttons: 15px, 500 weight, 20px line-height
+           ============================================ */
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .pill-btn {
+            padding: 8px 12px;
+            border-radius: 100px;
+            font-family: var(--font-family);
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 20px;
+            letter-spacing: -0.2px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .pill-btn:active {
+            transform: scale(0.98);
+            opacity: 0.8;
+        }
+
+        .pill-blue-lite {
+            background: var(--filo-15);
+            color: var(--filo-02);
+        }
+
+        .pill-blue-fill {
+            background: var(--filo-02);
+            color: var(--filo-10);
+        }
+
+        .pill-white {
+            background: var(--filo-10);
+            color: var(--filo-06);
+        }
+
+        /* ============================================
+           SPECIFIC CARD COMPONENTS
+           ============================================ */
+        
+        /* Summary Card Header */
+        .summary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .feedback-icons {
+            display: flex;
+            gap: 24px;
+            padding-right: 4px;
+        }
+
+        .feedback-icon {
+            width: 18px;
+            height: 18px;
+            color: var(--filo-02);
+        }
+
+        /* Bullet List (P2_R: 16px, 400, 20px) */
+        .bullet-list {
+            list-style: disc;
+            padding-left: 24px;
+            color: var(--filo-06);
+        }
+
+        .bullet-list li {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 20px;
+            letter-spacing: -0.2px;
+            margin-bottom: 4px;
+        }
+
+        /* Divider */
+        .divider {
+            height: 0.5px;
+            background: var(--filo-08);
+            width: 100%;
+        }
+
+        /* Todo Item */
+        .todo-row {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .checkbox {
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+        }
+
+        .checkbox-unchecked {
+            border: 1.5px solid var(--filo-08);
+            border-radius: 6px;
+            background: var(--filo-10);
+        }
+
+        .checkbox-checked {
+            background: var(--filo-02);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .checkbox-checked svg {
+            width: 12px;
+            height: 12px;
+            color: white;
+        }
+
+        .more-btn {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--filo-14);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .more-icon {
+            width: 14px;
+            height: 14px;
+            color: var(--filo-02);
+        }
+
+        /* Tag & Time */
+        .tag-time {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            margin-left: 32px;
+        }
+
+        .tag {
+            background: var(--filo-14);
+            padding: 4px 8px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--filo-02);
+        }
+
+        .time {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .time-icon {
+            width: 16px;
+            height: 16px;
+            color: var(--filo-07);
+        }
+
+        /* Tips Close Button */
+        .close-btn {
+            width: 24px;
+            height: 24px;
+            background: var(--filo-14);
+            border-radius: 800px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .close-icon {
+            width: 8px;
+            height: 8px;
+            color: var(--filo-07);
+        }
+
+        /* AI Card with Icon */
+        .ai-header {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .ai-icon {
+            width: 20px;
+            height: 20px;
+            color: var(--filo-02);
+        }
+
+        /* Tracker */
+        .tracker-row {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .tracker-icon {
+            width: 14px;
+            height: 14px;
+            color: var(--filo-07);
+            flex-shrink: 0;
+        }
+
+        /* Multi-select List */
+        .select-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+        }
+
+        .select-item {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .select-checkbox {
+            width: 24px;
+            height: 24px;
+            background: var(--filo-02);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .select-checkbox svg {
+            width: 12px;
+            height: 12px;
+            color: white;
+        }
+
+        .select-checkbox-icon {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .select-content {
+            flex: 1;
+        }
+
+        /* Email Draft (P1.1_R: 17px, 400, 24px) */
+        .email-meta {
+            font-size: 17px;
+            font-weight: 400;
+            line-height: 24px;
+            letter-spacing: -0.2px;
+        }
+
+        .email-meta .label {
+            font-weight: 700;
+        }
+
+        .email-body {
+            font-size: 17px;
+            font-weight: 400;
+            line-height: 24px;
+            letter-spacing: -0.2px;
+            color: var(--filo-06);
+        }
+
+        .email-body p {
+            margin-bottom: 0;
+        }
+
+        .email-body .blank {
+            height: 24px;
+        }
+
+        /* ============================================
+           TOAST
+           ============================================ */
+        .toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--filo-06);
+            color: var(--filo-10);
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Filo Cards</h1>
+        <p class="subtitle">14 cards — Summary, AI, Todo, Tips, and Trackers</p>
+        <p class="hint">Click any card to copy its name</p>
+    </div>
+
+    <div class="sections">
+        <!-- SUMMARY CARDS -->
+        <div class="section">
+            <h2 class="section-title">Summary</h2>
+            <div class="cards-grid">
+                <!-- summary-ghost -->
+                <div class="card-item" onclick="copyName('summary-ghost')">
+                    <div class="tooltip">Tap to manually generate an AI summary. Shown when auto-summary is disabled or daily free limit hasn't been used yet.</div>
+                    <div class="card card-gray card-pill" style="padding: 16px;">
+                        <p class="caption-bold">Summarize this email</p>
+                    </div>
+                    <span class="card-name">summary-ghost</span>
+                </div>
+
+                <!-- summary-ghost-caption -->
+                <div class="card-item" onclick="copyName('summary-ghost-caption')">
+                    <div class="tooltip">Daily free summary limit reached. Users can upgrade for unlimited summaries or tap to generate manually.</div>
+                    <div class="card card-gray" style="gap: 4px;">
+                        <p class="caption-bold">Summarize This Email</p>
+                        <p class="caption-medium">Daily limit reached. <span class="link-blue">Upgrade</span> or Summarize.</p>
+                    </div>
+                    <span class="card-name">summary-ghost-caption</span>
+                </div>
+
+                <!-- summary-generating -->
+                <div class="card-item" onclick="copyName('summary-generating')">
+                    <div class="tooltip">Loading state while Filo AI processes and generates the email summary. Usually takes 1-3 seconds.</div>
+                    <div class="card card-blue card-pill" style="padding: 16px;">
+                        <p class="title-blue" style="font-size: 16px;">Generating...</p>
+                    </div>
+                    <span class="card-name">summary-generating</span>
+                </div>
+
+                <!-- summary-default -->
+                <div class="card-item" onclick="copyName('summary-default')">
+                    <div class="tooltip">Auto-loaded AI summary with bullet points. Includes embedded actions from the email. Thumbs up/down icons let users provide feedback to improve AI quality.</div>
+                    <div class="card card-blue">
+                        <div class="summary-header">
+                            <p class="title-blue">Summary</p>
+                            <div class="feedback-icons">
+                                <!-- Thumbs Up -->
+                                <svg class="feedback-icon" viewBox="0 0 24 24" fill="none">
+                                    <path d="M2 16.0181C2 14.9419 2.18864 13.9647 2.56592 13.0864C2.9432 12.2082 3.45654 11.5093 4.10596 10.9897C4.75537 10.464 5.48519 10.2012 6.29541 10.2012H7.90039C8.40755 9.58268 8.87142 8.99821 9.29199 8.44775C9.71875 7.89111 10.1146 7.34994 10.4795 6.82422C10.8506 6.2985 11.1908 5.77897 11.5 5.26562C11.8154 4.74609 12.1123 4.21729 12.3906 3.6792C12.6999 3.08545 13.0277 2.65869 13.374 2.39893C13.7266 2.13298 14.141 2 14.6172 2C15.0501 2 15.4336 2.10205 15.7676 2.30615C16.1077 2.50407 16.3768 2.7793 16.5747 3.13184C16.7726 3.47819 16.8716 3.87712 16.8716 4.32861C16.8716 4.7863 16.7943 5.25944 16.6396 5.74805C16.4912 6.23047 16.318 6.70052 16.1201 7.1582C15.9284 7.61589 15.7552 8.03337 15.6006 8.41064C15.4521 8.78174 15.3717 9.0848 15.3594 9.31982C15.3594 9.40023 15.3841 9.46208 15.4336 9.50537C15.4893 9.54867 15.5604 9.57031 15.647 9.57031H19.0054C19.4816 9.57031 19.9084 9.68473 20.2856 9.91357C20.6691 10.1362 20.9722 10.4393 21.1948 10.8228C21.4237 11.2062 21.5381 11.6361 21.5381 12.1123C21.5381 12.6813 21.4051 13.173 21.1392 13.5874C21.2257 13.7482 21.2938 13.9338 21.3433 14.144C21.3927 14.3543 21.4175 14.5677 21.4175 14.7842C21.4175 15.1182 21.3618 15.4367 21.2505 15.7397C21.1392 16.0428 20.9784 16.3057 20.7681 16.5283C20.8979 16.8252 20.9629 17.1592 20.9629 17.5303C20.9629 18.3281 20.6413 18.9837 19.998 19.4971C20.029 19.596 20.0506 19.6919 20.063 19.7847C20.0754 19.8836 20.0815 19.9857 20.0815 20.0908C20.0815 20.6722 19.8867 21.1855 19.4971 21.6309C19.1074 22.0762 18.5817 22.3761 17.9199 22.5308C17.5921 22.6173 17.187 22.6792 16.7046 22.7163C16.2222 22.7534 15.6872 22.772 15.0996 22.772H13.8472C13.0493 22.772 12.2917 22.6854 11.5742 22.5122C10.863 22.3452 10.2043 22.1071 9.59814 21.7979H6.63867C5.98307 21.7979 5.37386 21.6463 4.81104 21.3433C4.25439 21.0402 3.7627 20.6227 3.33594 20.0908C2.91536 19.5589 2.58757 18.9466 2.35254 18.2539C2.11751 17.555 2 16.8097 2 16.0181ZM7.61279 15.9438C7.61279 16.952 7.87565 17.8457 8.40137 18.625C8.92708 19.3981 9.66309 20.0042 10.6094 20.4434C11.5618 20.8825 12.6689 21.1051 13.9307 21.1113H15.0161C15.5728 21.1113 16.0614 21.0959 16.4819 21.0649C16.9025 21.0402 17.2427 20.9938 17.5024 20.9258C17.8055 20.8454 18.0282 20.731 18.1704 20.5825C18.3127 20.4403 18.3838 20.2733 18.3838 20.0815C18.3838 19.9764 18.3714 19.8836 18.3467 19.8032C18.3281 19.7228 18.2694 19.562 18.1704 19.3208C18.1086 19.1847 18.0993 19.0487 18.1426 18.9126C18.1859 18.7703 18.2786 18.6559 18.4209 18.5693C18.9837 18.2786 19.2651 17.9292 19.2651 17.521C19.2651 17.3787 19.2404 17.252 19.1909 17.1406C19.1414 17.0231 19.0672 16.8716 18.9683 16.686C18.8817 16.5005 18.86 16.3242 18.9033 16.1572C18.9528 15.9902 19.0548 15.8511 19.2095 15.7397C19.3888 15.6037 19.5218 15.4583 19.6084 15.3037C19.695 15.1429 19.7383 14.9728 19.7383 14.7935C19.7383 14.6326 19.7104 14.4873 19.6548 14.3574C19.5991 14.2214 19.5063 14.0605 19.3765 13.875C19.2775 13.7575 19.2311 13.6245 19.2373 13.4761C19.2497 13.3215 19.3177 13.1854 19.4414 13.0679C19.596 12.9132 19.7043 12.7679 19.7661 12.6318C19.8341 12.4958 19.8682 12.3319 19.8682 12.1401C19.8682 11.8804 19.7816 11.6639 19.6084 11.4907C19.4352 11.3175 19.2188 11.231 18.959 11.231H15.7305C15.1367 11.231 14.645 11.0701 14.2554 10.7485C13.8719 10.4269 13.6802 9.99398 13.6802 9.44971C13.6802 9.0848 13.7544 8.68278 13.9028 8.24365C14.0575 7.80452 14.2337 7.35612 14.4316 6.89844C14.6357 6.43457 14.8151 5.98926 14.9697 5.5625C15.1243 5.13574 15.2017 4.75537 15.2017 4.42139C15.2017 4.20492 15.1491 4.03792 15.0439 3.92041C14.9388 3.8029 14.8027 3.74414 14.6357 3.74414C14.4873 3.74414 14.3574 3.79053 14.2461 3.8833C14.1348 3.97607 14.008 4.16781 13.8657 4.4585C13.4142 5.36149 12.9163 6.20882 12.3721 7.00049C11.834 7.79215 11.2928 8.53434 10.7485 9.22705C10.2104 9.91976 9.71256 10.5692 9.25488 11.1753C8.85286 11.7257 8.53125 12.2422 8.29004 12.7246C8.04883 13.2008 7.87565 13.6987 7.77051 14.2183C7.66536 14.7316 7.61279 15.3068 7.61279 15.9438ZM3.64209 16.0181C3.64209 16.7664 3.77507 17.453 4.04102 18.0776C4.30697 18.7023 4.65951 19.2033 5.09863 19.5806C5.53776 19.9578 6.01709 20.1558 6.53662 20.1743C6.7098 20.1743 6.87988 20.1743 7.04688 20.1743C7.21387 20.1805 7.38086 20.1836 7.54785 20.1836C7.03451 19.6084 6.63867 18.9652 6.36035 18.2539C6.08203 17.5365 5.94287 16.7664 5.94287 15.9438C5.94287 15.1646 6.014 14.444 6.15625 13.7822C6.30469 13.1143 6.53662 12.471 6.85205 11.8525C6.74072 11.8525 6.62321 11.8525 6.49951 11.8525C6.382 11.8525 6.26758 11.8556 6.15625 11.8618C5.71094 11.8804 5.29655 12.0783 4.91309 12.4556C4.52962 12.8267 4.22038 13.3245 3.98535 13.9492C3.75651 14.5677 3.64209 15.2573 3.64209 16.0181Z" fill="currentColor"/>
+                                </svg>
+                                <!-- Thumbs Down -->
+                                <svg class="feedback-icon" viewBox="0 0 24 24" fill="none">
+                                    <path d="M21.5381 8.75391C21.5381 9.83008 21.3464 10.8104 20.9629 11.6948C20.5856 12.5731 20.0723 13.272 19.4229 13.7915C18.7796 14.311 18.0529 14.5708 17.2427 14.5708H15.6284C15.1274 15.1831 14.6636 15.7707 14.2368 16.3335C13.8101 16.8901 13.4142 17.4313 13.0493 17.957C12.6844 18.4766 12.3442 18.993 12.0288 19.5063C11.7134 20.0259 11.4165 20.5578 11.1382 21.1021C10.8289 21.6896 10.498 22.1133 10.1455 22.373C9.79915 22.639 9.39095 22.772 8.9209 22.772C8.48177 22.772 8.09212 22.673 7.75195 22.4751C7.41797 22.2772 7.15202 22.002 6.9541 21.6494C6.76237 21.2969 6.6665 20.8949 6.6665 20.4434C6.6665 19.9919 6.74072 19.5218 6.88916 19.0332C7.0376 18.5384 7.20768 18.0653 7.39941 17.6138C7.59733 17.1561 7.77051 16.7417 7.91895 16.3706C8.07357 15.9933 8.15706 15.6903 8.16943 15.4614C8.17562 15.381 8.15088 15.3192 8.09521 15.2759C8.03955 15.2326 7.96842 15.2109 7.88184 15.2109H4.53271C4.05648 15.2109 3.62663 15.0996 3.24316 14.877C2.8597 14.6481 2.55664 14.342 2.33398 13.9585C2.11133 13.5688 2 13.1359 2 12.6597C2 12.0845 2.12988 11.5959 2.38965 11.1938C2.30306 11.0269 2.23503 10.8382 2.18555 10.6279C2.13607 10.4115 2.11133 10.1981 2.11133 9.98779C2.11133 9.65381 2.16699 9.33529 2.27832 9.03223C2.39583 8.72917 2.55973 8.46631 2.77002 8.24365C2.64014 7.94678 2.5752 7.61279 2.5752 7.2417C2.5752 6.44385 2.89372 5.78825 3.53076 5.2749C3.50602 5.18213 3.48438 5.08626 3.46582 4.9873C3.45345 4.88835 3.44727 4.78939 3.44727 4.69043C3.44727 4.09668 3.64209 3.58024 4.03174 3.14111C4.42139 2.70199 4.9471 2.40202 5.60889 2.24121C5.93669 2.16081 6.3418 2.10205 6.82422 2.06494C7.31283 2.02165 7.84782 2 8.4292 2H9.69092C10.4826 2 11.234 2.08659 11.9453 2.25977C12.6628 2.43294 13.3245 2.67415 13.9307 2.9834H16.8994C17.5488 2.9834 18.1519 3.13493 18.7085 3.43799C19.2713 3.73486 19.763 4.14925 20.1836 4.68115C20.6104 5.21305 20.9412 5.82845 21.1763 6.52734C21.4175 7.22624 21.5381 7.96842 21.5381 8.75391ZM15.916 8.82812C15.916 7.81999 15.6532 6.92936 15.1274 6.15625C14.6079 5.38314 13.8719 4.77702 12.9194 4.33789C11.9731 3.89258 10.866 3.66683 9.59814 3.66064H8.5127C7.96224 3.66064 7.47673 3.67611 7.05615 3.70703C6.63558 3.73796 6.29232 3.78743 6.02637 3.85547C5.72331 3.92969 5.50065 4.04102 5.3584 4.18945C5.21615 4.33171 5.14502 4.4987 5.14502 4.69043C5.14502 4.78939 5.15739 4.88216 5.18213 4.96875C5.20687 5.05534 5.26562 5.21305 5.3584 5.44189C5.42025 5.58415 5.42952 5.7264 5.38623 5.86865C5.34912 6.00472 5.25944 6.11296 5.11719 6.19336C4.54818 6.49642 4.26367 6.85205 4.26367 7.26025C4.26367 7.40251 4.28841 7.53239 4.33789 7.6499C4.38737 7.76123 4.46159 7.90967 4.56055 8.09521C4.64714 8.26839 4.66569 8.44157 4.61621 8.61475C4.57292 8.78174 4.47705 8.91781 4.32861 9.02295C4.14307 9.1652 4.00391 9.31673 3.91113 9.47754C3.82454 9.63216 3.78125 9.80225 3.78125 9.98779C3.78125 10.1424 3.81217 10.2878 3.87402 10.4238C3.93587 10.5537 4.02865 10.7145 4.15234 10.9062C4.25749 11.0176 4.30387 11.1506 4.2915 11.3052C4.27913 11.4598 4.21419 11.5928 4.09668 11.7041C3.94206 11.8587 3.83073 12.0072 3.7627 12.1494C3.70085 12.2855 3.66992 12.4463 3.66992 12.6318C3.66992 12.8916 3.75342 13.1081 3.92041 13.2812C4.09359 13.4544 4.31006 13.541 4.56982 13.541H7.80762C8.39518 13.541 8.88379 13.7018 9.27344 14.0234C9.66309 14.3451 9.85791 14.778 9.85791 15.3223C9.85791 15.6934 9.7806 16.0985 9.62598 16.5376C9.47754 16.9767 9.30127 17.4251 9.09717 17.8828C8.89925 18.3405 8.72298 18.7827 8.56836 19.2095C8.41374 19.6362 8.33643 20.0166 8.33643 20.3506C8.33643 20.5671 8.389 20.734 8.49414 20.8516C8.59928 20.9691 8.73226 21.0278 8.89307 21.0278C9.03532 21.0278 9.16211 20.9814 9.27344 20.8887C9.39095 20.7959 9.52083 20.6073 9.66309 20.3228C10.1146 19.4198 10.6094 18.5724 11.1475 17.7808C11.6917 16.9829 12.236 16.2376 12.7803 15.5449C13.3245 14.8522 13.8224 14.2028 14.2739 13.5967C14.6821 13.0524 15.0068 12.5391 15.248 12.0566C15.4893 11.5742 15.6593 11.0763 15.7583 10.563C15.8634 10.0496 15.916 9.47135 15.916 8.82812ZM19.8867 8.75391C19.8867 8.00553 19.7537 7.3221 19.4878 6.70361C19.2218 6.07894 18.8693 5.57796 18.4302 5.20068C17.991 4.81722 17.5117 4.61621 16.9922 4.59766C16.8252 4.59766 16.6551 4.59766 16.4819 4.59766C16.3149 4.59766 16.1479 4.59766 15.981 4.59766C16.5005 5.16667 16.8963 5.8099 17.1685 6.52734C17.4468 7.24479 17.5859 8.01172 17.5859 8.82812C17.5859 9.60742 17.5117 10.3311 17.3633 10.999C17.221 11.6608 16.9922 12.3009 16.6768 12.9194C16.7943 12.9194 16.9087 12.9194 17.02 12.9194C17.1375 12.9194 17.255 12.9194 17.3726 12.9194C17.8241 12.9009 18.2384 12.703 18.6157 12.3257C18.9992 11.9484 19.3053 11.4505 19.5342 10.832C19.7692 10.2074 19.8867 9.51465 19.8867 8.75391Z" fill="currentColor"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <ul class="bullet-list">
+                            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent viverra in lorem et accumsan.</li>
+                            <li>Ut eget scelerisque purus, non tincidunt magna. Duis nec massa libero.</li>
+                            <li>Edmattis luctus cursus. Sed aliquet ornare nibh sed egestas.</li>
+                        </ul>
+                        <div class="actions">
+                            <button class="pill-btn pill-blue-lite">Action 1</button>
+                            <button class="pill-btn pill-blue-lite">Action 2</button>
+                        </div>
+                    </div>
+                    <span class="card-name">summary-default</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- TODO & TIPS CARDS -->
+        <div class="section">
+            <h2 class="section-title">Todo & Tips</h2>
+            <div class="cards-grid">
+                <!-- todo-inmail -->
+                <div class="card-item" onclick="copyName('todo-inmail')">
+                    <div class="tooltip">Auto-generated task from actionable emails. Statuses: To respond, Awaiting Reply, Meeting Update, Suggested Done. Tap checkbox to complete; tap ••• for more options.</div>
+                    <div class="card card-blue" style="height: 127px;">
+                        <div class="todo-row">
+                            <div class="checkbox checkbox-unchecked" style="border-color: #9CD5FF;"></div>
+                            <p class="body-text" style="flex: 1;">A brief notes that clarifies the task and guides the user toward the appropriate next action.</p>
+                            <div class="more-btn">
+                                <svg class="more-icon" viewBox="0 0 24 24" fill="none">
+                                    <circle cx="5" cy="12" r="2" fill="currentColor"/>
+                                    <circle cx="12" cy="12" r="2" fill="currentColor"/>
+                                    <circle cx="19" cy="12" r="2" fill="currentColor"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="tag-time">
+                            <span class="tag">To respond</span>
+                            <div class="time">
+                                <svg class="time-icon" viewBox="0 0 16 16" fill="none">
+                                    <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M8 4V8L10.5 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                </svg>
+                                <span class="caption-medium">July 26, 4:00 PM</span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="card-name">todo-inmail</span>
+                </div>
+
+                <!-- tips -->
+                <div class="card-item" onclick="copyName('tips')">
+                    <div class="tooltip">System notification for account status, feature tips, or helpful guidance. Dismissible with the close button.</div>
+                    <div class="card card-gray" style="height: 70px; flex-direction: row; align-items: flex-start; gap: 12px;">
+                        <p class="caption-medium" style="flex: 1; font-size: 15px;">Some email accounts are disconnected. Reconnect or remove them in <span class="link-blue">Settings</span>.</p>
+                        <div class="close-btn">
+                            <svg class="close-icon" viewBox="0 0 8 8" fill="none">
+                                <path d="M1 1L7 7M7 1L1 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <span class="card-name">tips</span>
+                </div>
+
+                <!-- spam -->
+                <div class="card-item" onclick="copyName('spam')">
+                    <div class="tooltip">Security warning when Filo detects phishing or scam patterns. Users can report false positives to improve detection accuracy.</div>
+                    <div class="card card-gray" style="height: 215px;">
+                        <p class="title-black">Potential Risk Detected</p>
+                        <p class="body-text" style="height: 105px;">This email from has characteristics often found in phishing or scam attempts. Opening such attachments can expose your device to malware. Proceed only if you are certain you trust the sender.</p>
+                        <div class="actions">
+                            <button class="pill-btn pill-white">Report not spam</button>
+                        </div>
+                    </div>
+                    <span class="card-name">spam</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI CARDS -->
+        <div class="section">
+            <h2 class="section-title">AI Actions</h2>
+            <div class="cards-grid">
+                <!-- ai-draft -->
+                <div class="card-item" onclick="copyName('ai-draft')">
+                    <div class="tooltip">AI-composed email reply ready for review. Edit the draft before sending, or send immediately if the response looks good.</div>
+                    <div class="card card-gray" style="gap: 16px; align-items: flex-end;">
+                        <div class="email-meta" style="width: 100%;">
+                            <p><span class="label">From</span> jordanneumann@gmail.com</p>
+                            <p><span class="label">To</span> emilyharris@gmail.com</p>
+                            <p><span class="label">Subject</span> Quick things before next Weekend</p>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="email-body" style="width: 100%;">
+                            <p>Hi Emily,</p>
+                            <div class="blank"></div>
+                            <p>Thanks for checking in! I haven't gotten around to rescheduling the dentist yet, but I'll give them a call this week. We can try to coordinate so we go together.</p>
+                            <div class="blank"></div>
+                            <p>I'll also sort through my photos from the trip and upload the missing ones to the shared folder later today or tomorrow.</p>
+                            <div class="blank"></div>
+                            <p>– Jordan</p>
+                        </div>
+                        <div class="actions">
+                            <button class="pill-btn pill-blue-lite">Edit in Draft</button>
+                            <button class="pill-btn pill-blue-fill">Send Now</button>
+                        </div>
+                    </div>
+                    <span class="card-name">ai-draft</span>
+                </div>
+
+                <!-- ai-label -->
+                <div class="card-item" onclick="copyName('ai-label')">
+                    <div class="tooltip">AI suggests a smart label based on email patterns. Review the name and description, then confirm to auto-organize similar emails.</div>
+                    <div class="card card-gray" style="gap: 12px; align-items: flex-end;">
+                        <div class="ai-header" style="width: 100%;">
+                            <svg class="ai-icon" viewBox="0 0 24 24" fill="none">
+                                <path d="M16.9079 2C17.2376 2 17.511 2.03425 17.7356 2.09394C17.9602 2.15362 18.1766 2.25314 18.3755 2.40085C18.5744 2.54856 18.8016 2.74723 19.0572 2.99702C19.3128 3.24681 20.7518 4.67669 21.002 4.93246C21.2521 5.18821 21.4513 5.42178 21.599 5.62349C21.7468 5.82521 21.8463 6.03802 21.906 6.26244C21.9657 6.48685 21.9999 6.76247 21.9999 7.09763C21.9999 7.43278 21.9999 9.96221 21.9999 10.3203C21.9999 10.6783 21.9994 10.9526 21.9404 11.2243C21.8814 11.4959 21.8215 11.6431 21.7097 11.8976C21.598 12.1521 21.3914 12.6084 21.0475 12.9523C20.5713 13.4285 20.3624 13.5867 20.0951 13.4285C19.8766 13.2992 19.7426 12.7907 19.619 12.4761C19.4953 12.1616 19.2246 11.3694 19.4218 11.2085C19.619 11.0476 19.5664 11.0648 19.6459 10.9853C19.7255 10.9057 19.7792 10.8231 19.8161 10.7379C19.8531 10.6526 19.8766 10.5421 19.8766 10.4058C19.8766 10.2695 19.8766 7.42516 19.8766 7.20923C19.8766 6.99331 19.7994 6.80835 19.6459 6.65492C19.4924 6.50143 17.4966 4.50646 17.3431 4.35304C17.1896 4.19962 17.0021 4.12241 16.7804 4.12238C16.5586 4.12236 13.7153 4.12236 13.5904 4.12238C13.4654 4.12241 13.363 4.14859 13.2834 4.19121C13.2039 4.23383 13.1185 4.29305 13.0277 4.37815C12.9363 4.46375 5.016 12.3778 4.77158 12.6221C4.52715 12.8665 4.40237 13.1172 4.39677 13.3643C4.39116 13.6114 4.51876 13.8585 4.77995 14.114C5.04114 14.3695 9.46672 18.7983 9.89804 19.2293C10.3293 19.6602 10.8448 19.5957 11.1843 19.4125C11.5238 19.2293 12 19.4575 12.4761 19.6189C12.9523 19.7804 13.3207 19.8138 13.4285 20.0951C13.5364 20.3765 13.0694 20.7293 12.7552 20.9852C12.0471 21.5617 11.3735 21.997 10.6486 21.9999C9.92373 22.0028 9.2207 21.6645 8.53272 20.9768C7.84471 20.2891 3.72023 16.1743 3.03238 15.4867C2.34453 14.7992 1.99724 14.0917 2.00002 13.3643C2.00279 12.637 2.34675 11.9349 3.02308 11.2587C3.6994 10.5825 11.2198 3.07392 11.4587 2.83519C11.6974 2.59663 11.9135 2.41786 12.1153 2.29855C12.3171 2.17923 12.5415 2.09931 12.7803 2.05952C13.0191 2.01974 13.3177 2 13.6759 2H16.9079Z" fill="currentColor"/>
+                                <path d="M17.2585 13.754C17.4068 13.3198 18.0216 13.3198 18.1699 13.754L18.6033 15.0254C18.8922 15.8714 19.557 16.5362 20.403 16.8251L21.6744 17.2585C22.1086 17.4068 22.1086 18.0216 21.6744 18.1699L20.403 18.6033C19.557 18.8922 18.8922 19.557 18.6033 20.403L18.1699 21.6744C18.0216 22.1085 17.4068 22.1085 17.2585 21.6744L16.8251 20.403C16.5362 19.557 15.8714 18.8922 15.0254 18.6033L13.754 18.1699C13.3199 18.0216 13.3199 17.4068 13.754 17.2585L15.0254 16.8251C15.8714 16.5362 16.5362 15.8714 16.8251 15.0254L17.2585 13.754Z" fill="currentColor"/>
+                                <path d="M15.7397 6.9358C16.115 6.9358 16.428 7.06416 16.6781 7.31991C16.9338 7.56994 17.0613 7.88241 17.0613 8.2574C17.0613 8.62108 16.9339 8.9308 16.6781 9.18653C16.428 9.44227 16.115 9.57064 15.7397 9.57064C15.3702 9.57061 15.0571 9.44225 14.8013 9.18653C14.5513 8.93082 14.4265 8.62102 14.4265 8.2574C14.4265 7.88246 14.5513 7.56992 14.8013 7.31991C15.0571 7.06418 15.3702 6.93582 15.7397 6.9358Z" fill="currentColor"/>
+                            </svg>
+                            <p class="body-bold">Meetings</p>
+                        </div>
+                        <p class="body-regular" style="width: 100%;">Label for organizing meetings and call-related emails.</p>
+                        <div class="actions">
+                            <button class="pill-btn pill-blue-lite">Edit</button>
+                            <button class="pill-btn pill-blue-fill">Confirm & Create</button>
+                        </div>
+                    </div>
+                    <span class="card-name">ai-label</span>
+                </div>
+
+                <!-- ai-filter -->
+                <div class="card-item" onclick="copyName('ai-filter')">
+                    <div class="tooltip">AI-generated email filter with conditions and actions. Automate inbox management by confirming or editing the suggested rule.</div>
+                    <div class="card card-gray" style="gap: 12px; align-items: flex-end;">
+                        <div class="email-meta" style="width: 100%;">
+                            <p class="label-gray">Condition</p>
+                            <p>Emails that contain the word "unsubscribe" (in subject or content)</p>
+                            <div class="blank"></div>
+                            <p class="label-gray">Actions</p>
+                            <ol style="padding-left: 25px; margin: 0;">
+                                <li>Skip Inbox (archived as well)</li>
+                                <li>Do not generate to-do</li>
+                            </ol>
+                        </div>
+                        <div class="actions">
+                            <button class="pill-btn pill-blue-lite">Edit</button>
+                            <button class="pill-btn pill-blue-fill">Confirm & Save</button>
+                        </div>
+                    </div>
+                    <span class="card-name">ai-filter</span>
+                </div>
+
+                <!-- ai-todo -->
+                <div class="card-item" onclick="copyName('ai-todo')">
+                    <div class="tooltip">AI extracts a task from the email with date and priority. Review the details and confirm to add it to your todo list.</div>
+                    <div class="card card-gray" style="gap: 16px; align-items: flex-end;">
+                        <p class="body-bold" style="width: 100%;">Pick up grocery at Safeway, and then split the bill with Emily.</p>
+                        <div class="email-meta" style="width: 100%;">
+                            <p><span class="label-gray">Date & Time</span> Saturday, Aug 13</p>
+                            <p><span class="label-gray">Priority</span> High</p>
+                        </div>
+                        <div class="actions">
+                            <button class="pill-btn pill-blue-lite">Edit</button>
+                            <button class="pill-btn pill-blue-fill">Confirm</button>
+                        </div>
+                    </div>
+                    <span class="card-name">ai-todo</span>
+                </div>
+
+                <!-- ai-select -->
+                <div class="card-item" onclick="copyName('ai-select')">
+                    <div class="tooltip">Multi-select checklist for batch operations. Select multiple AI-generated items and perform bulk actions like delete.</div>
+                    <div class="card card-gray" style="gap: 16px; align-items: flex-end;">
+                        <div class="select-list">
+                            <div class="select-item">
+                                <svg class="select-checkbox-icon" viewBox="0 0 24 24" fill="none">
+                                    <path d="M0 12C0 7.32222 0 4.98333 1.07293 3.27578C1.63242 2.38535 2.38535 1.63242 3.27578 1.07293C4.98333 0 7.32222 0 12 0C16.6778 0 19.0167 0 20.7242 1.07293C21.6147 1.63242 22.3676 2.38535 22.9271 3.27578C24 4.98333 24 7.32222 24 12C24 16.6778 24 19.0167 22.9271 20.7242C22.3676 21.6147 21.6147 22.3676 20.7242 22.9271C19.0167 24 16.6778 24 12 24C7.32222 24 4.98333 24 3.27578 22.9271C2.38535 22.3676 1.63242 21.6147 1.07293 20.7242C0 19.0167 0 16.6778 0 12Z" fill="#22A0FB"/>
+                                    <path d="M6.0822 12.7664L6.08589 12.7766L6.08997 12.7865C6.15176 12.9376 6.24066 13.0757 6.34406 13.2014L9.53759 17.1964C9.83486 17.5692 10.2367 17.7964 10.7227 17.7964C11.226 17.7964 11.6457 17.5718 11.9274 17.1557L17.7347 8.10495L17.7382 8.09946C17.8167 7.97376 17.8833 7.84198 17.9289 7.70521L17.9311 7.69809C17.9753 7.55939 18 7.41516 18 7.26738C18 6.92846 17.8875 6.60829 17.6337 6.36045C17.384 6.11234 17.0656 6 16.7265 6C16.5045 6 16.2705 6.04302 16.0619 6.17106C15.8664 6.28718 15.716 6.46117 15.598 6.64074L10.6506 14.5007L8.36553 11.5679C8.10551 11.2286 7.74265 11.0165 7.29823 11.0165C6.95171 11.0165 6.63015 11.1327 6.37514 11.3804L6.36955 11.386C6.11855 11.637 6 11.9568 6 12.3023C6 12.4617 6.02796 12.6173 6.0822 12.7664Z" fill="white"/>
+                                </svg>
+                                <div class="select-content">
+                                    <p class="body-regular">Pick up grocery at Safeway, and then split the bill with Emily.</p>
+                                    <p class="caption-medium">Saturday, Aug 13</p>
+                                </div>
+                            </div>
+                            <div class="select-item">
+                                <svg class="select-checkbox-icon" viewBox="0 0 24 24" fill="none">
+                                    <path d="M0 12C0 7.32222 0 4.98333 1.07293 3.27578C1.63242 2.38535 2.38535 1.63242 3.27578 1.07293C4.98333 0 7.32222 0 12 0C16.6778 0 19.0167 0 20.7242 1.07293C21.6147 1.63242 22.3676 2.38535 22.9271 3.27578C24 4.98333 24 7.32222 24 12C24 16.6778 24 19.0167 22.9271 20.7242C22.3676 21.6147 21.6147 22.3676 20.7242 22.9271C19.0167 24 16.6778 24 12 24C7.32222 24 4.98333 24 3.27578 22.9271C2.38535 22.3676 1.63242 21.6147 1.07293 20.7242C0 19.0167 0 16.6778 0 12Z" fill="#22A0FB"/>
+                                    <path d="M6.0822 12.7664L6.08589 12.7766L6.08997 12.7865C6.15176 12.9376 6.24066 13.0757 6.34406 13.2014L9.53759 17.1964C9.83486 17.5692 10.2367 17.7964 10.7227 17.7964C11.226 17.7964 11.6457 17.5718 11.9274 17.1557L17.7347 8.10495L17.7382 8.09946C17.8167 7.97376 17.8833 7.84198 17.9289 7.70521L17.9311 7.69809C17.9753 7.55939 18 7.41516 18 7.26738C18 6.92846 17.8875 6.60829 17.6337 6.36045C17.384 6.11234 17.0656 6 16.7265 6C16.5045 6 16.2705 6.04302 16.0619 6.17106C15.8664 6.28718 15.716 6.46117 15.598 6.64074L10.6506 14.5007L8.36553 11.5679C8.10551 11.2286 7.74265 11.0165 7.29823 11.0165C6.95171 11.0165 6.63015 11.1327 6.37514 11.3804L6.36955 11.386C6.11855 11.637 6 11.9568 6 12.3023C6 12.4617 6.02796 12.6173 6.0822 12.7664Z" fill="white"/>
+                                </svg>
+                                <div class="select-content">
+                                    <p class="body-regular">Cancel Canary Growth Yearly Bundle to avoid charges</p>
+                                    <p class="caption-medium">Saturday, Nov 13</p>
+                                </div>
+                            </div>
+                            <div class="select-item">
+                                <svg class="select-checkbox-icon" viewBox="0 0 24 24" fill="none">
+                                    <path d="M0 12C0 7.32222 0 4.98333 1.07293 3.27578C1.63242 2.38535 2.38535 1.63242 3.27578 1.07293C4.98333 0 7.32222 0 12 0C16.6778 0 19.0167 0 20.7242 1.07293C21.6147 1.63242 22.3676 2.38535 22.9271 3.27578C24 4.98333 24 7.32222 24 12C24 16.6778 24 19.0167 22.9271 20.7242C22.3676 21.6147 21.6147 22.3676 20.7242 22.9271C19.0167 24 16.6778 24 12 24C7.32222 24 4.98333 24 3.27578 22.9271C2.38535 22.3676 1.63242 21.6147 1.07293 20.7242C0 19.0167 0 16.6778 0 12Z" fill="#22A0FB"/>
+                                    <path d="M6.0822 12.7664L6.08589 12.7766L6.08997 12.7865C6.15176 12.9376 6.24066 13.0757 6.34406 13.2014L9.53759 17.1964C9.83486 17.5692 10.2367 17.7964 10.7227 17.7964C11.226 17.7964 11.6457 17.5718 11.9274 17.1557L17.7347 8.10495L17.7382 8.09946C17.8167 7.97376 17.8833 7.84198 17.9289 7.70521L17.9311 7.69809C17.9753 7.55939 18 7.41516 18 7.26738C18 6.92846 17.8875 6.60829 17.6337 6.36045C17.384 6.11234 17.0656 6 16.7265 6C16.5045 6 16.2705 6.04302 16.0619 6.17106C15.8664 6.28718 15.716 6.46117 15.598 6.64074L10.6506 14.5007L8.36553 11.5679C8.10551 11.2286 7.74265 11.0165 7.29823 11.0165C6.95171 11.0165 6.63015 11.1327 6.37514 11.3804L6.36955 11.386C6.11855 11.637 6 11.9568 6 12.3023C6 12.4617 6.02796 12.6173 6.0822 12.7664Z" fill="white"/>
+                                </svg>
+                                <div class="select-content">
+                                    <p class="body-regular">Book pediatric appointment for Leo</p>
+                                    <p class="caption-medium">Saturday, Nov 15</p>
+                                </div>
+                            </div>
+                            <div class="select-item">
+                                <svg class="select-checkbox-icon" viewBox="0 0 24 24" fill="none">
+                                    <path d="M0 12C0 7.32222 0 4.98333 1.07293 3.27578C1.63242 2.38535 2.38535 1.63242 3.27578 1.07293C4.98333 0 7.32222 0 12 0C16.6778 0 19.0167 0 20.7242 1.07293C21.6147 1.63242 22.3676 2.38535 22.9271 3.27578C24 4.98333 24 7.32222 24 12C24 16.6778 24 19.0167 22.9271 20.7242C22.3676 21.6147 21.6147 22.3676 20.7242 22.9271C19.0167 24 16.6778 24 12 24C7.32222 24 4.98333 24 3.27578 22.9271C2.38535 22.3676 1.63242 21.6147 1.07293 20.7242C0 19.0167 0 16.6778 0 12Z" fill="#22A0FB"/>
+                                    <path d="M6.0822 12.7664L6.08589 12.7766L6.08997 12.7865C6.15176 12.9376 6.24066 13.0757 6.34406 13.2014L9.53759 17.1964C9.83486 17.5692 10.2367 17.7964 10.7227 17.7964C11.226 17.7964 11.6457 17.5718 11.9274 17.1557L17.7347 8.10495L17.7382 8.09946C17.8167 7.97376 17.8833 7.84198 17.9289 7.70521L17.9311 7.69809C17.9753 7.55939 18 7.41516 18 7.26738C18 6.92846 17.8875 6.60829 17.6337 6.36045C17.384 6.11234 17.0656 6 16.7265 6C16.5045 6 16.2705 6.04302 16.0619 6.17106C15.8664 6.28718 15.716 6.46117 15.598 6.64074L10.6506 14.5007L8.36553 11.5679C8.10551 11.2286 7.74265 11.0165 7.29823 11.0165C6.95171 11.0165 6.63015 11.1327 6.37514 11.3804L6.36955 11.386C6.11855 11.637 6 11.9568 6 12.3023C6 12.4617 6.02796 12.6173 6.0822 12.7664Z" fill="white"/>
+                                </svg>
+                                <div class="select-content">
+                                    <p class="body-regular">Attend the weekly meeting</p>
+                                    <p class="caption-medium">Saturday, Nov 20</p>
+                                </div>
+                            </div>
+                            <div class="select-item">
+                                <svg class="select-checkbox-icon" viewBox="0 0 24 24" fill="none">
+                                    <path d="M0 12C0 7.32222 0 4.98333 1.07293 3.27578C1.63242 2.38535 2.38535 1.63242 3.27578 1.07293C4.98333 0 7.32222 0 12 0C16.6778 0 19.0167 0 20.7242 1.07293C21.6147 1.63242 22.3676 2.38535 22.9271 3.27578C24 4.98333 24 7.32222 24 12C24 16.6778 24 19.0167 22.9271 20.7242C22.3676 21.6147 21.6147 22.3676 20.7242 22.9271C19.0167 24 16.6778 24 12 24C7.32222 24 4.98333 24 3.27578 22.9271C2.38535 22.3676 1.63242 21.6147 1.07293 20.7242C0 19.0167 0 16.6778 0 12Z" fill="#22A0FB"/>
+                                    <path d="M6.0822 12.7664L6.08589 12.7766L6.08997 12.7865C6.15176 12.9376 6.24066 13.0757 6.34406 13.2014L9.53759 17.1964C9.83486 17.5692 10.2367 17.7964 10.7227 17.7964C11.226 17.7964 11.6457 17.5718 11.9274 17.1557L17.7347 8.10495L17.7382 8.09946C17.8167 7.97376 17.8833 7.84198 17.9289 7.70521L17.9311 7.69809C17.9753 7.55939 18 7.41516 18 7.26738C18 6.92846 17.8875 6.60829 17.6337 6.36045C17.384 6.11234 17.0656 6 16.7265 6C16.5045 6 16.2705 6.04302 16.0619 6.17106C15.8664 6.28718 15.716 6.46117 15.598 6.64074L10.6506 14.5007L8.36553 11.5679C8.10551 11.2286 7.74265 11.0165 7.29823 11.0165C6.95171 11.0165 6.63015 11.1327 6.37514 11.3804L6.36955 11.386C6.11855 11.637 6 11.9568 6 12.3023C6 12.4617 6.02796 12.6173 6.0822 12.7664Z" fill="white"/>
+                                </svg>
+                                <div class="select-content">
+                                    <p class="body-regular">Attend the weekly meeting</p>
+                                    <p class="caption-medium">Saturday, Nov 20</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <button class="pill-btn pill-blue-fill">Delete 5</button>
+                        </div>
+                    </div>
+                    <span class="card-name">ai-select</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACKER CARDS -->
+        <div class="section">
+            <h2 class="section-title">Trackers</h2>
+            <div class="cards-grid">
+                <!-- tracker-collapsed -->
+                <div class="card-item" onclick="copyName('tracker-collapsed')">
+                    <div class="tooltip">Compact notification showing how many invisible email trackers Filo blocked. Tap to expand and see tracker details.</div>
+                    <div class="card card-gray card-pill" style="padding: 10px; flex-direction: row; gap: 4px; align-items: center;">
+                        <svg class="tracker-icon" viewBox="0 0 24 24" fill="none">
+                            <path d="M12.1351 23C12.0414 23 11.9261 22.9784 11.7892 22.9351C11.6523 22.8991 11.5153 22.845 11.3784 22.773C9.82162 21.9225 8.50631 21.1586 7.43243 20.4811C6.36577 19.8108 5.5045 19.1586 4.84865 18.5243C4.2 17.8901 3.72793 17.2054 3.43243 16.4703C3.14414 15.7279 3 14.8631 3 13.8757V5.7027C3 5.06126 3.12613 4.59279 3.37838 4.2973C3.63784 3.99459 4.03423 3.73153 4.56757 3.50811C4.80541 3.40721 5.14054 3.27387 5.57297 3.10811C6.00541 2.94234 6.48468 2.76577 7.01081 2.57838C7.53694 2.38378 8.05946 2.19279 8.57838 2.00541C9.1045 1.81802 9.58018 1.65225 10.0054 1.50811C10.4378 1.35676 10.773 1.24865 11.0108 1.18378C11.1838 1.14054 11.3676 1.1009 11.5622 1.06486C11.764 1.02162 11.955 1 12.1351 1C12.3153 1 12.5027 1.01802 12.6973 1.05405C12.8991 1.09009 13.0901 1.13333 13.2703 1.18378C13.5009 1.26306 13.8288 1.37838 14.2541 1.52973C14.6865 1.68108 15.1622 1.85045 15.6811 2.03784C16.2072 2.21802 16.7297 2.4018 17.2486 2.58919C17.7748 2.77658 18.2541 2.95315 18.6865 3.11892C19.1189 3.27748 19.4541 3.40721 19.6919 3.50811C20.2324 3.73874 20.6288 4.0018 20.8811 4.2973C21.1405 4.59279 21.2703 5.06126 21.2703 5.7027V13.8757C21.2703 14.8631 21.1225 15.7279 20.827 16.4703C20.5387 17.2054 20.0667 17.8937 19.4108 18.5351C18.7622 19.1694 17.9009 19.8216 16.827 20.4919C15.7604 21.1622 14.4486 21.9225 12.8919 22.773C12.755 22.845 12.618 22.8991 12.4811 22.9351C12.3441 22.9784 12.2288 23 12.1351 23ZM12.1351 20.7189C12.2072 20.7189 12.2901 20.7009 12.3838 20.6649C12.4775 20.6288 12.6 20.564 12.7514 20.4703C13.9766 19.7351 15.0036 19.1045 15.8324 18.5784C16.6613 18.045 17.3243 17.5405 17.8216 17.0649C18.3261 16.5892 18.6865 16.0739 18.9027 15.5189C19.1189 14.9568 19.227 14.2757 19.227 13.4757V6.04865C19.227 5.86126 19.2018 5.72072 19.1514 5.62703C19.1009 5.52613 19.0036 5.45045 18.8595 5.4C18.5279 5.28469 18.1495 5.15135 17.7243 5C17.3063 4.84865 16.8631 4.69009 16.3946 4.52432C15.9333 4.35856 15.4757 4.19279 15.0216 4.02703C14.5676 3.86126 14.1387 3.70631 13.7351 3.56216C13.3315 3.41081 12.9856 3.27748 12.6973 3.16216C12.5748 3.11892 12.4667 3.08649 12.373 3.06486C12.2865 3.04324 12.2072 3.03243 12.1351 3.03243C12.0559 3.03243 11.9694 3.04324 11.8757 3.06486C11.7892 3.08649 11.6847 3.11892 11.5622 3.16216C11.2739 3.27748 10.9279 3.40721 10.5243 3.55135C10.1279 3.6955 9.6991 3.84685 9.23784 4.00541C8.77658 4.16396 8.31171 4.32613 7.84324 4.49189C7.38198 4.65766 6.93874 4.81982 6.51351 4.97838C6.0955 5.12973 5.72793 5.27027 5.41081 5.4C5.25946 5.45766 5.15856 5.53333 5.10811 5.62703C5.05766 5.72072 5.03243 5.86126 5.03243 6.04865V13.4757C5.03243 14.2685 5.14054 14.9423 5.35676 15.4973C5.57297 16.0523 5.92613 16.5676 6.41622 17.0432C6.91351 17.5117 7.57658 18.0126 8.40541 18.5459C9.24144 19.0793 10.2757 19.7207 11.5081 20.4703C11.6667 20.564 11.7892 20.6288 11.8757 20.6649C11.9694 20.7009 12.0559 20.7189 12.1351 20.7189ZM10.9892 16.5568C10.7874 16.5568 10.6072 16.5135 10.4486 16.427C10.2901 16.3333 10.1351 16.1964 9.98378 16.0162L7.43243 12.9027C7.24504 12.6649 7.15135 12.4234 7.15135 12.1784C7.15135 11.9117 7.24144 11.6847 7.42162 11.4973C7.60901 11.3027 7.83243 11.2054 8.09189 11.2054C8.25766 11.2054 8.40541 11.2414 8.53513 11.3135C8.67207 11.3784 8.80541 11.4973 8.93513 11.6703L10.9459 14.2216L15.2162 7.37838C15.4396 7.01081 15.7207 6.82703 16.0595 6.82703C16.3117 6.82703 16.5387 6.90991 16.7405 7.07568C16.9423 7.24144 17.0432 7.45766 17.0432 7.72432C17.0432 7.84685 17.0144 7.97297 16.9568 8.1027C16.9063 8.22523 16.845 8.34054 16.773 8.44865L11.9405 16.0054C11.7099 16.373 11.3928 16.5568 10.9892 16.5568Z" fill="currentColor"/>
+                        </svg>
+                        <p class="caption-medium" style="flex: 1;">Blocked (count) tracker(s).</p>
+                    </div>
+                    <span class="card-name">tracker-collapsed</span>
+                </div>
+
+                <!-- tracker-expanded -->
+                <div class="card-item" onclick="copyName('tracker-expanded')">
+                    <div class="tooltip">Expanded view showing all blocked tracker domains. Learn More link provides education about email tracking and privacy.</div>
+                    <div class="card card-gray" style="height: 123px; border-radius: 20px; padding: 10px; gap: 4px; justify-content: center;">
+                        <div class="tracker-row">
+                            <svg class="tracker-icon" viewBox="0 0 24 24" fill="none">
+                                <path d="M12.1351 23C12.0414 23 11.9261 22.9784 11.7892 22.9351C11.6523 22.8991 11.5153 22.845 11.3784 22.773C9.82162 21.9225 8.50631 21.1586 7.43243 20.4811C6.36577 19.8108 5.5045 19.1586 4.84865 18.5243C4.2 17.8901 3.72793 17.2054 3.43243 16.4703C3.14414 15.7279 3 14.8631 3 13.8757V5.7027C3 5.06126 3.12613 4.59279 3.37838 4.2973C3.63784 3.99459 4.03423 3.73153 4.56757 3.50811C4.80541 3.40721 5.14054 3.27387 5.57297 3.10811C6.00541 2.94234 6.48468 2.76577 7.01081 2.57838C7.53694 2.38378 8.05946 2.19279 8.57838 2.00541C9.1045 1.81802 9.58018 1.65225 10.0054 1.50811C10.4378 1.35676 10.773 1.24865 11.0108 1.18378C11.1838 1.14054 11.3676 1.1009 11.5622 1.06486C11.764 1.02162 11.955 1 12.1351 1C12.3153 1 12.5027 1.01802 12.6973 1.05405C12.8991 1.09009 13.0901 1.13333 13.2703 1.18378C13.5009 1.26306 13.8288 1.37838 14.2541 1.52973C14.6865 1.68108 15.1622 1.85045 15.6811 2.03784C16.2072 2.21802 16.7297 2.4018 17.2486 2.58919C17.7748 2.77658 18.2541 2.95315 18.6865 3.11892C19.1189 3.27748 19.4541 3.40721 19.6919 3.50811C20.2324 3.73874 20.6288 4.0018 20.8811 4.2973C21.1405 4.59279 21.2703 5.06126 21.2703 5.7027V13.8757C21.2703 14.8631 21.1225 15.7279 20.827 16.4703C20.5387 17.2054 20.0667 17.8937 19.4108 18.5351C18.7622 19.1694 17.9009 19.8216 16.827 20.4919C15.7604 21.1622 14.4486 21.9225 12.8919 22.773C12.755 22.845 12.618 22.8991 12.4811 22.9351C12.3441 22.9784 12.2288 23 12.1351 23ZM12.1351 20.7189C12.2072 20.7189 12.2901 20.7009 12.3838 20.6649C12.4775 20.6288 12.6 20.564 12.7514 20.4703C13.9766 19.7351 15.0036 19.1045 15.8324 18.5784C16.6613 18.045 17.3243 17.5405 17.8216 17.0649C18.3261 16.5892 18.6865 16.0739 18.9027 15.5189C19.1189 14.9568 19.227 14.2757 19.227 13.4757V6.04865C19.227 5.86126 19.2018 5.72072 19.1514 5.62703C19.1009 5.52613 19.0036 5.45045 18.8595 5.4C18.5279 5.28469 18.1495 5.15135 17.7243 5C17.3063 4.84865 16.8631 4.69009 16.3946 4.52432C15.9333 4.35856 15.4757 4.19279 15.0216 4.02703C14.5676 3.86126 14.1387 3.70631 13.7351 3.56216C13.3315 3.41081 12.9856 3.27748 12.6973 3.16216C12.5748 3.11892 12.4667 3.08649 12.373 3.06486C12.2865 3.04324 12.2072 3.03243 12.1351 3.03243C12.0559 3.03243 11.9694 3.04324 11.8757 3.06486C11.7892 3.08649 11.6847 3.11892 11.5622 3.16216C11.2739 3.27748 10.9279 3.40721 10.5243 3.55135C10.1279 3.6955 9.6991 3.84685 9.23784 4.00541C8.77658 4.16396 8.31171 4.32613 7.84324 4.49189C7.38198 4.65766 6.93874 4.81982 6.51351 4.97838C6.0955 5.12973 5.72793 5.27027 5.41081 5.4C5.25946 5.45766 5.15856 5.53333 5.10811 5.62703C5.05766 5.72072 5.03243 5.86126 5.03243 6.04865V13.4757C5.03243 14.2685 5.14054 14.9423 5.35676 15.4973C5.57297 16.0523 5.92613 16.5676 6.41622 17.0432C6.91351 17.5117 7.57658 18.0126 8.40541 18.5459C9.24144 19.0793 10.2757 19.7207 11.5081 20.4703C11.6667 20.564 11.7892 20.6288 11.8757 20.6649C11.9694 20.7009 12.0559 20.7189 12.1351 20.7189ZM10.9892 16.5568C10.7874 16.5568 10.6072 16.5135 10.4486 16.427C10.2901 16.3333 10.1351 16.1964 9.98378 16.0162L7.43243 12.9027C7.24504 12.6649 7.15135 12.4234 7.15135 12.1784C7.15135 11.9117 7.24144 11.6847 7.42162 11.4973C7.60901 11.3027 7.83243 11.2054 8.09189 11.2054C8.25766 11.2054 8.40541 11.2414 8.53513 11.3135C8.67207 11.3784 8.80541 11.4973 8.93513 11.6703L10.9459 14.2216L15.2162 7.37838C15.4396 7.01081 15.7207 6.82703 16.0595 6.82703C16.3117 6.82703 16.5387 6.90991 16.7405 7.07568C16.9423 7.24144 17.0432 7.45766 17.0432 7.72432C17.0432 7.84685 17.0144 7.97297 16.9568 8.1027C16.9063 8.22523 16.845 8.34054 16.773 8.44865L11.9405 16.0054C11.7099 16.373 11.3928 16.5568 10.9892 16.5568Z" fill="currentColor"/>
+                            </svg>
+                            <p class="caption-medium" style="flex: 1;">Blocked (count) tracker(s).</p>
+                        </div>
+                        <div class="tracker-row" style="margin-left: 12px;">
+                            <div style="flex: 1;">
+                                <p class="caption-medium" style="margin-bottom: 2px;">Trackers found in this email:</p>
+                                <p class="caption-medium" style="font-weight: 400;">e.worldly.com; s-links.producthunt.com; clicks.sparkmailapp.com</p>
+                            </div>
+                        </div>
+                        <div class="tracker-row" style="margin-left: 12px;">
+                            <p class="caption-medium" style="color: var(--filo-06);">Learn More</p>
+                        </div>
+                    </div>
+                    <span class="card-name">tracker-expanded</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">Copied!</div>
+
+    <script>
+        // Check URL parameter for mode and apply on load
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            const mode = params.get('mode');
+            if (mode === 'dark') {
+                document.body.classList.add('dark-mode');
+            }
+        })();
+
+        function copyName(name) {
+            navigator.clipboard.writeText(name);
+            const toast = document.getElementById('toast');
+            toast.textContent = `Copied: ${name}`;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+    </script>
+</body>
+</html>

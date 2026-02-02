@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Filo Bars - Tab Bar & Navigation</title>
+    <title>Filo Bars</title>
     <style>
         * {
             margin: 0;
@@ -16,8 +16,8 @@
             --filo-02: #22A0FB;
             --filo-06: #000000;
             --filo-07: #707070;
-            --filo-08: #999999;
-            --filo-09: #F5F5F5;
+            --filo-08: #D5D5D5;
+            --filo-09: #FCFAFA;
             --filo-10: #FFFFFF;
             --filo-14: rgba(0, 0, 0, 0.04);
             --filo-25: #9E9E9E;
@@ -33,7 +33,7 @@
             --filo-06: #FFFFFF;
             --filo-07: #8B8B8B;
             --filo-08: #414149;
-            --filo-09: #1D1D21;
+            --filo-09: #121214;
             --filo-10: #1D1D21;
             --filo-14: rgba(255, 255, 255, 0.06);
             --filo-25: #727272;
@@ -45,287 +45,139 @@
             font-family: var(--font-family);
             background: var(--filo-09);
             min-height: 100vh;
-            padding: 40px 20px;
-        }
-
-        .mode-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 8px;
-            background: var(--filo-10);
-            padding: 4px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            z-index: 100;
-        }
-
-        .mode-btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            background: transparent;
-            color: var(--filo-07);
-            transition: all 0.2s ease;
-        }
-
-        .mode-btn.active {
-            background: var(--filo-02);
-            color: white;
+            padding: 60px 80px;
+            color: var(--filo-06);
         }
 
         .header {
-            text-align: center;
-            margin-bottom: 48px;
+            margin-bottom: 40px;
         }
 
         h1 {
             font-size: 32px;
             font-weight: 700;
-            color: var(--filo-06);
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
         .subtitle {
-            font-size: 16px;
+            font-size: 15px;
             color: var(--filo-07);
-        }
-
-        .main-section {
-            margin-bottom: 64px;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-
-        .section-header h2 {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--filo-06);
             margin-bottom: 8px;
         }
 
-        .section-header p {
-            font-size: 14px;
+        .hint {
+            font-size: 13px;
             color: var(--filo-07);
         }
 
         /* ============================================
-           BOTTOM TAB BAR SECTION
+           SECTION LAYOUT
            ============================================ */
-        .tab-bar-section {
+        .sections {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            gap: 60px;
         }
 
-        .phone-frame {
-            width: 390px;
-            height: 844px;
-            background: var(--filo-10);
-            border-radius: 44px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-        }
-
-        .dynamic-island {
-            position: absolute;
-            top: 12px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 126px;
-            height: 36px;
-            background: #000;
-            border-radius: 20px;
-        }
-
-        .content-area {
-            position: absolute;
-            top: 60px;
-            left: 0;
-            right: 0;
-            bottom: 102px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .tab-name {
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--filo-06);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex: 1;
-        }
-
-        /* AI Screen */
-        .ai-screen {
-            display: none;
-            flex-direction: column;
-            height: 100%;
-        }
-
-        .ai-screen.visible {
-            display: flex;
-        }
-
-        .ai-nav {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px 20px;
-            position: relative;
-        }
-
-        .ai-nav-title {
-            font-size: 17px;
-            font-weight: 700;
-            color: var(--filo-06);
-        }
-
-        .ai-nav-btn {
-            position: absolute;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+        .section {
             background: var(--filo-14);
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
+            border-radius: 24px;
+            padding: 40px;
+            border: 1px dashed var(--filo-08);
         }
 
-        .ai-nav-btn svg {
-            width: 22px;
-            height: 22px;
-            color: var(--filo-06);
-        }
-
-        .ai-greeting {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 0 40px;
-        }
-
-        .ai-greeting-title {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--filo-06);
-            margin-bottom: 8px;
-        }
-
-        .ai-greeting-subtitle {
-            font-size: 17px;
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
             color: var(--filo-07);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 32px;
         }
 
-        .ai-suggestions {
+        /* ============================================
+           ITEMS GRID
+           ============================================ */
+        .items-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+
+        .item {
             display: flex;
             flex-direction: column;
+            align-items: center;
             gap: 12px;
-            padding: 0 20px;
-            margin-bottom: 12px;
-        }
-
-        .ai-suggestion {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--filo-14);
-            border-radius: 100px;
-            padding: 14px 18px;
             cursor: pointer;
-            width: fit-content;
+            transition: transform 0.2s ease;
+            position: relative;
         }
 
-        .ai-suggestion svg {
-            width: 20px;
-            height: 20px;
-            color: var(--filo-02);
-            flex-shrink: 0;
+        .item:hover {
+            transform: translateY(-2px);
         }
 
-        .ai-suggestion-text {
-            font-size: 15px;
-            font-weight: 500;
-            color: var(--filo-06);
+        .item:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
         }
 
-        .ai-input-area {
-            padding: 0 20px 12px 20px;
-        }
-
-        .ai-input {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--filo-14);
-            border-radius: 100px;
-            padding: 12px 16px;
-        }
-
-        .ai-input-icon svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        .ai-input input {
-            flex: 1;
-            border: none;
-            background: transparent;
-            font-size: 15px;
-            color: var(--filo-06);
-            outline: none;
-        }
-
-        .ai-input input::placeholder {
-            color: var(--filo-25);
-        }
-
-        .ai-input-btn {
-            width: 30px;
-            height: 30px;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .ai-input-btn svg {
-            width: 30px;
-            height: 30px;
-            opacity: 0.2;
-            color: var(--filo-06);
-        }
-
-        /* Bottom Tab Bar */
-        .bottom-tab-container {
+        /* ============================================
+           TOOLTIP
+           ============================================ */
+        .tooltip {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 0 16px;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%) translateY(4px);
+            background: var(--filo-10);
+            color: var(--filo-07);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 1.5;
+            max-width: 280px;
+            text-align: left;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.15s ease, transform 0.15s ease;
+            z-index: 100;
+            pointer-events: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 0.5px solid var(--filo-08);
+        }
+
+        .item-name {
+            font-size: 13px;
+            color: var(--filo-07);
+            text-align: center;
+        }
+
+        /* ============================================
+           BAR FRAME (White background container)
+           ============================================ */
+        .bar-frame {
+            width: 390px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            background: var(--filo-10);
+        }
+
+        /* ============================================
+           BOTTOM TAB BAR
+           ============================================ */
+        .tab-bar-container {
+            padding: 12px 16px 20px 16px;
         }
 
         .tab-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0;
             gap: 8px;
         }
 
@@ -412,46 +264,9 @@
             color: var(--filo-06);
         }
 
-        .home-indicator {
-            display: flex;
-            justify-content: center;
-            padding: 8px 0;
-            height: 34px;
-        }
-
         /* ============================================
-           NAVIGATION BARS SECTION
+           NAVIGATION BARS
            ============================================ */
-        .nav-bars-section {
-            max-width: 430px;
-            margin: 0 auto;
-        }
-
-        .variant-section {
-            margin-bottom: 32px;
-        }
-
-        .variant-label {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--filo-07);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-            padding-left: 4px;
-        }
-
-        .nav-phone-frame {
-            width: 390px;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-        }
-
-        .bg-gradient { background: linear-gradient(180deg, #ABDCFF 0%, #6FC2FF 50%, #48AEFA 100%); }
-        .bg-light { background: var(--filo-09); }
-        .bg-white { background: var(--filo-10); }
-
         .nav-bar {
             display: flex;
             align-items: center;
@@ -526,18 +341,6 @@
 
         .send-btn svg { width: 24px; height: 24px; }
 
-        .selection-count {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .count {
-            font-size: 15px;
-            font-weight: 500;
-            color: var(--filo-06);
-        }
-
         .nav-title {
             flex: 1;
             text-align: center;
@@ -549,205 +352,172 @@
         .spacer { width: 44px; height: 44px; }
 
         .nav-content-area {
-            height: 100px;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--filo-07);
             font-size: 13px;
         }
+
+        /* Background variants */
+        .bg-gradient { background: linear-gradient(180deg, #ABDCFF 0%, #6FC2FF 50%, #48AEFA 100%); }
+        .bg-white { background: var(--filo-10); }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--filo-06);
+            color: var(--filo-10);
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
     </style>
 </head>
 <body>
-    <div class="mode-toggle">
-        <button class="mode-btn active" onclick="setMode('light')">Light</button>
-        <button class="mode-btn" onclick="setMode('dark')">Dark</button>
-    </div>
-
     <div class="header">
         <h1>Filo Bars</h1>
-        <p class="subtitle">Bottom Tab Bar & Navigation Bars — iOS 26 Liquid Glass</p>
+        <p class="subtitle">Bottom Tab & Navigation Bars — iOS 26 Liquid Glass</p>
+        <p class="hint">Click any item to copy its name</p>
     </div>
 
-    <!-- BOTTOM TAB BAR SECTION -->
-    <div class="main-section">
-        <div class="section-header">
-            <h2>Bottom Tab Bar</h2>
-            <p>4 Tabs: Inbox, To-do, AI, Compose</p>
-        </div>
-        <div class="tab-bar-section">
-            <div class="phone-frame">
-                <div class="dynamic-island"></div>
-                
-                <div class="content-area">
-                    <span class="tab-name" id="current-tab" style="display: none;">AI</span>
-                    
-                    <div class="ai-screen visible" id="ai-screen">
-                        <div class="ai-nav">
-                            <span class="ai-nav-title">Filo AI</span>
-                            <button class="ai-nav-btn">
-                                <svg viewBox="0 0 24 24" fill="none"><path d="M12 6V12L16 14M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                            </button>
-                        </div>
-                        
-                        <div class="ai-greeting">
-                            <div class="ai-greeting-title">Hi Adam</div>
-                            <div class="ai-greeting-subtitle">Need help with an email?</div>
-                        </div>
-                        
-                        <div class="ai-suggestions">
-                            <div class="ai-suggestion">
-                                <svg viewBox="0 0 24 24" fill="none"><path d="M12.876 17.7998C13.3727 17.8002 13.7754 18.2034 13.7754 18.7002C13.7754 19.197 13.3727 19.6002 12.876 19.6006H7.10059C6.60355 19.6006 6.20023 19.1972 6.2002 18.7002C6.2002 18.2031 6.60353 17.7998 7.10059 17.7998H12.876Z" fill="currentColor"/><path d="M15.501 14.125C15.9977 14.1254 16.4004 14.5286 16.4004 15.0254C16.4003 15.5221 15.9976 15.9254 15.501 15.9258H7.10059C6.60361 15.9258 6.20033 15.5223 6.2002 15.0254C6.2002 14.5283 6.60353 14.125 7.10059 14.125H15.501Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M14.9756 1C16.2191 1.00013 17.2454 1.91832 17.4209 3.11328C18.1853 3.13106 18.8543 3.17441 19.4307 3.28027C20.2406 3.4291 20.9415 3.71508 21.5137 4.28711C22.1699 4.94344 22.4484 5.76719 22.5771 6.72461C22.7023 7.65617 22.7002 8.84169 22.7002 10.3008V16.6006C22.7002 18.0598 22.7024 19.2461 22.5771 20.1777C22.4484 21.1349 22.1698 21.9581 21.5137 22.6143C20.8573 23.2705 20.0336 23.549 19.0762 23.6777C18.1446 23.8029 16.9592 23.8008 15.5 23.8008H9.2002C7.74083 23.8008 6.55567 23.803 5.62402 23.6777C4.66656 23.549 3.84288 23.2705 3.18652 22.6143C2.53052 21.9582 2.2528 21.1348 2.12402 20.1777C1.99878 19.2461 2 18.0598 2 16.6006V10.3008C2 8.84169 1.99883 7.65617 2.12402 6.72461C2.25276 5.76722 2.53034 4.94342 3.18652 4.28711C3.75877 3.71489 4.46035 3.4291 5.27051 3.28027C5.84664 3.17447 6.51531 3.13108 7.2793 3.11328C7.45487 1.91824 8.4819 1 9.72559 1H14.9756ZM17.416 4.91504C17.2289 6.09639 16.2095 6.99987 14.9756 7H9.72559C8.49142 7 7.47037 6.09654 7.2832 4.91504C6.57937 4.93216 6.03553 4.97002 5.5957 5.05078C5.01495 5.15747 4.69348 5.32605 4.45898 5.56055C4.19314 5.82673 4.00905 6.2075 3.90723 6.96484C3.80195 7.74858 3.80078 8.79108 3.80078 10.3008V16.6006C3.80078 18.1107 3.80185 19.1537 3.90723 19.9375C4.00912 20.695 4.19298 21.0757 4.45898 21.3418C4.72519 21.6079 5.10651 21.7917 5.86426 21.8936C6.64806 21.9989 7.69019 22.001 9.2002 22.001H15.5C17.0103 22.001 18.0531 21.9989 18.8369 21.8936C19.5945 21.7917 19.975 21.6079 20.2412 21.3418L20.3369 21.2363C20.5518 20.9749 20.7038 20.6006 20.793 19.9375C20.8983 19.1537 20.9004 18.1107 20.9004 16.6006V10.3008C20.9004 8.79104 20.8983 7.74859 20.793 6.96484C20.6911 6.20732 20.5072 5.82674 20.2412 5.56055C20.0067 5.32608 19.686 5.15747 19.1055 5.05078C18.6654 4.96994 18.1207 4.93214 17.416 4.91504ZM9.72559 2.80078C9.3528 2.80078 9.05078 3.1028 9.05078 3.47559V4.52539C9.0508 4.89816 9.35281 5.2002 9.72559 5.2002H14.9756C15.3482 5.20005 15.6504 4.89807 15.6504 4.52539V3.47559C15.6504 3.1029 15.3482 2.80092 14.9756 2.80078H9.72559Z" fill="currentColor"/></svg>
-                                <span class="ai-suggestion-text">Summarize this week's emails</span>
-                            </div>
-                            <div class="ai-suggestion">
-                                <svg viewBox="0 0 24 24" fill="none"><path d="M10.2432 2.00056C10.9483 2.00057 11.625 2.08221 12.2734 2.2447C11.8717 3.02353 11.2621 3.67263 10.5146 4.12263C10.4248 4.11899 10.3343 4.11677 10.2432 4.11677C9.39933 4.11677 8.60586 4.2751 7.86328 4.59236C7.12072 4.90289 6.4655 5.34172 5.89844 5.90876C5.33813 6.46909 4.89932 7.12125 4.58203 7.86384C4.27159 8.60635 4.11621 9.39998 4.11621 10.2437C4.11627 11.0942 4.27154 11.8909 4.58203 12.6334C4.89931 13.3692 5.33816 14.0174 5.89844 14.5777C6.46549 15.138 7.12074 15.5798 7.86328 15.9039C8.60588 16.2212 9.3993 16.3804 10.2432 16.3804C11.0937 16.3804 11.8872 16.2212 12.623 15.9039C13.3655 15.5799 14.0169 15.1379 14.5771 14.5777C15.1374 14.0174 15.5763 13.3691 15.8936 12.6334C16.2175 11.8909 16.3798 11.0942 16.3799 10.2437C16.3799 9.80077 16.3334 9.37167 16.2441 8.95662C16.7225 8.3633 17.3422 7.89043 18.0537 7.58455C18.3471 8.42292 18.4961 9.30907 18.4961 10.2437C18.496 11.1346 18.3577 11.9816 18.0811 12.7847C17.811 13.5881 17.4363 14.3214 16.957 14.983L21.5742 19.6207C21.7159 19.7556 21.8212 19.9141 21.8887 20.0963C21.9629 20.2784 22 20.4711 22 20.6734C22 20.9568 21.9357 21.2135 21.8076 21.4429C21.6794 21.6724 21.5039 21.8518 21.2812 21.9801C21.0586 22.115 20.8019 22.1822 20.5117 22.1822C20.3092 22.1822 20.1128 22.1451 19.9238 22.0709C19.7418 22.0034 19.5761 21.896 19.4277 21.7476L14.7793 17.0992C14.1314 17.5311 13.4227 17.8719 12.6533 18.1217C11.8905 18.3647 11.087 18.4869 10.2432 18.4869C9.109 18.4869 8.04211 18.2735 7.04297 17.8482C6.05067 17.4229 5.17598 16.8328 4.41992 16.0767C3.66384 15.3207 3.06976 14.446 2.6377 13.4537C2.21244 12.4547 2.00006 11.3845 2 10.2437C2 9.10959 2.21241 8.04567 2.6377 7.0533C3.06973 6.05425 3.6639 5.17654 4.41992 4.42048C5.17602 3.65763 6.0506 3.06357 7.04297 2.63826C8.04212 2.21294 9.10899 2.00056 10.2432 2.00056Z" fill="currentColor"/><path d="M13.5752 2.30427C13.7136 1.89901 14.2864 1.89901 14.4248 2.30427L14.8301 3.4908C15.0998 4.28026 15.7203 4.90088 16.5098 5.17048L17.6963 5.57478C18.1014 5.71327 18.1013 6.28681 17.6963 6.42537L16.5098 6.83064C15.7202 7.1003 15.0997 7.72075 14.8301 8.51033L14.4248 9.69587C14.2864 10.1012 13.7136 10.1012 13.5752 9.69587L13.1699 8.51033C12.9003 7.72075 12.2798 7.1003 11.4902 6.83064L10.3037 6.42537C9.89869 6.28681 9.89863 5.71327 10.3037 5.57478L11.4902 5.17048C12.2797 4.90088 12.9002 4.28026 13.1699 3.4908L13.5752 2.30427Z" fill="currentColor"/><path d="M17.7871 0.151929C17.8564 -0.050521 18.1436 -0.0505209 18.2129 0.151929L18.415 0.745679C18.5499 1.14034 18.8602 1.45074 19.2549 1.58552L19.8477 1.78767C20.0503 1.85688 20.0503 2.14327 19.8477 2.21248L19.2549 2.4156C18.8601 2.55044 18.5498 2.86067 18.415 3.25544L18.2129 3.84822C18.1437 4.05089 17.8563 4.05089 17.7871 3.84822L17.585 3.25544C17.4502 2.86067 17.1399 2.55044 16.7451 2.4156L16.1523 2.21248C15.9497 2.14327 15.9497 1.85688 16.1523 1.78767L16.7451 1.58552C17.1398 1.45074 17.4501 1.14034 17.585 0.745679L17.7871 0.151929Z" fill="currentColor"/></svg>
-                                <span class="ai-suggestion-text">Find what needs to be done</span>
-                            </div>
-                            <div class="ai-suggestion">
-                                <svg viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 4C12.5523 4 13 4.44772 13 5V11H19C19.5523 11 20 11.4477 20 12C20 12.5523 19.5523 13 19 13H13V19C13 19.5523 12.5523 20 12 20C11.4477 20 11 19.5523 11 19V13H5C4.44772 13 4 12.5523 4 12C4 11.4477 4.44772 11 5 11H11V5C11 4.44772 11.4477 4 12 4Z" fill="currentColor"/></svg>
-                                <span class="ai-suggestion-text">Add a smart filter</span>
-                            </div>
-                        </div>
-                        
-                        <div class="ai-input-area">
-                            <div class="ai-input">
-                                <div class="ai-input-icon">
-                                    <svg viewBox="0 0 24 24" fill="none"><path d="M16.2696 13.8423C16.4148 13.418 17.0145 13.418 17.1597 13.8423L17.5843 15.0853C17.8668 15.9125 18.5168 16.5625 19.344 16.845L20.5871 17.2696C21.0112 17.4148 21.0112 18.0145 20.5871 18.1597L19.344 18.5843C18.5168 18.8668 17.8668 19.5168 17.5843 20.344L17.1597 21.5871C17.0145 22.0112 16.4148 22.0112 16.2696 21.5871L15.845 20.344C15.5625 19.5168 14.9125 18.8668 14.0853 18.5843L12.8422 18.1597C12.418 18.0145 12.418 17.4148 12.8422 17.2696L14.0853 16.845C14.9125 16.5625 15.5625 15.9125 15.845 15.0853L16.2696 13.8423Z" fill="#22A0FB"/><path d="M6.61775 2.47774C6.83527 1.84076 7.73639 1.84076 7.95391 2.47774L8.59027 4.34182C9.01401 5.58266 9.98901 6.55766 11.2299 6.98139L13.0939 7.61776C13.7309 7.83528 13.7309 8.7364 13.0939 8.95392L11.2299 9.59028C9.98901 10.014 9.01401 10.989 8.59027 12.2299L7.95391 14.0939C7.73639 14.7309 6.83527 14.7309 6.61775 14.0939L5.98139 12.2299C5.55766 10.989 4.58266 10.014 3.34181 9.59028L1.47774 8.95392C0.840755 8.7364 0.840755 7.83528 1.47774 7.61776L3.34181 6.98139C4.58266 6.55766 5.55766 5.58266 5.98139 4.34182L6.61775 2.47774Z" fill="#22A0FB"/><path d="M19.5241 2.23834C19.6331 1.92056 20.0821 1.92054 20.1911 2.23834L20.5103 3.1714C20.7222 3.79142 21.2091 4.27828 21.8291 4.49016L22.7611 4.80937C23.0796 4.91813 23.0796 5.36766 22.7611 5.47642L21.8291 5.79563C21.209 6.00753 20.7222 6.49434 20.5103 7.1144L20.1911 8.04643C20.0824 8.36492 19.6328 8.36492 19.5241 8.04643L19.2049 7.1144C18.993 6.49436 18.5061 6.00755 17.8861 5.79563L16.953 5.47642C16.6352 5.36742 16.6353 4.9184 16.953 4.80937L17.8861 4.49016C18.5061 4.27826 18.993 3.79141 19.2049 3.1714L19.5241 2.23834Z" fill="#22A0FB"/></svg>
+    <div class="sections">
+        <!-- BOTTOM TAB SECTION -->
+        <div class="section">
+            <h2 class="section-title">Bottom Tab</h2>
+            <div class="items-grid">
+                <!-- Bottom Tab Bar -->
+                <div class="item" onclick="copyName('bottom-tab')">
+                    <div class="tooltip">Main navigation with 4 tabs: Inbox, To-do, AI, and Compose. Uses iOS 26 Liquid Glass style with frosted blur effect.</div>
+                    <div class="bar-frame">
+                        <div class="tab-bar-container">
+                            <div class="tab-bar">
+                                <div class="glass-pill-tabs">
+                                    <div class="tab-item" data-tab="Inbox">
+                                        <div class="tab-icon">
+                                            <svg class="icon-inactive" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M23 5.99979V17.9998C23 19.6521 21.6523 20.9998 20 20.9998H4C2.34772 20.9998 1 19.6521 1 17.9998V5.99979C1 4.34294 2.34315 2.99979 4 2.99979H20C21.6569 2.99979 23 4.34294 23 5.99979ZM3.24859 5.65315C3.16709 5.5961 3.13831 5.48631 3.19771 5.40651C3.38079 5.16057 3.67343 4.99979 4 4.99979H20C20.3266 4.99979 20.6192 5.16057 20.8023 5.40651C20.8617 5.48631 20.8329 5.5961 20.7514 5.65315L12.2867 11.5784C12.1146 11.6989 11.8854 11.6989 11.7133 11.5784L3.24859 5.65315ZM3 8.11251C3 8.03161 3.09107 7.98419 3.15735 8.03059L10.8531 13.4176C11.5417 13.8997 12.4583 13.8997 13.1469 13.4176L20.8427 8.03059C20.9089 7.98419 21 8.03161 21 8.11251V17.9998C21 18.5475 20.5477 18.9998 20 18.9998H4C3.45228 18.9998 3 18.5475 3 17.9998V8.11251Z" fill="currentColor"/></svg>
+                                            <svg class="icon-active" viewBox="0 0 24 24" fill="none"><path d="M22.8408 6.35156C22.9069 6.30354 22.9998 6.35104 23 6.43262V18C23 19.6523 21.6523 21 20 21H4C2.34772 21 1.00001 19.6523 1 18V6.43262C1.00019 6.35104 1.09315 6.30354 1.15918 6.35156L10.8232 13.3809C11.5245 13.8909 12.4755 13.8909 13.1768 13.3809L22.8408 6.35156Z" fill="currentColor"/><path d="M20 3C20.9056 3 21.7197 3.40498 22.2705 4.04297C22.3435 4.12754 22.3238 4.2546 22.2334 4.32031L13.1768 10.9082C12.4755 11.4182 11.5245 11.4182 10.8232 10.9082L1.7666 4.32031C1.67624 4.2546 1.65647 4.12754 1.72949 4.04297C2.28034 3.40497 3.09438 3.00002 4 3H20Z" fill="currentColor"/></svg>
+                                        </div>
+                                        <span class="tab-label">Inbox</span>
+                                    </div>
+                                    <div class="tab-item" data-tab="To-do">
+                                        <div class="tab-icon">
+                                            <svg viewBox="0 0 24 24" fill="none"><path d="M2.04466 4C1.5073 4 1.07168 4.49055 1.07168 5.09565C1.07168 5.70076 1.5073 6.1913 2.04466 6.1913H21.0987C21.636 6.1913 22.0717 5.70076 22.0717 5.09565C22.0717 4.49055 21.636 4 21.0987 4H2.04466Z" fill="currentColor"/><path d="M15.0177 11.1043C14.4803 11.1043 14.0447 11.5949 14.0447 12.2C14.0447 12.8051 14.4803 13.2957 15.0177 13.2957H21.0987C21.6361 13.2957 22.0717 12.8051 22.0717 12.2C22.0717 11.5949 21.6361 11.1043 21.0987 11.1043H15.0177Z" fill="currentColor"/><path d="M15.0177 18.2087C14.4803 18.2087 14.0447 18.6993 14.0447 19.3043C14.0447 19.9094 14.4803 20.4 15.0177 20.4H21.0987C21.6361 20.4 22.0717 19.9094 22.0717 19.3043C22.0717 18.6993 21.6361 18.2087 21.0987 18.2087H15.0177Z" fill="currentColor"/><path d="M11.5716 12.589C11.9383 12.1066 11.8545 11.4105 11.3842 11.0344C10.9139 10.658 10.2353 10.7441 9.86835 11.2265L5.07288 17.5322L2.90699 14.8875C2.52337 14.4192 1.84211 14.3583 1.38535 14.7519C0.928725 15.1454 0.869397 15.8441 1.25301 16.3124L4.277 20.0047C4.48666 20.2607 4.7977 20.4059 5.12357 20.3998C5.44944 20.3938 5.75515 20.2372 5.9556 19.9736L11.5716 12.589Z" fill="currentColor"/></svg>
+                                        </div>
+                                        <span class="tab-label">To-do</span>
+                                    </div>
+                                    <div class="tab-item active" data-tab="AI">
+                                        <div class="tab-icon">
+                                            <svg viewBox="0 0 24 24" fill="none"><path d="M16.2696 13.8423C16.4148 13.418 17.0145 13.418 17.1597 13.8423L17.5843 15.0853C17.8668 15.9125 18.5168 16.5625 19.344 16.845L20.5871 17.2696C21.0112 17.4148 21.0112 18.0145 20.5871 18.1597L19.344 18.5843C18.5168 18.8668 17.8668 19.5168 17.5843 20.344L17.1597 21.5871C17.0145 22.0112 16.4148 22.0112 16.2696 21.5871L15.845 20.344C15.5625 19.5168 14.9125 18.8668 14.0853 18.5843L12.8422 18.1597C12.418 18.0145 12.418 17.4148 12.8422 17.2696L14.0853 16.845C14.9125 16.5625 15.5625 15.9125 15.845 15.0853L16.2696 13.8423Z" fill="currentColor"/><path d="M6.61775 2.47774C6.83527 1.84076 7.73639 1.84076 7.95391 2.47774L8.59027 4.34182C9.01401 5.58266 9.98901 6.55766 11.2299 6.98139L13.0939 7.61776C13.7309 7.83528 13.7309 8.7364 13.0939 8.95392L11.2299 9.59028C9.98901 10.014 9.01401 10.989 8.59027 12.2299L7.95391 14.0939C7.73639 14.7309 6.83527 14.7309 6.61775 14.0939L5.98139 12.2299C5.55766 10.989 4.58266 10.014 3.34181 9.59028L1.47774 8.95392C0.840755 8.7364 0.840755 7.83528 1.47774 7.61776L3.34181 6.98139C4.58266 6.55766 5.55766 5.58266 5.98139 4.34182L6.61775 2.47774Z" fill="currentColor"/><path d="M19.5241 2.23834C19.6331 1.92056 20.0821 1.92054 20.1911 2.23834L20.5103 3.1714C20.7222 3.79142 21.2091 4.27828 21.8291 4.49016L22.7611 4.80937C23.0796 4.91813 23.0796 5.36766 22.7611 5.47642L21.8291 5.79563C21.209 6.00753 20.7222 6.49434 20.5103 7.1144L20.1911 8.04643C20.0824 8.36492 19.6328 8.36492 19.5241 8.04643L19.2049 7.1144C18.993 6.49436 18.5061 6.00755 17.8861 5.79563L16.953 5.47642C16.6352 5.36742 16.6353 4.9184 16.953 4.80937L17.8861 4.49016C18.5061 4.27826 18.993 3.79141 19.2049 3.1714L19.5241 2.23834Z" fill="currentColor"/></svg>
+                                        </div>
+                                        <span class="tab-label">AI</span>
+                                    </div>
                                 </div>
-                                <input type="text" placeholder="Ask anything">
-                                <button class="ai-input-btn">
-                                    <svg viewBox="0 0 24 24" fill="none"><path d="M12 24C10.3451 24 8.79216 23.6863 7.34118 23.0588C5.8902 22.4392 4.61569 21.5804 3.51765 20.4824C2.41961 19.3765 1.55686 18.102 0.929412 16.6588C0.309804 15.2078 0 13.6549 0 12C0 10.3451 0.309804 8.79216 0.929412 7.34118C1.55686 5.8902 2.41961 4.61569 3.51765 3.51765C4.61569 2.41961 5.8902 1.56078 7.34118 0.941176C8.79216 0.313726 10.3451 0 12 0C13.6549 0 15.2078 0.313726 16.6588 0.941176C18.1098 1.56078 19.3843 2.41961 20.4824 3.51765C21.5804 4.61569 22.4392 5.8902 23.0588 7.34118C23.6863 8.79216 24 10.3451 24 12C24 13.6549 23.6863 15.2078 23.0588 16.6588C22.4392 18.102 21.5804 19.3765 20.4824 20.4824C19.3843 21.5804 18.1098 22.4392 16.6588 23.0588C15.2078 23.6863 13.6549 24 12 24ZM12.0118 5.88235C11.8863 5.88235 11.7686 5.90588 11.6588 5.95294C11.549 5.99216 11.4314 6.07451 11.3059 6.2L7.30588 10.0588C7.21176 10.1451 7.14118 10.2431 7.09412 10.3529C7.04706 10.4549 7.02353 10.5725 7.02353 10.7059C7.02353 10.949 7.10588 11.1529 7.27059 11.3176C7.43529 11.4745 7.64314 11.5529 7.89412 11.5529C8.17647 11.5529 8.4 11.4549 8.56471 11.2588L10.4118 9.29412L11.1176 8.55294L11.0353 10.3647V17.1765C11.0353 17.4353 11.1294 17.6588 11.3176 17.8471C11.5137 18.0275 11.7451 18.1176 12.0118 18.1176C12.2784 18.1176 12.5059 18.0275 12.6941 17.8471C12.8824 17.6588 12.9765 17.4353 12.9765 17.1765V10.3647L12.9059 8.55294L13.6118 9.29412L15.4588 11.2588C15.6157 11.4549 15.8353 11.5529 16.1176 11.5529C16.3686 11.5529 16.5765 11.4745 16.7412 11.3176C16.9137 11.1529 17 10.949 17 10.7059C17 10.5725 16.9725 10.4549 16.9176 10.3529C16.8706 10.2431 16.8 10.1451 16.7059 10.0588L12.7176 6.2C12.5922 6.07451 12.4745 5.99216 12.3647 5.95294C12.2549 5.90588 12.1373 5.88235 12.0118 5.88235Z" fill="currentColor"/></svg>
+                                <button class="compose-btn">
+                                    <svg viewBox="0 0 24 24" fill="none"><path d="M17.71 13.7982C17.8755 13.3135 18.5601 13.3135 18.7256 13.7982L19.21 15.2162C19.5324 16.1603 20.2746 16.9025 21.2188 17.2249L22.6367 17.7093C23.1214 17.8748 23.1214 18.5594 22.6367 18.7249L21.2188 19.2093C20.2746 19.5317 19.5324 20.274 19.21 21.2181L18.7256 22.6361C18.5601 23.1207 17.8755 23.1207 17.71 22.6361L17.2256 21.2181C16.9032 20.274 16.1609 19.5317 15.2168 19.2093L13.7988 18.7249C13.3142 18.5594 13.3142 17.8748 13.7988 17.7093L15.2168 17.2249C16.1609 16.9025 16.9032 16.1603 17.2256 15.2162L17.71 13.7982ZM14.458 1.97299C15.7559 0.675233 17.8603 0.675256 19.1582 1.97299C20.456 3.27086 20.456 5.3753 19.1582 6.67319L7.77734 18.054L7.58594 18.2249C7.38489 18.3839 7.15646 18.5067 6.91211 18.5882L2.45996 20.0726L2.29785 20.1136C1.49528 20.257 0.788402 19.4817 1.05859 18.6703L2.54297 14.2201C2.62446 13.9756 2.74822 13.7474 2.90723 13.5462L3.07812 13.3539L14.458 1.97299ZM3.16016 17.971L6.3252 16.9164L4.21484 14.805L3.16016 17.971ZM17.9053 3.22592C17.2997 2.62052 16.3176 2.62074 15.7119 3.22592L5.40918 13.5277L7.60254 15.722L17.9053 5.42026C18.5109 4.81458 18.5109 3.83158 17.9053 3.22592Z" fill="currentColor"/></svg>
                                 </button>
                             </div>
                         </div>
                     </div>
+                    <span class="item-name">bottom-tab</span>
                 </div>
+            </div>
+        </div>
 
-                <div class="bottom-tab-container">
-                    <div class="tab-bar">
-                        <div class="glass-pill-tabs">
-                            <div class="tab-item" data-tab="Inbox" onclick="selectTab(this)">
-                                <div class="tab-icon">
-                                    <svg class="icon-inactive" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M23 5.99979V17.9998C23 19.6521 21.6523 20.9998 20 20.9998H4C2.34772 20.9998 1 19.6521 1 17.9998V5.99979C1 4.34294 2.34315 2.99979 4 2.99979H20C21.6569 2.99979 23 4.34294 23 5.99979ZM3.24859 5.65315C3.16709 5.5961 3.13831 5.48631 3.19771 5.40651C3.38079 5.16057 3.67343 4.99979 4 4.99979H20C20.3266 4.99979 20.6192 5.16057 20.8023 5.40651C20.8617 5.48631 20.8329 5.5961 20.7514 5.65315L12.2867 11.5784C12.1146 11.6989 11.8854 11.6989 11.7133 11.5784L3.24859 5.65315ZM3 8.11251C3 8.03161 3.09107 7.98419 3.15735 8.03059L10.8531 13.4176C11.5417 13.8997 12.4583 13.8997 13.1469 13.4176L20.8427 8.03059C20.9089 7.98419 21 8.03161 21 8.11251V17.9998C21 18.5475 20.5477 18.9998 20 18.9998H4C3.45228 18.9998 3 18.5475 3 17.9998V8.11251Z" fill="currentColor"/></svg>
-                                    <svg class="icon-active" viewBox="0 0 24 24" fill="none"><path d="M22.8408 6.35156C22.9069 6.30354 22.9998 6.35104 23 6.43262V18C23 19.6523 21.6523 21 20 21H4C2.34772 21 1.00001 19.6523 1 18V6.43262C1.00019 6.35104 1.09315 6.30354 1.15918 6.35156L10.8232 13.3809C11.5245 13.8909 12.4755 13.8909 13.1768 13.3809L22.8408 6.35156Z" fill="currentColor"/><path d="M20 3C20.9056 3 21.7197 3.40498 22.2705 4.04297C22.3435 4.12754 22.3238 4.2546 22.2334 4.32031L13.1768 10.9082C12.4755 11.4182 11.5245 11.4182 10.8232 10.9082L1.7666 4.32031C1.67624 4.2546 1.65647 4.12754 1.72949 4.04297C2.28034 3.40497 3.09438 3.00002 4 3H20Z" fill="currentColor"/></svg>
-                                </div>
-                                <span class="tab-label">Inbox</span>
+        <!-- NAVIGATION BARS SECTION -->
+        <div class="section">
+            <h2 class="section-title">Navigation Bars</h2>
+            <div class="items-grid">
+                <!-- Read Email -->
+                <div class="item" onclick="copyName('nav-read-email')">
+                    <div class="tooltip">Navigation bar for reading emails. Features back button, action pills (star, archive, delete), and more options button.</div>
+                    <div class="bar-frame bg-gradient">
+                        <nav class="nav-bar">
+                            <button class="glass-btn" title="Back">
+                                <svg viewBox="0 0 24 24" fill="none"><path d="M7 12.1782C7.00507 12.0098 7.04059 11.8558 7.10654 11.7162C7.1725 11.5767 7.27397 11.442 7.41096 11.312L15.0365 4.31038C15.2547 4.10346 15.5236 4 15.8432 4C16.0563 4 16.2491 4.04812 16.4216 4.14436C16.5992 4.24061 16.7387 4.37053 16.8402 4.53415C16.9467 4.69776 17 4.88062 17 5.08273C17 5.38108 16.8808 5.64334 16.6423 5.86951L9.74734 12.171L16.6423 18.4797C16.8808 18.7107 17 18.9729 17 19.2665C17 19.4734 16.9467 19.6587 16.8402 19.8223C16.7387 19.9859 16.5992 20.1158 16.4216 20.2121C16.2491 20.3131 16.0563 20.3636 15.8432 20.3636C15.5236 20.3636 15.2547 20.2578 15.0365 20.046L7.41096 13.0444C7.2689 12.9145 7.16489 12.7797 7.09893 12.6402C7.03298 12.4958 7 12.3418 7 12.1782Z" fill="currentColor"/></svg>
+                            </button>
+                            <div style="flex: 1;"></div>
+                            <div class="glass-pill">
+                                <button title="Star"><svg viewBox="0 0 24 24" fill="none"><path d="M11.1639 3.2736C11.42 2.53678 11.5481 2.16839 11.7375 2.06628C11.9013 1.97791 12.0986 1.97791 12.2626 2.06628C12.4519 2.16839 12.5799 2.53678 12.8361 3.2736L14.5293 8.14471C14.6022 8.35442 14.6386 8.45926 14.7044 8.53735C14.7623 8.60632 14.8364 8.66009 14.9199 8.69395C15.0144 8.73228 15.1254 8.73454 15.3473 8.73907L20.5033 8.84414C21.2832 8.86003 21.6731 8.86798 21.8288 9.01653C21.9635 9.14509 22.0244 9.33278 21.991 9.51595C21.9525 9.72763 21.6417 9.9632 21.0201 10.4346L16.9106 13.55C16.7336 13.6842 16.6452 13.7513 16.5912 13.8378C16.5435 13.9144 16.5153 14.0014 16.5089 14.0912C16.5017 14.193 16.5338 14.2992 16.5981 14.5118L18.0915 19.4478C18.3173 20.1945 18.4303 20.5678 18.3371 20.7617C18.2565 20.9295 18.0968 21.0455 17.9122 21.0704C17.699 21.099 17.3789 20.8763 16.7386 20.4307L12.5056 17.4852C12.3234 17.3584 12.2323 17.295 12.1333 17.2703C12.0457 17.2486 11.9542 17.2486 11.8668 17.2703C11.7678 17.295 11.6766 17.3584 11.4944 17.4852L7.26143 20.4307C6.62114 20.8763 6.301 21.099 6.08778 21.0704C5.90325 21.0455 5.74359 20.9295 5.66294 20.7617C5.56975 20.5678 5.6827 20.1945 5.90859 19.4478L7.40193 14.5118C7.46622 14.2992 7.49836 14.193 7.49112 14.0912C7.48473 14.0014 7.45647 13.9144 7.40879 13.8378C7.35483 13.7513 7.26637 13.6842 7.08945 13.55L2.97999 10.4346C2.35837 9.9632 2.04757 9.72763 2.00898 9.51595C1.97558 9.33278 2.03657 9.14509 2.17126 9.01653C2.32687 8.86798 2.71682 8.86004 3.49672 8.84414L8.65265 8.73907C8.87461 8.73454 8.9856 8.73228 9.08016 8.69395C9.16368 8.66009 9.23768 8.60632 9.2957 8.53735C9.36138 8.45926 9.39782 8.35442 9.47072 8.14471L11.1639 3.2736Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                                <button title="Archive"><svg viewBox="0 0 24 24" fill="none"><path d="M6.51226 22.4192C5.5251 22.4192 4.77472 22.1691 4.26113 21.6688C3.74754 21.1686 3.49075 20.4249 3.49075 19.4377V8.75238H5.10155V19.5178C5.10155 19.9646 5.22161 20.3082 5.46173 20.5483C5.70185 20.7884 6.04536 20.9085 6.49225 20.9085H17.5078C17.948 20.9085 18.2881 20.7884 18.5283 20.5483C18.7751 20.3082 18.8984 19.9646 18.8984 19.5178V8.75238H20.5093V19.4377C20.5093 20.4182 20.2525 21.1586 19.7389 21.6588C19.2253 22.1658 18.4749 22.4192 17.4877 22.4192H6.51226ZM8.70335 13.5348C8.48991 13.5348 8.31649 13.4681 8.18309 13.3347C8.05636 13.2013 7.993 13.0245 7.993 12.8044V12.4842C7.993 12.2641 8.05636 12.0907 8.18309 11.964C8.31649 11.8306 8.48991 11.7639 8.70335 11.7639H15.3067C15.5201 11.7639 15.6935 11.8306 15.8269 11.964C15.9603 12.0907 16.027 12.2641 16.027 12.4842V12.8044C16.027 13.0245 15.9603 13.2013 15.8269 13.3347C15.6935 13.4681 15.5201 13.5348 15.3067 13.5348H8.70335ZM3.90095 9.50275C3.28731 9.50275 2.81708 9.32266 2.49025 8.96248C2.16342 8.6023 2 8.11873 2 7.51176V5.991C2 5.37736 2.17009 4.89378 2.51026 4.54027C2.85043 4.18009 3.31399 4 3.90095 4H20.0991C20.7127 4 21.1829 4.18009 21.5098 4.54027C21.8366 4.89378 22 5.37736 22 5.991V7.51176C22 8.11873 21.8366 8.6023 21.5098 8.96248C21.1829 9.32266 20.7127 9.50275 20.0991 9.50275H3.90095ZM4.31116 7.992H19.6989C19.9523 7.992 20.1291 7.9353 20.2291 7.82191C20.3358 7.70852 20.3892 7.52843 20.3892 7.28164V6.22111C20.3892 5.96765 20.3358 5.78756 20.2291 5.68084C20.1291 5.56745 19.9523 5.51076 19.6989 5.51076H4.31116C4.0577 5.51076 3.87761 5.56745 3.77089 5.68084C3.66417 5.78756 3.61081 5.96765 3.61081 6.22111V7.28164C3.61081 7.52843 3.66417 7.70852 3.77089 7.82191C3.87761 7.9353 4.0577 7.992 4.31116 7.992Z" fill="currentColor"/></svg></button>
+                                <button title="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M9.1001 10.8999C9.1001 10.4028 9.50293 10 10 10C10.4971 10 10.9001 10.4028 10.9001 10.8999V16.1001C10.9001 16.5972 10.4971 17 10 17C9.50293 17 9.1001 16.5972 9.1001 16.1001V10.8999Z" fill="currentColor"/><path d="M14 10C13.5029 10 13.1001 10.4028 13.1001 10.8999V16.1001C13.1001 16.5972 13.5029 17 14 17C14.4971 17 14.9001 16.5972 14.9001 16.1001V10.8999C14.9001 10.4028 14.4971 10 14 10Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M21 5H17V3.5C17 2.11938 15.8806 1 14.5 1H9.5C8.11938 1 7 2.11938 7 3.5V5H3C2.44775 5 2 5.44775 2 6C2 6.55225 2.44775 7 3 7H4.1001V19C4.1001 21.1538 5.84619 22.8999 8 22.8999H16C18.1541 22.8999 19.9001 21.1538 19.9001 19V7H21C21.5522 7 22 6.55225 22 6C22 5.44775 21.5522 5 21 5ZM18.1001 7H5.90015V19C5.90015 20.1599 6.84033 21.1001 8 21.1001H16C17.1599 21.1001 18.1001 20.1599 18.1001 19V7ZM9.5 2.80005H14.5C14.8867 2.80005 15.2 3.11328 15.2 3.5V5H8.80005V3.5C8.80005 3.11328 9.11328 2.80005 9.5 2.80005Z" fill="currentColor"/></svg></button>
                             </div>
-                            <div class="tab-item" data-tab="To-do" onclick="selectTab(this)">
-                                <div class="tab-icon">
-                                    <svg viewBox="0 0 24 24" fill="none"><path d="M2.04466 4C1.5073 4 1.07168 4.49055 1.07168 5.09565C1.07168 5.70076 1.5073 6.1913 2.04466 6.1913H21.0987C21.636 6.1913 22.0717 5.70076 22.0717 5.09565C22.0717 4.49055 21.636 4 21.0987 4H2.04466Z" fill="currentColor"/><path d="M15.0177 11.1043C14.4803 11.1043 14.0447 11.5949 14.0447 12.2C14.0447 12.8051 14.4803 13.2957 15.0177 13.2957H21.0987C21.6361 13.2957 22.0717 12.8051 22.0717 12.2C22.0717 11.5949 21.6361 11.1043 21.0987 11.1043H15.0177Z" fill="currentColor"/><path d="M15.0177 18.2087C14.4803 18.2087 14.0447 18.6993 14.0447 19.3043C14.0447 19.9094 14.4803 20.4 15.0177 20.4H21.0987C21.6361 20.4 22.0717 19.9094 22.0717 19.3043C22.0717 18.6993 21.6361 18.2087 21.0987 18.2087H15.0177Z" fill="currentColor"/><path d="M11.5716 12.589C11.9383 12.1066 11.8545 11.4105 11.3842 11.0344C10.9139 10.658 10.2353 10.7441 9.86835 11.2265L5.07288 17.5322L2.90699 14.8875C2.52337 14.4192 1.84211 14.3583 1.38535 14.7519C0.928725 15.1454 0.869397 15.8441 1.25301 16.3124L4.277 20.0047C4.48666 20.2607 4.7977 20.4059 5.12357 20.3998C5.44944 20.3938 5.75515 20.2372 5.9556 19.9736L11.5716 12.589Z" fill="currentColor"/></svg>
-                                </div>
-                                <span class="tab-label">To-do</span>
-                            </div>
-                            <div class="tab-item active" data-tab="AI" onclick="selectTab(this)">
-                                <div class="tab-icon">
-                                    <svg viewBox="0 0 24 24" fill="none"><path d="M16.2696 13.8423C16.4148 13.418 17.0145 13.418 17.1597 13.8423L17.5843 15.0853C17.8668 15.9125 18.5168 16.5625 19.344 16.845L20.5871 17.2696C21.0112 17.4148 21.0112 18.0145 20.5871 18.1597L19.344 18.5843C18.5168 18.8668 17.8668 19.5168 17.5843 20.344L17.1597 21.5871C17.0145 22.0112 16.4148 22.0112 16.2696 21.5871L15.845 20.344C15.5625 19.5168 14.9125 18.8668 14.0853 18.5843L12.8422 18.1597C12.418 18.0145 12.418 17.4148 12.8422 17.2696L14.0853 16.845C14.9125 16.5625 15.5625 15.9125 15.845 15.0853L16.2696 13.8423Z" fill="currentColor"/><path d="M6.61775 2.47774C6.83527 1.84076 7.73639 1.84076 7.95391 2.47774L8.59027 4.34182C9.01401 5.58266 9.98901 6.55766 11.2299 6.98139L13.0939 7.61776C13.7309 7.83528 13.7309 8.7364 13.0939 8.95392L11.2299 9.59028C9.98901 10.014 9.01401 10.989 8.59027 12.2299L7.95391 14.0939C7.73639 14.7309 6.83527 14.7309 6.61775 14.0939L5.98139 12.2299C5.55766 10.989 4.58266 10.014 3.34181 9.59028L1.47774 8.95392C0.840755 8.7364 0.840755 7.83528 1.47774 7.61776L3.34181 6.98139C4.58266 6.55766 5.55766 5.58266 5.98139 4.34182L6.61775 2.47774Z" fill="currentColor"/><path d="M19.5241 2.23834C19.6331 1.92056 20.0821 1.92054 20.1911 2.23834L20.5103 3.1714C20.7222 3.79142 21.2091 4.27828 21.8291 4.49016L22.7611 4.80937C23.0796 4.91813 23.0796 5.36766 22.7611 5.47642L21.8291 5.79563C21.209 6.00753 20.7222 6.49434 20.5103 7.1144L20.1911 8.04643C20.0824 8.36492 19.6328 8.36492 19.5241 8.04643L19.2049 7.1144C18.993 6.49436 18.5061 6.00755 17.8861 5.79563L16.953 5.47642C16.6352 5.36742 16.6353 4.9184 16.953 4.80937L17.8861 4.49016C18.5061 4.27826 18.993 3.79141 19.2049 3.1714L19.5241 2.23834Z" fill="currentColor"/></svg>
-                                </div>
-                                <span class="tab-label">AI</span>
-                            </div>
-                        </div>
-                        <button class="compose-btn" onclick="selectCompose()">
-                            <svg viewBox="0 0 24 24" fill="none"><path d="M17.71 13.7982C17.8755 13.3135 18.5601 13.3135 18.7256 13.7982L19.21 15.2162C19.5324 16.1603 20.2746 16.9025 21.2188 17.2249L22.6367 17.7093C23.1214 17.8748 23.1214 18.5594 22.6367 18.7249L21.2188 19.2093C20.2746 19.5317 19.5324 20.274 19.21 21.2181L18.7256 22.6361C18.5601 23.1207 17.8755 23.1207 17.71 22.6361L17.2256 21.2181C16.9032 20.274 16.1609 19.5317 15.2168 19.2093L13.7988 18.7249C13.3142 18.5594 13.3142 17.8748 13.7988 17.7093L15.2168 17.2249C16.1609 16.9025 16.9032 16.1603 17.2256 15.2162L17.71 13.7982ZM14.458 1.97299C15.7559 0.675233 17.8603 0.675256 19.1582 1.97299C20.456 3.27086 20.456 5.3753 19.1582 6.67319L7.77734 18.054L7.58594 18.2249C7.38489 18.3839 7.15646 18.5067 6.91211 18.5882L2.45996 20.0726L2.29785 20.1136C1.49528 20.257 0.788402 19.4817 1.05859 18.6703L2.54297 14.2201C2.62446 13.9756 2.74822 13.7474 2.90723 13.5462L3.07812 13.3539L14.458 1.97299ZM3.16016 17.971L6.3252 16.9164L4.21484 14.805L3.16016 17.971ZM17.9053 3.22592C17.2997 2.62052 16.3176 2.62074 15.7119 3.22592L5.40918 13.5277L7.60254 15.722L17.9053 5.42026C18.5109 4.81458 18.5109 3.83158 17.9053 3.22592Z" fill="currentColor"/></svg>
-                        </button>
+                            <button class="glass-btn" title="More"><svg viewBox="0 0 24 24" fill="none"><circle cx="5" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="19" cy="12" r="2" fill="currentColor"/></svg></button>
+                        </nav>
+                        <div class="nav-content-area">Email content area</div>
                     </div>
-                    <div class="home-indicator"></div>
+                    <span class="item-name">nav-read-email</span>
+                </div>
+
+                <!-- Compose -->
+                <div class="item" onclick="copyName('nav-compose')">
+                    <div class="tooltip">Navigation bar for composing emails. Features close button, attachment button, and send button with Filo blue accent.</div>
+                    <div class="bar-frame bg-white">
+                        <nav class="nav-bar">
+                            <div class="glass-pill single">
+                                <button title="Close"><svg viewBox="0 0 24 24" fill="none"><path d="M5.28235 18.7174C5.15493 18.5957 5.07095 18.4507 5.03041 18.2826C4.98986 18.1145 4.98986 17.9464 5.03041 17.7783C5.07674 17.6101 5.16072 17.4681 5.28235 17.3522L10.6165 11.9957L5.28235 6.64783C5.16072 6.53188 5.07964 6.38986 5.03909 6.22174C4.99855 6.05362 4.99855 5.88551 5.03909 5.71739C5.07964 5.54928 5.16072 5.40435 5.28235 5.28261C5.40976 5.15507 5.55745 5.07101 5.72541 5.03043C5.89337 4.98986 6.06133 4.98986 6.22929 5.03043C6.39725 5.07101 6.54204 5.15217 6.66367 5.27391L12.0065 10.6217L17.3407 5.27391C17.4623 5.14638 17.6071 5.06522 17.7751 5.03043C17.943 4.98986 18.1081 4.98986 18.2702 5.03043C18.4382 5.07101 18.5888 5.15507 18.722 5.28261C18.8436 5.40435 18.9247 5.54928 18.9652 5.71739C19.0116 5.88551 19.0116 6.05362 18.9652 6.22174C18.9247 6.38406 18.8436 6.52899 18.722 6.65652L13.3878 11.9957L18.722 17.3435C18.8436 17.471 18.9247 17.6188 18.9652 17.787C19.0058 17.9493 19.0058 18.1145 18.9652 18.2826C18.9247 18.4507 18.8436 18.5957 18.722 18.7174C18.5946 18.8449 18.4469 18.929 18.2789 18.9696C18.111 19.0101 17.943 19.0101 17.7751 18.9696C17.6071 18.929 17.4623 18.8478 17.3407 18.7261L12.0065 13.3783L6.66367 18.7261C6.54204 18.8478 6.39725 18.929 6.22929 18.9696C6.06712 19.0101 5.89916 19.0101 5.72541 18.9696C5.55745 18.929 5.40976 18.8449 5.28235 18.7174Z" fill="currentColor"/></svg></button>
+                            </div>
+                            <div style="flex: 1;"></div>
+                            <div class="glass-pill">
+                                <button title="Attach"><svg viewBox="0 0 24 24" fill="none"><path d="M19 10.1667V16C19 17.8565 18.2625 19.637 16.9497 20.9497C15.637 22.2625 13.8565 23 12 23C10.1435 23 8.36301 22.2625 7.05025 20.9497C5.7375 19.637 5 17.8565 5 16L5 6.66667C5 5.42899 5.49167 4.242 6.36683 3.36683C7.242 2.49167 8.42899 2 9.66667 2C10.9043 2 12.0913 2.49167 12.9665 3.36683C13.8417 4.242 14.3333 5.42899 14.3333 6.66667V16C14.3333 16.6188 14.0875 17.2123 13.6499 17.6499C13.2123 18.0875 12.6188 18.3333 12 18.3333C11.3812 18.3333 10.7877 18.0875 10.3501 17.6499C9.9125 17.2123 9.66667 16.6188 9.66667 16V10.1667" stroke="currentColor" stroke-width="1.86667" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                                <button class="send-btn" title="Send"><svg viewBox="0 0 25 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.1006 0C18.728 0 24.1006 5.37258 24.1006 12C24.1006 18.6274 18.728 24 12.1006 24C5.47317 24 0.100586 18.6274 0.100586 12C0.100586 5.37258 5.47317 0 12.1006 0ZM12.1006 6C11.5329 6 11.1915 6.75668 10.5098 8.27051L8.12695 13.5625C7.25862 15.4905 6.82463 16.4542 7.29102 16.8613C7.75741 17.2684 8.69809 16.7463 10.5791 15.7021L11.2393 15.3359C11.6598 15.1025 11.87 14.9854 12.1006 14.9854C12.3311 14.9854 12.5414 15.1025 12.9619 15.3359L13.6221 15.7021C15.503 16.7463 16.4438 17.2684 16.9102 16.8613C17.3765 16.4542 16.9426 15.4905 16.0742 13.5625L13.6914 8.27051C13.0096 6.75668 12.6682 6.00001 12.1006 6Z" fill="#22A0FB"/></svg></button>
+                            </div>
+                        </nav>
+                        <div class="nav-content-area">Compose email editor</div>
+                    </div>
+                    <span class="item-name">nav-compose</span>
+                </div>
+
+                <!-- Subpage -->
+                <div class="item" onclick="copyName('nav-settings')">
+                    <div class="tooltip">Navigation bar for subpages like Settings. Features back button and centered title with subtle bottom border.</div>
+                    <div class="bar-frame bg-white">
+                        <nav class="nav-bar with-border">
+                            <button class="glass-btn" title="Back"><svg viewBox="0 0 24 24" fill="none"><path d="M7 12.1782C7.00507 12.0098 7.04059 11.8558 7.10654 11.7162C7.1725 11.5767 7.27397 11.442 7.41096 11.312L15.0365 4.31038C15.2547 4.10346 15.5236 4 15.8432 4C16.0563 4 16.2491 4.04812 16.4216 4.14436C16.5992 4.24061 16.7387 4.37053 16.8402 4.53415C16.9467 4.69776 17 4.88062 17 5.08273C17 5.38108 16.8808 5.64334 16.6423 5.86951L9.74734 12.171L16.6423 18.4797C16.8808 18.7107 17 18.9729 17 19.2665C17 19.4734 16.9467 19.6587 16.8402 19.8223C16.7387 19.9859 16.5992 20.1158 16.4216 20.2121C16.2491 20.3131 16.0563 20.3636 15.8432 20.3636C15.5236 20.3636 15.2547 20.2578 15.0365 20.046L7.41096 13.0444C7.2689 12.9145 7.16489 12.7797 7.09893 12.6402C7.03298 12.4958 7 12.3418 7 12.1782Z" fill="currentColor"/></svg></button>
+                            <span class="nav-title">Settings</span>
+                            <div class="spacer"></div>
+                        </nav>
+                        <div class="nav-content-area">Settings content</div>
+                    </div>
+                    <span class="item-name">nav-settings</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- NAVIGATION BARS SECTION -->
-    <div class="main-section">
-        <div class="section-header">
-            <h2>Navigation Bars</h2>
-            <p>iOS 26 Liquid Glass — 44pt Touch Targets</p>
-        </div>
-        <div class="nav-bars-section">
-            <!-- Read Email -->
-            <div class="variant-section">
-                <div class="variant-label">1. Read Email</div>
-                <div class="nav-phone-frame bg-gradient">
-                    <nav class="nav-bar">
-                        <button class="glass-btn" title="Back">
-                            <svg viewBox="0 0 24 24" fill="none"><path d="M7 12.1782C7.00507 12.0098 7.04059 11.8558 7.10654 11.7162C7.1725 11.5767 7.27397 11.442 7.41096 11.312L15.0365 4.31038C15.2547 4.10346 15.5236 4 15.8432 4C16.0563 4 16.2491 4.04812 16.4216 4.14436C16.5992 4.24061 16.7387 4.37053 16.8402 4.53415C16.9467 4.69776 17 4.88062 17 5.08273C17 5.38108 16.8808 5.64334 16.6423 5.86951L9.74734 12.171L16.6423 18.4797C16.8808 18.7107 17 18.9729 17 19.2665C17 19.4734 16.9467 19.6587 16.8402 19.8223C16.7387 19.9859 16.5992 20.1158 16.4216 20.2121C16.2491 20.3131 16.0563 20.3636 15.8432 20.3636C15.5236 20.3636 15.2547 20.2578 15.0365 20.046L7.41096 13.0444C7.2689 12.9145 7.16489 12.7797 7.09893 12.6402C7.03298 12.4958 7 12.3418 7 12.1782Z" fill="currentColor"/></svg>
-                        </button>
-                        <div style="flex: 1;"></div>
-                        <div class="glass-pill">
-                            <button title="Star"><svg viewBox="0 0 24 24" fill="none"><path d="M11.1639 3.2736C11.42 2.53678 11.5481 2.16839 11.7375 2.06628C11.9013 1.97791 12.0986 1.97791 12.2626 2.06628C12.4519 2.16839 12.5799 2.53678 12.8361 3.2736L14.5293 8.14471C14.6022 8.35442 14.6386 8.45926 14.7044 8.53735C14.7623 8.60632 14.8364 8.66009 14.9199 8.69395C15.0144 8.73228 15.1254 8.73454 15.3473 8.73907L20.5033 8.84414C21.2832 8.86003 21.6731 8.86798 21.8288 9.01653C21.9635 9.14509 22.0244 9.33278 21.991 9.51595C21.9525 9.72763 21.6417 9.9632 21.0201 10.4346L16.9106 13.55C16.7336 13.6842 16.6452 13.7513 16.5912 13.8378C16.5435 13.9144 16.5153 14.0014 16.5089 14.0912C16.5017 14.193 16.5338 14.2992 16.5981 14.5118L18.0915 19.4478C18.3173 20.1945 18.4303 20.5678 18.3371 20.7617C18.2565 20.9295 18.0968 21.0455 17.9122 21.0704C17.699 21.099 17.3789 20.8763 16.7386 20.4307L12.5056 17.4852C12.3234 17.3584 12.2323 17.295 12.1333 17.2703C12.0457 17.2486 11.9542 17.2486 11.8668 17.2703C11.7678 17.295 11.6766 17.3584 11.4944 17.4852L7.26143 20.4307C6.62114 20.8763 6.301 21.099 6.08778 21.0704C5.90325 21.0455 5.74359 20.9295 5.66294 20.7617C5.56975 20.5678 5.6827 20.1945 5.90859 19.4478L7.40193 14.5118C7.46622 14.2992 7.49836 14.193 7.49112 14.0912C7.48473 14.0014 7.45647 13.9144 7.40879 13.8378C7.35483 13.7513 7.26637 13.6842 7.08945 13.55L2.97999 10.4346C2.35837 9.9632 2.04757 9.72763 2.00898 9.51595C1.97558 9.33278 2.03657 9.14509 2.17126 9.01653C2.32687 8.86798 2.71682 8.86004 3.49672 8.84414L8.65265 8.73907C8.87461 8.73454 8.9856 8.73228 9.08016 8.69395C9.16368 8.66009 9.23768 8.60632 9.2957 8.53735C9.36138 8.45926 9.39782 8.35442 9.47072 8.14471L11.1639 3.2736Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-                            <button title="Archive"><svg viewBox="0 0 24 24" fill="none"><path d="M6.51226 22.4192C5.5251 22.4192 4.77472 22.1691 4.26113 21.6688C3.74754 21.1686 3.49075 20.4249 3.49075 19.4377V8.75238H5.10155V19.5178C5.10155 19.9646 5.22161 20.3082 5.46173 20.5483C5.70185 20.7884 6.04536 20.9085 6.49225 20.9085H17.5078C17.948 20.9085 18.2881 20.7884 18.5283 20.5483C18.7751 20.3082 18.8984 19.9646 18.8984 19.5178V8.75238H20.5093V19.4377C20.5093 20.4182 20.2525 21.1586 19.7389 21.6588C19.2253 22.1658 18.4749 22.4192 17.4877 22.4192H6.51226ZM8.70335 13.5348C8.48991 13.5348 8.31649 13.4681 8.18309 13.3347C8.05636 13.2013 7.993 13.0245 7.993 12.8044V12.4842C7.993 12.2641 8.05636 12.0907 8.18309 11.964C8.31649 11.8306 8.48991 11.7639 8.70335 11.7639H15.3067C15.5201 11.7639 15.6935 11.8306 15.8269 11.964C15.9603 12.0907 16.027 12.2641 16.027 12.4842V12.8044C16.027 13.0245 15.9603 13.2013 15.8269 13.3347C15.6935 13.4681 15.5201 13.5348 15.3067 13.5348H8.70335ZM3.90095 9.50275C3.28731 9.50275 2.81708 9.32266 2.49025 8.96248C2.16342 8.6023 2 8.11873 2 7.51176V5.991C2 5.37736 2.17009 4.89378 2.51026 4.54027C2.85043 4.18009 3.31399 4 3.90095 4H20.0991C20.7127 4 21.1829 4.18009 21.5098 4.54027C21.8366 4.89378 22 5.37736 22 5.991V7.51176C22 8.11873 21.8366 8.6023 21.5098 8.96248C21.1829 9.32266 20.7127 9.50275 20.0991 9.50275H3.90095ZM4.31116 7.992H19.6989C19.9523 7.992 20.1291 7.9353 20.2291 7.82191C20.3358 7.70852 20.3892 7.52843 20.3892 7.28164V6.22111C20.3892 5.96765 20.3358 5.78756 20.2291 5.68084C20.1291 5.56745 19.9523 5.51076 19.6989 5.51076H4.31116C4.0577 5.51076 3.87761 5.56745 3.77089 5.68084C3.66417 5.78756 3.61081 5.96765 3.61081 6.22111V7.28164C3.61081 7.52843 3.66417 7.70852 3.77089 7.82191C3.87761 7.9353 4.0577 7.992 4.31116 7.992Z" fill="currentColor"/></svg></button>
-                            <button title="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M9.1001 10.8999C9.1001 10.4028 9.50293 10 10 10C10.4971 10 10.9001 10.4028 10.9001 10.8999V16.1001C10.9001 16.5972 10.4971 17 10 17C9.50293 17 9.1001 16.5972 9.1001 16.1001V10.8999Z" fill="currentColor"/><path d="M14 10C13.5029 10 13.1001 10.4028 13.1001 10.8999V16.1001C13.1001 16.5972 13.5029 17 14 17C14.4971 17 14.9001 16.5972 14.9001 16.1001V10.8999C14.9001 10.4028 14.4971 10 14 10Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M21 5H17V3.5C17 2.11938 15.8806 1 14.5 1H9.5C8.11938 1 7 2.11938 7 3.5V5H3C2.44775 5 2 5.44775 2 6C2 6.55225 2.44775 7 3 7H4.1001V19C4.1001 21.1538 5.84619 22.8999 8 22.8999H16C18.1541 22.8999 19.9001 21.1538 19.9001 19V7H21C21.5522 7 22 6.55225 22 6C22 5.44775 21.5522 5 21 5ZM18.1001 7H5.90015V19C5.90015 20.1599 6.84033 21.1001 8 21.1001H16C17.1599 21.1001 18.1001 20.1599 18.1001 19V7ZM9.5 2.80005H14.5C14.8867 2.80005 15.2 3.11328 15.2 3.5V5H8.80005V3.5C8.80005 3.11328 9.11328 2.80005 9.5 2.80005Z" fill="currentColor"/></svg></button>
-                        </div>
-                        <button class="glass-btn" title="More"><svg viewBox="0 0 24 24" fill="none"><circle cx="5" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="19" cy="12" r="2" fill="currentColor"/></svg></button>
-                    </nav>
-                    <div class="nav-content-area">Email content area</div>
-                </div>
-            </div>
-
-            <!-- Compose -->
-            <div class="variant-section">
-                <div class="variant-label">2. Compose Email</div>
-                <div class="nav-phone-frame bg-white">
-                    <nav class="nav-bar">
-                        <div class="glass-pill single">
-                            <button title="Close"><svg viewBox="0 0 24 24" fill="none"><path d="M5.28235 18.7174C5.15493 18.5957 5.07095 18.4507 5.03041 18.2826C4.98986 18.1145 4.98986 17.9464 5.03041 17.7783C5.07674 17.6101 5.16072 17.4681 5.28235 17.3522L10.6165 11.9957L5.28235 6.64783C5.16072 6.53188 5.07964 6.38986 5.03909 6.22174C4.99855 6.05362 4.99855 5.88551 5.03909 5.71739C5.07964 5.54928 5.16072 5.40435 5.28235 5.28261C5.40976 5.15507 5.55745 5.07101 5.72541 5.03043C5.89337 4.98986 6.06133 4.98986 6.22929 5.03043C6.39725 5.07101 6.54204 5.15217 6.66367 5.27391L12.0065 10.6217L17.3407 5.27391C17.4623 5.14638 17.6071 5.06522 17.7751 5.03043C17.943 4.98986 18.1081 4.98986 18.2702 5.03043C18.4382 5.07101 18.5888 5.15507 18.722 5.28261C18.8436 5.40435 18.9247 5.54928 18.9652 5.71739C19.0116 5.88551 19.0116 6.05362 18.9652 6.22174C18.9247 6.38406 18.8436 6.52899 18.722 6.65652L13.3878 11.9957L18.722 17.3435C18.8436 17.471 18.9247 17.6188 18.9652 17.787C19.0058 17.9493 19.0058 18.1145 18.9652 18.2826C18.9247 18.4507 18.8436 18.5957 18.722 18.7174C18.5946 18.8449 18.4469 18.929 18.2789 18.9696C18.111 19.0101 17.943 19.0101 17.7751 18.9696C17.6071 18.929 17.4623 18.8478 17.3407 18.7261L12.0065 13.3783L6.66367 18.7261C6.54204 18.8478 6.39725 18.929 6.22929 18.9696C6.06712 19.0101 5.89916 19.0101 5.72541 18.9696C5.55745 18.929 5.40976 18.8449 5.28235 18.7174Z" fill="currentColor"/></svg></button>
-                        </div>
-                        <div style="flex: 1;"></div>
-                        <div class="glass-pill">
-                            <button title="Attach"><svg viewBox="0 0 24 24" fill="none"><path d="M19 10.1667V16C19 17.8565 18.2625 19.637 16.9497 20.9497C15.637 22.2625 13.8565 23 12 23C10.1435 23 8.36301 22.2625 7.05025 20.9497C5.7375 19.637 5 17.8565 5 16L5 6.66667C5 5.42899 5.49167 4.242 6.36683 3.36683C7.242 2.49167 8.42899 2 9.66667 2C10.9043 2 12.0913 2.49167 12.9665 3.36683C13.8417 4.242 14.3333 5.42899 14.3333 6.66667V16C14.3333 16.6188 14.0875 17.2123 13.6499 17.6499C13.2123 18.0875 12.6188 18.3333 12 18.3333C11.3812 18.3333 10.7877 18.0875 10.3501 17.6499C9.9125 17.2123 9.66667 16.6188 9.66667 16V10.1667" stroke="currentColor" stroke-width="1.86667" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-                            <button class="send-btn" title="Send"><svg viewBox="0 0 25 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.1006 0C18.728 0 24.1006 5.37258 24.1006 12C24.1006 18.6274 18.728 24 12.1006 24C5.47317 24 0.100586 18.6274 0.100586 12C0.100586 5.37258 5.47317 0 12.1006 0ZM12.1006 6C11.5329 6 11.1915 6.75668 10.5098 8.27051L8.12695 13.5625C7.25862 15.4905 6.82463 16.4542 7.29102 16.8613C7.75741 17.2684 8.69809 16.7463 10.5791 15.7021L11.2393 15.3359C11.6598 15.1025 11.87 14.9854 12.1006 14.9854C12.3311 14.9854 12.5414 15.1025 12.9619 15.3359L13.6221 15.7021C15.503 16.7463 16.4438 17.2684 16.9102 16.8613C17.3765 16.4542 16.9426 15.4905 16.0742 13.5625L13.6914 8.27051C13.0096 6.75668 12.6682 6.00001 12.1006 6Z" fill="#22A0FB"/></svg></button>
-                        </div>
-                    </nav>
-                    <div class="nav-content-area">Compose email editor</div>
-                </div>
-            </div>
-
-            <!-- Subpage -->
-            <div class="variant-section">
-                <div class="variant-label">3. Subpage (Settings)</div>
-                <div class="nav-phone-frame bg-white">
-                    <nav class="nav-bar with-border">
-                        <button class="glass-btn" title="Back"><svg viewBox="0 0 24 24" fill="none"><path d="M7 12.1782C7.00507 12.0098 7.04059 11.8558 7.10654 11.7162C7.1725 11.5767 7.27397 11.442 7.41096 11.312L15.0365 4.31038C15.2547 4.10346 15.5236 4 15.8432 4C16.0563 4 16.2491 4.04812 16.4216 4.14436C16.5992 4.24061 16.7387 4.37053 16.8402 4.53415C16.9467 4.69776 17 4.88062 17 5.08273C17 5.38108 16.8808 5.64334 16.6423 5.86951L9.74734 12.171L16.6423 18.4797C16.8808 18.7107 17 18.9729 17 19.2665C17 19.4734 16.9467 19.6587 16.8402 19.8223C16.7387 19.9859 16.5992 20.1158 16.4216 20.2121C16.2491 20.3131 16.0563 20.3636 15.8432 20.3636C15.5236 20.3636 15.2547 20.2578 15.0365 20.046L7.41096 13.0444C7.2689 12.9145 7.16489 12.7797 7.09893 12.6402C7.03298 12.4958 7 12.3418 7 12.1782Z" fill="currentColor"/></svg></button>
-                        <span class="nav-title">Settings</span>
-                        <div class="spacer"></div>
-                    </nav>
-                    <div class="nav-content-area">Settings content</div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="toast" id="toast">Copied!</div>
 
     <script>
-        function updateContentArea(tabName) {
-            const tabNameEl = document.getElementById('current-tab');
-            const aiScreen = document.getElementById('ai-screen');
-            
-            if (tabName === 'AI') {
-                tabNameEl.style.display = 'none';
-                aiScreen.classList.add('visible');
-            } else {
-                tabNameEl.style.display = 'flex';
-                tabNameEl.textContent = tabName;
-                aiScreen.classList.remove('visible');
+        // Check URL parameter for mode and apply on load
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            const mode = params.get('mode');
+            if (mode === 'dark') {
+                document.body.classList.add('dark-mode');
             }
-        }
+        })();
 
-        function selectTab(element) {
-            document.querySelectorAll('.tab-item').forEach(tab => tab.classList.remove('active'));
-            element.classList.add('active');
-            updateContentArea(element.dataset.tab);
-        }
-
-        function selectCompose() {
-            document.querySelectorAll('.tab-item').forEach(tab => tab.classList.remove('active'));
-            updateContentArea('Compose');
-        }
-
-        function setMode(mode) {
-            document.body.classList.toggle('dark-mode', mode === 'dark');
-            document.querySelectorAll('.mode-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.textContent.toLowerCase() === mode);
-            });
+        function copyName(name) {
+            navigator.clipboard.writeText(name);
+            const toast = document.getElementById('toast');
+            toast.textContent = `Copied: ${name}`;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
         }
     </script>
 </body>
