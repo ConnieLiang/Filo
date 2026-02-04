@@ -6,6 +6,10 @@
       "nodeId": "1419-6638",
       "url": "https://www.figma.com/design/Pmns0wqmroGCQmqFPeSrwd/Components?node-id=1419-6638"
     },
+    "pillsBlack": {
+      "nodeId": "1427-7101",
+      "url": "https://www.figma.com/design/Pmns0wqmroGCQmqFPeSrwd/Components?node-id=1427-7101"
+    },
     "labels": {
       "nodeId": "1414-6625",
       "url": "https://www.figma.com/design/Pmns0wqmroGCQmqFPeSrwd/Components?node-id=1414-6625"
@@ -84,6 +88,17 @@
         },
         "dark": {
           "background": "#45B1FF",
+          "textColor": "#000000"
+        }
+      },
+      "filledBlack": {
+        "description": "Solid black button for high-emphasis actions",
+        "light": {
+          "background": "#000000",
+          "textColor": "#FFFFFF"
+        },
+        "dark": {
+          "background": "#FFFFFF",
           "textColor": "#000000"
         }
       }

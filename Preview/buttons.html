@@ -220,6 +220,16 @@
             color: #000000;
         }
 
+        .pill-filled-black {
+            background: #000000;
+            color: #FFFFFF;
+        }
+
+        body.dark-mode .pill-filled-black {
+            background: #FFFFFF;
+            color: #000000;
+        }
+
         /* ============================================
            LABELS
            ============================================ */
@@ -428,7 +438,7 @@
 <body>
     <div class="header">
         <h1>Filo Buttons</h1>
-        <p class="subtitle">28 buttons — Pills, Labels, and Others</p>
+        <p class="subtitle">31 buttons — Pills, Labels, and Others</p>
         <p class="hint">Click any button to copy its name</p>
     </div>
 
@@ -495,6 +505,21 @@
                     <div class="btn-item" onclick="copyName('button-large-blue')">
                         <button class="pill-btn pill-large pill-filled">button-large</button>
                         <span class="btn-name">button-large-blue</span>
+                    </div>
+                </div>
+                <!-- Row 5: Black (Filled Black) -->
+                <div class="pills-row">
+                    <div class="btn-item" onclick="copyName('button-small-black')">
+                        <button class="pill-btn pill-small pill-filled-black">button-small</button>
+                        <span class="btn-name">button-small-black</span>
+                    </div>
+                    <div class="btn-item" onclick="copyName('button-medium-black')">
+                        <button class="pill-btn pill-medium pill-filled-black">button-medium</button>
+                        <span class="btn-name">button-medium-black</span>
+                    </div>
+                    <div class="btn-item" onclick="copyName('button-large-black')">
+                        <button class="pill-btn pill-large pill-filled-black">button-large</button>
+                        <span class="btn-name">button-large-black</span>
                     </div>
                 </div>
             </div>
