@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inbox - Filo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --filo-02: #22A0FB;
+            --filo-06: #000000;
+            --filo-07: #707070;
+            --filo-08: #D5D5D5;
+            --filo-10: #FFFFFF;
+            --filo-14: rgba(0, 0, 0, 0.04);
+            --filo-25: #BDBDBD;
+            --bg: #F5F5F5;
+            --glass-bg: rgba(247, 247, 247, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.5);
+        }
+
+        body.dark-mode {
+            --filo-02: #45B1FF;
+            --filo-06: #FFFFFF;
+            --filo-07: #8B8B8B;
+            --filo-08: #414149;
+            --filo-10: #1D1D21;
+            --filo-14: rgba(255, 255, 255, 0.06);
+            --filo-25: #727272;
+            --bg: #000000;
+            --glass-bg: rgba(40, 40, 40, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            padding: 60px 80px;
+            color: var(--filo-06);
+        }
+
+        /* Header */
+        .header {
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: var(--filo-07);
+            margin-bottom: 16px;
+        }
+
+        .meta {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: var(--filo-07);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .meta-item svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Mode Toggles */
+        .mode-toggles {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .toggle-group {
+            display: flex;
+            background: var(--filo-14);
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        .mode-btn {
+            padding: 6px 12px;
+            border: none;
+            background: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--filo-07);
+            transition: all 0.2s;
+        }
+
+        .mode-btn.active {
+            background: var(--filo-10);
+            color: var(--filo-06);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        /* Screen Container */
+        .screen-container {
+            display: flex;
+            justify-content: center;
+            padding: 40px 0;
+        }
+
+        /* iPhone Frame */
+        .iphone-frame {
+            width: 390px;
+            height: 844px;
+            background: var(--filo-10);
+            border-radius: 44px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 0;
+            background: var(--filo-10);
+        }
+
+        .status-time {
+            flex: 1;
+            padding-left: 28px;
+        }
+
+        .status-time span {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--filo-06);
+        }
+
+        .status-island {
+            width: 124px;
+            height: 10px;
+        }
+
+        .status-icons {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 6px;
+            padding-right: 20px;
+        }
+
+        .status-icons svg {
+            height: 12px;
+            color: var(--filo-06);
+        }
+
+        /* Search Bar - iOS 26 */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px 16px;
+            gap: 8px;
+            background: var(--filo-10);
+        }
+
+        .search-pill {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            height: 48px;
+            padding: 0 6px 0 4px;
+            gap: 8px;
+            border-radius: 24px;
+            background: color-mix(in srgb, var(--filo-14) 70%, transparent);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .glass-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), inset 0 1px 0 var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .glass-btn svg {
+            width: 20px;
+            height: 20px;
+            color: var(--filo-06);
+        }
+
+        .search-text {
+            flex: 1;
+            font-size: 17px;
+            color: var(--filo-25);
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 0.5px solid var(--filo-14);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Category Tabs */
+        .category-tabs {
+            display: flex;
+            gap: 24px;
+            padding: 0 20px 12px;
+            background: var(--filo-10);
+        }
+
+        .category-tab {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding-bottom: 8px;
+            position: relative;
+        }
+
+        .category-tab .name {
+            font-size: 17px;
+            font-weight: 590;
+            color: var(--filo-05);
+            line-height: 1.4;
+            letter-spacing: -0.2px;
+        }
+
+        .category-tab .count {
+            font-size: 17px;
+            font-weight: 400;
+            color: var(--filo-07);
+            line-height: 1.4;
+            letter-spacing: -0.2px;
+        }
+
+        .category-tab.selected .name {
+            color: var(--filo-02);
+        }
+
+        .category-tab.selected .count {
+            color: var(--filo-02);
+            font-weight: 400;
+        }
+
+        .category-tab.selected::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--filo-02);
+            border-radius: 1.5px;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--filo-08);
+            margin: 0 20px;
+        }
+
+        /* Email List */
+        .email-list {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 100px;
+        }
+
+        .date-label {
+            font-size: 14px;
+            font-weight: 510;
+            color: var(--filo-07);
+            padding: 16px 20px 16px;
+            letter-spacing: -0.2px;
+            line-height: 1.35;
+        }
+
+        .email-card {
+            display: flex;
+            gap: 12px;
+            padding: 0 20px 24px;
+        }
+
+        .email-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .email-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .email-avatar.initials {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--filo-06);
+        }
+
+        .email-avatar.coral { background: #F9C9B6; }
+        .email-avatar.lavender { background: #E0DDFF; }
+        .email-avatar.azure { background: #D2EFF3; }
+        .email-avatar.salmon { background: #FC909F; }
+
+        .email-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .email-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .email-sender {
+            font-size: 16px;
+            color: var(--filo-06);
+            letter-spacing: -0.2px;
+            line-height: 1.3;
+        }
+
+        .email-sender.unread {
+            font-weight: 700;
+        }
+
+        .email-sender .highlight {
+            font-weight: 700;
+        }
+
+        .email-time {
+            font-size: 13px;
+            color: var(--filo-06);
+            letter-spacing: 0;
+            line-height: 1.2;
+            flex-shrink: 0;
+        }
+
+        .email-time.unread {
+            font-weight: 700;
+        }
+
+        .email-subject {
+            font-size: 16px;
+            color: var(--filo-06);
+            letter-spacing: -0.2px;
+            line-height: 1.3;
+            margin-bottom: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .email-subject.unread {
+            font-weight: 700;
+        }
+
+        .email-preview {
+            font-size: 16px;
+            color: var(--filo-06);
+            letter-spacing: -0.2px;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Bottom Tab Bar - iOS 26 Glass Pill */
+        .tab-bar-container {
+            position: absolute;
+            bottom: 24px;
+            left: 0;
+            right: 0;
+            padding: 0 24px;
+        }
+
+        .tab-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .glass-pill-tabs {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            padding: 4px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 100px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06), inset 0 1px 0 var(--glass-border);
+        }
+
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            height: 52px;
+            gap: 2px;
+            cursor: pointer;
+            border-radius: 100px;
+            position: relative;
+        }
+
+        .tab-item.active .tab-icon svg { color: var(--filo-02); }
+        .tab-item.active .tab-label { color: var(--filo-02); }
+        .tab-item:not(.active) .tab-icon svg { color: var(--filo-06); }
+        .tab-item:not(.active) .tab-label { color: var(--filo-06); }
+
+        .tab-item.active::before {
+            content: '';
+            position: absolute;
+            inset: 0px;
+            background: var(--filo-14);
+            border-radius: 100px;
+        }
+
+        .tab-icon {
+            width: 24px;
+            height: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tab-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .tab-label {
+            font-size: 10px;
+            font-weight: 510;
+            position: relative;
+            z-index: 1;
+        }
+
+        .compose-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06), inset 0 1px 0 var(--glass-border);
+            flex-shrink: 0;
+        }
+
+        .compose-btn svg {
+            width: 28px;
+            height: 28px;
+            color: var(--filo-06);
+        }
+
+        /* Desktop placeholder */
+        .desktop-placeholder {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 1200px;
+            height: 800px;
+            background: var(--filo-14);
+            border-radius: 24px;
+            border: 2px dashed var(--filo-08);
+            color: var(--filo-07);
+            gap: 16px;
+        }
+
+        body.desktop-mode .iphone-frame { display: none; }
+        body.desktop-mode .desktop-placeholder { display: flex; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Inbox</h1>
+        <p class="subtitle">The default home screen showing the user's email inbox with categories and email list.</p>
+        <div class="meta">
+            <span class="meta-item">
+                <svg viewBox="0 0 24 24" fill="none"><rect x="5" y="2" width="14" height="20" rx="3" stroke="currentColor" stroke-width="2"/><line x1="12" y1="18" x2="12" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                iOS 26+
+            </span>
+            <span class="meta-item">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M3 9L12 2L21 9V20C21 21.1 20.1 22 19 22H5C3.9 22 3 21.1 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Home Screen
+            </span>
+        </div>
+    </div>
+
+    <div class="mode-toggles">
+        <div class="toggle-group">
+            <button class="mode-btn active" onclick="setPlatform('mobile')">Mobile</button>
+            <button class="mode-btn" onclick="setPlatform('desktop')">Desktop</button>
+        </div>
+        <div class="toggle-group">
+            <button class="mode-btn active" onclick="setTheme('light')">Light</button>
+            <button class="mode-btn" onclick="setTheme('dark')">Dark</button>
+        </div>
+    </div>
+
+    <div class="screen-container">
+        <div class="iphone-frame">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <div class="status-time"><span>9:41</span></div>
+                <div class="status-island"></div>
+                <div class="status-icons">
+                    <svg viewBox="0 0 18 12" fill="none"><rect x="0" y="8" width="3" height="4" rx="1" fill="currentColor"/><rect x="5" y="5" width="3" height="7" rx="1" fill="currentColor"/><rect x="10" y="2" width="3" height="10" rx="1" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx="1" fill="currentColor"/></svg>
+                    <svg viewBox="0 0 16 12" fill="none"><path d="M8 2C5.5 2 3.2 2.9 1.5 4.4L3 6C4.3 4.9 6.1 4.2 8 4.2C9.9 4.2 11.7 4.9 13 6L14.5 4.4C12.8 2.9 10.5 2 8 2ZM8 6C6.6 6 5.3 6.5 4.3 7.3L6 9C6.6 8.5 7.3 8.2 8 8.2C8.7 8.2 9.4 8.5 10 9L11.7 7.3C10.7 6.5 9.4 6 8 6ZM8 10C7.4 10 7 10.4 7 11C7 11.6 7.4 12 8 12C8.6 12 9 11.6 9 11C9 10.4 8.6 10 8 10Z" fill="currentColor"/></svg>
+                    <svg viewBox="0 0 28 13" fill="none"><rect x="0.5" y="0.5" width="24" height="12" rx="3" stroke="currentColor" opacity="0.35"/><rect x="2" y="2" width="21" height="9" rx="2" fill="currentColor"/><path d="M26 4.5V8.5C26.8 8.2 27.3 7.4 27.3 6.5C27.3 5.6 26.8 4.8 26 4.5Z" fill="currentColor" opacity="0.4"/></svg>
+                </div>
+            </div>
+
+            <!-- Search Bar - iOS 26 -->
+            <div class="search-bar">
+                <div class="search-pill">
+                    <button class="glass-btn" title="Menu">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M3 6C3 5.44772 3.44772 5 4 5H20C20.5523 5 21 5.44772 21 6C21 6.55228 20.5523 7 20 7H4C3.44772 7 3 6.55228 3 6Z" fill="currentColor"/><path d="M3 12C3 11.4477 3.44772 11 4 11H20C20.5523 11 21 11.4477 21 12C21 12.5523 20.5523 13 20 13H4C3.44772 13 3 12.5523 3 12Z" fill="currentColor"/><path d="M4 17C3.44772 17 3 17.4477 3 18C3 18.5523 3.44772 19 4 19H20C20.5523 19 21 18.5523 21 18C21 17.4477 20.5523 17 20 17H4Z" fill="currentColor"/></svg>
+                    </button>
+                    <span class="search-text">Search</span>
+                    <div class="avatar">
+                        <img src="../Preview/assets/avatar-adam.png" alt="Profile">
+                    </div>
+                </div>
+                <button class="glass-btn" title="Customize">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M3.23162 7.94485C2.88848 7.94485 2.59436 7.82843 2.34926 7.59559C2.11642 7.35049 2 7.0625 2 6.73162C2 6.40074 2.11642 6.11887 2.34926 5.88603C2.59436 5.64093 2.88848 5.51838 3.23162 5.51838H12.4412V7.94485H3.23162ZM14.9963 10.4449C14.3223 10.4449 13.7034 10.2794 13.1397 9.94853C12.576 9.60539 12.1225 9.15196 11.7794 8.58823C11.4485 8.02451 11.2831 7.39951 11.2831 6.71324C11.2831 6.02696 11.4485 5.40809 11.7794 4.85662C12.1225 4.29289 12.576 3.84559 13.1397 3.51471C13.7034 3.17157 14.3223 3 14.9963 3C15.6826 3 16.3076 3.17157 16.8713 3.51471C17.4351 3.84559 17.8824 4.29289 18.2132 4.85662C18.5441 5.40809 18.7096 6.02696 18.7096 6.71324C18.7096 7.39951 18.5441 8.02451 18.2132 8.58823C17.8824 9.15196 17.4351 9.60539 16.8713 9.94853C16.3076 10.2794 15.6826 10.4449 14.9963 10.4449ZM14.9963 8.55147C15.511 8.55147 15.94 8.37377 16.2831 8.01838C16.6385 7.66299 16.8162 7.22794 16.8162 6.71324C16.8162 6.19853 16.6385 5.76961 16.2831 5.42647C15.94 5.07108 15.511 4.89338 14.9963 4.89338C14.4816 4.89338 14.0588 5.07108 13.7279 5.42647C13.3848 5.76961 13.2132 6.19853 13.2132 6.71324C13.2132 7.22794 13.3848 7.66299 13.7279 8.01838C14.0588 8.37377 14.4816 8.55147 14.9963 8.55147ZM3.23162 18.4816H8.51103V16.0551H3.23162C2.88848 16.0551 2.59436 16.1777 2.34926 16.4228C2.11642 16.6557 2 16.9375 2 17.2684C2 17.5993 2.11642 17.8811 2.34926 18.114C2.59436 18.3591 2.88848 18.4816 3.23162 18.4816ZM11.4412 21C10.7672 21 10.1544 20.8346 9.60294 20.5037C9.03921 20.1728 8.59191 19.7255 8.26103 19.1618C7.9179 18.598 7.74632 17.9669 7.74632 17.2684C7.74632 16.5821 7.9179 15.9571 8.26103 15.3934convergent C8.59191 14.8296 9.03921 14.3823 9.60294 14.0515C10.1544 13.7206 10.7672 13.5551 11.4412 13.5551C12.1152 13.5551 12.7341 13.7206 13.2978 14.0515C13.8616 14.3823 14.3089 14.8296 14.6397 15.3934C14.9706 15.9571 15.136 16.5821 15.136 17.2684C15.136 17.9669 14.9706 18.598 14.6397 19.1618C14.3089 19.7255 13.8616 20.1728 13.2978 20.5037C12.7341 20.8346 12.1152 21 11.4412 21ZM11.4412 19.1066C11.9559 19.1066 12.3909 18.9289 12.7463 18.5735C13.0894 18.2304 13.261 17.8014 13.261 17.2867C13.261 16.772 13.0894 16.3431 12.7463 16C12.3909 15.6446 11.9559 15.4669 11.4412 15.4669C10.9265 15.4669 10.4975 15.6446 10.1544 16C9.79901 16.3431 9.62132 16.772 9.62132 17.2867C9.62132 17.8014 9.79901 18.2304 10.1544 18.5735C10.4975 18.9289 10.9265 19.1066 11.4412 19.1066ZM17.4265 18.4816H20.7684C21.1115 18.4816 21.4056 18.3591 21.6507 18.114C21.8836 17.8811 22 17.5993 22 17.2684C22 16.9375 21.8836 16.6557 21.6507 16.4228C21.4056 16.1777 21.1115 16.0551 20.7684 16.0551H17.4265V18.4816ZM15.4888 7.94485H20.7684C21.1115 7.94485 21.4056 7.82843 21.6507 7.59559C21.8836 7.35049 22 7.0625 22 6.73162C22 6.40074 21.8836 6.11887 21.6507 5.88603C21.4056 5.64093 21.1115 5.51838 20.7684 5.51838H15.4888V7.94485Z" fill="currentColor"/></svg>
+                </button>
+            </div>
+
+            <!-- Category Tabs -->
+            <div class="category-tabs">
+                <button class="category-tab selected">
+                    <span class="name">Important</span>
+                </button>
+                <button class="category-tab">
+                    <span class="name">Updates</span>
+                    <span class="count">2</span>
+                </button>
+                <button class="category-tab">
+                    <span class="name">Promotions</span>
+                    <span class="count">95</span>
+                </button>
+                <button class="category-tab">
+                    <span class="name">All</span>
+                </button>
+            </div>
+            <div class="divider"></div>
+
+            <!-- Email List -->
+            <div class="email-list">
+                <div class="date-label">Today</div>
+
+                <!-- Email 1 -->
+                <div class="email-card">
+                    <div class="email-avatar initials coral">K</div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Kristin, Jade, me, <span class="highlight">Ann</span></span>
+                            <span class="email-time unread">2:03 PM</span>
+                        </div>
+                        <div class="email-subject unread">Renter's Insurance Expired - Final N...</div>
+                        <div class="email-preview">Hello, your renter's insurance policy has expired, we haven't received an updat...</div>
+                    </div>
+                </div>
+
+                <!-- Email 2 -->
+                <div class="email-card">
+                    <div class="email-avatar initials lavender">E</div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Emily Harris</span>
+                            <span class="email-time">1:28 PM</span>
+                        </div>
+                        <div class="email-subject">Quick Things Before the Weekend</div>
+                        <div class="email-preview">Hey Jordan, Hope your week's been going okay! I just wanted to touch base...</div>
+                    </div>
+                </div>
+
+                <!-- Email 3 -->
+                <div class="email-card">
+                    <div class="email-avatar initials azure">K</div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender unread">Kat Dixon</span>
+                            <span class="email-time unread">Yesterday</span>
+                        </div>
+                        <div class="email-subject unread">Reminder: Order RMXCSQ is confir...</div>
+                        <div class="email-preview">Hi there, this is a reminder that your order has been confirmed. Make sure...</div>
+                    </div>
+                </div>
+
+                <div class="date-label">Yesterday</div>
+
+                <!-- Email 4 -->
+                <div class="email-card">
+                    <div class="email-avatar initials salmon">N</div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Nathan Lau</span>
+                            <span class="email-time">Oct 12</span>
+                        </div>
+                        <div class="email-subject">Refund reservation fee</div>
+                        <div class="email-preview">Hi Connie, I've processed your refund.</div>
+                    </div>
+                </div>
+
+                <!-- Email 5 -->
+                <div class="email-card">
+                    <div class="email-avatar initials azure">P</div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Parkable</span>
+                            <span class="email-time">Oct 3</span>
+                        </div>
+                        <div class="email-subject">Parking Invitation Updated</div>
+                        <div class="email-preview">Albert St, Auckland CBD, Auckland 1010.</div>
+                    </div>
+                </div>
+
+                <!-- Email 6 -->
+                <div class="email-card">
+                    <div class="email-avatar initials coral">V</div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender unread">Verizon Wireless</span>
+                            <span class="email-time unread">Oct 5</span>
+                        </div>
+                        <div class="email-subject unread">Thanks for your payment.</div>
+                        <div class="email-preview">Your Verizon plan has been renewed.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Tab Bar - iOS 26 Glass Pill -->
+            <div class="tab-bar-container">
+                <div class="tab-bar">
+                    <div class="glass-pill-tabs">
+                        <div class="tab-item active">
+                            <div class="tab-icon">
+                                <svg viewBox="0 0 24 24" fill="none"><path d="M22.84 6.35C22.91 6.3 23 6.35 23 6.43V18C23 19.65 21.65 21 20 21H4C2.35 21 1 19.65 1 18V6.43C1 6.35 1.09 6.3 1.16 6.35L10.82 13.38C11.52 13.89 12.48 13.89 13.18 13.38L22.84 6.35Z" fill="currentColor"/><path d="M20 3C20.91 3 21.72 3.4 22.27 4.04C22.34 4.13 22.32 4.25 22.23 4.32L13.18 10.91C12.48 11.42 11.52 11.42 10.82 10.91L1.77 4.32C1.68 4.25 1.66 4.13 1.73 4.04C2.28 3.4 3.09 3 4 3H20Z" fill="currentColor"/></svg>
+                            </div>
+                            <span class="tab-label">Inbox</span>
+                        </div>
+                        <div class="tab-item">
+                            <div class="tab-icon">
+                                <svg viewBox="0 0 24 24" fill="none"><path d="M2 4H21.1C21.64 4 22.07 4.49 22.07 5.1C22.07 5.7 21.64 6.19 21.1 6.19H2C1.51 6.19 1.07 5.7 1.07 5.1C1.07 4.49 1.51 4 2 4Z" fill="currentColor"/><path d="M15 11.1H21.1C21.64 11.1 22.07 11.59 22.07 12.2C22.07 12.81 21.64 13.3 21.1 13.3H15C14.48 13.3 14.04 12.81 14.04 12.2C14.04 11.59 14.48 11.1 15 11.1Z" fill="currentColor"/><path d="M15 18.21H21.1C21.64 18.21 22.07 18.7 22.07 19.3C22.07 19.91 21.64 20.4 21.1 20.4H15C14.48 20.4 14.04 19.91 14.04 19.3C14.04 18.7 14.48 18.21 15 18.21Z" fill="currentColor"/><path d="M11.57 12.59C11.94 12.11 11.85 11.41 11.38 11.03C10.91 10.66 10.24 10.74 9.87 11.23L5.07 17.53L2.91 14.89C2.52 14.42 1.84 14.36 1.39 14.75C0.93 15.14 0.87 15.84 1.25 16.31L4.28 20C4.48 20.25 4.78 20.39 5.09 20.4C5.41 20.41 5.71 20.27 5.92 20.03L11.57 12.59Z" fill="currentColor"/></svg>
+                            </div>
+                            <span class="tab-label">To-do</span>
+                        </div>
+                        <div class="tab-item">
+                            <div class="tab-icon">
+                                <svg viewBox="0 0 24 24" fill="none"><path d="M16.27 13.84C16.41 13.42 17.01 13.42 17.16 13.84L17.58 15.09C17.87 15.91 18.52 16.56 19.34 16.85L20.59 17.27C21.01 17.41 21.01 18.01 20.59 18.16L19.34 18.58C18.52 18.87 17.87 19.52 17.58 20.34L17.16 21.59C17.01 22.01 16.41 22.01 16.27 21.59L15.85 20.34C15.56 19.52 14.91 18.87 14.09 18.58L12.84 18.16C12.42 18.01 12.42 17.41 12.84 17.27L14.09 16.85C14.91 16.56 15.56 15.91 15.85 15.09L16.27 13.84Z" fill="currentColor"/><path d="M6.62 2.48C6.84 1.84 7.74 1.84 7.95 2.48L8.59 4.34C9.01 5.58 9.99 6.56 11.23 6.98L13.09 7.62C13.73 7.84 13.73 8.74 13.09 8.95L11.23 9.59C9.99 10.01 9.01 10.99 8.59 12.23L7.95 14.09C7.74 14.73 6.84 14.73 6.62 14.09L5.98 12.23C5.56 10.99 4.58 10.01 3.34 9.59L1.48 8.95C0.84 8.74 0.84 7.84 1.48 7.62L3.34 6.98C4.58 6.56 5.56 5.58 5.98 4.34L6.62 2.48Z" fill="currentColor"/></svg>
+                            </div>
+                            <span class="tab-label">AI</span>
+                        </div>
+                    </div>
+                    <button class="compose-btn">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M17.71 13.8C17.88 13.31 18.56 13.31 18.73 13.8L19.21 15.22C19.53 16.16 20.27 16.9 21.22 17.22L22.64 17.71C23.12 17.87 23.12 18.56 22.64 18.72L21.22 19.21C20.27 19.53 19.53 20.27 19.21 21.22L18.73 22.64C18.56 23.12 17.88 23.12 17.71 22.64L17.23 21.22C16.9 20.27 16.16 19.53 15.22 19.21L13.8 18.72C13.31 18.56 13.31 17.87 13.8 17.71L15.22 17.22C16.16 16.9 16.9 16.16 17.23 15.22L17.71 13.8ZM14.46 1.97C15.76 0.68 17.86 0.68 19.16 1.97C20.46 3.27 20.46 5.38 19.16 6.67L7.78 18.05L7.59 18.22C7.38 18.38 7.16 18.51 6.91 18.59L2.46 20.07L2.3 20.11C1.5 20.26 0.79 19.48 1.06 18.67L2.54 14.22C2.62 13.98 2.75 13.75 2.91 13.55L3.08 13.35L14.46 1.97ZM3.16 17.97L6.33 16.92L4.21 14.8L3.16 17.97ZM5.59 13.43L7.7 15.53L17.78 5.29C18.3 4.78 18.3 3.94 17.78 3.42C17.26 2.91 16.44 2.91 15.92 3.42L5.59 13.43Z" fill="currentColor"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="desktop-placeholder">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/><line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="2"/></svg>
+            <span>Desktop version coming soon</span>
+        </div>
+    </div>
+
+    <script>
+        function setTheme(theme) {
+            const body = document.body;
+            const btns = document.querySelectorAll('.toggle-group:last-child .mode-btn');
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+            } else {
+                body.classList.remove('dark-mode');
+            }
+            btns.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function setPlatform(platform) {
+            const body = document.body;
+            const btns = document.querySelectorAll('.toggle-group:first-child .mode-btn');
+            if (platform === 'desktop') {
+                body.classList.add('desktop-mode');
+            } else {
+                body.classList.remove('desktop-mode');
+            }
+            btns.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Category tab selection
+        document.querySelectorAll('.category-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('selected'));
+                tab.classList.add('selected');
+            });
+        });
+
+        // Bottom tab selection
+        document.querySelectorAll('.glass-pill-tabs .tab-item').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.glass-pill-tabs .tab-item').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

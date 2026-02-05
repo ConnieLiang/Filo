@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onboarding - See Filo in Action</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --filo-01: #1F9EFA;
+            --filo-02: #22A0FB;
+            --filo-04: #5ABEFF;
+            --filo-05: #E8EEF2;
+            --filo-06: #000000;
+            --filo-07: #707070;
+            --filo-08: #D5D5D5;
+            --filo-09: #F5F5F5;
+            --filo-10: #FFFFFF;
+            --filo-11: #EF4A68;
+            --filo-14: rgba(0, 0, 0, 0.04);
+            --filo-18: #7EBA02;
+            --filo-25: #9E9E9E;
+            --bg: #F5F5F5;
+        }
+
+        body.dark-mode {
+            --filo-01: #6CC1FF;
+            --filo-02: #45B1FF;
+            --filo-04: #2E5168;
+            --filo-05: #344352;
+            --filo-06: #FFFFFF;
+            --filo-07: #8B8B8B;
+            --filo-08: #414149;
+            --filo-09: #2A2A30;
+            --filo-10: #1D1D21;
+            --filo-11: #BE424D;
+            --filo-14: rgba(255, 255, 255, 0.06);
+            --filo-25: #727272;
+            --bg: #121212;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            padding: 60px 80px;
+            color: var(--filo-06);
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 40px;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--filo-06);
+        }
+
+        .page-subtitle {
+            font-size: 15px;
+            color: var(--filo-07);
+            margin-bottom: 16px;
+            max-width: 800px;
+            line-height: 1.5;
+        }
+
+        .page-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: var(--filo-07);
+            align-items: center;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .meta-item svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .meta-link {
+            color: var(--filo-02);
+            text-decoration: none;
+        }
+
+        .meta-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Mode Toggles */
+        .mode-toggles {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .toggle-group {
+            display: flex;
+            background: var(--filo-14);
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        .mode-btn {
+            padding: 6px 12px;
+            border: none;
+            background: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--filo-07);
+            transition: all 0.2s;
+        }
+
+        .mode-btn.active {
+            background: var(--filo-10);
+            color: var(--filo-06);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        /* Screen Container */
+        .screen-container {
+            display: flex;
+            justify-content: center;
+            padding: 40px 0;
+        }
+
+        /* iPhone Frame */
+        .iphone-frame {
+            width: 390px;
+            height: 844px;
+            background: linear-gradient(180deg, #F3FAFF 0%, #E9F6FF 26.98%, #A7DAFF 100%);
+            border-radius: 48px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        body.dark-mode .iphone-frame {
+            background: linear-gradient(180deg, #1f1f23 0%, #27272b 50%, #2d2d32 100%);
+        }
+
+        /* Status Bar */
+        .status-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 0;
+            position: relative;
+        }
+
+        .status-time {
+            flex: 1;
+            padding-left: 28px;
+        }
+
+        .status-time span {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--filo-06);
+        }
+
+        .status-island {
+            width: 124px;
+            height: 36px;
+            background: #000;
+            border-radius: 24px;
+        }
+
+        .status-icons {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 6px;
+            padding-right: 20px;
+        }
+
+        .status-icons svg {
+            height: 12px;
+            color: var(--filo-06);
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 24px 40px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Slides */
+        .slide {
+            position: absolute;
+            inset: 0;
+            padding: 74px 24px 50px;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+            position: relative;
+            flex: 1;
+        }
+
+        /* Enter animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide.active .slide-icon {
+            animation: fadeInUp 0.4s ease-out forwards;
+        }
+
+        .slide.active .title {
+            animation: fadeInUp 0.4s ease-out 0.1s forwards;
+            opacity: 0;
+        }
+
+        .slide.active .subtitle {
+            animation: fadeInUp 0.4s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .slide.active .scroll-area {
+            animation: fadeInUp 0.5s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        .slide.active .complete-content {
+            animation: fadeInUp 0.5s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        .slide.active .nav {
+            animation: fadeInUp 0.4s ease-out 0.5s forwards;
+            opacity: 0;
+        }
+
+        .slide.active .skip-top,
+        .slide.active .back-top {
+            animation: fadeInUp 0.3s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        /* Back navigation - slide in from left with fade */
+        @keyframes slideBack {
+            0% {
+                opacity: 0.3;
+                transform: translateX(-30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .slide.active.back-animate {
+            animation: slideBack 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+        }
+
+        .slide.active.back-animate .slide-icon,
+        .slide.active.back-animate .title,
+        .slide.active.back-animate .subtitle,
+        .slide.active.back-animate .scroll-area,
+        .slide.active.back-animate .complete-content,
+        .slide.active.back-animate .nav,
+        .slide.active.back-animate .skip-top,
+        .slide.active.back-animate .back-top {
+            animation: none;
+            opacity: 1;
+        }
+
+        /* Slide Icon */
+        .slide-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 16px;
+        }
+
+        .slide-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Twinkling sparkle animation */
+        .slide-icon .sparkle-main {
+            transform-origin: 8.5px 15.5px;
+            animation: twinkleMain 2.5s ease-in-out infinite;
+        }
+
+        .slide-icon .sparkle-small {
+            transform-origin: 19.5px 4.5px;
+            animation: twinkleSmall 2s ease-in-out infinite;
+        }
+
+        @keyframes twinkleMain {
+            0%, 100% { 
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% { 
+                transform: scale(0.85);
+                opacity: 0.6;
+            }
+        }
+
+        @keyframes twinkleSmall {
+            0%, 100% { 
+                transform: scale(1);
+                opacity: 1;
+            }
+            30% { 
+                transform: scale(0.7);
+                opacity: 0.4;
+            }
+            60% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+        }
+
+        /* Title & Subtitle */
+        .title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--filo-06);
+            line-height: 1.25;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--filo-07);
+            line-height: 1.45;
+            margin-bottom: 20px;
+        }
+
+        /* Scroll Area */
+        .scroll-area {
+            flex: 1;
+            overflow-y: auto;
+            margin: 0 -24px;
+            padding: 0 24px;
+        }
+
+        /* Processing */
+        .slide[data-step="0"] {
+            justify-content: center;
+        }
+
+        .processing-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .processing-spinner {
+            width: 80px;
+            height: 80px;
+            border: 3px solid var(--filo-02);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 32px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .processing-step svg.spinning {
+            animation: spin 0.8s linear infinite;
+        }
+
+        .processing-steps {
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .processing-step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            font-size: 14px;
+            color: var(--filo-07);
+            transition: all 0.3s;
+        }
+
+        .processing-step.active {
+            color: var(--filo-06);
+        }
+
+        .processing-step.done {
+            color: var(--filo-06);
+        }
+
+        .processing-step svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 2px solid transparent;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04), inset 0 0 0 0.5px rgba(255, 255, 255, 0.6);
+        }
+
+        body.dark-mode .card {
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2), inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+        }
+
+        .card.selected {
+            border-color: var(--filo-04);
+        }
+
+        body.dark-mode .card.selected {
+            border-color: var(--filo-02);
+        }
+
+        .card-checkbox {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .card-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #c7d2fe, #a5b4fc);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #4338ca;
+            flex-shrink: 0;
+        }
+
+        .card-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--filo-06);
+        }
+
+        .card-time {
+            font-size: 12px;
+            color: var(--filo-07);
+            flex-shrink: 0;
+        }
+
+        .card-subtitle {
+            font-size: 13px;
+            color: var(--filo-07);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-delete {
+            width: 16px;
+            height: 16px;
+            border: none;
+            background: none;
+            color: var(--filo-07);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Todo done state */
+        .card.done .card-title {
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+
+        .card.done .card-delete {
+            opacity: 0.5;
+        }
+
+        /* Label Cards */
+        .label-card {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04), inset 0 0 0 0.5px rgba(255, 255, 255, 0.6);
+        }
+
+        body.dark-mode .label-card {
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2), inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+        }
+
+        .label-card.selected {
+            border-color: var(--filo-04);
+        }
+
+        body.dark-mode .label-card.selected {
+            border-color: var(--filo-02);
+        }
+
+        .label-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .label-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .label-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--filo-06);
+            flex: 1;
+        }
+
+        .label-count {
+            font-size: 13px;
+            color: var(--filo-07);
+        }
+
+        .label-desc {
+            font-size: 13px;
+            color: var(--filo-07);
+            line-height: 1.4;
+        }
+
+        /* Reply Section */
+        .reply-section {
+            background: var(--filo-10);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        body.dark-mode .reply-section {
+            background: var(--filo-10);
+        }
+
+        .reply-original {
+            padding: 16px;
+            background: var(--filo-09);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .reply-draft {
+            padding: 16px;
+            height: 150px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--filo-06);
+            white-space: pre-wrap;
+            overflow-y: auto;
+        }
+
+        .reply-draft.placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--filo-25);
+        }
+
+        .typing-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 14px;
+            background: var(--filo-02);
+            margin-left: 2px;
+            vertical-align: middle;
+            animation: cursorBlink 0.8s infinite;
+        }
+
+        @keyframes cursorBlink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .quick-actions {
+            padding: 16px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            border-top: 0.5px solid var(--filo-08);
+        }
+
+        .quick-btn {
+            padding: 10px 16px;
+            border-radius: 20px;
+            border: none;
+            background: var(--filo-09);
+            color: var(--filo-07);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-btn.active {
+            background: var(--filo-02);
+            color: white;
+        }
+
+        /* Complete Content */
+        .complete-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0;
+        }
+
+        /* Step 5 specific - space between content and nav */
+        .slide[data-step="5"] .complete-content {
+            margin-bottom: 32px;
+        }
+
+        .complete-icon {
+            width: 72px;
+            height: 72px;
+            background: var(--filo-02);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .complete-icon svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .complete-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--filo-06);
+            margin-bottom: 8px;
+        }
+
+        .complete-subtitle {
+            font-size: 14px;
+            color: var(--filo-07);
+            margin-bottom: 24px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 20px 16px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04), inset 0 0 0 0.5px rgba(255, 255, 255, 0.6);
+        }
+
+        body.dark-mode .stat-item {
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2), inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--filo-02);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--filo-07);
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            margin-top: auto;
+            padding-top: 0;
+        }
+
+        .nav-link {
+            font-size: 15px;
+            color: var(--filo-07);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px 0;
+        }
+
+        .nav-link.skip-top {
+            position: absolute;
+            top: 0;
+            right: 24px;
+            z-index: 10;
+        }
+
+        .nav-link.back-top {
+            position: absolute;
+            top: 0;
+            left: 24px;
+            z-index: 10;
+        }
+
+        .nav .btn {
+            width: 100%;
+        }
+
+        /* Button Medium Black */
+        .btn {
+            padding: 12px 30px;
+            border-radius: 100px;
+            border: none;
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 20px;
+            letter-spacing: -0.2px;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #000000;
+            color: #FFFFFF;
+        }
+
+        body.dark-mode .btn-primary {
+            background: #FFFFFF;
+            color: #000000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>Onboarding - See Filo in Action</h1>
+        <p class="page-subtitle">Mobile version of the interactive onboarding flow. Filo AI helps users set up their inbox through conversation, organizing emails, creating todos, suggesting labels, and drafting replies.</p>
+        <div class="page-meta">
+            <span class="meta-item">
+                <svg viewBox="0 0 24 24" fill="none"><rect x="5" y="2" width="14" height="20" rx="3" stroke="currentColor" stroke-width="2"/></svg>
+                Mobile
+            </span>
+            <span class="meta-item">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M10 6H6C4.89543 6 4 6.89543 4 8V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                <a href="https://tryfilo.atlassian.net/browse/FILO-1616" target="_blank" class="meta-link">FILO-1616</a>
+            </span>
+        </div>
+    </div>
+
+    <div class="mode-toggles">
+        <div class="toggle-group">
+            <button class="mode-btn active" onclick="setTheme('light')">Light</button>
+            <button class="mode-btn" onclick="setTheme('dark')">Dark</button>
+        </div>
+    </div>
+
+    <div class="screen-container">
+        <div class="iphone-frame">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <div class="status-time"><span>9:41</span></div>
+                <div class="status-island"></div>
+                <div class="status-icons">
+                    <svg viewBox="0 0 18 12" fill="none"><rect x="0" y="8" width="3" height="4" rx="1" fill="currentColor"/><rect x="5" y="5" width="3" height="7" rx="1" fill="currentColor"/><rect x="10" y="2" width="3" height="10" rx="1" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx="1" fill="currentColor"/></svg>
+                    <svg viewBox="0 0 16 12" fill="none"><path d="M8 2C5.5 2 3.2 2.9 1.5 4.4L3 6C4.3 4.9 6.1 4.2 8 4.2C9.9 4.2 11.7 4.9 13 6L14.5 4.4C12.8 2.9 10.5 2 8 2ZM8 6C6.6 6 5.3 6.5 4.3 7.3L6 9C6.6 8.5 7.3 8.2 8 8.2C8.7 8.2 9.4 8.5 10 9L11.7 7.3C10.7 6.5 9.4 6 8 6ZM8 10C7.4 10 7 10.4 7 11C7 11.6 7.4 12 8 12C8.6 12 9 11.6 9 11C9 10.4 8.6 10 8 10Z" fill="currentColor"/></svg>
+                    <svg viewBox="0 0 28 13" fill="none"><rect x="0.5" y="0.5" width="24" height="12" rx="3" stroke="currentColor" opacity="0.35"/><rect x="2" y="2" width="21" height="9" rx="2" fill="currentColor"/></svg>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Step 0: Processing -->
+                <div class="slide active" data-step="0">
+                    <div class="processing-content">
+                        <div class="processing-spinner"></div>
+                        <div class="processing-steps">
+                            <div class="processing-step" id="proc-sync">
+                                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/></svg>
+                                <span>Syncing your emails...</span>
+                            </div>
+                            <div class="processing-step" id="proc-important">
+                                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/></svg>
+                                <span>Looking for important ones...</span>
+                            </div>
+                            <div class="processing-step" id="proc-todos">
+                                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/></svg>
+                                <span>Extracting action items...</span>
+                            </div>
+                            <div class="processing-step" id="proc-labels">
+                                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/></svg>
+                                <span>Suggesting some labels...</span>
+                            </div>
+                            <div class="processing-step" id="proc-reply">
+                                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/></svg>
+                                <span>Checking for pending replies...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 1: Emails -->
+                <div class="slide" data-step="1">
+                    <button class="nav-link skip-top" id="skipBtn1">Skip</button>
+                    <div class="slide-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path class="sparkle-main" d="M7.59668 7.64636C7.89082 6.78501 9.1082 6.78501 9.40234 7.64636L10.2637 10.1669C10.8366 11.8447 12.1543 13.1632 13.832 13.7362L16.3535 14.5966C17.2149 14.8907 17.2149 16.1091 16.3535 16.4032L13.832 17.2645C12.1544 17.8376 10.8366 19.1552 10.2637 20.8329L9.40234 23.3544C9.10797 24.2151 7.89104 24.2151 7.59668 23.3544L6.73535 20.8329C6.16241 19.1551 4.84467 17.8376 3.16699 17.2645L0.645508 16.4032C-0.215783 16.109 -0.215821 14.8907 0.645508 14.5966L3.16699 13.7362C4.8448 13.1632 6.16239 11.8447 6.73535 10.1669L7.59668 7.64636Z" fill="#22A0FB"/>
+                            <path class="sparkle-small" d="M19.0215 0.341675C19.1774 -0.113881 19.8216 -0.113867 19.9775 0.341675L20.4336 1.67664C20.7369 2.56495 21.4349 3.26294 22.3232 3.56628L23.6572 4.02136C24.1132 4.17708 24.1132 4.82267 23.6572 4.97839L22.3232 5.43347C21.435 5.73679 20.737 6.43491 20.4336 7.32312L19.9775 8.65808C19.8217 9.11391 19.1773 9.11392 19.0215 8.65808L18.5654 7.32312C18.262 6.43492 17.564 5.73679 16.6758 5.43347L15.3418 4.97839C14.8858 4.82267 14.8858 4.17708 15.3418 4.02136L16.6758 3.56628C17.5641 3.26294 18.2621 2.56494 18.5654 1.67664L19.0215 0.341675Z" fill="#22A0FB"/>
+                        </svg>
+                    </div>
+                    <h1 class="title">Look What I Found</h1>
+                    <p class="subtitle">These were hiding deep in your inbox. Take a quick look and mark the ones you want to keep an eye on.</p>
+                    <div class="scroll-area" id="emailList"></div>
+                    <div class="nav">
+                        <button class="btn btn-primary" id="nextBtn1">Mark as Important</button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Todos -->
+                <div class="slide" data-step="2">
+                    <button class="nav-link back-top" id="backBtn2">Back</button>
+                    <button class="nav-link skip-top" id="skipBtn2">Skip</button>
+                    <div class="slide-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path class="sparkle-main" d="M7.59668 7.64636C7.89082 6.78501 9.1082 6.78501 9.40234 7.64636L10.2637 10.1669C10.8366 11.8447 12.1543 13.1632 13.832 13.7362L16.3535 14.5966C17.2149 14.8907 17.2149 16.1091 16.3535 16.4032L13.832 17.2645C12.1544 17.8376 10.8366 19.1552 10.2637 20.8329L9.40234 23.3544C9.10797 24.2151 7.89104 24.2151 7.59668 23.3544L6.73535 20.8329C6.16241 19.1551 4.84467 17.8376 3.16699 17.2645L0.645508 16.4032C-0.215783 16.109 -0.215821 14.8907 0.645508 14.5966L3.16699 13.7362C4.8448 13.1632 6.16239 11.8447 6.73535 10.1669L7.59668 7.64636Z" fill="#22A0FB"/>
+                            <path class="sparkle-small" d="M19.0215 0.341675C19.1774 -0.113881 19.8216 -0.113867 19.9775 0.341675L20.4336 1.67664C20.7369 2.56495 21.4349 3.26294 22.3232 3.56628L23.6572 4.02136C24.1132 4.17708 24.1132 4.82267 23.6572 4.97839L22.3232 5.43347C21.435 5.73679 20.737 6.43491 20.4336 7.32312L19.9775 8.65808C19.8217 9.11391 19.1773 9.11392 19.0215 8.65808L18.5654 7.32312C18.262 6.43492 17.564 5.73679 16.6758 5.43347L15.3418 4.97839C14.8858 4.82267 14.8858 4.17708 15.3418 4.02136L16.6758 3.56628C17.5641 3.26294 18.2621 2.56494 18.5654 1.67664L19.0215 0.341675Z" fill="#22A0FB"/>
+                        </svg>
+                    </div>
+                    <h1 class="title">Some Things Need Doing</h1>
+                    <p class="subtitle">Spotted these tasks hiding in your emails. Already done? Check them off. Don't need them? Toss them out.</p>
+                    <div class="scroll-area" id="todoList"></div>
+                    <div class="nav">
+                        <button class="btn btn-primary" id="nextBtn2">Continue</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Labels -->
+                <div class="slide" data-step="3">
+                    <button class="nav-link back-top" id="backBtn3">Back</button>
+                    <button class="nav-link skip-top" id="skipBtn3">Skip</button>
+                    <div class="slide-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path class="sparkle-main" d="M7.59668 7.64636C7.89082 6.78501 9.1082 6.78501 9.40234 7.64636L10.2637 10.1669C10.8366 11.8447 12.1543 13.1632 13.832 13.7362L16.3535 14.5966C17.2149 14.8907 17.2149 16.1091 16.3535 16.4032L13.832 17.2645C12.1544 17.8376 10.8366 19.1552 10.2637 20.8329L9.40234 23.3544C9.10797 24.2151 7.89104 24.2151 7.59668 23.3544L6.73535 20.8329C6.16241 19.1551 4.84467 17.8376 3.16699 17.2645L0.645508 16.4032C-0.215783 16.109 -0.215821 14.8907 0.645508 14.5966L3.16699 13.7362C4.8448 13.1632 6.16239 11.8447 6.73535 10.1669L7.59668 7.64636Z" fill="#22A0FB"/>
+                            <path class="sparkle-small" d="M19.0215 0.341675C19.1774 -0.113881 19.8216 -0.113867 19.9775 0.341675L20.4336 1.67664C20.7369 2.56495 21.4349 3.26294 22.3232 3.56628L23.6572 4.02136C24.1132 4.17708 24.1132 4.82267 23.6572 4.97839L22.3232 5.43347C21.435 5.73679 20.737 6.43491 20.4336 7.32312L19.9775 8.65808C19.8217 9.11391 19.1773 9.11392 19.0215 8.65808L18.5654 7.32312C18.262 6.43492 17.564 5.73679 16.6758 5.43347L15.3418 4.97839C14.8858 4.82267 14.8858 4.17708 15.3418 4.02136L16.6758 3.56628C17.5641 3.26294 18.2621 2.56494 18.5654 1.67664L19.0215 0.341675Z" fill="#22A0FB"/>
+                        </svg>
+                    </div>
+                    <h1 class="title">I Made Some Labels for You</h1>
+                    <p class="subtitle">These should help you stay organized. Keep the ones that fit, skip the ones that don't.</p>
+                    <div class="scroll-area" id="labelList"></div>
+                    <div class="nav">
+                        <button class="btn btn-primary" id="nextBtn3">Looks Good</button>
+                    </div>
+                </div>
+
+                <!-- Step 4: Reply -->
+                <div class="slide" data-step="4">
+                    <button class="nav-link back-top" id="backBtn4">Back</button>
+                    <button class="nav-link skip-top" id="skipBtn4">Skip</button>
+                    <div class="slide-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path class="sparkle-main" d="M7.59668 7.64636C7.89082 6.78501 9.1082 6.78501 9.40234 7.64636L10.2637 10.1669C10.8366 11.8447 12.1543 13.1632 13.832 13.7362L16.3535 14.5966C17.2149 14.8907 17.2149 16.1091 16.3535 16.4032L13.832 17.2645C12.1544 17.8376 10.8366 19.1552 10.2637 20.8329L9.40234 23.3544C9.10797 24.2151 7.89104 24.2151 7.59668 23.3544L6.73535 20.8329C6.16241 19.1551 4.84467 17.8376 3.16699 17.2645L0.645508 16.4032C-0.215783 16.109 -0.215821 14.8907 0.645508 14.5966L3.16699 13.7362C4.8448 13.1632 6.16239 11.8447 6.73535 10.1669L7.59668 7.64636Z" fill="#22A0FB"/>
+                            <path class="sparkle-small" d="M19.0215 0.341675C19.1774 -0.113881 19.8216 -0.113867 19.9775 0.341675L20.4336 1.67664C20.7369 2.56495 21.4349 3.26294 22.3232 3.56628L23.6572 4.02136C24.1132 4.17708 24.1132 4.82267 23.6572 4.97839L22.3232 5.43347C21.435 5.73679 20.737 6.43491 20.4336 7.32312L19.9775 8.65808C19.8217 9.11391 19.1773 9.11392 19.0215 8.65808L18.5654 7.32312C18.262 6.43492 17.564 5.73679 16.6758 5.43347L15.3418 4.97839C14.8858 4.82267 14.8858 4.17708 15.3418 4.02136L16.6758 3.56628C17.5641 3.26294 18.2621 2.56494 18.5654 1.67664L19.0215 0.341675Z" fill="#22A0FB"/>
+                        </svg>
+                    </div>
+                    <h1 class="title">This One's Been Waiting</h1>
+                    <p class="subtitle">Looks like an email is still waiting for your reply. Select a response style and I'll put together a draft for you.</p>
+                    <div class="scroll-area">
+                        <div class="reply-section">
+                            <div class="reply-original">
+                                <div class="card-avatar">M</div>
+                                <div class="card-content">
+                                    <div class="card-title">Mike Wang</div>
+                                    <div class="card-subtitle">Re: Project Timeline Confirmation</div>
+                                </div>
+                            </div>
+                            <div class="reply-draft placeholder" id="replyDraft">Pick a response style below</div>
+                            <div class="quick-actions">
+                                <button class="quick-btn" data-reply="accept">Sounds good</button>
+                                <button class="quick-btn" data-reply="reschedule">Need to reschedule</button>
+                                <button class="quick-btn" data-reply="question">Have a question</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="nav">
+                        <button class="btn btn-primary" id="nextBtn4">Let's Wrap Up</button>
+                    </div>
+                </div>
+
+                <!-- Step 5: Complete -->
+                <div class="slide" data-step="5">
+                    <div class="slide-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path class="sparkle-main" d="M7.59668 7.64636C7.89082 6.78501 9.1082 6.78501 9.40234 7.64636L10.2637 10.1669C10.8366 11.8447 12.1543 13.1632 13.832 13.7362L16.3535 14.5966C17.2149 14.8907 17.2149 16.1091 16.3535 16.4032L13.832 17.2645C12.1544 17.8376 10.8366 19.1552 10.2637 20.8329L9.40234 23.3544C9.10797 24.2151 7.89104 24.2151 7.59668 23.3544L6.73535 20.8329C6.16241 19.1551 4.84467 17.8376 3.16699 17.2645L0.645508 16.4032C-0.215783 16.109 -0.215821 14.8907 0.645508 14.5966L3.16699 13.7362C4.8448 13.1632 6.16239 11.8447 6.73535 10.1669L7.59668 7.64636Z" fill="#22A0FB"/>
+                            <path class="sparkle-small" d="M19.0215 0.341675C19.1774 -0.113881 19.8216 -0.113867 19.9775 0.341675L20.4336 1.67664C20.7369 2.56495 21.4349 3.26294 22.3232 3.56628L23.6572 4.02136C24.1132 4.17708 24.1132 4.82267 23.6572 4.97839L22.3232 5.43347C21.435 5.73679 20.737 6.43491 20.4336 7.32312L19.9775 8.65808C19.8217 9.11391 19.1773 9.11392 19.0215 8.65808L18.5654 7.32312C18.262 6.43492 17.564 5.73679 16.6758 5.43347L15.3418 4.97839C14.8858 4.82267 14.8858 4.17708 15.3418 4.02136L16.6758 3.56628C17.5641 3.26294 18.2621 2.56494 18.5654 1.67664L19.0215 0.341675Z" fill="#22A0FB"/>
+                        </svg>
+                    </div>
+                    <h1 class="title">You're All Set</h1>
+                    <p class="subtitle">I've tidied things up for you. Ready to dive in? Or add another email account—I can handle them all.</p>
+                    <div class="scroll-area">
+                        <div class="complete-content">
+                            <div class="complete-icon">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M10.1267 19.7574C9.69231 19.7574 9.32127 19.5643 9.01358 19.1782L4.32579 13.3139C4.21116 13.1752 4.1267 13.0394 4.0724 12.9067C4.02413 12.7739 4 12.6382 4 12.4994C4 12.1857 4.10256 11.9263 4.30769 11.7212C4.51885 11.516 4.78431 11.4135 5.10407 11.4135C5.4721 11.4135 5.78281 11.5794 6.0362 11.9112L10.0905 17.1148L17.9457 4.63519C18.0845 4.42402 18.2262 4.27621 18.371 4.19175C18.5158 4.10125 18.7029 4.056 18.9321 4.056C19.2459 4.056 19.5023 4.15555 19.7014 4.35464C19.9005 4.5477 20 4.8011 20 5.11482C20 5.24152 19.9789 5.37123 19.9367 5.50396C19.8944 5.63066 19.8281 5.76641 19.7376 5.9112L11.2308 19.1691C10.9653 19.5613 10.5973 19.7574 10.1267 19.7574Z" fill="white"/>
+                                </svg>
+                            </div>
+                            <div class="complete-title">Done and Dusted</div>
+                            <div class="complete-subtitle">Here's what I took care of</div>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <div class="stat-value" data-target="128">0</div>
+                                    <div class="stat-label">Emails Synced</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" data-target="5">0</div>
+                                    <div class="stat-label">Tasks Found</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" data-target="3">0</div>
+                                    <div class="stat-label">Labels Created</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" data-target="1">0</div>
+                                    <div class="stat-label">Draft Saved</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="nav">
+                        <button class="btn btn-primary" id="diveInBtn">Dive into Filo</button>
+                        <button class="nav-link" id="addAccountBtn">Add account</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State
+        const state = { step: 0 };
+
+        // Mock Data
+        const mockEmails = [
+            { id: 1, sender: 'CEO Office', initial: 'C', subject: 'Company All-Hands Meeting Next Week', time: '2h ago', selected: false },
+            { id: 2, sender: 'Finance Team', initial: 'F', subject: 'Q4 Budget Approval Needed', time: '5h ago', selected: false },
+            { id: 3, sender: 'HR Department', initial: 'H', subject: 'Benefits Enrollment Deadline', time: '1d ago', selected: true },
+            { id: 4, sender: 'Tech Lead', initial: 'T', subject: 'Code Review Required - Urgent', time: '1d ago', selected: false },
+        ];
+
+        const mockTodos = [
+            { id: 1, text: 'Review Q4 budget proposal', done: false },
+            { id: 2, text: 'Submit expense report by Friday', done: true },
+            { id: 3, text: 'Schedule 1:1 with manager', done: false },
+            { id: 4, text: 'Complete security training', done: false },
+        ];
+
+        const mockLabels = [
+            { id: 1, name: 'Urgent', color: '#EF4A68', desc: 'Time-sensitive emails requiring immediate attention', count: 5, selected: true },
+            { id: 2, name: 'Projects', color: '#22A0FB', desc: 'Project updates, discussions, and deliverables', count: 12, selected: true },
+            { id: 3, name: 'Finance', color: '#7EBA02', desc: 'Invoices, budgets, and financial reports', count: 8, selected: false },
+        ];
+
+        const mockReplies = {
+            accept: 'Hi Mike,\n\nThanks for the timeline update. The proposed schedule looks good to me, and I\'m on board with moving forward as planned.\n\nLet me know if you need anything from my end.\n\nBest regards',
+            reschedule: 'Hi Mike,\n\nThanks for sharing the timeline. I\'ve reviewed it, but I have a conflict with the proposed dates. Would it be possible to push the deadline by a week?\n\nLet me know your thoughts.\n\nBest regards',
+            question: 'Hi Mike,\n\nThanks for the update. Before I confirm, I have a few questions:\n\n1. Is the milestone for Phase 2 flexible?\n2. Who will be the point of contact for the deliverables?\n\nLooking forward to your response.\n\nBest regards'
+        };
+
+        // Icons
+        const uncheckedIcon = `<svg viewBox="0 0 24 24" fill="none"><path d="M0 12C0 7.32222 0 4.98333 1.07293 3.27578C1.63242 2.38535 2.38535 1.63242 3.27578 1.07293C4.98333 0 7.32222 0 12 0C16.6778 0 19.0167 0 20.7242 1.07293C21.6147 1.63242 22.3676 2.38535 22.9271 3.27578C24 4.98333 24 7.32222 24 12C24 16.6778 24 19.0167 22.9271 20.7242C22.3676 21.6147 21.6147 22.3676 20.7242 22.9271C19.0167 24 16.6778 24 12 24C7.32222 24 4.98333 24 3.27578 22.9271C2.38535 22.3676 1.63242 21.6147 1.07293 20.7242C0 19.0167 0 16.6778 0 12Z" fill="#FCFAFA"/><path d="M22.2002 12C22.2002 9.62578 22.1979 7.97402 22.0742 6.69824C21.9532 5.45021 21.7294 4.75243 21.4033 4.2334C20.9877 3.57194 20.4281 3.0123 19.7666 2.59668C19.2476 2.27058 18.5498 2.04682 17.3018 1.92578C16.026 1.80209 14.3742 1.7998 12 1.7998C9.62578 1.7998 7.97402 1.80209 6.69824 1.92578C5.45021 2.04682 4.75243 2.27058 4.2334 2.59668C3.57194 3.0123 3.0123 3.57194 2.59668 4.2334C2.27058 4.75243 2.04682 5.45021 1.92578 6.69824C1.80209 7.97402 1.7998 9.62578 1.7998 12C1.7998 14.3742 1.80209 16.026 1.92578 17.3018C2.04682 18.5498 2.27058 19.2476 2.59668 19.7666C3.0123 20.4281 3.57194 20.9877 4.2334 21.4033C4.75243 21.7294 5.45021 21.9532 6.69824 22.0742C7.97402 22.1979 9.62578 22.2002 12 22.2002V24C7.32222 24 4.98295 23.9997 3.27539 22.9268C2.49653 22.4373 1.82297 21.7998 1.29199 21.0518L1.07324 20.7246C0.000311494 19.017 0 16.6778 0 12C0 7.61452 -0.00031811 5.2846 0.883789 3.60352L1.07324 3.27539C1.56271 2.49653 2.20021 1.82297 2.94824 1.29199L3.27539 1.07324C4.98295 0.000311494 7.32222 0 12 0C16.6778 0 19.017 0.000311494 20.7246 1.07324C21.6147 1.63262 22.3674 2.38528 22.9268 3.27539C23.9997 4.98295 24 7.32222 24 12C24 16.6778 23.9997 19.017 22.9268 20.7246L22.708 21.0518C22.177 21.7998 21.5035 22.4373 20.7246 22.9268L20.3965 23.1162C18.7154 24.0003 16.3855 24 12 24V22.2002C14.3742 22.2002 16.026 22.1979 17.3018 22.0742C18.5498 21.9532 19.2476 21.7294 19.7666 21.4033C20.4281 20.9877 20.9877 20.4281 21.4033 19.7666C21.7294 19.2476 21.9532 18.5498 22.0742 17.3018C22.1979 16.026 22.2002 14.3742 22.2002 12Z" fill="#D5D5D5"/></svg>`;
+        const checkedIcon = `<svg viewBox="0 0 24 24" fill="none"><path d="M0 12C0 7.32222 0 4.98333 1.07293 3.27578C1.63242 2.38535 2.38535 1.63242 3.27578 1.07293C4.98333 0 7.32222 0 12 0C16.6778 0 19.0167 0 20.7242 1.07293C21.6147 1.63242 22.3676 2.38535 22.9271 3.27578C24 4.98333 24 7.32222 24 12C24 16.6778 24 19.0167 22.9271 20.7242C22.3676 21.6147 21.6147 22.3676 20.7242 22.9271C19.0167 24 16.6778 24 12 24C7.32222 24 4.98333 24 3.27578 22.9271C2.38535 22.3676 1.63242 21.6147 1.07293 20.7242C0 19.0167 0 16.6778 0 12Z" fill="#22A0FB"/><path d="M6.0822 12.7664L6.08589 12.7766L6.08997 12.7865C6.15176 12.9376 6.24066 13.0757 6.34406 13.2014L9.53759 17.1964C9.83486 17.5692 10.2367 17.7964 10.7227 17.7964C11.226 17.7964 11.6457 17.5718 11.9274 17.1557L17.7347 8.10495L17.7382 8.09946C17.8167 7.97376 17.8833 7.84198 17.9289 7.70521L17.9311 7.69809C17.9753 7.55939 18 7.41516 18 7.26738C18 6.92846 17.8875 6.60829 17.6337 6.36045C17.384 6.11234 17.0656 6 16.7265 6C16.5045 6 16.2705 6.04302 16.0619 6.17106C15.8664 6.28718 15.716 6.46117 15.598 6.64074L10.6506 14.5007L8.36553 11.5679C8.10551 11.2286 7.74265 11.0165 7.29823 11.0165C6.95171 11.0165 6.63015 11.1327 6.37514 11.3804L6.36955 11.386C6.11855 11.637 6 11.9568 6 12.3023C6 12.4617 6.02796 12.6173 6.0822 12.7664Z" fill="white"/></svg>`;
+        const deleteIcon = `<svg viewBox="0 0 24 24" fill="none"><path d="M9.1001 10.8999C9.1001 10.4028 9.50293 10 10 10C10.4971 10 10.9001 10.4028 10.9001 10.8999V16.1001C10.9001 16.5972 10.4971 17 10 17C9.50293 17 9.1001 16.5972 9.1001 16.1001V10.8999Z" fill="currentColor"/><path d="M14 10C13.5029 10 13.1001 10.4028 13.1001 10.8999V16.1001C13.1001 16.5972 13.5029 17 14 17C14.4971 17 14.9001 16.5972 14.9001 16.1001V10.8999C14.9001 10.4028 14.4971 10 14 10Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M21 5H17V3.5C17 2.11938 15.8806 1 14.5 1H9.5C8.11938 1 7 2.11938 7 3.5V5H3C2.44775 5 2 5.44775 2 6C2 6.55225 2.44775 7 3 7H4.1001V19C4.1001 21.1538 5.84619 22.8999 8 22.8999H16C18.1541 22.8999 19.9001 21.1538 19.9001 19V7H21C21.5522 7 22 6.55225 22 6C22 5.44775 21.5522 5 21 5ZM18.1001 7H5.90015V19C5.90015 20.1599 6.84033 21.1001 8 21.1001H16C17.1599 21.1001 18.1001 20.1599 18.1001 19V7ZM9.5 2.80005H14.5C14.8867 2.80005 15.2 3.11328 15.2 3.5V5H8.80005V3.5C8.80005 3.11328 9.11328 2.80005 9.5 2.80005Z" fill="currentColor"/></svg>`;
+        const labelIcon = (color) => `<svg viewBox="0 0 24 24" fill="none"><path d="M16.9079 2C17.2376 2 17.511 2.03425 17.7356 2.09394C17.9602 2.15362 18.1766 2.25314 18.3755 2.40085C18.5744 2.54856 18.8016 2.74723 19.0572 2.99702C19.3128 3.24681 20.7518 4.67669 21.002 4.93246C21.2521 5.18821 21.4513 5.42178 21.599 5.62349C21.7468 5.82521 21.8463 6.03802 21.906 6.26244C21.9657 6.48685 21.9999 6.76247 21.9999 7.09763C21.9999 7.43278 21.9999 9.96221 21.9999 10.3203C21.9999 10.6783 21.9994 10.9526 21.9404 11.2243C21.8814 11.4959 21.8215 11.6431 21.7097 11.8976C21.598 12.1521 21.3914 12.6084 21.0475 12.9523C20.5713 13.4285 20.3624 13.5867 20.0951 13.4285C19.8766 13.2992 19.7426 12.7907 19.619 12.4761C19.4953 12.1616 19.2246 11.3694 19.4218 11.2085C19.619 11.0476 19.5664 11.0648 19.6459 10.9853C19.7255 10.9057 19.7792 10.8231 19.8161 10.7379C19.8531 10.6526 19.8766 10.5421 19.8766 10.4058C19.8766 10.2695 19.8766 7.42516 19.8766 7.20923C19.8766 6.99331 19.7994 6.80835 19.6459 6.65492C19.4924 6.50143 17.4966 4.50646 17.3431 4.35304C17.1896 4.19962 17.0021 4.12241 16.7804 4.12238C16.5586 4.12236 13.7153 4.12236 13.5904 4.12238C13.4654 4.12241 13.363 4.14859 13.2834 4.19121C13.2039 4.23383 13.1185 4.29305 13.0277 4.37815C12.9363 4.46375 5.016 12.3778 4.77158 12.6221C4.52715 12.8665 4.40237 13.1172 4.39677 13.3643C4.39116 13.6114 4.51876 13.8585 4.77995 14.114C5.04114 14.3695 9.46672 18.7983 9.89804 19.2293C10.3293 19.6602 10.8448 19.5957 11.1843 19.4125C11.5238 19.2293 12 19.4575 12.4761 19.6189C12.9523 19.7804 13.3207 19.8138 13.4285 20.0951C13.5364 20.3765 13.0694 20.7293 12.7552 20.9852C12.0471 21.5617 11.3735 21.997 10.6486 21.9999C9.92373 22.0028 9.2207 21.6645 8.53272 20.9768C7.84471 20.2891 3.72023 16.1743 3.03238 15.4867C2.34453 14.7992 1.99724 14.0917 2.00002 13.3643C2.00279 12.637 2.34675 11.9349 3.02308 11.2587C3.6994 10.5825 11.2198 3.07392 11.4587 2.83519C11.6974 2.59663 11.9135 2.41786 12.1153 2.29855C12.3171 2.17923 12.5415 2.09931 12.7803 2.05952C13.0191 2.01974 13.3177 2 13.6759 2H16.9079Z" fill="${color}"/><path d="M17.2585 13.754C17.4068 13.3198 18.0216 13.3198 18.1699 13.754L18.6033 15.0254C18.8922 15.8714 19.557 16.5362 20.403 16.8251L21.6744 17.2585C22.1086 17.4068 22.1086 18.0216 21.6744 18.1699L20.403 18.6033C19.557 18.8922 18.8922 19.557 18.6033 20.403L18.1699 21.6744C18.0216 22.1085 17.4068 22.1085 17.2585 21.6744L16.8251 20.403C16.5362 19.557 15.8714 18.8922 15.0254 18.6033L13.754 18.1699C13.3199 18.0216 13.3199 17.4068 13.754 17.2585L15.0254 16.8251C15.8714 16.5362 16.5362 15.8714 16.8251 15.0254L17.2585 13.754Z" fill="${color}"/><path d="M15.7397 6.9358C16.115 6.9358 16.428 7.06416 16.6781 7.31991C16.9338 7.56994 17.0613 7.88241 17.0613 8.2574C17.0613 8.62108 16.9339 8.9308 16.6781 9.18653C16.428 9.44227 16.115 9.57064 15.7397 9.57064C15.3702 9.57061 15.0571 9.44225 14.8013 9.18653C14.5513 8.93082 14.4265 8.62102 14.4265 8.2574C14.4265 7.88246 14.5513 7.56992 14.8013 7.31991C15.0571 7.06418 15.3702 6.93582 15.7397 6.9358Z" fill="${color}"/></svg>`;
+
+        // Theme
+        function setTheme(theme) {
+            document.body.classList.toggle('dark-mode', theme === 'dark');
+            document.querySelectorAll('.toggle-group .mode-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Navigation
+        function goToStep(n, isBack = false) {
+            state.step = n;
+            document.querySelectorAll('.slide').forEach(s => {
+                const isActive = +s.dataset.step === n;
+                s.classList.toggle('active', isActive);
+                s.classList.toggle('back-animate', isActive && isBack);
+            });
+            if (n === 0) runProcessing();
+            if (n === 1) renderEmails();
+            if (n === 2) renderTodos();
+            if (n === 3) renderLabels();
+            if (n === 5) animateStats();
+        }
+
+        // Animate stats counter
+        function animateStats() {
+            const statValues = document.querySelectorAll('.stat-value[data-target]');
+            statValues.forEach(el => {
+                const target = parseInt(el.dataset.target);
+                const duration = 1500; // 1.5 seconds
+                const startTime = performance.now();
+                
+                function updateCount(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    
+                    // Ease out cubic for smooth deceleration
+                    const easeOut = 1 - Math.pow(1 - progress, 3);
+                    const currentValue = Math.floor(easeOut * target);
+                    
+                    el.textContent = currentValue;
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(updateCount);
+                    } else {
+                        el.textContent = target;
+                    }
+                }
+                
+                requestAnimationFrame(updateCount);
+            });
+        }
+
+        // Processing Animation
+        function runProcessing() {
+            const steps = ['proc-sync', 'proc-important', 'proc-todos', 'proc-labels', 'proc-reply'];
+            let idx = 0;
+            const doneIcon = `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M8 12L11 15L16 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+            const activeIcon = `<svg viewBox="0 0 24 24" fill="none" class="spinning"><circle cx="12" cy="12" r="10" stroke="var(--filo-08)" stroke-width="2"/><path d="M12 2a10 10 0 0 1 10 10" stroke="var(--filo-02)" stroke-width="2" stroke-linecap="round"/></svg>`;
+
+            const interval = setInterval(() => {
+                if (idx > 0) {
+                    const prev = document.getElementById(steps[idx - 1]);
+                    prev.classList.remove('active');
+                    prev.classList.add('done');
+                    prev.querySelector('svg').outerHTML = doneIcon;
+                }
+                if (idx < steps.length) {
+                    const curr = document.getElementById(steps[idx]);
+                    curr.classList.add('active');
+                    curr.querySelector('svg').outerHTML = activeIcon;
+                    idx++;
+                } else {
+                    clearInterval(interval);
+                    setTimeout(() => goToStep(1), 1500);
+                }
+            }, 1200);
+        }
+
+        // Render Emails
+        function renderEmails() {
+            const list = document.getElementById('emailList');
+            list.innerHTML = mockEmails.map(email => `
+                <div class="card ${email.selected ? 'selected' : ''}" data-id="${email.id}" onclick="toggleEmail(${email.id})">
+                    <div class="card-avatar">${email.initial}</div>
+                    <div class="card-content">
+                        <div class="card-header">
+                            <div class="card-title">${email.sender}</div>
+                            <span class="card-time">${email.time}</span>
+                        </div>
+                        <div class="card-subtitle">${email.subject}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleEmail(id) {
+            const email = mockEmails.find(e => e.id === id);
+            if (email) { email.selected = !email.selected; renderEmails(); }
+        }
+
+        // Render Todos
+        function renderTodos() {
+            const list = document.getElementById('todoList');
+            list.innerHTML = mockTodos.filter(t => !t.removed).map(todo => `
+                <div class="card ${todo.done ? 'done' : ''}" data-id="${todo.id}">
+                    <div class="card-checkbox" onclick="toggleTodo(${todo.id})">${todo.done ? checkedIcon : uncheckedIcon}</div>
+                    <div class="card-content">
+                        <div class="card-title">${todo.text}</div>
+                    </div>
+                    <button class="card-delete" onclick="removeTodo(${todo.id})">${deleteIcon}</button>
+                </div>
+            `).join('');
+        }
+
+        function toggleTodo(id) {
+            const todo = mockTodos.find(t => t.id === id);
+            if (todo) { todo.done = !todo.done; renderTodos(); }
+        }
+
+        function removeTodo(id) {
+            const todo = mockTodos.find(t => t.id === id);
+            if (todo) { todo.removed = true; renderTodos(); }
+        }
+
+        // Render Labels
+        function renderLabels() {
+            const list = document.getElementById('labelList');
+            list.innerHTML = mockLabels.map(label => `
+                <div class="label-card ${label.selected ? 'selected' : ''}" data-id="${label.id}" onclick="toggleLabel(${label.id})">
+                    <div class="label-header">
+                        <div class="label-icon">${labelIcon(label.color)}</div>
+                        <span class="label-name">${label.name}</span>
+                        <span class="label-count">${label.count} emails</span>
+                    </div>
+                    <div class="label-desc">${label.desc}</div>
+                </div>
+            `).join('');
+        }
+
+        function toggleLabel(id) {
+            const label = mockLabels.find(l => l.id === id);
+            if (label) { label.selected = !label.selected; renderLabels(); }
+        }
+
+        // Quick Reply with typing effect
+        function generateReply(type) {
+            document.querySelectorAll('.quick-btn').forEach(b => b.classList.toggle('active', b.dataset.reply === type));
+            
+            const draft = document.getElementById('replyDraft');
+            const replyText = mockReplies[type];
+            
+            draft.textContent = '';
+            draft.classList.remove('placeholder');
+            
+            let i = 0;
+            const cursor = document.createElement('span');
+            cursor.className = 'typing-cursor';
+            
+            function typeChar() {
+                if (i < replyText.length) {
+                    draft.textContent = replyText.slice(0, i + 1);
+                    draft.appendChild(cursor);
+                    draft.scrollTop = draft.scrollHeight;
+                    i++;
+                    setTimeout(typeChar, 12);
+                } else {
+                    cursor.remove();
+                }
+            }
+            typeChar();
+        }
+
+        document.querySelectorAll('.quick-btn').forEach(btn => {
+            btn.onclick = () => generateReply(btn.dataset.reply);
+        });
+
+        // Button Handlers
+        document.getElementById('skipBtn1').onclick = () => alert('Welcome to Filo!');
+        document.getElementById('skipBtn2').onclick = () => alert('Welcome to Filo!');
+        document.getElementById('skipBtn3').onclick = () => alert('Welcome to Filo!');
+        document.getElementById('skipBtn4').onclick = () => alert('Welcome to Filo!');
+
+        document.getElementById('backBtn2').onclick = () => goToStep(1, true);
+        document.getElementById('backBtn3').onclick = () => goToStep(2, true);
+        document.getElementById('backBtn4').onclick = () => goToStep(3, true);
+
+        document.getElementById('nextBtn1').onclick = () => goToStep(2);
+        document.getElementById('nextBtn2').onclick = () => goToStep(3);
+        document.getElementById('nextBtn3').onclick = () => goToStep(4);
+        document.getElementById('nextBtn4').onclick = () => goToStep(5);
+
+        document.getElementById('diveInBtn').onclick = () => alert('Welcome to Filo!');
+        document.getElementById('addAccountBtn').onclick = () => alert('Add account clicked');
+
+        // Init
+        runProcessing();
+    </script>
+</body>
+</html>

@@ -964,93 +964,6 @@
       margin-top: 4px;
     }
 
-    /* Language Dropdown */
-    .top-bar {
-      position: absolute;
-      top: 16px;
-      right: 24px;
-      z-index: 100;
-    }
-
-    .lang-dropdown {
-      position: relative;
-    }
-
-    .lang-trigger {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: inherit;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--filo-07);
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 8px 12px;
-      border-radius: 8px;
-      transition: all 0.2s;
-    }
-
-    .lang-trigger:hover {
-      background: var(--filo-14);
-    }
-
-    .lang-trigger svg {
-      width: 12px;
-      height: 12px;
-      transition: transform 0.2s;
-    }
-
-    .lang-dropdown.open .lang-trigger svg {
-      transform: rotate(180deg);
-    }
-
-    .lang-menu {
-      position: absolute;
-      top: calc(100% + 6px);
-      right: 0;
-      min-width: 120px;
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(16px);
-      border-radius: 12px;
-      padding: 4px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-6px);
-      transition: all 0.2s ease;
-    }
-
-    .lang-dropdown.open .lang-menu {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-
-    .lang-item {
-      display: block;
-      width: 100%;
-      text-align: left;
-      font-family: inherit;
-      font-size: 13px;
-      color: var(--filo-07);
-      background: none;
-      border: none;
-      padding: 10px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-
-    .lang-item:hover {
-      background: var(--filo-14);
-    }
-
-    .lang-item.active {
-      color: var(--filo-02);
-      font-weight: 500;
-    }
   </style>
 </head>
 <body>
@@ -1087,25 +1000,6 @@
         <div class="traffic-light close"></div>
         <div class="traffic-light minimize"></div>
         <div class="traffic-light maximize"></div>
-      </div>
-
-      <!-- Language Selector -->
-      <div class="top-bar">
-        <div class="lang-dropdown" id="langDropdown">
-          <button class="lang-trigger" id="langTrigger">
-            <span id="langValue">English</span>
-            <svg viewBox="0 0 16 16" fill="none">
-              <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <div class="lang-menu">
-            <button class="lang-item active" data-lang="en">English</button>
-            <button class="lang-item" data-lang="zh">简体中文</button>
-            <button class="lang-item" data-lang="zh-tw">繁體中文</button>
-            <button class="lang-item" data-lang="ja">日本語</button>
-            <button class="lang-item" data-lang="es">Español</button>
-          </div>
-        </div>
       </div>
 
       <div class="frame-content">
@@ -1280,19 +1174,19 @@
                   <div class="ready-subtitle" id="readySubtitle">Here's what I took care of</div>
                   <div class="stats-grid">
                     <div class="stat-item">
-                      <div class="stat-value" id="statEmails">128</div>
+                      <div class="stat-value" id="statEmails" data-target="128">0</div>
                       <div class="stat-label" id="statLabelEmails">Emails Synced</div>
                     </div>
                     <div class="stat-item">
-                      <div class="stat-value" id="statTodos">5</div>
+                      <div class="stat-value" id="statTodos" data-target="5">0</div>
                       <div class="stat-label" id="statLabelTodos">Tasks Found</div>
                     </div>
                     <div class="stat-item">
-                      <div class="stat-value" id="statLabels">3</div>
+                      <div class="stat-value" id="statLabels" data-target="3">0</div>
                       <div class="stat-label" id="statLabelLabels">Labels Created</div>
                     </div>
                     <div class="stat-item">
-                      <div class="stat-value" id="statDrafts">1</div>
+                      <div class="stat-value" id="statDrafts" data-target="1">0</div>
                       <div class="stat-label" id="statLabelDrafts">Draft Saved</div>
                     </div>
                   </div>
@@ -1565,6 +1459,32 @@
       if (n === 2) renderTodos();
       if (n === 3) renderLabels();
       if (n === 4) renderReply();
+      if (n === 5) animateStats();
+    }
+
+    // ========== Step 5: Stats Animation ==========
+    function animateStats() {
+      const statValues = $$('.stat-value[data-target]');
+      statValues.forEach(el => {
+        const target = parseInt(el.dataset.target);
+        const duration = 1500;
+        const startTime = performance.now();
+        
+        function updateCount(currentTime) {
+          const elapsed = currentTime - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const easeOut = 1 - Math.pow(1 - progress, 3);
+          const currentValue = Math.floor(easeOut * target);
+          el.textContent = currentValue;
+          
+          if (progress < 1) {
+            requestAnimationFrame(updateCount);
+          } else {
+            el.textContent = target;
+          }
+        }
+        requestAnimationFrame(updateCount);
+      });
     }
 
     // ========== Step 0: Processing ==========
@@ -1732,27 +1652,6 @@
 
     $('#backBtn').onclick = () => {
       if (state.step > 1) goToStep(state.step - 1);
-    };
-
-    // Language toggle
-    $('#langTrigger').onclick = () => {
-      $('#langDropdown').classList.toggle('open');
-    };
-
-    $$('.lang-item').forEach(btn => {
-      btn.onclick = () => {
-        state.lang = btn.dataset.lang;
-        $$('.lang-item').forEach(b => b.classList.toggle('active', b === btn));
-        $('#langValue').textContent = btn.textContent;
-        $('#langDropdown').classList.remove('open');
-        updateI18n();
-      };
-    });
-
-    document.onclick = (e) => {
-      if (!e.target.closest('.lang-dropdown')) {
-        $('#langDropdown').classList.remove('open');
-      }
     };
 
     // Keyboard navigation
