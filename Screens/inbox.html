@@ -18,6 +18,7 @@
             --filo-08: #D5D5D5;
             --filo-10: #FFFFFF;
             --filo-14: rgba(0, 0, 0, 0.04);
+            --filo-18: #7EBA02;
             --filo-25: #BDBDBD;
             --bg: #F5F5F5;
             --glass-bg: rgba(247, 247, 247, 0.85);
@@ -31,6 +32,7 @@
             --filo-08: #414149;
             --filo-10: #1D1D21;
             --filo-14: rgba(255, 255, 255, 0.06);
+            --filo-18: #9AD803;
             --filo-25: #727272;
             --bg: #000000;
             --glass-bg: rgba(40, 40, 40, 0.85);
@@ -163,22 +165,38 @@
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            gap: 6px;
+            gap: 7px;
             padding-right: 20px;
         }
 
         .status-icons svg {
-            height: 12px;
             color: var(--filo-06);
         }
+
+        .status-icons .icon-signal { width: 17px; height: 12px; }
+        .status-icons .icon-wifi { width: 18px; height: 13px; }
+        .status-icons .icon-battery { width: 27px; height: 13px; }
 
         /* Search Bar - iOS 26 */
         .search-bar {
             display: flex;
             align-items: center;
-            padding: 12px 20px 16px;
+            padding: 8px 20px;
             gap: 8px;
             background: var(--filo-10);
+            opacity: 1;
+            max-height: 64px;
+            overflow: hidden;
+            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                        opacity 0.25s ease,
+                        padding 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .search-bar.hidden {
+            max-height: 0;
+            opacity: 0;
+            padding-top: 0;
+            padding-bottom: 0;
         }
 
         .search-pill {
@@ -216,6 +234,14 @@
             color: var(--filo-06);
         }
 
+        /* Menu button inside pill should be transparent */
+        .search-pill .glass-btn {
+            background: transparent;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            box-shadow: none;
+        }
+
         .search-text {
             flex: 1;
             font-size: 17px;
@@ -238,11 +264,29 @@
         }
 
         /* Category Tabs */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: var(--filo-10);
+        }
+
         .category-tabs {
             display: flex;
             gap: 24px;
-            padding: 0 20px 12px;
+            padding: 0 20px;
             background: var(--filo-10);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .category-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category-tab .name {
+            white-space: nowrap;
         }
 
         .category-tab {
@@ -252,21 +296,15 @@
             background: none;
             border: none;
             cursor: pointer;
-            padding-bottom: 8px;
+            padding: 12px 0;
             position: relative;
         }
 
+        /* P1.1_B - 17px, 700, 1.4 line-height, -0.2px letter-spacing */
+        /* P1.1_B - 17px, 700, 1.4 line-height, -0.2px letter-spacing */
         .category-tab .name {
             font-size: 17px;
-            font-weight: 590;
-            color: var(--filo-05);
-            line-height: 1.4;
-            letter-spacing: -0.2px;
-        }
-
-        .category-tab .count {
-            font-size: 17px;
-            font-weight: 400;
+            font-weight: 700;
             color: var(--filo-07);
             line-height: 1.4;
             letter-spacing: -0.2px;
@@ -274,11 +312,6 @@
 
         .category-tab.selected .name {
             color: var(--filo-02);
-        }
-
-        .category-tab.selected .count {
-            color: var(--filo-02);
-            font-weight: 400;
         }
 
         .category-tab.selected::after {
@@ -289,7 +322,7 @@
             right: 0;
             height: 3px;
             background: var(--filo-02);
-            border-radius: 1.5px;
+            border-radius: 1.5px 1.5px 0 0;
         }
 
         .divider {
@@ -299,9 +332,13 @@
         }
 
         /* Email List */
-        .email-list {
+        .scroll-container {
             flex: 1;
             overflow-y: auto;
+            position: relative;
+        }
+
+        .email-list {
             padding-bottom: 100px;
         }
 
@@ -343,10 +380,32 @@
             color: var(--filo-06);
         }
 
-        .email-avatar.coral { background: #F9C9B6; }
-        .email-avatar.lavender { background: #E0DDFF; }
-        .email-avatar.azure { background: #D2EFF3; }
-        .email-avatar.salmon { background: #FC909F; }
+        .email-avatar.coral { background: #F9C9B6; color: #8B5A3C; }
+        .email-avatar.lavender { background: #E0DDFF; color: #5B4B8A; }
+        .email-avatar.azure { background: #D2EFF3; color: #3A7A8A; }
+        .email-avatar.salmon { background: #FC909F; color: #8B3A4A; }
+        .email-avatar.mint { background: #C8F7DC; color: #2D6A4F; }
+        .email-avatar.peach { background: #FFD9C4; color: #9D5B3F; }
+        .email-avatar.sky { background: #B8E0FF; color: #2D5A87; }
+        .email-avatar.rose { background: #FFD6E0; color: #8B3A5A; }
+        .email-avatar.gold { background: #FFE4A0; color: #8B6914; }
+        .email-avatar.sage { background: #D4E8D1; color: #4A6B47; }
+
+        /* Labels - Filo Design System (Mobile) P4_B */
+        .email-label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px 8px;
+            border-radius: 100px;
+            background: var(--filo-14);
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: 0;
+        }
+        .email-label.billing { color: var(--filo-18); }
+        .email-label.travel { color: var(--filo-02); }
 
         .email-content {
             flex: 1;
@@ -402,6 +461,25 @@
             font-weight: 700;
         }
 
+        .email-subject {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .email-subject .subject-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .attachment-icon {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+            color: var(--filo-07);
+        }
+
         .email-preview {
             font-size: 16px;
             color: var(--filo-06);
@@ -411,6 +489,19 @@
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
+        }
+
+        .email-preview.has-label {
+            display: block;
+            -webkit-line-clamp: unset;
+            -webkit-box-orient: unset;
+            overflow: visible;
+        }
+
+        .email-preview.has-label .email-label {
+            display: inline-block;
+            margin-left: 4px;
+            vertical-align: middle;
         }
 
         /* Bottom Tab Bar - iOS 26 Glass Pill */
@@ -438,7 +529,11 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-radius: 100px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06), inset 0 1px 0 var(--glass-border);
+            /* Apple-style elevation shadow: primary depth + ambient + inner highlight */
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.12),
+                0 2px 8px rgba(0, 0, 0, 0.08),
+                inset 0 0.5px 0 rgba(255, 255, 255, 0.5);
         }
 
         .tab-item {
@@ -490,7 +585,7 @@
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            background: var(--glass-bg);
+            background: var(--filo-02);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             display: flex;
@@ -505,7 +600,7 @@
         .compose-btn svg {
             width: 28px;
             height: 28px;
-            color: var(--filo-06);
+            color: var(--filo-10);
         }
 
         /* Desktop placeholder */
@@ -561,12 +656,27 @@
                 <div class="status-time"><span>9:41</span></div>
                 <div class="status-island"></div>
                 <div class="status-icons">
-                    <svg viewBox="0 0 18 12" fill="none"><rect x="0" y="8" width="3" height="4" rx="1" fill="currentColor"/><rect x="5" y="5" width="3" height="7" rx="1" fill="currentColor"/><rect x="10" y="2" width="3" height="10" rx="1" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx="1" fill="currentColor"/></svg>
-                    <svg viewBox="0 0 16 12" fill="none"><path d="M8 2C5.5 2 3.2 2.9 1.5 4.4L3 6C4.3 4.9 6.1 4.2 8 4.2C9.9 4.2 11.7 4.9 13 6L14.5 4.4C12.8 2.9 10.5 2 8 2ZM8 6C6.6 6 5.3 6.5 4.3 7.3L6 9C6.6 8.5 7.3 8.2 8 8.2C8.7 8.2 9.4 8.5 10 9L11.7 7.3C10.7 6.5 9.4 6 8 6ZM8 10C7.4 10 7 10.4 7 11C7 11.6 7.4 12 8 12C8.6 12 9 11.6 9 11C9 10.4 8.6 10 8 10Z" fill="currentColor"/></svg>
-                    <svg viewBox="0 0 28 13" fill="none"><rect x="0.5" y="0.5" width="24" height="12" rx="3" stroke="currentColor" opacity="0.35"/><rect x="2" y="2" width="21" height="9" rx="2" fill="currentColor"/><path d="M26 4.5V8.5C26.8 8.2 27.3 7.4 27.3 6.5C27.3 5.6 26.8 4.8 26 4.5Z" fill="currentColor" opacity="0.4"/></svg>
+                    <!-- Signal bars -->
+                    <svg class="icon-signal" viewBox="0 0 17 12" fill="none">
+                        <rect x="0" y="9" width="3" height="3" rx="0.5" fill="currentColor"/>
+                        <rect x="4.5" y="6" width="3" height="6" rx="0.5" fill="currentColor"/>
+                        <rect x="9" y="3" width="3" height="9" rx="0.5" fill="currentColor"/>
+                        <rect x="13.5" y="0" width="3" height="12" rx="0.5" fill="currentColor"/>
+                    </svg>
+                    <!-- WiFi -->
+                    <svg class="icon-wifi" viewBox="0 0 18 13" fill="none">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M8.5713 2.46628C11.0584 2.46639 13.4504 3.38847 15.2529 5.04195C15.3887 5.1696 15.6056 5.16799 15.7393 5.03834L17.0368 3.77487C17.1045 3.70911 17.1422 3.62004 17.1417 3.52735C17.1411 3.43467 17.1023 3.34603 17.0338 3.28104C12.3028 -1.09368 4.83907 -1.09368 0.108056 3.28104C0.039524 3.34598 0.000639766 3.4346 7.82398e-06 3.52728C-0.000624118 3.61996 0.0370483 3.70906 0.104689 3.77487L1.40255 5.03834C1.53615 5.16819 1.75327 5.1698 1.88893 5.04195C3.69167 3.38836 6.08395 2.46628 8.5713 2.46628ZM8.56795 6.68656C9.92527 6.68647 11.2341 7.19821 12.2403 8.12234C12.3763 8.2535 12.5907 8.25065 12.7234 8.11593L14.0106 6.79663C14.0784 6.72742 14.1161 6.63355 14.1151 6.536C14.1141 6.43844 14.0746 6.34536 14.0054 6.27757C10.9416 3.38672 6.19688 3.38672 3.13305 6.27757C3.06384 6.34536 3.02435 6.43849 3.02345 6.53607C3.02254 6.63366 3.06028 6.72752 3.12822 6.79663L4.41513 8.11593C4.54778 8.25065 4.76215 8.2535 4.89823 8.12234C5.90368 7.19882 7.21152 6.68713 8.56795 6.68656ZM11.0924 9.48011C11.0943 9.58546 11.0572 9.68703 10.9899 9.76084L8.81327 12.2156C8.74946 12.2877 8.66247 12.3283 8.5717 12.3283C8.48093 12.3283 8.39394 12.2877 8.33013 12.2156L6.1531 9.76084C6.08585 9.68697 6.04886 9.58537 6.05085 9.48002C6.05284 9.37467 6.09365 9.27491 6.16364 9.20429C7.55374 7.8904 9.58966 7.8904 10.9798 9.20429C11.0497 9.27497 11.0904 9.37476 11.0924 9.48011Z" fill="currentColor"/>
+                    </svg>
+                    <!-- Battery -->
+                    <svg class="icon-battery" viewBox="0 0 27 13" fill="none">
+                        <rect x="0.5" y="0.5" width="22" height="12" rx="2.5" stroke="currentColor" stroke-opacity="0.35"/>
+                        <rect x="2" y="2" width="19" height="9" rx="1.5" fill="currentColor"/>
+                        <path d="M24 4.5C24.8 4.82 25.5 5.58 25.5 6.5C25.5 7.42 24.8 8.18 24 8.5V4.5Z" fill="currentColor" opacity="0.4"/>
+                    </svg>
                 </div>
             </div>
 
+            <div class="scroll-container">
             <!-- Search Bar - iOS 26 -->
             <div class="search-bar">
                 <div class="search-pill">
@@ -579,113 +689,439 @@
                     </div>
                 </div>
                 <button class="glass-btn" title="Customize">
-                    <svg viewBox="0 0 24 24" fill="none"><path d="M3.23162 7.94485C2.88848 7.94485 2.59436 7.82843 2.34926 7.59559C2.11642 7.35049 2 7.0625 2 6.73162C2 6.40074 2.11642 6.11887 2.34926 5.88603C2.59436 5.64093 2.88848 5.51838 3.23162 5.51838H12.4412V7.94485H3.23162ZM14.9963 10.4449C14.3223 10.4449 13.7034 10.2794 13.1397 9.94853C12.576 9.60539 12.1225 9.15196 11.7794 8.58823C11.4485 8.02451 11.2831 7.39951 11.2831 6.71324C11.2831 6.02696 11.4485 5.40809 11.7794 4.85662C12.1225 4.29289 12.576 3.84559 13.1397 3.51471C13.7034 3.17157 14.3223 3 14.9963 3C15.6826 3 16.3076 3.17157 16.8713 3.51471C17.4351 3.84559 17.8824 4.29289 18.2132 4.85662C18.5441 5.40809 18.7096 6.02696 18.7096 6.71324C18.7096 7.39951 18.5441 8.02451 18.2132 8.58823C17.8824 9.15196 17.4351 9.60539 16.8713 9.94853C16.3076 10.2794 15.6826 10.4449 14.9963 10.4449ZM14.9963 8.55147C15.511 8.55147 15.94 8.37377 16.2831 8.01838C16.6385 7.66299 16.8162 7.22794 16.8162 6.71324C16.8162 6.19853 16.6385 5.76961 16.2831 5.42647C15.94 5.07108 15.511 4.89338 14.9963 4.89338C14.4816 4.89338 14.0588 5.07108 13.7279 5.42647C13.3848 5.76961 13.2132 6.19853 13.2132 6.71324C13.2132 7.22794 13.3848 7.66299 13.7279 8.01838C14.0588 8.37377 14.4816 8.55147 14.9963 8.55147ZM3.23162 18.4816H8.51103V16.0551H3.23162C2.88848 16.0551 2.59436 16.1777 2.34926 16.4228C2.11642 16.6557 2 16.9375 2 17.2684C2 17.5993 2.11642 17.8811 2.34926 18.114C2.59436 18.3591 2.88848 18.4816 3.23162 18.4816ZM11.4412 21C10.7672 21 10.1544 20.8346 9.60294 20.5037C9.03921 20.1728 8.59191 19.7255 8.26103 19.1618C7.9179 18.598 7.74632 17.9669 7.74632 17.2684C7.74632 16.5821 7.9179 15.9571 8.26103 15.3934convergent C8.59191 14.8296 9.03921 14.3823 9.60294 14.0515C10.1544 13.7206 10.7672 13.5551 11.4412 13.5551C12.1152 13.5551 12.7341 13.7206 13.2978 14.0515C13.8616 14.3823 14.3089 14.8296 14.6397 15.3934C14.9706 15.9571 15.136 16.5821 15.136 17.2684C15.136 17.9669 14.9706 18.598 14.6397 19.1618C14.3089 19.7255 13.8616 20.1728 13.2978 20.5037C12.7341 20.8346 12.1152 21 11.4412 21ZM11.4412 19.1066C11.9559 19.1066 12.3909 18.9289 12.7463 18.5735C13.0894 18.2304 13.261 17.8014 13.261 17.2867C13.261 16.772 13.0894 16.3431 12.7463 16C12.3909 15.6446 11.9559 15.4669 11.4412 15.4669C10.9265 15.4669 10.4975 15.6446 10.1544 16C9.79901 16.3431 9.62132 16.772 9.62132 17.2867C9.62132 17.8014 9.79901 18.2304 10.1544 18.5735C10.4975 18.9289 10.9265 19.1066 11.4412 19.1066ZM17.4265 18.4816H20.7684C21.1115 18.4816 21.4056 18.3591 21.6507 18.114C21.8836 17.8811 22 17.5993 22 17.2684C22 16.9375 21.8836 16.6557 21.6507 16.4228C21.4056 16.1777 21.1115 16.0551 20.7684 16.0551H17.4265V18.4816ZM15.4888 7.94485H20.7684C21.1115 7.94485 21.4056 7.82843 21.6507 7.59559C21.8836 7.35049 22 7.0625 22 6.73162C22 6.40074 21.8836 6.11887 21.6507 5.88603C21.4056 5.64093 21.1115 5.51838 20.7684 5.51838H15.4888V7.94485Z" fill="currentColor"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M3.23162 7.94485C2.88848 7.94485 2.59436 7.82843 2.34926 7.59559C2.11642 7.35049 2 7.0625 2 6.73162C2 6.40074 2.11642 6.11887 2.34926 5.88603C2.59436 5.64093 2.88848 5.51838 3.23162 5.51838H12.4412V7.94485H3.23162ZM14.9963 10.4449C14.3223 10.4449 13.7034 10.2794 13.1397 9.94853C12.576 9.60539 12.1225 9.15196 11.7794 8.58823C11.4485 8.02451 11.2831 7.39951 11.2831 6.71324C11.2831 6.02696 11.4485 5.40809 11.7794 4.85662C12.1225 4.29289 12.576 3.84559 13.1397 3.51471C13.7034 3.17157 14.3223 3 14.9963 3C15.6826 3 16.3076 3.17157 16.8713 3.51471C17.4351 3.84559 17.8824 4.29289 18.2132 4.85662C18.5441 5.40809 18.7096 6.02696 18.7096 6.71324C18.7096 7.39951 18.5441 8.02451 18.2132 8.58823C17.8824 9.15196 17.4351 9.60539 16.8713 9.94853C16.3076 10.2794 15.6826 10.4449 14.9963 10.4449ZM14.9963 8.55147C15.511 8.55147 15.94 8.37377 16.2831 8.01838C16.6385 7.66299 16.8162 7.22794 16.8162 6.71324C16.8162 6.19853 16.6385 5.76961 16.2831 5.42647C15.94 5.07108 15.511 4.89338 14.9963 4.89338C14.4816 4.89338 14.0466 5.07108 13.6912 5.42647C13.348 5.76961 13.1765 6.19853 13.1765 6.71324C13.1765 7.22794 13.348 7.66299 13.6912 8.01838C14.0466 8.37377 14.4816 8.55147 14.9963 8.55147ZM17.4228 7.94485V5.51838H20.8235C21.1422 5.51838 21.4179 5.64093 21.6507 5.88603C21.8836 6.11887 22 6.40074 22 6.73162C22 7.0625 21.8836 7.35049 21.6507 7.59559C21.4179 7.82843 21.1422 7.94485 20.8235 7.94485H17.4228ZM20.75 15.4265C21.1054 15.4265 21.3995 15.5429 21.6324 15.7757C21.8775 16.0086 22 16.2966 22 16.6397C22 16.9706 21.8775 17.2586 21.6324 17.5037C21.3995 17.7365 21.1054 17.8529 20.75 17.8529H11.5588V15.4265H20.75ZM8.98529 12.9081C9.67157 12.9081 10.2966 13.0797 10.8603 13.4228C11.424 13.7537 11.8713 14.2071 12.2022 14.7831C12.5331 15.3468 12.6985 15.9718 12.6985 16.6581C12.6985 17.3321 12.5331 17.951 12.2022 18.5147C11.8713 19.0784 11.424 19.5319 10.8603 19.875C10.2966 20.2059 9.67157 20.3713 8.98529 20.3713C8.29902 20.3713 7.67402 20.2059 7.11029 19.875C6.55882 19.5319 6.11152 19.0784 5.76838 18.5147C5.4375 17.951 5.27206 17.3321 5.27206 16.6581C5.27206 15.9718 5.4375 15.3468 5.76838 14.7831C6.11152 14.2071 6.55882 13.7537 7.11029 13.4228C7.67402 13.0797 8.29902 12.9081 8.98529 12.9081ZM8.98529 14.8199C8.48284 14.8199 8.05392 14.9975 7.69853 15.3529C7.34314 15.7083 7.16544 16.1434 7.16544 16.6581C7.16544 17.1728 7.34314 17.6078 7.69853 17.9632C8.05392 18.3064 8.48284 18.4779 8.98529 18.4779C9.5 18.4779 9.92892 18.3064 10.2721 17.9632C10.6275 17.6078 10.8051 17.1728 10.8051 16.6581C10.8051 16.1434 10.6275 15.7083 10.2721 15.3529C9.92892 14.9975 9.5 14.8199 8.98529 14.8199ZM6.57721 15.4265V17.8529H3.15809C2.85172 17.8529 2.58211 17.7365 2.34926 17.5037C2.11642 17.2586 2 16.9706 2 16.6397C2 16.2966 2.11642 16.0086 2.34926 15.7757C2.58211 15.5429 2.85172 15.4265 3.15809 15.4265H6.57721Z" fill="currentColor"/></svg>
                 </button>
             </div>
 
             <!-- Category Tabs -->
-            <div class="category-tabs">
-                <button class="category-tab selected">
-                    <span class="name">Important</span>
-                </button>
-                <button class="category-tab">
-                    <span class="name">Updates</span>
-                    <span class="count">2</span>
-                </button>
-                <button class="category-tab">
-                    <span class="name">Promotions</span>
-                    <span class="count">95</span>
-                </button>
-                <button class="category-tab">
-                    <span class="name">All</span>
-                </button>
+            <div class="sticky-header">
+                <div class="category-tabs">
+                    <button class="category-tab selected">
+                        <span class="name">Important</span>
+                    </button>
+                    <button class="category-tab">
+                        <span class="name">Updates</span>
+                    </button>
+                    <button class="category-tab">
+                        <span class="name">Promotions</span>
+                    </button>
+                    <button class="category-tab">
+                        <span class="name">Billing</span>
+                    </button>
+                    <button class="category-tab">
+                        <span class="name">Travel</span>
+                    </button>
+                    <button class="category-tab">
+                        <span class="name">Family</span>
+                    </button>
+                    <button class="category-tab">
+                        <span class="name">All</span>
+                    </button>
+                </div>
+                <div class="divider"></div>
             </div>
-            <div class="divider"></div>
 
             <!-- Email List -->
             <div class="email-list">
                 <div class="date-label">Today</div>
 
-                <!-- Email 1 -->
+                <!-- Email 1 - Thread -->
                 <div class="email-card">
-                    <div class="email-avatar initials coral">K</div>
+                    <div class="email-avatar"><img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=100&h=100&fit=crop&crop=face" alt="Marcus"></div>
                     <div class="email-content">
                         <div class="email-header">
-                            <span class="email-sender">Kristin, Jade, me, <span class="highlight">Ann</span></span>
-                            <span class="email-time unread">2:03 PM</span>
+                            <span class="email-sender">Marcus, Julia, me, <span class="highlight">David</span></span>
+                            <span class="email-time unread">3:42 PM</span>
                         </div>
-                        <div class="email-subject unread">Renter's Insurance Expired - Final N...</div>
-                        <div class="email-preview">Hello, your renter's insurance policy has expired, we haven't received an updat...</div>
+                        <div class="email-subject unread">Re: Q4 Budget Review Meeting</div>
+                        <div class="email-preview">Thanks everyone for the quick turnaround. I've attached the revised budget spreadsheet with the updated Q4 projections we discussed in yesterday's meeting.</div>
                     </div>
                 </div>
 
-                <!-- Email 2 -->
+                <!-- Email 2 - Billing -->
                 <div class="email-card">
-                    <div class="email-avatar initials lavender">E</div>
+                    <div class="email-avatar"><img src="https://www.google.com/s2/favicons?domain=stripe.com&sz=128" alt="Stripe"></div>
                     <div class="email-content">
                         <div class="email-header">
-                            <span class="email-sender">Emily Harris</span>
-                            <span class="email-time">1:28 PM</span>
+                            <span class="email-sender">Stripe</span>
+                            <span class="email-time unread">2:15 PM</span>
                         </div>
-                        <div class="email-subject">Quick Things Before the Weekend</div>
-                        <div class="email-preview">Hey Jordan, Hope your week's been going okay! I just wanted to touch base...</div>
+                        <div class="email-subject unread">Your invoice for January is ready</div>
+                        <div class="email-preview has-label">Invoice #INV-2024-0142 for $299.00 is now available. View and...<span class="email-label billing">Billing</span></div>
                     </div>
                 </div>
 
                 <!-- Email 3 -->
                 <div class="email-card">
-                    <div class="email-avatar initials azure">K</div>
+                    <div class="email-avatar"><img src="https://images.unsplash.com/photo-1573496799652-408c2ac9fe98?w=100&h=100&fit=crop&crop=face" alt="Alexandra Chen"></div>
                     <div class="email-content">
                         <div class="email-header">
-                            <span class="email-sender unread">Kat Dixon</span>
-                            <span class="email-time unread">Yesterday</span>
+                            <span class="email-sender">Alexandra Chen</span>
+                            <span class="email-time">1:58 PM</span>
                         </div>
-                        <div class="email-subject unread">Reminder: Order RMXCSQ is confir...</div>
-                        <div class="email-preview">Hi there, this is a reminder that your order has been confirmed. Make sure...</div>
+                        <div class="email-subject"><span class="subject-text">Design files for homepage refresh</span><svg class="attachment-icon" viewBox="0 0 24 24" fill="none"><path d="M19 10.1667V16C19 17.8565 18.2625 19.637 16.9497 20.9497C15.637 22.2625 13.8565 23 12 23C10.1435 23 8.36301 22.2625 7.05025 20.9497C5.7375 19.637 5 17.8565 5 16L5 6.66667C5 5.42899 5.49167 4.242 6.36683 3.36683C7.242 2.49167 8.42899 2 9.66667 2C10.9043 2 12.0913 2.49167 12.9665 3.36683C13.8417 4.242 14.3333 5.42899 14.3333 6.66667V16C14.3333 16.6188 14.0875 17.2123 13.6499 17.6499C13.2123 18.0875 12.6188 18.3333 12 18.3333C11.3812 18.3333 10.7877 18.0875 10.3501 17.6499C9.9125 17.2123 9.66667 16.6188 9.66667 16V10.1667" stroke="currentColor" stroke-width="1.86667" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                        <div class="email-preview">Hey! Here are the final mockups we discussed. Let me know if you need any revisions before we hand off to the dev team next week.</div>
                     </div>
                 </div>
 
-                <div class="date-label">Yesterday</div>
-
-                <!-- Email 4 -->
+                <!-- Email 4 - Travel -->
                 <div class="email-card">
-                    <div class="email-avatar initials salmon">N</div>
+                    <div class="email-avatar"><img src="https://www.google.com/s2/favicons?domain=delta.com&sz=128" alt="Delta Air Lines"></div>
                     <div class="email-content">
                         <div class="email-header">
-                            <span class="email-sender">Nathan Lau</span>
-                            <span class="email-time">Oct 12</span>
+                            <span class="email-sender">Delta Air Lines</span>
+                            <span class="email-time">12:30 PM</span>
                         </div>
-                        <div class="email-subject">Refund reservation fee</div>
-                        <div class="email-preview">Hi Connie, I've processed your refund.</div>
+                        <div class="email-subject">Your trip to San Francisco is coming up</div>
+                        <div class="email-preview has-label">Check in now for your flight DL 1247 departing Jan 28 at 9:45 AM...<span class="email-label travel">Travel</span></div>
                     </div>
                 </div>
 
-                <!-- Email 5 -->
+                <!-- Email 5 - Thread -->
                 <div class="email-card">
-                    <div class="email-avatar initials azure">P</div>
+                    <div class="email-avatar"><img src="https://images.unsplash.com/photo-1614283233556-f35b0c801ef1?w=100&h=100&fit=crop&crop=face" alt="Rachel"></div>
                     <div class="email-content">
                         <div class="email-header">
-                            <span class="email-sender">Parkable</span>
-                            <span class="email-time">Oct 3</span>
+                            <span class="email-sender">Rachel, Tom, <span class="highlight">Sarah</span></span>
+                            <span class="email-time">11:45 AM</span>
                         </div>
-                        <div class="email-subject">Parking Invitation Updated</div>
-                        <div class="email-preview">Albert St, Auckland CBD, Auckland 1010.</div>
+                        <div class="email-subject">Re: Lunch plans Friday?</div>
+                        <div class="email-preview">That Italian place sounds great! I'm in. What time works for everyone? I'm free after 12:30 but need to be back by 2pm for a call.</div>
                     </div>
                 </div>
 
                 <!-- Email 6 -->
                 <div class="email-card">
-                    <div class="email-avatar initials coral">V</div>
+                    <div class="email-avatar"><img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=100&h=100&fit=crop&crop=face" alt="James Wilson"></div>
                     <div class="email-content">
                         <div class="email-header">
-                            <span class="email-sender unread">Verizon Wireless</span>
-                            <span class="email-time unread">Oct 5</span>
+                            <span class="email-sender">James Wilson</span>
+                            <span class="email-time">10:22 AM</span>
                         </div>
-                        <div class="email-subject unread">Thanks for your payment.</div>
-                        <div class="email-preview">Your Verizon plan has been renewed.</div>
+                        <div class="email-subject">Quick question about the API</div>
+                        <div class="email-preview">Hey, I was looking at the documentation and wondering if there's a rate limit on the webhook endpoints? I couldn't find it in the API docs.</div>
+                    </div>
+                </div>
+
+                <!-- Email 7 - Billing -->
+                <div class="email-card">
+                    <div class="email-avatar"><img src="https://www.google.com/s2/favicons?domain=netflix.com&sz=128" alt="Netflix"></div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Netflix</span>
+                            <span class="email-time">9:15 AM</span>
+                        </div>
+                        <div class="email-subject">Your payment was successful</div>
+                        <div class="email-preview has-label">Thanks for your payment of $22.99. Your next billing date is Feb 15...<span class="email-label billing">Billing</span></div>
+                    </div>
+                </div>
+
+                <div class="date-label">Yesterday</div>
+
+                <!-- Email 8 -->
+                <div class="email-card">
+                    <div class="email-avatar"><img src="https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=100&h=100&fit=crop&crop=face" alt="Emma Rodriguez"></div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Emma Rodriguez</span>
+                            <span class="email-time">Yesterday</span>
+                        </div>
+                        <div class="email-subject"><span class="subject-text">Project timeline update</span><svg class="attachment-icon" viewBox="0 0 24 24" fill="none"><path d="M19 10.1667V16C19 17.8565 18.2625 19.637 16.9497 20.9497C15.637 22.2625 13.8565 23 12 23C10.1435 23 8.36301 22.2625 7.05025 20.9497C5.7375 19.637 5 17.8565 5 16L5 6.66667C5 5.42899 5.49167 4.242 6.36683 3.36683C7.242 2.49167 8.42899 2 9.66667 2C10.9043 2 12.0913 2.49167 12.9665 3.36683C13.8417 4.242 14.3333 5.42899 14.3333 6.66667V16C14.3333 16.6188 14.0875 17.2123 13.6499 17.6499C13.2123 18.0875 12.6188 18.3333 12 18.3333C11.3812 18.3333 10.7877 18.0875 10.3501 17.6499C9.9125 17.2123 9.66667 16.6188 9.66667 16V10.1667" stroke="currentColor" stroke-width="1.86667" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                        <div class="email-preview">Hi team, I wanted to share the updated timeline for the product launch. We've moved the beta release to March 15th based on the new requirements.</div>
+                    </div>
+                </div>
+
+                <!-- Email 9 - Thread -->
+                <div class="email-card">
+                    <div class="email-avatar"><img src="https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=100&h=100&fit=crop&crop=face" alt="Kevin"></div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Kevin, Lisa, me, <span class="highlight">Mike</span></span>
+                            <span class="email-time unread">Yesterday</span>
+                        </div>
+                        <div class="email-subject unread">Re: Re: Team offsite planning</div>
+                        <div class="email-preview">I think the cabin idea is perfect! Let me check on availability for the first weekend of March. How many rooms do we need to book?</div>
+                    </div>
+                </div>
+
+                <!-- Email 10 - Billing -->
+                <div class="email-card">
+                    <div class="email-avatar"><img src="https://www.google.com/s2/favicons?domain=aws.amazon.com&sz=128" alt="Amazon Web Services"></div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Amazon Web Services</span>
+                            <span class="email-time">Yesterday</span>
+                        </div>
+                        <div class="email-subject">AWS Invoice Available - January 2024</div>
+                        <div class="email-preview has-label">Your invoice for account ending in 4521 is now available. Total: $847...<span class="email-label billing">Billing</span></div>
+                    </div>
+                </div>
+
+                <!-- Email 11 -->
+                <div class="email-card">
+                    <div class="email-avatar"><img src="https://images.unsplash.com/photo-1598550874175-4d0ef436c909?w=100&h=100&fit=crop&crop=face" alt="Sophie Martinez"></div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Sophie Martinez</span>
+                            <span class="email-time">Yesterday</span>
+                        </div>
+                        <div class="email-subject">Feedback on your presentation</div>
+                        <div class="email-preview">Great job on the client pitch! I have a few thoughts that might help for the follow-up meeting. Can we grab coffee tomorrow to discuss?</div>
+                    </div>
+                </div>
+
+                <!-- Email 12 - Travel -->
+                <div class="email-card">
+                    <div class="email-avatar"><img src="https://www.google.com/s2/favicons?domain=marriott.com&sz=128" alt="Marriott Bonvoy"></div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Marriott Bonvoy</span>
+                            <span class="email-time">Yesterday</span>
+                        </div>
+                        <div class="email-subject">Your reservation is confirmed</div>
+                        <div class="email-preview has-label">Thank you for choosing Marriott. Confirmation #MR2847291...<span class="email-label travel">Travel</span></div>
+                    </div>
+                </div>
+
+                <div class="date-label">This Week</div>
+
+                <!-- Email 13 -->
+                <div class="email-card">
+                    <div class="email-avatar"><img src="https://images.unsplash.com/photo-1618077360395-f3068be8e001?w=100&h=100&fit=crop&crop=face" alt="Benjamin Park"></div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Benjamin Park</span>
+                            <span class="email-time">Jan 21</span>
+                        </div>
+                        <div class="email-subject">Coffee catch-up?</div>
+                        <div class="email-preview">Hey! It's been a while since we last chatted. Would love to catch up over coffee sometime this week if you're free. How's Thursday looking?</div>
+                    </div>
+                </div>
+
+                <!-- Email 14 - Billing -->
+                <div class="email-card">
+                    <div class="email-avatar"><img src="https://www.google.com/s2/favicons?domain=figma.com&sz=128" alt="Figma"></div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Figma</span>
+                            <span class="email-time">Jan 21</span>
+                        </div>
+                        <div class="email-subject">Receipt for your Figma subscription</div>
+                        <div class="email-preview has-label">Your payment of $15.00 for Figma Professional has been...<span class="email-label billing">Billing</span></div>
+                    </div>
+                </div>
+
+                <!-- Email 15 - Thread -->
+                <div class="email-card">
+                    <div class="email-avatar"><img src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?w=100&h=100&fit=crop&crop=face" alt="Nina"></div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Nina, Chris, <span class="highlight">Alex</span></span>
+                            <span class="email-time">Jan 21</span>
+                        </div>
+                        <div class="email-subject">Re: Birthday party for Sam</div>
+                        <div class="email-preview">I can bring the cake! Should we do chocolate or vanilla? Also, does anyone know if Sam has any food allergies we should be aware of?</div>
+                    </div>
+                </div>
+
+                <!-- Email 16 - Billing -->
+                <div class="email-card">
+                    <div class="email-avatar"><img src="https://www.google.com/s2/favicons?domain=paypal.com&sz=128" alt="PayPal"></div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">PayPal</span>
+                            <span class="email-time">Jan 20</span>
+                        </div>
+                        <div class="email-subject">You sent a payment of $127.50</div>
+                        <div class="email-preview has-label">Your payment to Acme Corp has been completed. Transaction ID...<span class="email-label billing">Billing</span></div>
+                    </div>
+                </div>
+
+                <!-- Email 17 -->
+                <div class="email-card">
+                    <div class="email-avatar"><img src="https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?w=100&h=100&fit=crop&crop=face" alt="Hannah Kim"></div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Hannah Kim</span>
+                            <span class="email-time">Jan 20</span>
+                        </div>
+                        <div class="email-subject">Yoga class tomorrow at 7am</div>
+                        <div class="email-preview">Don't forget we have yoga class tomorrow morning! Bring your mat and a water bottle. The studio gets warm so dress in layers.</div>
+                    </div>
+                </div>
+
+                <!-- Email 18 - Billing -->
+                <div class="email-card">
+                    <div class="email-avatar"><img src="https://www.google.com/s2/favicons?domain=spotify.com&sz=128" alt="Spotify"></div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Spotify</span>
+                            <span class="email-time">Jan 20</span>
+                        </div>
+                        <div class="email-subject">Your Spotify Premium receipt</div>
+                        <div class="email-preview has-label">Thanks for being a Premium member. Your $10.99 payment...<span class="email-label billing">Billing</span></div>
+                    </div>
+                </div>
+
+                <!-- Email 19 -->
+                <div class="email-card">
+                    <div class="email-avatar"><img src="https://images.unsplash.com/photo-1615109398623-88346a601842?w=100&h=100&fit=crop&crop=face" alt="Daniel Foster"></div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Daniel Foster</span>
+                            <span class="email-time">Jan 19</span>
+                        </div>
+                        <div class="email-subject">Recommendations for SF trip</div>
+                        <div class="email-preview">Heard you're heading to San Francisco! Here are my top picks for restaurants and hidden gems. Don't miss Tartine Bakery in the Mission!</div>
+                    </div>
+                </div>
+
+                <!-- Email 20 - Travel -->
+                <div class="email-card">
+                    <div class="email-avatar"><img src="https://www.google.com/s2/favicons?domain=united.com&sz=128" alt="United Airlines"></div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">United Airlines</span>
+                            <span class="email-time">Jan 19</span>
+                        </div>
+                        <div class="email-subject">Earn 2X miles on your next flight</div>
+                        <div class="email-preview has-label">Book by February 15 and earn double MileagePlus miles on...<span class="email-label travel">Travel</span></div>
+                    </div>
+                </div>
+
+                <div class="date-label">Last Week</div>
+
+                <!-- Email 21 - Thread -->
+                <div class="email-card">
+                    <div class="email-avatar"><img src="https://images.unsplash.com/photo-1611432579699-484f7990b127?w=100&h=100&fit=crop&crop=face" alt="Priya"></div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Priya, Jordan, me, <span class="highlight">Casey</span></span>
+                            <span class="email-time">Jan 18</span>
+                        </div>
+                        <div class="email-subject">Re: Re: Re: Apartment hunting tips</div>
+                        <div class="email-preview">I found a great 2BR in Hayes Valley! Sending you the listing now. It's $3,200/month with in-unit laundry. They're doing tours this Saturday.</div>
+                    </div>
+                </div>
+
+                <!-- Email 22 -->
+                <div class="email-card">
+                    <div class="email-avatar"><img src="https://images.unsplash.com/photo-1491349174775-aaafddd81942?w=100&h=100&fit=crop&crop=face" alt="Grace Liu"></div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Grace Liu</span>
+                            <span class="email-time">Jan 18</span>
+                        </div>
+                        <div class="email-subject"><span class="subject-text">Photography portfolio review</span><svg class="attachment-icon" viewBox="0 0 24 24" fill="none"><path d="M19 10.1667V16C19 17.8565 18.2625 19.637 16.9497 20.9497C15.637 22.2625 13.8565 23 12 23C10.1435 23 8.36301 22.2625 7.05025 20.9497C5.7375 19.637 5 17.8565 5 16L5 6.66667C5 5.42899 5.49167 4.242 6.36683 3.36683C7.242 2.49167 8.42899 2 9.66667 2C10.9043 2 12.0913 2.49167 12.9665 3.36683C13.8417 4.242 14.3333 5.42899 14.3333 6.66667V16C14.3333 16.6188 14.0875 17.2123 13.6499 17.6499C13.2123 18.0875 12.6188 18.3333 12 18.3333C11.3812 18.3333 10.7877 18.0875 10.3501 17.6499C9.9125 17.2123 9.66667 16.6188 9.66667 16V10.1667" stroke="currentColor" stroke-width="1.86667" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                        <div class="email-preview">I've uploaded my latest work to the shared drive. Would love your honest feedback on the portrait series. I tried some new lighting techniques.</div>
+                    </div>
+                </div>
+
+                <!-- Email 23 - Billing -->
+                <div class="email-card">
+                    <div class="email-avatar"><img src="https://www.google.com/s2/favicons?domain=adobe.com&sz=128" alt="Adobe Creative Cloud"></div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Adobe Creative Cloud</span>
+                            <span class="email-time">Jan 17</span>
+                        </div>
+                        <div class="email-subject">Your subscription has been renewed</div>
+                        <div class="email-preview has-label">Your Adobe Creative Cloud subscription ($54.99/mo) has been renewed...<span class="email-label billing">Billing</span></div>
+                    </div>
+                </div>
+
+                <!-- Email 24 -->
+                <div class="email-card">
+                    <div class="email-avatar"><img src="https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=100&h=100&fit=crop&crop=face" alt="Lucas Nguyen"></div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Lucas Nguyen</span>
+                            <span class="email-time">Jan 17</span>
+                        </div>
+                        <div class="email-subject">Book club pick for February</div>
+                        <div class="email-preview">Hey everyone! I'm thinking we should read "Tomorrow and Tomorrow and Tomorrow" by Gabrielle Zevin. It's about friendship, gaming, and creativity.</div>
+                    </div>
+                </div>
+
+                <!-- Email 25 -->
+                <div class="email-card">
+                    <div class="email-avatar"><img src="https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=100&h=100&fit=crop&crop=face" alt="Isabella Wright"></div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Isabella Wright</span>
+                            <span class="email-time">Jan 16</span>
+                        </div>
+                        <div class="email-subject"><span class="subject-text">New hire onboarding checklist</span><svg class="attachment-icon" viewBox="0 0 24 24" fill="none"><path d="M19 10.1667V16C19 17.8565 18.2625 19.637 16.9497 20.9497C15.637 22.2625 13.8565 23 12 23C10.1435 23 8.36301 22.2625 7.05025 20.9497C5.7375 19.637 5 17.8565 5 16L5 6.66667C5 5.42899 5.49167 4.242 6.36683 3.36683C7.242 2.49167 8.42899 2 9.66667 2C10.9043 2 12.0913 2.49167 12.9665 3.36683C13.8417 4.242 14.3333 5.42899 14.3333 6.66667V16C14.3333 16.6188 14.0875 17.2123 13.6499 17.6499C13.2123 18.0875 12.6188 18.3333 12 18.3333C11.3812 18.3333 10.7877 18.0875 10.3501 17.6499C9.9125 17.2123 9.66667 16.6188 9.66667 16V10.1667" stroke="currentColor" stroke-width="1.86667" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                        <div class="email-preview">Welcome to the team! Here's everything you need to get started on your first day. I've included links to HR portal, Slack channels, and your mentor info.</div>
+                    </div>
+                </div>
+
+                <!-- Email 26 -->
+                <div class="email-card">
+                    <div class="email-avatar"><img src="https://images.unsplash.com/photo-1624224971170-2f84fed5eb5e?w=100&h=100&fit=crop&crop=face" alt="Ryan Cooper"></div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Ryan Cooper</span>
+                            <span class="email-time">Jan 16</span>
+                        </div>
+                        <div class="email-subject">Podcast episode is live!</div>
+                        <div class="email-preview">Our latest episode just dropped! We interviewed the founder of Notion about building in public and the future of productivity tools. Listen now!</div>
+                    </div>
+                </div>
+
+                <!-- Email 27 -->
+                <div class="email-card">
+                    <div class="email-avatar"><img src="https://images.unsplash.com/photo-1619946794135-5bc917a27793?w=100&h=100&fit=crop&crop=face" alt="Maya Patel"></div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Maya Patel</span>
+                            <span class="email-time">Jan 15</span>
+                        </div>
+                        <div class="email-subject">Weekend hiking trip photos</div>
+                        <div class="email-preview">Finally got around to editing the photos from our hike! Check the shared album for all 47 pics. That sunset shot from the summit turned out amazing.</div>
+                    </div>
+                </div>
+
+                <!-- Email 28 -->
+                <div class="email-card">
+                    <div class="email-avatar"><img src="https://images.unsplash.com/photo-1600486913747-55e5470d6f40?w=100&h=100&fit=crop&crop=face" alt="Tyler Brooks"></div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Tyler Brooks</span>
+                            <span class="email-time">Jan 15</span>
+                        </div>
+                        <div class="email-subject">Guitar lessons next week</div>
+                        <div class="email-preview">Hey! Just confirming our lesson for Tuesday at 6pm. We'll work on barre chords this week. Practice the F chord shape if you get a chance before then!</div>
+                    </div>
+                </div>
+
+                <!-- Email 29 -->
+                <div class="email-card">
+                    <div class="email-avatar"><img src="https://images.unsplash.com/photo-1589571894960-20bbe2828d0a?w=100&h=100&fit=crop&crop=face" alt="Charlotte Adams"></div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Charlotte Adams</span>
+                            <span class="email-time">Jan 14</span>
+                        </div>
+                        <div class="email-subject">Art gallery opening this Saturday</div>
+                        <div class="email-preview">You're invited to the opening night of my exhibition! Free wine and snacks. Saturday 7pm at Gallery 42 on Valencia Street. Hope to see you there!</div>
+                    </div>
+                </div>
+
+                <!-- Email 30 -->
+                <div class="email-card">
+                    <div class="email-avatar"><img src="https://images.unsplash.com/photo-1463453091185-61582044d556?w=100&h=100&fit=crop&crop=face" alt="Ethan Murphy"></div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender">Ethan Murphy</span>
+                            <span class="email-time">Jan 14</span>
+                        </div>
+                        <div class="email-subject">Recipe for that pasta dish</div>
+                        <div class="email-preview">As promised, here's the recipe for the lemon garlic pasta you loved! The secret is using pasta water to make the sauce silky. Let me know how it turns out!</div>
                     </div>
                 </div>
             </div>
+            </div><!-- end scroll-container -->
 
             <!-- Bottom Tab Bar - iOS 26 Glass Pill -->
             <div class="tab-bar-container">
@@ -762,6 +1198,23 @@
                 document.querySelectorAll('.glass-pill-tabs .tab-item').forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
             });
+        });
+
+        // Scroll to hide/show search bar
+        const scrollContainer = document.querySelector('.scroll-container');
+        const searchBar = document.querySelector('.search-bar');
+        let lastScrollTop = 0;
+
+        scrollContainer.addEventListener('scroll', () => {
+            const scrollTop = scrollContainer.scrollTop;
+            if (scrollTop > lastScrollTop && scrollTop > 10) {
+                // Scrolling up (content moves up) — hide search bar
+                searchBar.classList.add('hidden');
+            } else {
+                // Scrolling down (content moves down) — show search bar
+                searchBar.classList.remove('hidden');
+            }
+            lastScrollTop = scrollTop;
         });
     </script>
 </body>
