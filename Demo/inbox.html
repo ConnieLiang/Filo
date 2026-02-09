@@ -1220,10 +1220,8 @@
         scrollContainer.addEventListener('scroll', () => {
             const scrollTop = scrollContainer.scrollTop;
             if (scrollTop > lastScrollTop && scrollTop > 10) {
-                // Scrolling up (content moves up) — hide search bar
                 searchBar.classList.add('hidden');
             } else {
-                // Scrolling down (content moves down) — show search bar
                 searchBar.classList.remove('hidden');
             }
             lastScrollTop = scrollTop;
