@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inbox - Filo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -356,6 +359,14 @@
             gap: 12px;
             padding: 0 20px 24px;
         }
+        .email-card.clickable {
+            cursor: pointer;
+            border-radius: 12px;
+            transition: background 0.2s ease;
+        }
+        .email-card.clickable:active {
+            background: rgba(0,0,0,0.04);
+        }
 
         .email-avatar {
             width: 36px;
@@ -406,6 +417,7 @@
         }
         .email-label.billing { color: var(--filo-18); }
         .email-label.travel { color: var(--filo-02); }
+        .email-label.family { color: #E85D75; }
 
         .email-content {
             flex: 1;
@@ -597,7 +609,7 @@
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            background: var(--filo-02);
+            background: var(--glass-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             display: flex;
@@ -612,7 +624,7 @@
         .compose-btn svg {
             width: 28px;
             height: 28px;
-            color: var(--filo-10);
+            color: var(--filo-06);
         }
 
         /* Desktop placeholder */
@@ -632,6 +644,459 @@
 
         body.desktop-mode .iphone-frame { display: none; }
         body.desktop-mode .desktop-placeholder { display: flex; }
+        body.android-mode .iphone-frame { display: none; }
+        body.android-mode .android-frame { display: flex; }
+
+        /* ============================================
+           ANDROID FRAME — Material Design 3
+           ============================================ */
+        .android-frame {
+            width: 390px;
+            height: 844px;
+            background: var(--filo-10);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            display: none;
+            flex-direction: column;
+            position: relative;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Android Status Bar */
+        .android-status-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 16px 6px;
+            background: var(--filo-10);
+        }
+
+        .android-status-left {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .android-status-left svg {
+            color: var(--filo-06);
+        }
+
+        .android-status-time {
+            font-size: 14px;
+            font-weight: 500;
+            font-family: 'Roboto', sans-serif;
+            color: var(--filo-06);
+            margin-right: 2px;
+        }
+
+        .android-status-icons {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .android-status-icons svg {
+            color: var(--filo-06);
+        }
+
+        /* M3 Search Bar */
+        .android-search-bar {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px 8px;
+            gap: 4px;
+            background: var(--filo-10);
+            opacity: 1;
+            max-height: 64px;
+            overflow: hidden;
+            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                        opacity 0.25s ease,
+                        padding 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .android-search-bar.hidden {
+            max-height: 0;
+            opacity: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        .android-search-pill {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            height: 48px;
+            padding: 0 6px 0 4px;
+            gap: 8px;
+            border-radius: 28px;
+            background: var(--filo-14);
+        }
+
+        .android-icon-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 24px;
+            border: none;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            color: var(--filo-06);
+        }
+
+        .android-icon-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .android-search-pill .android-icon-btn {
+            width: 40px;
+            height: 40px;
+        }
+
+        .android-search-text {
+            flex: 1;
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--filo-25);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .android-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .android-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Android Filter Tabs — same layout as iOS, Roboto font */
+        .android-sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: var(--filo-10);
+        }
+
+        .android-tabs {
+            display: flex;
+            gap: 24px;
+            padding: 0 20px;
+            background: var(--filo-10);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .android-tabs::-webkit-scrollbar { display: none; }
+
+        .android-tab {
+            display: flex;
+            align-items: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 12px 0;
+            position: relative;
+            font-size: 17px;
+            font-weight: 700;
+            font-family: 'Roboto', sans-serif;
+            color: var(--filo-07);
+            white-space: nowrap;
+        }
+
+        .android-tab.selected .name {
+            color: var(--filo-02);
+        }
+
+        .android-tab.selected::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--filo-02);
+            border-radius: 1.5px 1.5px 0 0;
+        }
+
+        .android-divider {
+            height: 1px;
+            background: var(--filo-14);
+        }
+
+        /* Android Scroll Container */
+        .android-scroll-container {
+            flex: 1;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* Android Email List */
+        .android-email-list {
+            padding-bottom: 100px;
+        }
+
+        .android-date-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--filo-07);
+            padding: 16px 16px 8px;
+            font-family: 'Roboto', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .android-email-card {
+            display: flex;
+            gap: 16px;
+            padding: 12px 16px;
+        }
+
+        .android-email-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .android-email-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .android-email-avatar.initials {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 500;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .android-email-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .android-email-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2px;
+        }
+
+        .android-email-sender {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--filo-07);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .android-email-sender.unread {
+            font-weight: 500;
+            color: var(--filo-06);
+        }
+
+        .android-email-sender .highlight {
+            font-weight: 500;
+            color: var(--filo-06);
+        }
+
+        .android-email-time {
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--filo-07);
+            flex-shrink: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .android-email-time.unread {
+            font-weight: 500;
+            color: var(--filo-06);
+        }
+
+        .android-email-subject {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--filo-07);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 2px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .android-email-subject.unread {
+            font-weight: 500;
+            color: var(--filo-06);
+        }
+
+        .android-email-preview {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--filo-07);
+            font-family: 'Roboto', sans-serif;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .android-email-preview.has-label {
+            display: block;
+            -webkit-line-clamp: unset;
+            -webkit-box-orient: unset;
+            overflow: visible;
+        }
+
+        .android-email-label {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 100px;
+            background: var(--filo-14);
+            font-size: 13px;
+            font-weight: 700;
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.2;
+            margin-left: 4px;
+            vertical-align: middle;
+        }
+
+        .android-email-label.billing { color: var(--filo-18); }
+        .android-email-label.travel { color: var(--filo-02); }
+        .android-email-label.family { color: #E85D75; }
+
+        /* Android Bottom Nav — M3 */
+        .android-nav-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .android-bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 80px;
+            background: var(--filo-10);
+            border-top: 1px solid var(--filo-14);
+            padding: 0 8px;
+        }
+
+        .android-nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            padding: 12px 0;
+        }
+
+        .android-nav-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 32px;
+            border-radius: 16px;
+            transition: all 0.2s;
+        }
+
+        .android-nav-item.active .android-nav-indicator {
+            width: 64px;
+            background: color-mix(in srgb, var(--filo-02) 20%, transparent);
+        }
+
+        .android-nav-indicator svg {
+            width: 24px;
+            height: 24px;
+            color: var(--filo-06);
+        }
+
+        .android-nav-item.active .android-nav-indicator svg {
+            color: var(--filo-02);
+        }
+
+        .android-nav-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--filo-06);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .android-nav-item.active .android-nav-label {
+            color: var(--filo-02);
+            font-weight: 600;
+        }
+
+        /* Android FAB — M3 Extended with collapse */
+        .android-fab {
+            position: absolute;
+            right: 16px;
+            top: -64px;
+            height: 56px;
+            padding: 0 20px;
+            border-radius: 28px;
+            background: var(--filo-02);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2), 0 6px 10px rgba(0, 0, 0, 0.14);
+            z-index: 5;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        border-radius 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .android-fab.collapsed {
+            width: 64px;
+            padding: 0;
+            border-radius: 50%;
+            gap: 0;
+        }
+
+        .android-fab svg {
+            width: 24px;
+            height: 24px;
+            color: #FFFFFF;
+            fill: #FFFFFF;
+            flex-shrink: 0;
+        }
+
+        .android-fab-label {
+            font-size: 16px;
+            font-weight: 500;
+            color: #FFFFFF;
+            font-family: 'Roboto', sans-serif;
+            white-space: nowrap;
+            overflow: hidden;
+            max-width: 100px;
+            transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        opacity 0.2s ease;
+        }
+
+        .android-fab.collapsed .android-fab-label {
+            max-width: 0;
+            opacity: 0;
+        }
     </style>
 </head>
 <body>
@@ -639,9 +1104,9 @@
         <h1>Inbox</h1>
         <p class="subtitle">The default home screen showing the user's email inbox with categories and email list.</p>
         <div class="meta">
-            <span class="meta-item">
+            <span class="meta-item" id="platform-meta">
                 <svg viewBox="0 0 24 24" fill="none"><rect x="5" y="2" width="14" height="20" rx="3" stroke="currentColor" stroke-width="2"/><line x1="12" y1="18" x2="12" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                iOS 26+
+                <span id="platform-label">iOS 26+</span>
             </span>
             <span class="meta-item">
                 <svg viewBox="0 0 24 24" fill="none"><path d="M3 9L12 2L21 9V20C21 21.1 20.1 22 19 22H5C3.9 22 3 21.1 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -652,8 +1117,9 @@
 
     <div class="mode-toggles">
         <div class="toggle-group">
-            <button class="mode-btn active" onclick="setPlatform('mobile')">Mobile</button>
-            <button class="mode-btn" onclick="setPlatform('desktop')">Desktop</button>
+            <button class="mode-btn active" onclick="setPlatform('ios')">iOS</button>
+            <button class="mode-btn" onclick="setPlatform('android')">Android</button>
+            <button class="mode-btn" onclick="setPlatform('macos')">macOS</button>
         </div>
         <div class="toggle-group">
             <button class="mode-btn active" onclick="setTheme('light')">Light</button>
@@ -736,6 +1202,19 @@
             <!-- Email List -->
             <div class="email-list">
                 <div class="date-label">Today</div>
+
+                <!-- Email 0 - Aunty Margaret (Family, Unread) -->
+                <div class="email-card clickable" onclick="window.location.href='read-email.html'">
+                    <div class="email-avatar"><img src="https://images.unsplash.com/photo-1683220367131-f9f205bb0391?q=80&w=100&auto=format&fit=crop" alt="Margaret Wilson"></div>
+                    <div class="email-content">
+                        <div class="email-header">
+                            <span class="email-sender unread">Margaret Wilson</span>
+                            <span class="email-time unread">4:18 PM</span>
+                        </div>
+                        <div class="email-subject unread">Thanksgiving dinner at our place!</div>
+                        <div class="email-preview has-label">Hi Adam! We'd love to have you over for Thanksgiving this year. Uncle...<span class="email-label family">Family</span></div>
+                    </div>
+                </div>
 
                 <!-- Email 1 - Thread -->
                 <div class="email-card">
@@ -1165,9 +1644,254 @@
             </div>
         </div>
 
+        <!-- Android Frame — Material Design 3 -->
+        <div class="android-frame">
+            <!-- Android Status Bar -->
+            <div class="android-status-bar">
+                <div class="android-status-left">
+                    <span class="android-status-time">9:30</span>
+                    <!-- Notification icons -->
+                    <svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M6 0C6.55 0 7 .45 7 1v.26A4 4 0 0 1 10 5v4l2 2H0l2-2V5a4 4 0 0 1 3-3.74V1c0-.55.45-1 1-1ZM4.5 12h3a1.5 1.5 0 0 1-3 0Z" fill="currentColor"/></svg>
+                    <svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1C.9 1 0 1.9 0 3v8c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2H2Zm1 3h6v1H3V4Zm0 2.5h4v1H3v-1Zm0 2.5h6v1H3V9Z" fill="currentColor"/></svg>
+                    <svg width="11" height="14" viewBox="0 0 11 14" fill="none"><path d="M1.5 0C.67 0 0 .67 0 1.5v11C0 13.33.67 14 1.5 14h8c.83 0 1.5-.67 1.5-1.5v-11C11 .67 10.33 0 9.5 0h-8ZM1 2h9v8H1V2Zm3.5 9h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1Z" fill="currentColor"/></svg>
+                </div>
+                <div class="android-status-icons">
+                    <!-- Water drop / WiFi -->
+                    <svg width="10" height="14" viewBox="0 0 10 14" fill="none"><path d="M5 0S0 5.5 0 8.5a5 5 0 0 0 10 0C10 5.5 5 0 5 0Z" fill="currentColor"/></svg>
+                    <!-- Signal triangle -->
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M0 12L12 12L12 0Z" fill="currentColor"/></svg>
+                    <!-- Battery vertical -->
+                    <svg width="8" height="14" viewBox="0 0 8 14" fill="none"><rect x="0.5" y="1.5" width="7" height="12" rx="1" stroke="currentColor" stroke-opacity="0.4"/><rect x="2" y="3" width="4" height="9" rx="0.5" fill="currentColor"/><rect x="2.5" y="0" width="3" height="1.5" rx="0.5" fill="currentColor"/></svg>
+                </div>
+            </div>
+
+            <div class="android-scroll-container">
+            <!-- M3 Search Bar -->
+            <div class="android-search-bar">
+                <div class="android-search-pill">
+                    <button class="android-icon-btn" title="Menu">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M3 6C3 5.44772 3.44772 5 4 5H20C20.5523 5 21 5.44772 21 6C21 6.55228 20.5523 7 20 7H4C3.44772 7 3 6.55228 3 6Z" fill="currentColor"/><path d="M3 12C3 11.4477 3.44772 11 4 11H20C20.5523 11 21 11.4477 21 12C21 12.5523 20.5523 13 20 13H4C3.44772 13 3 12.5523 3 12Z" fill="currentColor"/><path d="M4 17C3.44772 17 3 17.4477 3 18C3 18.5523 3.44772 19 4 19H20C20.5523 19 21 18.5523 21 18C21 17.4477 20.5523 17 20 17H4Z" fill="currentColor"/></svg>
+                    </button>
+                    <span class="android-search-text">Search</span>
+                    <div class="android-avatar">
+                        <img src="https://images.unsplash.com/photo-1573496799652-408c2ac9fe98?w=80&h=80&fit=crop&crop=face" alt="Profile">
+                    </div>
+                </div>
+                <button class="android-icon-btn" title="Customize">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M3.23162 7.94485C2.88848 7.94485 2.59436 7.82843 2.34926 7.59559C2.11642 7.35049 2 7.0625 2 6.73162C2 6.40074 2.11642 6.11887 2.34926 5.88603C2.59436 5.64093 2.88848 5.51838 3.23162 5.51838H12.4412V7.94485H3.23162ZM14.9963 10.4449C14.3223 10.4449 13.7034 10.2794 13.1397 9.94853C12.576 9.60539 12.1225 9.15196 11.7794 8.58823C11.4485 8.02451 11.2831 7.39951 11.2831 6.71324C11.2831 6.02696 11.4485 5.40809 11.7794 4.85662C12.1225 4.29289 12.576 3.84559 13.1397 3.51471C13.7034 3.17157 14.3223 3 14.9963 3C15.6826 3 16.3076 3.17157 16.8713 3.51471C17.4351 3.84559 17.8824 4.29289 18.2132 4.85662C18.5441 5.40809 18.7096 6.02696 18.7096 6.71324C18.7096 7.39951 18.5441 8.02451 18.2132 8.58823C17.8824 9.15196 17.4351 9.60539 16.8713 9.94853C16.3076 10.2794 15.6826 10.4449 14.9963 10.4449ZM14.9963 8.55147C15.511 8.55147 15.94 8.37377 16.2831 8.01838C16.6385 7.66299 16.8162 7.22794 16.8162 6.71324C16.8162 6.19853 16.6385 5.76961 16.2831 5.42647C15.94 5.07108 15.511 4.89338 14.9963 4.89338C14.4816 4.89338 14.0466 5.07108 13.6912 5.42647C13.348 5.76961 13.1765 6.19853 13.1765 6.71324C13.1765 7.22794 13.348 7.66299 13.6912 8.01838C14.0466 8.37377 14.4816 8.55147 14.9963 8.55147ZM17.4228 7.94485V5.51838H20.8235C21.1422 5.51838 21.4179 5.64093 21.6507 5.88603C21.8836 6.11887 22 6.40074 22 6.73162C22 7.0625 21.8836 7.35049 21.6507 7.59559C21.4179 7.82843 21.1422 7.94485 20.8235 7.94485H17.4228ZM20.75 15.4265C21.1054 15.4265 21.3995 15.5429 21.6324 15.7757C21.8775 16.0086 22 16.2966 22 16.6397C22 16.9706 21.8775 17.2586 21.6324 17.5037C21.3995 17.7365 21.1054 17.8529 20.75 17.8529H11.5588V15.4265H20.75ZM8.98529 12.9081C9.67157 12.9081 10.2966 13.0797 10.8603 13.4228C11.424 13.7537 11.8713 14.2071 12.2022 14.7831C12.5331 15.3468 12.6985 15.9718 12.6985 16.6581C12.6985 17.3321 12.5331 17.951 12.2022 18.5147C11.8713 19.0784 11.424 19.5319 10.8603 19.875C10.2966 20.2059 9.67157 20.3713 8.98529 20.3713C8.29902 20.3713 7.67402 20.2059 7.11029 19.875C6.55882 19.5319 6.11152 19.0784 5.76838 18.5147C5.4375 17.951 5.27206 17.3321 5.27206 16.6581C5.27206 15.9718 5.4375 15.3468 5.76838 14.7831C6.11152 14.2071 6.55882 13.7537 7.11029 13.4228C7.67402 13.0797 8.29902 12.9081 8.98529 12.9081ZM8.98529 14.8199C8.48284 14.8199 8.05392 14.9975 7.69853 15.3529C7.34314 15.7083 7.16544 16.1434 7.16544 16.6581C7.16544 17.1728 7.34314 17.6078 7.69853 17.9632C8.05392 18.3064 8.48284 18.4779 8.98529 18.4779C9.5 18.4779 9.92892 18.3064 10.2721 17.9632C10.6275 17.6078 10.8051 17.1728 10.8051 16.6581C10.8051 16.1434 10.6275 15.7083 10.2721 15.3529C9.92892 14.9975 9.5 14.8199 8.98529 14.8199ZM6.57721 15.4265V17.8529H3.15809C2.85172 17.8529 2.58211 17.7365 2.34926 17.5037C2.11642 17.2586 2 16.9706 2 16.6397C2 16.2966 2.11642 16.0086 2.34926 15.7757C2.58211 15.5429 2.85172 15.4265 3.15809 15.4265H6.57721Z" fill="currentColor"/></svg>
+                </button>
+            </div>
+
+            <!-- Android Filter Tabs -->
+            <div class="android-sticky-header">
+                <div class="android-tabs">
+                    <button class="android-tab selected"><span class="name">Important</span></button>
+                    <button class="android-tab"><span class="name">Updates</span></button>
+                    <button class="android-tab"><span class="name">Promotions</span></button>
+                    <button class="android-tab"><span class="name">Billing</span></button>
+                    <button class="android-tab"><span class="name">Travel</span></button>
+                    <button class="android-tab"><span class="name">Family</span></button>
+                    <button class="android-tab"><span class="name">All</span></button>
+                </div>
+                <div class="android-divider"></div>
+            </div>
+
+            <!-- Android Email List -->
+            <div class="android-email-list">
+                <div class="android-date-label">Today</div>
+
+                <!-- Aunty Margaret (Family, Unread) -->
+                <div class="android-email-card">
+                    <div class="android-email-avatar"><img src="https://images.unsplash.com/photo-1683220367131-f9f205bb0391?q=80&w=100&auto=format&fit=crop" alt="Margaret Wilson"></div>
+                    <div class="android-email-content">
+                        <div class="android-email-header">
+                            <span class="android-email-sender unread">Margaret Wilson</span>
+                            <span class="android-email-time unread">4:18 PM</span>
+                        </div>
+                        <div class="android-email-subject unread">Thanksgiving dinner at our place!</div>
+                        <div class="android-email-preview has-label">Hi Adam! We'd love to have you over for Thanksgiving this year...<span class="android-email-label family">Family</span></div>
+                    </div>
+                </div>
+
+                <div class="android-email-card">
+                    <div class="android-email-avatar"><img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=100&h=100&fit=crop&crop=face" alt="Marcus"></div>
+                    <div class="android-email-content">
+                        <div class="android-email-header">
+                            <span class="android-email-sender">Marcus, Julia, me, <span class="highlight">David</span></span>
+                            <span class="android-email-time unread">3:42 PM</span>
+                        </div>
+                        <div class="android-email-subject unread">Re: Q4 Budget Review Meeting</div>
+                        <div class="android-email-preview">Thanks everyone for the quick turnaround. I've attached the revised budget spreadsheet with the updated Q4 projections.</div>
+                    </div>
+                </div>
+
+                <div class="android-email-card">
+                    <div class="android-email-avatar"><img src="https://www.google.com/s2/favicons?domain=stripe.com&sz=128" alt="Stripe"></div>
+                    <div class="android-email-content">
+                        <div class="android-email-header">
+                            <span class="android-email-sender unread">Stripe</span>
+                            <span class="android-email-time unread">2:15 PM</span>
+                        </div>
+                        <div class="android-email-subject unread">Your invoice for January is ready</div>
+                        <div class="android-email-preview has-label">Invoice #INV-2024-0142 for $299.00 is now available. View and...<span class="android-email-label billing">Billing</span></div>
+                    </div>
+                </div>
+
+                <div class="android-email-card">
+                    <div class="android-email-avatar"><img src="https://images.unsplash.com/photo-1573496799652-408c2ac9fe98?w=100&h=100&fit=crop&crop=face" alt="Alexandra Chen"></div>
+                    <div class="android-email-content">
+                        <div class="android-email-header">
+                            <span class="android-email-sender">Alexandra Chen</span>
+                            <span class="android-email-time">1:58 PM</span>
+                        </div>
+                        <div class="android-email-subject">Design files for homepage refresh</div>
+                        <div class="android-email-preview">Hey! Here are the final mockups we discussed. Let me know if you need any revisions before we hand off.</div>
+                    </div>
+                </div>
+
+                <div class="android-email-card">
+                    <div class="android-email-avatar"><img src="https://www.google.com/s2/favicons?domain=delta.com&sz=128" alt="Delta"></div>
+                    <div class="android-email-content">
+                        <div class="android-email-header">
+                            <span class="android-email-sender">Delta Air Lines</span>
+                            <span class="android-email-time">12:30 PM</span>
+                        </div>
+                        <div class="android-email-subject">Your trip to San Francisco is coming up</div>
+                        <div class="android-email-preview has-label">Check in now for your flight DL 1247 departing Jan 28 at 9:45 AM...<span class="android-email-label travel">Travel</span></div>
+                    </div>
+                </div>
+
+                <div class="android-email-card">
+                    <div class="android-email-avatar"><img src="https://images.unsplash.com/photo-1614283233556-f35b0c801ef1?w=100&h=100&fit=crop&crop=face" alt="Rachel"></div>
+                    <div class="android-email-content">
+                        <div class="android-email-header">
+                            <span class="android-email-sender">Rachel, Tom, Sarah</span>
+                            <span class="android-email-time">11:45 AM</span>
+                        </div>
+                        <div class="android-email-subject">Re: Lunch plans Friday?</div>
+                        <div class="android-email-preview">That Italian place sounds great! I'm in. What time works for everyone?</div>
+                    </div>
+                </div>
+
+                <div class="android-email-card">
+                    <div class="android-email-avatar"><img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=100&h=100&fit=crop&crop=face" alt="James Wilson"></div>
+                    <div class="android-email-content">
+                        <div class="android-email-header">
+                            <span class="android-email-sender">James Wilson</span>
+                            <span class="android-email-time">10:22 AM</span>
+                        </div>
+                        <div class="android-email-subject">Quick question about the API</div>
+                        <div class="android-email-preview">Hey, I was looking at the documentation and wondering if there's a rate limit on the webhook endpoints.</div>
+                    </div>
+                </div>
+
+                <div class="android-email-card">
+                    <div class="android-email-avatar"><img src="https://www.google.com/s2/favicons?domain=netflix.com&sz=128" alt="Netflix"></div>
+                    <div class="android-email-content">
+                        <div class="android-email-header">
+                            <span class="android-email-sender">Netflix</span>
+                            <span class="android-email-time">9:15 AM</span>
+                        </div>
+                        <div class="android-email-subject">Your payment was successful</div>
+                        <div class="android-email-preview has-label">Thanks for your payment of $22.99. Your next billing date is Feb 15...<span class="android-email-label billing">Billing</span></div>
+                    </div>
+                </div>
+
+                <div class="android-date-label">Yesterday</div>
+
+                <div class="android-email-card">
+                    <div class="android-email-avatar"><img src="https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=100&h=100&fit=crop&crop=face" alt="Emma"></div>
+                    <div class="android-email-content">
+                        <div class="android-email-header">
+                            <span class="android-email-sender">Emma Rodriguez</span>
+                            <span class="android-email-time">Yesterday</span>
+                        </div>
+                        <div class="android-email-subject">Project timeline update</div>
+                        <div class="android-email-preview">Hi team, I wanted to share the updated timeline for the product launch.</div>
+                    </div>
+                </div>
+
+                <div class="android-email-card">
+                    <div class="android-email-avatar"><img src="https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=100&h=100&fit=crop&crop=face" alt="Kevin"></div>
+                    <div class="android-email-content">
+                        <div class="android-email-header">
+                            <span class="android-email-sender">Kevin, Lisa, me, <span class="highlight">Mike</span></span>
+                            <span class="android-email-time unread">Yesterday</span>
+                        </div>
+                        <div class="android-email-subject unread">Re: Re: Team offsite planning</div>
+                        <div class="android-email-preview">I think the cabin idea is perfect! Let me check on availability for March.</div>
+                    </div>
+                </div>
+
+                <div class="android-email-card">
+                    <div class="android-email-avatar"><img src="https://www.google.com/s2/favicons?domain=aws.amazon.com&sz=128" alt="AWS"></div>
+                    <div class="android-email-content">
+                        <div class="android-email-header">
+                            <span class="android-email-sender">Amazon Web Services</span>
+                            <span class="android-email-time">Yesterday</span>
+                        </div>
+                        <div class="android-email-subject">AWS Invoice Available - January 2024</div>
+                        <div class="android-email-preview has-label">Your invoice for account ending in 4521 is now available. Total: $847...<span class="android-email-label billing">Billing</span></div>
+                    </div>
+                </div>
+
+                <div class="android-email-card">
+                    <div class="android-email-avatar"><img src="https://images.unsplash.com/photo-1598550874175-4d0ef436c909?w=100&h=100&fit=crop&crop=face" alt="Sophie"></div>
+                    <div class="android-email-content">
+                        <div class="android-email-header">
+                            <span class="android-email-sender">Sophie Martinez</span>
+                            <span class="android-email-time">Yesterday</span>
+                        </div>
+                        <div class="android-email-subject">Feedback on your presentation</div>
+                        <div class="android-email-preview">Great job on the client pitch! I have a few thoughts that might help for the follow-up.</div>
+                    </div>
+                </div>
+
+                <div class="android-email-card">
+                    <div class="android-email-avatar"><img src="https://www.google.com/s2/favicons?domain=marriott.com&sz=128" alt="Marriott"></div>
+                    <div class="android-email-content">
+                        <div class="android-email-header">
+                            <span class="android-email-sender">Marriott Bonvoy</span>
+                            <span class="android-email-time">Yesterday</span>
+                        </div>
+                        <div class="android-email-subject">Your reservation is confirmed</div>
+                        <div class="android-email-preview has-label">Thank you for choosing Marriott. Confirmation #MR2847291...<span class="android-email-label travel">Travel</span></div>
+                    </div>
+                </div>
+            </div>
+            </div><!-- end android-scroll-container -->
+
+            <!-- M3 Bottom Navigation Container -->
+            <div class="android-nav-container">
+                <button class="android-fab">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M17.71 13.8C17.88 13.31 18.56 13.31 18.73 13.8L19.21 15.22C19.53 16.16 20.27 16.9 21.22 17.22L22.64 17.71C23.12 17.87 23.12 18.56 22.64 18.72L21.22 19.21C20.27 19.53 19.53 20.27 19.21 21.22L18.73 22.64C18.56 23.12 17.88 23.12 17.71 22.64L17.23 21.22C16.9 20.27 16.16 19.53 15.22 19.21L13.8 18.72C13.31 18.56 13.31 17.87 13.8 17.71L15.22 17.22C16.16 16.9 16.9 16.16 17.23 15.22L17.71 13.8ZM14.46 1.97C15.76 0.68 17.86 0.68 19.16 1.97C20.46 3.27 20.46 5.38 19.16 6.67L7.78 18.05L7.59 18.22C7.38 18.38 7.16 18.51 6.91 18.59L2.46 20.07L2.3 20.11C1.5 20.26 0.79 19.48 1.06 18.67L2.54 14.22C2.62 13.98 2.75 13.75 2.91 13.55L3.08 13.35L14.46 1.97ZM3.16 17.97L6.33 16.92L4.21 14.8L3.16 17.97ZM5.59 13.43L7.7 15.53L17.78 5.29C18.3 4.78 18.3 3.94 17.78 3.42C17.26 2.91 16.44 2.91 15.92 3.42L5.59 13.43Z" fill="currentColor"/></svg>
+                    <span class="android-fab-label">Compose</span>
+                </button>
+                <nav class="android-bottom-nav">
+                    <div class="android-nav-item active">
+                        <div class="android-nav-indicator">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="M22.84 6.35C22.91 6.3 23 6.35 23 6.43V18C23 19.65 21.65 21 20 21H4C2.35 21 1 19.65 1 18V6.43C1 6.35 1.09 6.3 1.16 6.35L10.82 13.38C11.52 13.89 12.48 13.89 13.18 13.38L22.84 6.35Z" fill="currentColor"/><path d="M20 3C20.91 3 21.72 3.4 22.27 4.04C22.34 4.13 22.32 4.25 22.23 4.32L13.18 10.91C12.48 11.42 11.52 11.42 10.82 10.91L1.77 4.32C1.68 4.25 1.66 4.13 1.73 4.04C2.28 3.4 3.09 3 4 3H20Z" fill="currentColor"/></svg>
+                        </div>
+                        <span class="android-nav-label">Inbox</span>
+                    </div>
+                    <div class="android-nav-item">
+                        <div class="android-nav-indicator">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="M2 4H21.1C21.64 4 22.07 4.49 22.07 5.1C22.07 5.7 21.64 6.19 21.1 6.19H2C1.51 6.19 1.07 5.7 1.07 5.1C1.07 4.49 1.51 4 2 4Z" fill="currentColor"/><path d="M15 11.1H21.1C21.64 11.1 22.07 11.59 22.07 12.2C22.07 12.81 21.64 13.3 21.1 13.3H15C14.48 13.3 14.04 12.81 14.04 12.2C14.04 11.59 14.48 11.1 15 11.1Z" fill="currentColor"/><path d="M15 18.21H21.1C21.64 18.21 22.07 18.7 22.07 19.3C22.07 19.91 21.64 20.4 21.1 20.4H15C14.48 20.4 14.04 19.91 14.04 19.3C14.04 18.7 14.48 18.21 15 18.21Z" fill="currentColor"/><path d="M11.57 12.59C11.94 12.11 11.85 11.41 11.38 11.03C10.91 10.66 10.24 10.74 9.87 11.23L5.07 17.53L2.91 14.89C2.52 14.42 1.84 14.36 1.39 14.75C0.93 15.14 0.87 15.84 1.25 16.31L4.28 20C4.48 20.25 4.78 20.39 5.09 20.4C5.41 20.41 5.71 20.27 5.92 20.03L11.57 12.59Z" fill="currentColor"/></svg>
+                        </div>
+                        <span class="android-nav-label">To-do</span>
+                    </div>
+                    <div class="android-nav-item">
+                        <div class="android-nav-indicator">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="M16.27 13.84C16.41 13.42 17.01 13.42 17.16 13.84L17.58 15.09C17.87 15.91 18.52 16.56 19.34 16.85L20.59 17.27C21.01 17.41 21.01 18.01 20.59 18.16L19.34 18.58C18.52 18.87 17.87 19.52 17.58 20.34L17.16 21.59C17.01 22.01 16.41 22.01 16.27 21.59L15.85 20.34C15.56 19.52 14.91 18.87 14.09 18.58L12.84 18.16C12.42 18.01 12.42 17.41 12.84 17.27L14.09 16.85C14.91 16.56 15.56 15.91 15.85 15.09L16.27 13.84Z" fill="currentColor"/><path d="M6.62 2.48C6.84 1.84 7.74 1.84 7.95 2.48L8.59 4.34C9.01 5.58 9.99 6.56 11.23 6.98L13.09 7.62C13.73 7.84 13.73 8.74 13.09 8.95L11.23 9.59C9.99 10.01 9.01 10.99 8.59 12.23L7.95 14.09C7.74 14.73 6.84 14.73 6.62 14.09L5.98 12.23C5.56 10.99 4.58 10.01 3.34 9.59L1.48 8.95C0.84 8.74 0.84 7.84 1.48 7.62L3.34 6.98C4.58 6.56 5.56 5.58 5.98 4.34L6.62 2.48Z" fill="currentColor"/></svg>
+                        </div>
+                        <span class="android-nav-label">AI</span>
+                    </div>
+                </nav>
+            </div>
+        </div>
         <div class="desktop-placeholder">
             <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/><line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="2"/></svg>
-            <span>Desktop version coming soon</span>
+            <span>macOS version coming soon</span>
         </div>
     </div>
 
@@ -1187,10 +1911,20 @@
         function setPlatform(platform) {
             const body = document.body;
             const btns = document.querySelectorAll('.toggle-group:first-child .mode-btn');
-            if (platform === 'desktop') {
+            const platformLabel = document.getElementById('platform-label');
+            const platformMeta = document.getElementById('platform-meta');
+            body.classList.remove('desktop-mode', 'android-mode');
+            if (platform === 'macos') {
                 body.classList.add('desktop-mode');
+                platformLabel.textContent = 'macOS';
+                platformMeta.querySelector('svg').innerHTML = '<rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/><line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="2"/>';
+            } else if (platform === 'android') {
+                body.classList.add('android-mode');
+                platformLabel.textContent = 'Android';
+                platformMeta.querySelector('svg').innerHTML = '<path d="M17.523 2.23a.75.75 0 0 0-1.046.206l-1.2 1.8A7.468 7.468 0 0 0 12 3.5a7.468 7.468 0 0 0-3.277.736l-1.2-1.8A.75.75 0 1 0 6.277 3.57l1.06 1.59A7.5 7.5 0 0 0 4.5 11v.5h15V11a7.5 7.5 0 0 0-2.837-5.84l1.06-1.59a.75.75 0 0 0-.2-1.04zM9 9a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm6 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM4.5 13v5.5A2.5 2.5 0 0 0 7 21h10a2.5 2.5 0 0 0 2.5-2.5V13h-15z" fill="currentColor"/>';
             } else {
-                body.classList.remove('desktop-mode');
+                platformLabel.textContent = 'iOS 26+';
+                platformMeta.querySelector('svg').innerHTML = '<rect x="5" y="2" width="14" height="20" rx="3" stroke="currentColor" stroke-width="2"/><line x1="12" y1="18" x2="12" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>';
             }
             btns.forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
@@ -1212,19 +1946,51 @@
             });
         });
 
-        // Scroll to hide/show search bar
+        // Scroll to hide/show search bar (iOS)
         const scrollContainer = document.querySelector('.scroll-container');
         const searchBar = document.querySelector('.search-bar');
         let lastScrollTop = 0;
 
         scrollContainer.addEventListener('scroll', () => {
             const scrollTop = scrollContainer.scrollTop;
-            if (scrollTop > lastScrollTop && scrollTop > 10) {
+            const delta = scrollTop - lastScrollTop;
+            if (Math.abs(delta) < 5) return;
+            if (delta > 0 && scrollTop > 10) {
                 searchBar.classList.add('hidden');
-            } else {
+            } else if (delta < 0) {
                 searchBar.classList.remove('hidden');
             }
             lastScrollTop = scrollTop;
+        });
+
+        // Scroll to hide/show search bar + collapse FAB (Android)
+        const androidScrollContainer = document.querySelector('.android-scroll-container');
+        const androidSearchBar = document.querySelector('.android-search-bar');
+        const androidFab = document.querySelector('.android-fab');
+        let androidLastScrollTop = 0;
+
+        if (androidScrollContainer && androidSearchBar) {
+            androidScrollContainer.addEventListener('scroll', () => {
+                const scrollTop = androidScrollContainer.scrollTop;
+                const delta = scrollTop - androidLastScrollTop;
+                if (Math.abs(delta) < 5) return;
+                if (delta > 0 && scrollTop > 10) {
+                    androidSearchBar.classList.add('hidden');
+                    androidFab.classList.add('collapsed');
+                } else if (delta < 0) {
+                    androidSearchBar.classList.remove('hidden');
+                    androidFab.classList.remove('collapsed');
+                }
+                androidLastScrollTop = scrollTop;
+            });
+        }
+
+        // Android tab selection
+        document.querySelectorAll('.android-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.android-tab').forEach(t => t.classList.remove('selected'));
+                tab.classList.add('selected');
+            });
         });
     </script>
 </body>

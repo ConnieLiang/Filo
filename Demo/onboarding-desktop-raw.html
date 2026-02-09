@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Onboarding - See Filo in Action</title>
+  <title>Onboarding - Raw (No User Data)</title>
   <style>
     * {
       margin: 0;
@@ -492,6 +492,15 @@
       flex-shrink: 0;
     }
 
+    .content.step5 .info {
+      display: none;
+    }
+
+    .content.step5 .visual {
+      width: 100%;
+      flex-shrink: 0;
+    }
+
     .panel-header {
       height: 48px;
       display: flex;
@@ -957,6 +966,140 @@
       height: 32px;
     }
 
+    .ready-content-centered {
+      justify-content: center;
+    }
+
+    .ready-icon-large {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 32px;
+    }
+
+    .ready-icon-large svg {
+      width: 56px;
+      height: 56px;
+    }
+
+    .ready-no-card {
+      background: transparent;
+    }
+
+    .slide-fullwidth {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .complete-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    .complete-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--filo-06);
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+
+    .complete-subtitle {
+      font-size: 16px;
+      color: var(--filo-07);
+      margin-bottom: 48px;
+      max-width: 360px;
+    }
+
+    .complete-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--filo-07);
+      border: none;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 8px 16px;
+    }
+
+    .btn-secondary:hover {
+      color: var(--filo-06);
+    }
+
+    .ready-icon-animated {
+      animation: checkPop 0.5s ease-out;
+    }
+
+    @keyframes checkPop {
+      0% {
+        transform: scale(0);
+        opacity: 0;
+      }
+      60% {
+        transform: scale(1.1);
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .checkmark-path {
+      stroke-dasharray: 30;
+      stroke-dashoffset: 30;
+      animation: drawCheck 0.4s ease-out 0.3s forwards;
+    }
+
+    @keyframes drawCheck {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    .confetti-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      opacity: 0;
+      animation: confettiFall 1.5s ease-out forwards;
+    }
+
+    @keyframes confettiFall {
+      0% {
+        opacity: 1;
+        transform: translateY(0) rotate(0deg);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(400px) rotate(720deg);
+      }
+    }
+
     .ready-title {
       font-size: var(--H5-size);
       font-weight: var(--H5-weight);
@@ -1008,7 +1151,7 @@
 <body>
   <!-- Page Header -->
   <div class="page-header">
-    <h1>Onboarding - See Filo in Action</h1>
+    <h1>Onboarding - Raw (No User Data)</h1>
     <p class="page-subtitle">Desktop version of the interactive onboarding flow. Filo AI helps users set up their inbox through conversation, organizing emails, creating todos, suggesting labels, and drafting replies.</p>
     <div class="page-meta">
       <span class="meta-item">
@@ -1058,8 +1201,8 @@
                   <path class="sparkle-small" d="M19.0215 0.341675C19.1774 -0.113881 19.8216 -0.113867 19.9775 0.341675L20.4336 1.67664C20.7369 2.56495 21.4349 3.26294 22.3232 3.56628L23.6572 4.02136C24.1132 4.17708 24.1132 4.82267 23.6572 4.97839L22.3232 5.43347C21.435 5.73679 20.737 6.43491 20.4336 7.32312L19.9775 8.65808C19.8217 9.11391 19.1773 9.11392 19.0215 8.65808L18.5654 7.32312C18.262 6.43492 17.564 5.73679 16.6758 5.43347L15.3418 4.97839C14.8858 4.82267 14.8858 4.17708 15.3418 4.02136L16.6758 3.56628C17.5641 3.26294 18.2621 2.56494 18.5654 1.67664L19.0215 0.341675Z" fill="#22A0FB"/>
                 </svg>
               </div>
-              <h1 class="title" id="title1">Look What I Found</h1>
-              <p class="subtitle" id="subtitle1">These were hiding deep in your inbox and looked important enough to surface. Take a quick look and mark the ones you want to keep an eye on.</p>
+              <h1 class="title" id="title1">Mark what matters, I'll learn the rest</h1>
+              <p class="subtitle" id="subtitle1">I scan your inbox and surface emails you might miss. Try clicking to mark which ones are important — I'll learn your preferences over time.</p>
             </div>
 
             <!-- Step 2: Todos -->
@@ -1070,8 +1213,8 @@
                   <path class="sparkle-small" d="M19.0215 0.341675C19.1774 -0.113881 19.8216 -0.113867 19.9775 0.341675L20.4336 1.67664C20.7369 2.56495 21.4349 3.26294 22.3232 3.56628L23.6572 4.02136C24.1132 4.17708 24.1132 4.82267 23.6572 4.97839L22.3232 5.43347C21.435 5.73679 20.737 6.43491 20.4336 7.32312L19.9775 8.65808C19.8217 9.11391 19.1773 9.11392 19.0215 8.65808L18.5654 7.32312C18.262 6.43492 17.564 5.73679 16.6758 5.43347L15.3418 4.97839C14.8858 4.82267 14.8858 4.17708 15.3418 4.02136L16.6758 3.56628C17.5641 3.26294 18.2621 2.56494 18.5654 1.67664L19.0215 0.341675Z" fill="#22A0FB"/>
                 </svg>
               </div>
-              <h1 class="title" id="title2">Some Things Need Doing</h1>
-              <p class="subtitle" id="subtitle2">Spotted these tasks hiding in your emails. Already done? Check them off. Don't need them? Toss them out.</p>
+              <h1 class="title" id="title2">To-dos from your inbox, automatically</h1>
+              <p class="subtitle" id="subtitle2">Deadlines, requests, follow-ups — You can mark them as done, remove those you don't need, or just tell me your rules, like 'always create a task for meeting invites'.</p>
             </div>
 
             <!-- Step 3: Labels -->
@@ -1082,8 +1225,8 @@
                   <path class="sparkle-small" d="M19.0215 0.341675C19.1774 -0.113881 19.8216 -0.113867 19.9775 0.341675L20.4336 1.67664C20.7369 2.56495 21.4349 3.26294 22.3232 3.56628L23.6572 4.02136C24.1132 4.17708 24.1132 4.82267 23.6572 4.97839L22.3232 5.43347C21.435 5.73679 20.737 6.43491 20.4336 7.32312L19.9775 8.65808C19.8217 9.11391 19.1773 9.11392 19.0215 8.65808L18.5654 7.32312C18.262 6.43492 17.564 5.73679 16.6758 5.43347L15.3418 4.97839C14.8858 4.82267 14.8858 4.17708 15.3418 4.02136L16.6758 3.56628C17.5641 3.26294 18.2621 2.56494 18.5654 1.67664L19.0215 0.341675Z" fill="#22A0FB"/>
                 </svg>
               </div>
-              <h1 class="title" id="title3">I Made Some Labels for You</h1>
-              <p class="subtitle" id="subtitle3">These should help you stay organized. Keep the ones that fit, skip the ones that don't.</p>
+              <h1 class="title" id="title3">I'll keep your inbox organized with labels</h1>
+              <p class="subtitle" id="subtitle3">Suggested based on your patterns — or add your own.</p>
             </div>
 
             <!-- Step 4: Reply -->
@@ -1094,21 +1237,12 @@
                   <path class="sparkle-small" d="M19.0215 0.341675C19.1774 -0.113881 19.8216 -0.113867 19.9775 0.341675L20.4336 1.67664C20.7369 2.56495 21.4349 3.26294 22.3232 3.56628L23.6572 4.02136C24.1132 4.17708 24.1132 4.82267 23.6572 4.97839L22.3232 5.43347C21.435 5.73679 20.737 6.43491 20.4336 7.32312L19.9775 8.65808C19.8217 9.11391 19.1773 9.11392 19.0215 8.65808L18.5654 7.32312C18.262 6.43492 17.564 5.73679 16.6758 5.43347L15.3418 4.97839C14.8858 4.82267 14.8858 4.17708 15.3418 4.02136L16.6758 3.56628C17.5641 3.26294 18.2621 2.56494 18.5654 1.67664L19.0215 0.341675Z" fill="#22A0FB"/>
                 </svg>
               </div>
-              <h1 class="title" id="title4">This One's Been Waiting</h1>
-              <p class="subtitle" id="subtitle4">Looks like an email is still waiting for your reply. Select a response style and I'll put together a draft for you.</p>
+              <h1 class="title" id="title4">Pick a response you like</h1>
+              <p class="subtitle" id="subtitle4">I draft replies for emails that need your attention. Choose the one that fits.</p>
             </div>
 
             <!-- Step 5: Ready -->
-            <div class="info-slide" data-step="5">
-              <div class="slide-icon">
-                <svg viewBox="0 0 24 24" fill="none">
-                  <path class="sparkle-main" d="M7.59668 7.64636C7.89082 6.78501 9.1082 6.78501 9.40234 7.64636L10.2637 10.1669C10.8366 11.8447 12.1543 13.1632 13.832 13.7362L16.3535 14.5966C17.2149 14.8907 17.2149 16.1091 16.3535 16.4032L13.832 17.2645C12.1544 17.8376 10.8366 19.1552 10.2637 20.8329L9.40234 23.3544C9.10797 24.2151 7.89104 24.2151 7.59668 23.3544L6.73535 20.8329C6.16241 19.1551 4.84467 17.8376 3.16699 17.2645L0.645508 16.4032C-0.215783 16.109 -0.215821 14.8907 0.645508 14.5966L3.16699 13.7362C4.8448 13.1632 6.16239 11.8447 6.73535 10.1669L7.59668 7.64636Z" fill="#22A0FB"/>
-                  <path class="sparkle-small" d="M19.0215 0.341675C19.1774 -0.113881 19.8216 -0.113867 19.9775 0.341675L20.4336 1.67664C20.7369 2.56495 21.4349 3.26294 22.3232 3.56628L23.6572 4.02136C24.1132 4.17708 24.1132 4.82267 23.6572 4.97839L22.3232 5.43347C21.435 5.73679 20.737 6.43491 20.4336 7.32312L19.9775 8.65808C19.8217 9.11391 19.1773 9.11392 19.0215 8.65808L18.5654 7.32312C18.262 6.43492 17.564 5.73679 16.6758 5.43347L15.3418 4.97839C14.8858 4.82267 14.8858 4.17708 15.3418 4.02136L16.6758 3.56628C17.5641 3.26294 18.2621 2.56494 18.5654 1.67664L19.0215 0.341675Z" fill="#22A0FB"/>
-                </svg>
-              </div>
-              <h1 class="title" id="title5">You're All Set</h1>
-              <p class="subtitle" id="subtitle5">I've tidied things up for you. Ready to dive in? Or add another email account—I can handle them all.</p>
-            </div>
+            <div class="info-slide" data-step="5"></div>
 
             <div class="nav">
               <div class="nav-links" id="navLinks" style="display:none;">
@@ -1201,34 +1335,19 @@
             </div>
 
             <!-- Step 5: Ready -->
-            <div class="slide" data-step="5">
-              <div class="screen-wrapper">
-                <div class="ready-content">
-                  <div class="ready-icon">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <path d="M10.1267 19.7574C9.69231 19.7574 9.32127 19.5643 9.01358 19.1782L4.32579 13.3139C4.21116 13.1752 4.1267 13.0394 4.0724 12.9067C4.02413 12.7739 4 12.6382 4 12.4994C4 12.1857 4.10256 11.9263 4.30769 11.7212C4.51885 11.516 4.78431 11.4135 5.10407 11.4135C5.4721 11.4135 5.78281 11.5794 6.0362 11.9112L10.0905 17.1148L17.9457 4.63519C18.0845 4.42402 18.2262 4.27621 18.371 4.19175C18.5158 4.10125 18.7029 4.056 18.9321 4.056C19.2459 4.056 19.5023 4.15555 19.7014 4.35464C19.9005 4.5477 20 4.8011 20 5.11482C20 5.24152 19.9789 5.37123 19.9367 5.50396C19.8944 5.63066 19.8281 5.76641 19.7376 5.9112L11.2308 19.1691C10.9653 19.5613 10.5973 19.7574 10.1267 19.7574Z" fill="white"/>
-                    </svg>
-                  </div>
-                  <div class="ready-title" id="readyTitle">Done and Dusted</div>
-                  <div class="ready-subtitle" id="readySubtitle">Here's what I took care of</div>
-                  <div class="stats-grid">
-                    <div class="stat-item">
-                      <div class="stat-value" id="statEmails" data-target="128">0</div>
-                      <div class="stat-label" id="statLabelEmails">Emails Synced</div>
-                    </div>
-                    <div class="stat-item">
-                      <div class="stat-value" id="statTodos" data-target="5">0</div>
-                      <div class="stat-label" id="statLabelTodos">Tasks Found</div>
-                    </div>
-                    <div class="stat-item">
-                      <div class="stat-value" id="statLabels" data-target="3">0</div>
-                      <div class="stat-label" id="statLabelLabels">Labels Created</div>
-                    </div>
-                    <div class="stat-item">
-                      <div class="stat-value" id="statDrafts" data-target="1">0</div>
-                      <div class="stat-label" id="statLabelDrafts">Draft Saved</div>
-                    </div>
-                  </div>
+            <div class="slide slide-fullwidth" data-step="5">
+              <div class="confetti-container" id="confettiContainer"></div>
+              <div class="complete-content">
+                <div class="ready-icon ready-icon-large ready-icon-animated">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path class="checkmark-path" d="M5 12L10 17L19 6" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                  </svg>
+                </div>
+                <h1 class="complete-title" id="completeTitle">You're All Set</h1>
+                <p class="complete-subtitle" id="completeSubtitle">Ready to dive in? Or add another email account—I can handle them all.</p>
+                <div class="complete-actions">
+                  <button class="btn btn-primary" id="btnGoToInbox">Dive into Filo</button>
+                  <button class="btn btn-secondary" id="btnAddAccount">Add account</button>
                 </div>
               </div>
             </div>
@@ -1265,11 +1384,11 @@
         wrapUp: 'Let\'s Wrap Up',
         addAccount: 'Add account',
         goToInbox: 'Dive into Filo',
-        step1: { title: 'Look What I Found', subtitle: 'These were hiding deep in your inbox and looked important enough to surface. Take a quick look and mark the ones you want to keep an eye on.' },
-        step2: { title: 'Some Things Need Doing', subtitle: 'Spotted these tasks hiding in your emails. Already done? Check them off. Don\'t need them? Toss them out.' },
-        step3: { title: 'I Made Some Labels for You', subtitle: 'These should help you stay organized. Keep the ones that fit, skip the ones that don\'t.' },
-        step4: { title: 'This One\'s Been Waiting', subtitle: 'Looks like an email is still waiting for your reply. Select a response style and I\'ll put together a draft for you.' },
-        step5: { title: 'You\'re All Set', subtitle: 'I\'ve tidied things up for you. Ready to dive in? Or add another email account—I can handle them all.' },
+        step1: { title: 'Mark what matters, I\'ll learn the rest', subtitle: 'I scan your inbox and surface emails you might miss. Try clicking to mark which ones are important — I\'ll learn your preferences over time.' },
+        step2: { title: 'To-dos from your inbox, automatically', subtitle: 'Deadlines, requests, follow-ups — You can mark them as done, remove those you don\'t need, or just tell me your rules, like \'always create a task for meeting invites\'.' },
+        step3: { title: 'I\'ll keep your inbox organized with labels', subtitle: 'Suggested based on your patterns — or add your own.' },
+        step4: { title: 'Pick a response you like', subtitle: 'I draft replies for emails that need your attention. Choose the one that fits.' },
+        step5: { title: 'You\'re All Set', subtitle: 'Ready to dive in? Or add another email account—I can handle them all.' },
         proc: ['Syncing your emails...', 'Looking for important ones...', 'Extracting action items...', 'Suggesting some labels...', 'Checking for pending replies...'],
         panels: ['Emails I Found', 'To-dos', 'Suggested Labels'],
         replyPlaceholder: 'Pick a response style below',
@@ -1420,7 +1539,7 @@
     function updateI18n() {
       const lang = i18n[state.lang];
       
-      for (let i = 0; i <= 5; i++) {
+      for (let i = 0; i <= 4; i++) {
         const step = lang[`step${i}`];
         if (step) {
           $(`#title${i}`).textContent = step.title;
@@ -1444,12 +1563,10 @@
         btn.textContent = lang.quickBtns[i];
       });
       
-      $('#readyTitle').textContent = lang.readyTitle;
-      $('#readySubtitle').textContent = lang.readySubtitle;
-      $('#statLabelEmails').textContent = lang.stats[0];
-      $('#statLabelTodos').textContent = lang.stats[1];
-      $('#statLabelLabels').textContent = lang.stats[2];
-      $('#statLabelDrafts').textContent = lang.stats[3];
+      $('#completeTitle').textContent = lang.step5.title;
+      $('#completeSubtitle').textContent = lang.step5.subtitle;
+      $('#btnGoToInbox').textContent = lang.goToInbox;
+      $('#btnAddAccount').textContent = lang.addAccount;
       
       updateButtons();
     }
@@ -1471,15 +1588,10 @@
         $('#navLinks .nav-divider').style.display = state.step === 1 ? 'none' : 'block';
         skipBtn.textContent = lang.skip;
         nextBtn.style.display = 'inline-flex';
-        nextBtn.textContent = state.step === 1 ? lang.markImportant : state.step === 3 ? lang.looksGood : state.step === 4 ? lang.wrapUp : lang.next;
+        nextBtn.textContent = lang.next;
       } else if (state.step === 5) {
-        navLinks.style.display = 'flex';
-        backBtn.style.display = 'block';
-        backBtn.textContent = lang.back;
-        $('#navLinks .nav-divider').style.display = 'block';
-        skipBtn.textContent = lang.addAccount;
-        nextBtn.style.display = 'inline-flex';
-        nextBtn.textContent = lang.goToInbox;
+        navLinks.style.display = 'none';
+        nextBtn.style.display = 'none';
       }
     }
 
@@ -1490,6 +1602,7 @@
       
       // Toggle processing state for centered layout
       $('.content').classList.toggle('processing', n === 0);
+      $('.content').classList.toggle('step5', n === 5);
       
       updateButtons();
       
@@ -1498,7 +1611,7 @@
       if (n === 2) renderTodos();
       if (n === 3) renderLabels();
       if (n === 4) renderReply();
-      if (n === 5) animateStats();
+      if (n === 5) launchConfetti();
     }
 
     // ========== Step 5: Stats Animation ==========
@@ -1652,6 +1765,23 @@
       });
     }
 
+    function launchConfetti() {
+      const container = $('#confettiContainer');
+      container.innerHTML = '';
+      const colors = ['#22A0FB', '#FFD700', '#FF6B6B', '#4ECDC4', '#A78BFA', '#F472B6'];
+      for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.top = '-10px';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDelay = Math.random() * 0.3 + 's';
+        confetti.style.animationDuration = (1 + Math.random() * 1) + 's';
+        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        container.appendChild(confetti);
+      }
+    }
+
     function generateReply(type) {
       $$('.quick-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.reply === type));
       
@@ -1691,6 +1821,14 @@
 
     $('#backBtn').onclick = () => {
       if (state.step > 1) goToStep(state.step - 1);
+    };
+
+    $('#btnGoToInbox').onclick = () => {
+      alert('Welcome to Filo!');
+    };
+
+    $('#btnAddAccount').onclick = () => {
+      alert('Add account clicked');
     };
 
     // Keyboard navigation

@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Read Email - Filo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --filo-01: #1F9EFA;
+            --filo-02: #22A0FB;
+            --filo-05: #E8EEF2;
+            --filo-06: #000000;
+            --filo-07: #707070;
+            --filo-08: #D5D5D5;
+            --filo-09: #F5F5F5;
+            --filo-10: #FFFFFF;
+            --filo-11: #E53935;
+            --filo-14: rgba(0, 0, 0, 0.04);
+            --filo-15: rgba(34, 160, 251, 0.08);
+            --filo-18: #7EBA02;
+            --filo-25: #9E9E9E;
+            --bg: #F5F5F5;
+            --glass-bg: rgba(247, 247, 247, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --glass-shadow: rgba(0, 0, 0, 0.04);
+            --font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+        }
+
+        body.dark-mode {
+            --filo-01: #6CC1FF;
+            --filo-02: #45B1FF;
+            --filo-05: #344352;
+            --filo-06: #FFFFFF;
+            --filo-07: #8B8B8B;
+            --filo-08: #414149;
+            --filo-09: #2A2A30;
+            --filo-10: #1D1D21;
+            --filo-11: #BE424D;
+            --filo-14: rgba(255, 255, 255, 0.06);
+            --filo-15: rgba(76, 180, 255, 0.12);
+            --filo-18: #9AD803;
+            --filo-25: #727272;
+            --bg: #000000;
+            --glass-bg: rgba(40, 40, 40, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-shadow: rgba(0, 0, 0, 0.04);
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--bg);
+            min-height: 100vh;
+            padding: 60px 80px;
+            color: var(--filo-06);
+        }
+
+        /* ============================================
+           PAGE HEADER (outside phone frame)
+           ============================================ */
+        .header {
+            margin-bottom: 40px;
+        }
+
+        /* H2 — 32px / 700 / 1.3 / 0.2px */
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.3;
+            letter-spacing: 0.2px;
+            margin-bottom: 8px;
+        }
+
+        /* P3_R — 15px / 400 / 1.35 / -0.2px */
+        .subtitle {
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 1.35;
+            letter-spacing: -0.2px;
+            color: var(--filo-07);
+            margin-bottom: 16px;
+        }
+
+        /* P4_R — 13px / 400 / 1.2 / 0 */
+        .meta {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 1.2;
+            color: var(--filo-07);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .meta-item svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Mode Toggles */
+        .mode-toggles {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .toggle-group {
+            display: flex;
+            background: var(--filo-14);
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        .mode-btn {
+            padding: 6px 12px;
+            border: none;
+            background: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--filo-07);
+            transition: all 0.2s;
+            font-family: var(--font-family);
+        }
+
+        .mode-btn.active {
+            background: var(--filo-10);
+            color: var(--filo-06);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        /* Screen Container */
+        .screen-container {
+            display: flex;
+            justify-content: center;
+            padding: 40px 0;
+        }
+
+        /* ============================================
+           iPHONE FRAME
+           ============================================ */
+        .iphone-frame {
+            width: 390px;
+            height: 844px;
+            background: var(--filo-10);
+            border-radius: 44px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* ============================================
+           STATUS BAR (iOS)
+           ============================================ */
+        .status-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 0;
+            background: var(--filo-10);
+        }
+
+        .status-time {
+            flex: 1;
+            padding-left: 28px;
+        }
+
+        /* P1.1_B for time — 17px / 600 */
+        .status-time span {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--filo-06);
+        }
+
+        .status-island {
+            width: 124px;
+            height: 10px;
+        }
+
+        .status-icons {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 7px;
+            padding-right: 20px;
+        }
+
+        .status-icons svg {
+            color: var(--filo-06);
+        }
+
+        .status-icons .icon-signal { width: 17px; height: 12px; }
+        .status-icons .icon-wifi { width: 18px; height: 13px; }
+        .status-icons .icon-battery { width: 27px; height: 13px; }
+
+        /* ============================================
+           NAVIGATION BAR — Read Email variant
+           from navigation-bars.json:
+           Left: glass back btn (42px)
+           Center: glass pill action bar (132×42, 3 icons)
+           Right: glass more btn (42px)
+           ============================================ */
+        .nav-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px 8px;
+            height: 50px;
+            background: var(--filo-10);
+        }
+
+        /* Glass icon button — 42×42 */
+        .glass-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 2px 8px var(--glass-shadow), inset 0 1px 0 var(--glass-border);
+            color: var(--filo-06);
+            flex-shrink: 0;
+        }
+
+        .glass-btn:active {
+            opacity: 0.6;
+        }
+
+        .glass-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Glass pill action bar — 132×42, pill shape, 3 icons */
+        .glass-pill {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            height: 42px;
+            padding: 0 16px;
+            border-radius: 999px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 2px 8px var(--glass-shadow), inset 0 1px 0 var(--glass-border);
+            color: var(--filo-06);
+        }
+
+        .glass-pill button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            margin: -8px;
+            border-radius: 8px;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .glass-pill button:active {
+            opacity: 0.5;
+        }
+
+        .glass-pill svg {
+            width: 20px;
+            height: 20px;
+            display: block;
+        }
+
+        /* ============================================
+           SCROLLABLE CONTENT AREA
+           ============================================ */
+        .email-scroll {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .email-scroll-inner {
+            padding-bottom: 100px;
+        }
+
+        /* ============================================
+           SUBJECT — H5: 22px / 700 / 1.2 / 0
+           ============================================ */
+        .email-subject-section {
+            padding: 16px 20px 20px;
+        }
+
+        .email-subject-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--filo-06);
+            line-height: 1.2;
+            letter-spacing: 0;
+            display: inline;
+        }
+
+        /* Filo AI sparkle icon inline */
+        .sparkle-icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            color: var(--filo-07);
+            vertical-align: middle;
+            margin-left: 8px;
+            position: relative;
+            top: -2px;
+        }
+
+        /* ============================================
+           SENDER SECTION
+           ============================================ */
+        .sender-section {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 4px 20px 16px;
+        }
+
+        .sender-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .sender-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sender-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .sender-name-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* P3_B — 15px / 700 / 1.35 / -0.2px (sender name) */
+        .sender-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--filo-06);
+            line-height: 1.35;
+            letter-spacing: -0.2px;
+        }
+
+        /* P3_R — 15px / 400 / 1.35 / -0.2px (timestamp) */
+        .sender-time {
+            font-size: 15px;
+            font-weight: 400;
+            color: var(--filo-07);
+            line-height: 1.35;
+            letter-spacing: -0.2px;
+        }
+
+        .sender-to-row {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            margin-top: 2px;
+        }
+
+        /* P4_B — 13px / 700 / 1.2 / 0 (To: label) */
+        .sender-to-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--filo-06);
+            line-height: 1.2;
+        }
+
+        /* P4_R — 13px / 400 / 1.2 / 0 (recipient) */
+        .sender-to-recipient {
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--filo-07);
+            line-height: 1.2;
+            display: flex;
+            align-items: center;
+            gap: 1px;
+            cursor: pointer;
+        }
+
+        .sender-to-recipient .chevron {
+            width: 10px;
+            height: 10px;
+        }
+
+        .sender-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+            padding-top: 4px;
+        }
+
+        .sender-action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--filo-06);
+            padding: 4px;
+        }
+
+        .sender-action-btn:active {
+            opacity: 0.5;
+        }
+
+        .sender-action-btn svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* ============================================
+           AI SUMMARY CARD
+           from cards.json: background var(--filo-05),
+           border-radius 24px, width fills container
+           ============================================ */
+        .summary-card {
+            margin: 0 20px 12px;
+            background: var(--filo-05);
+            border-left: 3px solid var(--filo-02);
+            border-radius: 24px;
+            padding: 16px;
+        }
+
+        .summary-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        /* P1.1_B — 17px / 700 / 1.4 / -0.2px */
+        .summary-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--filo-02);
+            line-height: 1.4;
+            letter-spacing: -0.2px;
+        }
+
+        .summary-feedback {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--filo-02);
+            padding: 2px;
+        }
+
+        .feedback-btn:active {
+            opacity: 0.5;
+        }
+
+        .feedback-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* P3_R — 15px / 400 / 1.35 / -0.2px (summary body) */
+        .summary-body {
+            font-size: 15px;
+            font-weight: 400;
+            color: var(--filo-06);
+            line-height: 1.35;
+            letter-spacing: -0.2px;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .summary-body::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 15px;
+            line-height: 1.35;
+            color: var(--filo-06);
+        }
+
+        .summary-body strong {
+            font-weight: 700;
+        }
+
+        /* P3_M — 15px / 510 / 1.3 / -0.2px (action link) */
+        .summary-action {
+            display: inline-block;
+            margin-top: 12px;
+            margin-left: 16px;
+            font-size: 15px;
+            font-weight: 510;
+            line-height: 1.3;
+            letter-spacing: -0.2px;
+            color: var(--filo-02);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .summary-action:active {
+            opacity: 0.5;
+        }
+
+        /* ============================================
+           TASK / TODO CARD
+           from cards.json: background var(--filo-14),
+           border-radius 24px
+           ============================================ */
+        .task-card {
+            margin: 0 20px 16px;
+            background: var(--filo-14);
+            border-radius: 24px;
+            padding: 16px;
+        }
+
+        .task-top {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        /* Filo checkbox — rounded-square with filo-08 border */
+        .task-checkbox {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            border: 2px solid var(--filo-08);
+            flex-shrink: 0;
+            margin-top: 1px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: var(--filo-10);
+        }
+
+        .task-checkbox:hover {
+            border-color: var(--filo-02);
+        }
+
+        .task-checkbox.checked {
+            background: var(--filo-02);
+            border-color: var(--filo-02);
+        }
+
+        .task-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* P3_R — 15px / 400 / 1.35 / -0.2px (task text) */
+        .task-text {
+            font-size: 15px;
+            font-weight: 400;
+            color: var(--filo-06);
+            line-height: 1.35;
+            letter-spacing: -0.2px;
+        }
+
+        .task-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        /* Label — P4_B / pill / filo-15 bg / filo-02 text */
+        .task-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: var(--filo-15);
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: 0;
+            color: var(--filo-02);
+        }
+
+        /* P4_R — 13px / 400 / 1.2 / 0 */
+        .task-time {
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 1.2;
+            color: var(--filo-07);
+        }
+
+        .task-more {
+            display: flex;
+            align-items: flex-start;
+            flex-shrink: 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--filo-02);
+            padding: 0;
+        }
+
+        .task-more:active {
+            opacity: 0.5;
+        }
+
+        .task-more svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* ============================================
+           EMAIL BODY
+           P2_R — 16px / 400 / 1.3 / -0.2px
+           (using 1.6 line-height for readability)
+           ============================================ */
+        .email-body {
+            padding: 16px 20px 32px;
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--filo-06);
+            line-height: 1.6;
+            letter-spacing: -0.2px;
+        }
+
+        .email-body p {
+            margin-bottom: 16px;
+        }
+
+        .email-body p:last-child {
+            margin-bottom: 0;
+        }
+
+        .email-body .greeting {
+            margin-bottom: 16px;
+        }
+
+        /* ============================================
+           BOTTOM ACTION BAR
+           ============================================ */
+        .bottom-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 12px 20px 36px;
+            background: linear-gradient(transparent, var(--filo-10) 24%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .bottom-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .bottom-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--filo-06);
+            padding: 4px;
+        }
+
+        .bottom-btn:active {
+            opacity: 0.5;
+        }
+
+        .bottom-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .bottom-right {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Page Header (outside phone) -->
+    <div class="header">
+        <h1>Read Email</h1>
+        <p class="subtitle">Email detail view — Thanksgiving dinner from Margaret Wilson</p>
+        <div class="meta">
+            <div class="meta-item">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M12 2C6.477 2 2 6.477 2 12C2 17.523 6.477 22 12 22C17.523 22 22 17.523 22 12C22 6.477 17.523 2 12 2ZM17 14H12C11.448 14 11 13.552 11 13V7C11 6.448 11.448 6 12 6C12.552 6 13 6.448 13 7V12H17C17.552 12 18 12.448 18 13C18 13.552 17.552 14 17 14Z" fill="currentColor"/></svg>
+                <span>Updated Jan 2026</span>
+            </div>
+            <div class="meta-item">
+                <svg fill="none" viewBox="0 0 24 24"><path d="M18.71 19.5C17.88 20.33 14.21 20.46 12 20.46S6.12 20.33 5.29 19.5C4.61 18.82 4.5 17.09 4.5 12S4.61 5.18 5.29 4.5C6.12 3.67 9.79 3.54 12 3.54S17.88 3.67 18.71 4.5C19.39 5.18 19.5 6.91 19.5 12S19.39 18.82 18.71 19.5Z" fill="currentColor"/></svg>
+                <span>iOS</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <div class="mode-toggles">
+        <div class="toggle-group">
+            <button class="mode-btn active" onclick="setTheme('light')">Light</button>
+            <button class="mode-btn" onclick="setTheme('dark')">Dark</button>
+        </div>
+    </div>
+
+    <div class="screen-container">
+        <!-- iPhone Frame -->
+        <div class="iphone-frame">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <div class="status-time"><span>9:41</span></div>
+                <div class="status-island"></div>
+                <div class="status-icons">
+                    <svg class="icon-signal" viewBox="0 0 17 12" fill="none">
+                        <rect x="0" y="9" width="3" height="3" rx="0.5" fill="currentColor"/>
+                        <rect x="4.5" y="6" width="3" height="6" rx="0.5" fill="currentColor"/>
+                        <rect x="9" y="3" width="3" height="9" rx="0.5" fill="currentColor"/>
+                        <rect x="13.5" y="0" width="3" height="12" rx="0.5" fill="currentColor"/>
+                    </svg>
+                    <svg class="icon-wifi" viewBox="0 0 18 13" fill="none">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M8.5713 2.46628C11.0584 2.46639 13.4504 3.38847 15.2529 5.04195C15.3887 5.1696 15.6056 5.16799 15.7393 5.03834L17.0368 3.77487C17.1045 3.70911 17.1422 3.62004 17.1417 3.52735C17.1411 3.43467 17.1023 3.34603 17.0338 3.28104C12.3028 -1.09368 4.83907 -1.09368 0.108056 3.28104C0.039524 3.34598 0.000639766 3.4346 7.82398e-06 3.52728C-0.000624118 3.61996 0.0370483 3.70906 0.104689 3.77487L1.40255 5.03834C1.53615 5.16819 1.75327 5.1698 1.88893 5.04195C3.69167 3.38836 6.08395 2.46628 8.5713 2.46628ZM8.56795 6.68656C9.92527 6.68647 11.2341 7.19821 12.2403 8.12234C12.3763 8.2535 12.5907 8.25065 12.7234 8.11593L14.0106 6.79663C14.0784 6.72742 14.1161 6.63355 14.1151 6.536C14.1141 6.43844 14.0746 6.34536 14.0054 6.27757C10.9416 3.38672 6.19688 3.38672 3.13305 6.27757C3.06384 6.34536 3.02435 6.43849 3.02345 6.53607C3.02254 6.63366 3.06028 6.72752 3.12822 6.79663L4.41513 8.11593C4.54778 8.25065 4.76215 8.2535 4.89823 8.12234C5.90368 7.19882 7.21152 6.68713 8.56795 6.68656ZM11.0924 9.48011C11.0943 9.58546 11.0572 9.68703 10.9899 9.76084L8.81327 12.2156C8.74946 12.2877 8.66247 12.3283 8.5717 12.3283C8.48093 12.3283 8.39394 12.2877 8.33013 12.2156L6.1531 9.76084C6.08585 9.68697 6.04886 9.58537 6.05085 9.48002C6.05284 9.37467 6.09365 9.27491 6.16364 9.20429C7.55374 7.8904 9.58966 7.8904 10.9798 9.20429C11.0497 9.27497 11.0904 9.37476 11.0924 9.48011Z" fill="currentColor"/>
+                    </svg>
+                    <svg class="icon-battery" viewBox="0 0 27 13" fill="none">
+                        <rect x="0.5" y="0.5" width="22" height="12" rx="2.5" stroke="currentColor" stroke-opacity="0.35"/>
+                        <rect x="2" y="2" width="19" height="9" rx="1.5" fill="currentColor"/>
+                        <path d="M24 4.5C24.8 4.82 25.5 5.58 25.5 6.5C25.5 7.42 24.8 8.18 24 8.5V4.5Z" fill="currentColor" opacity="0.4"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Navigation Bar — Read Email (glass) -->
+            <div class="nav-bar">
+                <!-- Left: Glass back button -->
+                <button class="glass-btn" onclick="window.location.href='inbox.html'" title="Back">
+                    <!-- Filo gobackward.svg -->
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M7 12.1782C7.00507 12.0098 7.04059 11.8558 7.10654 11.7162C7.1725 11.5767 7.27397 11.442 7.41096 11.312L15.0365 4.31038C15.2547 4.10346 15.5236 4 15.8432 4C16.0563 4 16.2491 4.04812 16.4216 4.14436C16.5992 4.24061 16.7387 4.37053 16.8402 4.53415C16.9467 4.69776 17 4.88062 17 5.08273C17 5.38108 16.8808 5.64334 16.6423 5.86951L9.74734 12.171L16.6423 18.4797C16.8808 18.7107 17 18.9729 17 19.2665C17 19.4734 16.9467 19.6587 16.8402 19.8223C16.7387 19.9859 16.5992 20.1158 16.4216 20.2121C16.2491 20.3131 16.0563 20.3636 15.8432 20.3636C15.5236 20.3636 15.2547 20.2578 15.0365 20.046L7.41096 13.0444C7.2689 12.9145 7.16489 12.7797 7.09893 12.6402C7.03298 12.4958 7 12.3418 7 12.1782Z" fill="currentColor"/></svg>
+                </button>
+
+                <!-- Center: Glass pill action bar (archive, share, label) -->
+                <div class="glass-pill">
+                    <button title="Archive">
+                        <!-- Filo archive.svg -->
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M6.51226 22.4192C5.5251 22.4192 4.77472 22.1691 4.26113 21.6688C3.74754 21.1686 3.49075 20.4249 3.49075 19.4377V8.75238H5.10155V19.5178C5.10155 19.9646 5.22161 20.3082 5.46173 20.5483C5.70185 20.7884 6.04536 20.9085 6.49225 20.9085H17.5078C17.948 20.9085 18.2881 20.7884 18.5283 20.5483C18.7751 20.3082 18.8984 19.9646 18.8984 19.5178V8.75238H20.5093V19.4377C20.5093 20.4182 20.2525 21.1586 19.7389 21.6588C19.2253 22.1658 18.4749 22.4192 17.4877 22.4192H6.51226ZM8.70335 13.5348C8.48991 13.5348 8.31649 13.4681 8.18309 13.3347C8.05636 13.2013 7.993 13.0245 7.993 12.8044V12.4842C7.993 12.2641 8.05636 12.0907 8.18309 11.964C8.31649 11.8306 8.48991 11.7639 8.70335 11.7639H15.3067C15.5201 11.7639 15.6935 11.8306 15.8269 11.964C15.9603 12.0907 16.027 12.2641 16.027 12.4842V12.8044C16.027 13.0245 15.9603 13.2013 15.8269 13.3347C15.6935 13.4681 15.5201 13.5348 15.3067 13.5348H8.70335ZM3.90095 9.50275C3.28731 9.50275 2.81708 9.32266 2.49025 8.96248C2.16342 8.6023 2 8.11873 2 7.51176V5.991C2 5.37736 2.17009 4.89378 2.51026 4.54027C2.85043 4.18009 3.31399 4 3.90095 4H20.0991C20.7127 4 21.1829 4.18009 21.5098 4.54027C21.8366 4.89378 22 5.37736 22 5.991V7.51176C22 8.11873 21.8366 8.6023 21.5098 8.96248C21.1829 9.32266 20.7127 9.50275 20.0991 9.50275H3.90095ZM4.31116 7.992H19.6989C19.9523 7.992 20.1291 7.9353 20.2291 7.82191C20.3358 7.70852 20.3892 7.52843 20.3892 7.28164V6.22111C20.3892 5.96765 20.3358 5.78756 20.2291 5.68084C20.1291 5.56745 19.9523 5.51076 19.6989 5.51076H4.31116C4.0577 5.51076 3.87761 5.56745 3.77089 5.68084C3.66417 5.78756 3.61081 5.96765 3.61081 6.22111V7.28164C3.61081 7.52843 3.66417 7.70852 3.77089 7.82191C3.87761 7.9353 4.0577 7.992 4.31116 7.992Z" fill="currentColor"/></svg>
+                    </button>
+                    <button title="Share">
+                        <!-- Filo share.svg -->
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M6.26549 22.8285C5.19027 22.8285 4.37721 22.5564 3.82633 22.0122C3.27544 21.4679 3 20.6615 3 19.5929V9.84624C3 8.77765 3.27544 7.97124 3.82633 7.42699C4.37721 6.88274 5.19027 6.61062 6.26549 6.61062H8.49248C8.87908 6.61062 9.19248 6.92402 9.19248 7.31062V7.86195C9.19248 8.24855 8.87908 8.56195 8.49248 8.56195H6.38496C5.92035 8.56195 5.56527 8.68142 5.31969 8.92035C5.08075 9.15929 4.96128 9.52102 4.96128 10.0055V19.4237C4.96128 19.9082 5.08075 20.2699 5.31969 20.5089C5.56527 20.7544 5.92035 20.8772 6.38496 20.8772H17.6051C18.0631 20.8772 18.4148 20.7544 18.6604 20.5089C18.9126 20.2699 19.0387 19.9082 19.0387 19.4237V10.0055C19.0387 9.52102 18.9126 9.15929 18.6604 8.92035C18.4148 8.68142 18.0631 8.56195 17.6051 8.56195H15.4976C15.111 8.56195 14.7976 8.24855 14.7976 7.86195V7.31062C14.7976 6.92402 15.111 6.61062 15.4976 6.61062H17.7345C18.8097 6.61062 19.6228 6.88274 20.1737 7.42699C20.7246 7.97124 21 8.77765 21 9.84624V19.5929C21 20.6615 20.7246 21.4679 20.1737 22.0122C19.6228 22.5564 18.8097 22.8285 17.7345 22.8285H6.26549ZM12 14.7942C11.7478 14.7942 11.5288 14.7046 11.3429 14.5254C11.1637 14.3462 11.0741 14.1372 11.0741 13.8982V3.90266L11.1538 2.4292L10.6261 3.05642L9.20243 4.56969C9.04314 4.75553 8.83407 4.84845 8.57522 4.84845C8.34956 4.84845 8.15708 4.77544 7.99779 4.62943C7.8385 4.47677 7.75885 4.28429 7.75885 4.05199C7.75885 3.83296 7.84845 3.63717 8.02766 3.4646L11.2931 0.308628C11.4192 0.189159 11.5387 0.109513 11.6515 0.0696903C11.7644 0.0232301 11.8805 0 12 0C12.1195 0 12.2356 0.0232301 12.3485 0.0696903C12.4613 0.109513 12.5774 0.189159 12.6969 0.308628L15.9723 3.4646C16.1449 3.63717 16.2312 3.83296 16.2312 4.05199C16.2312 4.28429 16.1482 4.47677 15.9823 4.62943C15.823 4.77544 15.6305 4.84845 15.4049 4.84845C15.1593 4.84845 14.9535 4.75553 14.7876 4.56969L13.3739 3.05642L12.8462 2.4292L12.9259 3.90266V13.8982C12.9259 14.1372 12.833 14.3462 12.6471 14.5254C12.4679 14.7046 12.2522 14.7942 12 14.7942Z" fill="currentColor"/></svg>
+                    </button>
+                    <button title="Label">
+                        <!-- Filo label.svg -->
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M16.9079 2C17.2376 2 17.511 2.03425 17.7356 2.09394C17.9602 2.15362 18.1766 2.25314 18.3755 2.40085C18.5744 2.54856 18.8016 2.74723 19.0572 2.99702C19.3128 3.24681 20.7518 4.67669 21.002 4.93246C21.2521 5.18821 21.4513 5.42178 21.599 5.62349C21.7468 5.82521 21.8463 6.03802 21.906 6.26244C21.9657 6.48685 21.9999 6.76247 21.9999 7.09763C21.9999 7.43278 21.9999 9.96221 21.9999 10.3203C21.9999 10.6783 21.9994 10.9526 21.9404 11.2243C21.8814 11.4959 21.8215 11.6431 21.7097 11.8976C21.598 12.1521 21.3914 12.6084 21.0475 12.9523C20.5713 13.4285 20.3624 13.5867 20.0951 13.4285C19.8766 13.2992 19.7426 12.7907 19.619 12.4761C19.4953 12.1616 19.2246 11.3694 19.4218 11.2085C19.619 11.0476 19.5664 11.0648 19.6459 10.9853C19.7255 10.9057 19.7792 10.8231 19.8161 10.7379C19.8531 10.6526 19.8766 10.5421 19.8766 10.4058C19.8766 10.2695 19.8766 7.42516 19.8766 7.20923C19.8766 6.99331 19.7994 6.80835 19.6459 6.65492C19.4924 6.50143 17.4966 4.50646 17.3431 4.35304C17.1896 4.19962 17.0021 4.12241 16.7804 4.12238C16.5586 4.12236 13.7153 4.12236 13.5904 4.12238C13.4654 4.12241 13.363 4.14859 13.2834 4.19121C13.2039 4.23383 13.1185 4.29305 13.0277 4.37815C12.9363 4.46375 5.016 12.3778 4.77158 12.6221C4.52715 12.8665 4.40237 13.1172 4.39677 13.3643C4.39116 13.6114 4.51876 13.8585 4.77995 14.114C5.04114 14.3695 9.46672 18.7983 9.89804 19.2293C10.3293 19.6602 10.8448 19.5957 11.1843 19.4125C11.5238 19.2293 12 19.4575 12.4761 19.6189C12.9523 19.7804 13.3207 19.8138 13.4285 20.0951C13.5364 20.3765 13.0694 20.7293 12.7552 20.9852C12.0471 21.5617 11.3735 21.997 10.6486 21.9999C9.92373 22.0028 9.2207 21.6645 8.53272 20.9768C7.84471 20.2891 3.72023 16.1743 3.03238 15.4867C2.34453 14.7992 1.99724 14.0917 2.00002 13.3643C2.00279 12.637 2.34675 11.9349 3.02308 11.2587C3.6994 10.5825 11.2198 3.07392 11.4587 2.83519C11.6974 2.59663 11.9135 2.41786 12.1153 2.29855C12.3171 2.17923 12.5415 2.09931 12.7803 2.05952C13.0191 2.01974 13.3177 2 13.6759 2H16.9079Z" fill="currentColor"/><path d="M17.2585 13.754C17.4068 13.3198 18.0216 13.3198 18.1699 13.754L18.6033 15.0254C18.8922 15.8714 19.557 16.5362 20.403 16.8251L21.6744 17.2585C22.1086 17.4068 22.1086 18.0216 21.6744 18.1699L20.403 18.6033C19.557 18.8922 18.8922 19.557 18.6033 20.403L18.1699 21.6744C18.0216 22.1085 17.4068 22.1085 17.2585 21.6744L16.8251 20.403C16.5362 19.557 15.8714 18.8922 15.0254 18.6033L13.754 18.1699C13.3199 18.0216 13.3199 17.4068 13.754 17.2585L15.0254 16.8251C15.8714 16.5362 16.5362 15.8714 16.8251 15.0254L17.2585 13.754Z" fill="currentColor"/><path d="M15.7397 6.9358C16.115 6.9358 16.428 7.06416 16.6781 7.31991C16.9338 7.56994 17.0613 7.88241 17.0613 8.2574C17.0613 8.62108 16.9339 8.9308 16.6781 9.18653C16.428 9.44227 16.115 9.57064 15.7397 9.57064C15.3702 9.57061 15.0571 9.44225 14.8013 9.18653C14.5513 8.93082 14.4265 8.62102 14.4265 8.2574C14.4265 7.88246 14.5513 7.56992 14.8013 7.31991C15.0571 7.06418 15.3702 6.93582 15.7397 6.9358Z" fill="currentColor"/></svg>
+                    </button>
+                </div>
+
+                <!-- Right: Glass more button -->
+                <button class="glass-btn" title="More">
+                    <!-- Filo more-vertical.svg -->
+                    <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="5" r="2" transform="rotate(90 12 5)" fill="currentColor"/><circle cx="12" cy="12" r="2" transform="rotate(90 12 12)" fill="currentColor"/><circle cx="12" cy="19" r="2" transform="rotate(90 12 19)" fill="currentColor"/></svg>
+                </button>
+            </div>
+
+            <!-- Scrollable Email Content -->
+            <div class="email-scroll">
+                <div class="email-scroll-inner">
+
+                <!-- Subject -->
+                <div class="email-subject-section">
+                    <span class="email-subject-title">Thanksgiving dinner at our place!</span>
+                    <!-- Filo generate-ai.svg (sparkle) -->
+                    <svg class="sparkle-icon" viewBox="0 0 24 24" fill="none"><path d="M9.16309 14.458L7.58008 14.9854L8.1084 13.4023L9.16309 14.458Z" fill="currentColor"/><path d="M13.8564 7.61328C14.1593 7.31096 14.6504 7.31067 14.9531 7.61328C15.2555 7.91599 15.2554 8.40719 14.9531 8.70996L9.80176 13.8604L8.70508 12.7637L13.8564 7.61328Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M12 0C18.6274 0 24 5.37258 24 12C24 18.6274 18.6274 24 12 24C5.37258 24 0 18.6274 0 12C0 5.37258 5.37258 0 12 0ZM15.3633 12.8994C15.2805 12.6572 14.9384 12.6574 14.8555 12.8994L14.6133 13.6084C14.4521 14.0802 14.0802 14.4501 13.6084 14.6113L12.8994 14.8545C12.6577 14.9375 12.6577 15.2793 12.8994 15.3623L13.6084 15.6045C14.0802 15.7657 14.452 16.1367 14.6133 16.6084L14.8555 17.3174C14.9382 17.5597 15.2805 17.5597 15.3633 17.3174L15.6064 16.6084C15.7678 16.1368 16.1378 15.7657 16.6094 15.6045L17.3193 15.3623C17.5607 15.2792 17.5608 14.9376 17.3193 14.8545L16.6094 14.6113C16.1378 14.4501 15.7677 14.08 15.6064 13.6084L15.3633 12.8994ZM15.5791 6.98633C14.9303 6.33791 13.8784 6.33797 13.2295 6.98633L7.53906 12.6768L7.4541 12.7725C7.37464 12.873 7.31224 12.9882 7.27148 13.1104L6.53027 15.335C6.3952 15.7406 6.7482 16.1282 7.14941 16.0566L7.23047 16.0361L9.45703 15.2939C9.57893 15.2532 9.69363 15.1916 9.79395 15.1123L9.88965 15.0264L15.5791 9.33691C16.2277 8.68799 16.2278 7.63519 15.5791 6.98633Z" fill="currentColor"/></svg>
+                </div>
+
+                <!-- Sender Section -->
+                <div class="sender-section">
+                    <div class="sender-avatar">
+                        <img src="https://images.unsplash.com/photo-1683220367131-f9f205bb0391?q=80&w=100&auto=format&fit=crop" alt="Margaret Wilson">
+                    </div>
+                    <div class="sender-details">
+                        <div class="sender-name-row">
+                            <span class="sender-name">Margaret Wilson</span>
+                            <span class="sender-time">4:18 PM</span>
+                        </div>
+                        <div class="sender-to-row">
+                            <span class="sender-to-label">To:</span>
+                            <span class="sender-to-recipient">
+                                me
+                                <svg class="chevron" viewBox="0 0 10 10" fill="none">
+                                    <path d="M2.5 3.5L5 6.5L7.5 3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="sender-actions">
+                        <!-- Filo reply.svg -->
+                        <button class="sender-action-btn" title="Reply">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="M11.0971 20.8C10.8538 20.8 10.6292 20.7485 10.4234 20.6456C10.2222 20.5474 10.007 20.393 9.77778 20.1825L2.60585 13.4737C2.41871 13.3006 2.28772 13.1205 2.21287 12.9333C2.13801 12.7462 2.10059 12.5684 2.10059 12.4C2.10059 12.2269 2.13801 12.0491 2.21287 11.8667C2.28772 11.6795 2.41871 11.4971 2.60585 11.3193L9.77778 4.65263C10.0257 4.42339 10.2456 4.25731 10.4374 4.15439C10.6292 4.05146 10.8444 4 11.083 4C11.4386 4 11.7287 4.12164 11.9532 4.36491C12.1825 4.60351 12.2971 4.89825 12.2971 5.24912V8.49825H12.5287C14.0444 8.49825 15.3684 8.73216 16.5006 9.2C17.6374 9.66316 18.5825 10.3439 19.3357 11.2421C20.0936 12.1357 20.6596 13.2304 21.0339 14.5263C21.4129 15.8222 21.6023 17.2959 21.6023 18.9474C21.6023 19.5415 21.4971 19.9883 21.2865 20.2877C21.076 20.5918 20.8094 20.7439 20.4865 20.7439C20.2433 20.7439 20.0164 20.6877 19.8058 20.5754C19.6 20.4678 19.4082 20.2503 19.2304 19.9228C18.7906 19.076 18.2643 18.3883 17.6515 17.8596C17.0386 17.331 16.3111 16.9474 15.469 16.7088C14.6316 16.4655 13.6515 16.3439 12.5287 16.3439H12.2971V19.593C12.2971 19.9345 12.1825 20.2199 11.9532 20.4491C11.7287 20.683 11.4433 20.8 11.0971 20.8Z" fill="currentColor"/></svg>
+                        </button>
+                        <!-- Filo more-horizontal.svg -->
+                        <button class="sender-action-btn" title="More">
+                            <svg viewBox="0 0 24 24" fill="none"><circle cx="5" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="19" cy="12" r="2" fill="currentColor"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- AI Summary Card (filo-05 bg, 24px radius, 3px blue left border) -->
+                <div class="summary-card">
+                    <div class="summary-header">
+                        <span class="summary-title">Summary</span>
+                        <div class="summary-feedback">
+                            <!-- Filo thumbsup-before.svg (outline) -->
+                            <button class="feedback-btn" title="Helpful">
+                                <svg viewBox="0 0 24 24" fill="none"><path d="M2 16.0181C2 14.9419 2.18864 13.9647 2.56592 13.0864C2.9432 12.2082 3.45654 11.5093 4.10596 10.9897C4.75537 10.464 5.48519 10.2012 6.29541 10.2012H7.90039C8.40755 9.58268 8.87142 8.99821 9.29199 8.44775C9.71875 7.89111 10.1146 7.34994 10.4795 6.82422C10.8506 6.2985 11.1908 5.77897 11.5 5.26562C11.8154 4.74609 12.1123 4.21729 12.3906 3.6792C12.6999 3.08545 13.0277 2.65869 13.374 2.39893C13.7266 2.13298 14.141 2 14.6172 2C15.0501 2 15.4336 2.10205 15.7676 2.30615C16.1077 2.50407 16.3768 2.7793 16.5747 3.13184C16.7726 3.47819 16.8716 3.87712 16.8716 4.32861C16.8716 4.7863 16.7943 5.25944 16.6396 5.74805C16.4912 6.23047 16.318 6.70052 16.1201 7.1582C15.9284 7.61589 15.7552 8.03337 15.6006 8.41064C15.4521 8.78174 15.3717 9.0848 15.3594 9.31982C15.3594 9.40023 15.3841 9.46208 15.4336 9.50537C15.4893 9.54867 15.5604 9.57031 15.647 9.57031H19.0054C19.4816 9.57031 19.9084 9.68473 20.2856 9.91357C20.6691 10.1362 20.9722 10.4393 21.1948 10.8228C21.4237 11.2062 21.5381 11.6361 21.5381 12.1123C21.5381 12.6813 21.4051 13.173 21.1392 13.5874C21.2257 13.7482 21.2938 13.9338 21.3433 14.144C21.3927 14.3543 21.4175 14.5677 21.4175 14.7842C21.4175 15.1182 21.3618 15.4367 21.2505 15.7397C21.1392 16.0428 20.9784 16.3057 20.7681 16.5283C20.8979 16.8252 20.9629 17.1592 20.9629 17.5303C20.9629 18.3281 20.6413 18.9837 19.998 19.4971C20.029 19.596 20.0506 19.6919 20.063 19.7847C20.0754 19.8836 20.0815 19.9857 20.0815 20.0908C20.0815 20.6722 19.8867 21.1855 19.4971 21.6309C19.1074 22.0762 18.5817 22.3761 17.9199 22.5308C17.5921 22.6173 17.187 22.6792 16.7046 22.7163C16.2222 22.7534 15.6872 22.772 15.0996 22.772H13.8472C13.0493 22.772 12.2917 22.6854 11.5742 22.5122C10.863 22.3452 10.2043 22.1071 9.59814 21.7979H6.63867C5.98307 21.7979 5.37386 21.6463 4.81104 21.3433C4.25439 21.0402 3.7627 20.6227 3.33594 20.0908C2.91536 19.5589 2.58757 18.9466 2.35254 18.2539C2.11751 17.555 2 16.8097 2 16.0181Z" fill="currentColor"/></svg>
+                            </button>
+                            <!-- Filo thumbsup-after.svg (filled, rotated for thumbs down) -->
+                            <button class="feedback-btn" title="Not helpful" style="transform: scaleY(-1);">
+                                <svg viewBox="0 0 24 24" fill="none"><path d="M2 16.0181C2 14.9419 2.18864 13.9647 2.56592 13.0864C2.9432 12.2082 3.45654 11.5093 4.10596 10.9897C4.75537 10.464 5.48519 10.2012 6.29541 10.2012H7.90039C8.40755 9.58268 8.87142 8.99821 9.29199 8.44775C9.71875 7.89111 10.1146 7.34994 10.4795 6.82422C10.8506 6.2985 11.1908 5.77897 11.5 5.26562C11.8154 4.74609 12.1123 4.21729 12.3906 3.6792C12.6999 3.08545 13.0277 2.65869 13.374 2.39893C13.7266 2.13298 14.141 2 14.6172 2C15.0501 2 15.4336 2.10205 15.7676 2.30615C16.1077 2.50407 16.3768 2.7793 16.5747 3.13184C16.7726 3.47819 16.8716 3.87712 16.8716 4.32861C16.8716 4.7863 16.7943 5.25944 16.6396 5.74805C16.4912 6.23047 16.318 6.70052 16.1201 7.1582C15.9284 7.61589 15.7552 8.03337 15.6006 8.41064C15.4521 8.78174 15.3717 9.0848 15.3594 9.31982C15.3594 9.40023 15.3841 9.46208 15.4336 9.50537C15.4893 9.54867 15.5604 9.57031 15.647 9.57031H19.0054C19.4816 9.57031 19.9084 9.68473 20.2856 9.91357C20.6691 10.1362 20.9722 10.4393 21.1948 10.8228C21.4237 11.2062 21.5381 11.6361 21.5381 12.1123C21.5381 12.6813 21.4051 13.173 21.1392 13.5874C21.2257 13.7482 21.2938 13.9338 21.3433 14.144C21.3927 14.3543 21.4175 14.5677 21.4175 14.7842C21.4175 15.1182 21.3618 15.4367 21.2505 15.7397C21.1392 16.0428 20.9784 16.3057 20.7681 16.5283C20.8979 16.8252 20.9629 17.1592 20.9629 17.5303C20.9629 18.3281 20.6413 18.9837 19.998 19.4971C20.029 19.596 20.0506 19.6919 20.063 19.7847C20.0754 19.8836 20.0815 19.9857 20.0815 20.0908C20.0815 20.6722 19.8867 21.1855 19.4971 21.6309C19.1074 22.0762 18.5817 22.3761 17.9199 22.5308C17.5921 22.6173 17.187 22.6792 16.7046 22.7163C16.2222 22.7534 15.6872 22.772 15.0996 22.772H13.8472C13.0493 22.772 12.2917 22.6854 11.5742 22.5122C10.863 22.3452 10.2043 22.1071 9.59814 21.7979H6.63867C5.98307 21.7979 5.37386 21.6463 4.81104 21.3433C4.25439 21.0402 3.7627 20.6227 3.33594 20.0908C2.91536 19.5589 2.58757 18.9466 2.35254 18.2539C2.11751 17.555 2 16.8097 2 16.0181Z" fill="currentColor"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="summary-body">
+                        Margaret invited you to Thanksgiving dinner at her place on <strong>Thursday, November 27th</strong> at 4 PM. Uncle Joe's been asking about you, and cousin Emma is bringing pecan pie. Guest room is available if you'd like to stay overnight.
+                    </div>
+                    <a class="summary-action">RSVP to Margaret</a>
+                </div>
+
+                <!-- Task / Todo Card (filo-14 bg, 24px radius) -->
+                <div class="task-card">
+                    <div class="task-top">
+                        <div class="task-checkbox" onclick="this.classList.toggle('checked')"></div>
+                        <div class="task-content">
+                            <div class="task-text">Reply to Margaret about Thanksgiving dinner and check travel options.</div>
+                            <div class="task-meta">
+                                <span class="task-badge">To Respond</span>
+                                <span class="task-time">Jan 23, 4:18 PM</span>
+                            </div>
+                        </div>
+                        <button class="task-more" title="More">
+                            <!-- Filo more-vertical.svg -->
+                            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="5" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="19" r="1.5" fill="currentColor"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Email Body -->
+                <div class="email-body">
+                    <p>Hi Adam!</p>
+
+                    <p>We'd love to have you over for Thanksgiving this year. Uncle Joe's been asking about you non-stop — he says it's been way too long since we all sat around the same table together.</p>
+
+                    <p>I'm planning the full spread this time: roast turkey with my grandmother's herb stuffing, cranberry sauce from scratch, sweet potato casserole, and your cousin Emma is bringing her famous pecan pie. Oh, and your uncle insists on making his "world-famous" gravy again — you know how he is about that! 😄</p>
+
+                    <p>Dinner will be around 4 PM on Thursday, November 27th, but feel free to come earlier if you'd like to help set up or just catch up. We've got the guest room ready if you want to stay the night and avoid the holiday traffic.</p>
+
+                    <p>Let me know if you have any dietary changes these days or if you'd like to bring anything. But honestly, just bring yourself — that's more than enough!</p>
+
+                    <p>Can't wait to see you, sweetheart. It's going to be a wonderful gathering this year.</p>
+
+                    <p>With love,<br>Aunt Margaret 💛</p>
+                </div>
+
+                </div>
+            </div>
+
+            <!-- Bottom Action Bar -->
+            <div class="bottom-bar">
+                <div class="bottom-left">
+                    <!-- Filo reply.svg -->
+                    <button class="bottom-btn" title="Reply">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M11.0971 20.8C10.8538 20.8 10.6292 20.7485 10.4234 20.6456C10.2222 20.5474 10.007 20.393 9.77778 20.1825L2.60585 13.4737C2.41871 13.3006 2.28772 13.1205 2.21287 12.9333C2.13801 12.7462 2.10059 12.5684 2.10059 12.4C2.10059 12.2269 2.13801 12.0491 2.21287 11.8667C2.28772 11.6795 2.41871 11.4971 2.60585 11.3193L9.77778 4.65263C10.0257 4.42339 10.2456 4.25731 10.4374 4.15439C10.6292 4.05146 10.8444 4 11.083 4C11.4386 4 11.7287 4.12164 11.9532 4.36491C12.1825 4.60351 12.2971 4.89825 12.2971 5.24912V8.49825H12.5287C14.0444 8.49825 15.3684 8.73216 16.5006 9.2C17.6374 9.66316 18.5825 10.3439 19.3357 11.2421C20.0936 12.1357 20.6596 13.2304 21.0339 14.5263C21.4129 15.8222 21.6023 17.2959 21.6023 18.9474C21.6023 19.5415 21.4971 19.9883 21.2865 20.2877C21.076 20.5918 20.8094 20.7439 20.4865 20.7439C20.2433 20.7439 20.0164 20.6877 19.8058 20.5754C19.6 20.4678 19.4082 20.2503 19.2304 19.9228C18.7906 19.076 18.2643 18.3883 17.6515 17.8596C17.0386 17.331 16.3111 16.9474 15.469 16.7088C14.6316 16.4655 13.6515 16.3439 12.5287 16.3439H12.2971V19.593C12.2971 19.9345 12.1825 20.2199 11.9532 20.4491C11.7287 20.683 11.4433 20.8 11.0971 20.8Z" fill="currentColor"/></svg>
+                    </button>
+                    <!-- Filo forward.svg -->
+                    <button class="bottom-btn" title="Forward">
+                        <svg viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.4923 6.23824C14.3825 6.12846 14.1948 6.20621 14.1948 6.36147V10.4275C14.1948 10.6322 14.0522 10.8094 13.8522 10.8531L4.1806 12.9688C4.08639 12.9894 4.09049 13.1251 4.18577 13.14L13.8263 14.6463C14.0384 14.6795 14.1948 14.8621 14.1948 15.0768V19.6738C14.1948 19.827 14.3783 19.9056 14.4892 19.8L21.3724 13.2446C21.4078 13.2108 21.4085 13.1545 21.3739 13.1199L14.4923 6.23824ZM12.6263 5.30965C12.6263 4.14521 14.0342 3.56206 14.8576 4.38544L22.483 12.0108C23.1407 12.6685 23.1276 13.7389 22.4541 14.3804L14.8348 21.6368C14.0026 22.4293 12.6263 21.8395 12.6263 20.6904V16.0463L2.1053 14.4024C0.676079 14.1791 0.614598 12.1433 2.02777 11.8342L12.6263 9.51574V5.30965Z" fill="currentColor"/></svg>
+                    </button>
+                </div>
+                <div class="bottom-right">
+                    <!-- Filo fullscreen-exit.svg -->
+                    <button class="bottom-btn" title="Expand">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M10.7002 12.0996C10.7545 12.0996 10.8079 12.1043 10.8604 12.1113C11.1349 12.0685 11.4254 12.1519 11.6367 12.3633C11.8479 12.5745 11.9303 12.8644 11.8877 13.1387C11.8948 13.1915 11.9004 13.2451 11.9004 13.2998V19C11.9004 19.4971 11.4971 19.9004 11 19.9004C10.5029 19.9004 10.0996 19.4971 10.0996 19V15.1738L5.63672 19.6367C5.28527 19.9882 4.71476 19.9881 4.36328 19.6367C4.01181 19.2852 4.01181 18.7148 4.36328 18.3633L8.82617 13.9004H5C4.50294 13.9004 4.09961 13.4971 4.09961 13C4.09961 12.5029 4.50294 12.0996 5 12.0996H10.7002Z" fill="currentColor"/><path d="M18.3633 4.36328C18.7148 4.01181 19.2852 4.01181 19.6367 4.36328C19.9881 4.71476 19.9882 5.28527 19.6367 5.63672L15.1738 10.0996H19C19.4971 10.0996 19.9004 10.5029 19.9004 11C19.9004 11.4971 19.4971 11.9004 19 11.9004H13.2998C13.2451 11.9004 13.1915 11.8948 13.1387 11.8877C12.8644 11.9303 12.5745 11.8479 12.3633 11.6367C12.1519 11.4254 12.0685 11.1349 12.1113 10.8604C12.1043 10.8079 12.0996 10.7545 12.0996 10.7002V5C12.0996 4.50294 12.5029 4.09961 13 4.09961C13.4971 4.09961 13.9004 4.50294 13.9004 5V8.82617L18.3633 4.36328Z" fill="currentColor"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function setTheme(theme) {
+            document.body.classList.toggle('dark-mode', theme === 'dark');
+            document.querySelectorAll('.toggle-group')[0].querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.toLowerCase() === theme);
+            });
+        }
+    </script>
+</body>
+</html>
