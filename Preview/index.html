@@ -5,580 +5,457 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Filo Design System</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
             --filo-02: #22A0FB;
             --filo-06: #000000;
             --filo-07: #707070;
             --filo-08: #D5D5D5;
-            --filo-09: #FCFAFA;
+            --filo-09: #F5F5F5;
             --filo-10: #FFFFFF;
             --filo-14: rgba(0, 0, 0, 0.04);
-            
-            --sidebar-width: 280px;
-            --header-height: 52px;
             --font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
-        }
-
-        body.dark-mode {
-            --filo-02: #45B1FF;
-            --filo-06: #FFFFFF;
-            --filo-07: #8B8B8B;
-            --filo-08: #414149;
-            --filo-09: #121214;
-            --filo-10: #1D1D21;
-            --filo-14: rgba(255, 255, 255, 0.06);
         }
 
         body {
             font-family: var(--font-family);
-            background: var(--filo-09);
+            background: #181818;
             color: var(--filo-06);
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* ============================================
-           HEADER
-           ============================================ */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: var(--header-height);
-            background: var(--filo-10);
-            border-bottom: 0.5px solid var(--filo-08);
+            min-height: 100vh;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 0 24px;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        /* Language Switcher */
+        .lang-switcher {
+            position: fixed;
+            top: 24px;
+            right: 24px;
             z-index: 100;
         }
 
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .header-logo {
-            width: 28px;
-            height: 28px;
-            border-radius: 6px;
-            overflow: hidden;
-        }
-
-        .header-logo svg {
-            width: 28px;
-            height: 28px;
-        }
-
-        .header-title {
-            font-size: 17px;
-            font-weight: 600;
-            color: var(--filo-06);
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .mode-toggle {
-            display: flex;
-            gap: 4px;
-            background: var(--filo-14);
-            padding: 3px;
-            border-radius: 8px;
-        }
-
-        .mode-btn {
-            padding: 6px 12px;
+        .lang-btn {
+            width: 32px;
+            height: 32px;
+            background: none;
             border: none;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 500;
             cursor: pointer;
-            background: transparent;
             color: var(--filo-07);
-            transition: all 0.2s ease;
-        }
-
-        .mode-btn.active {
-            background: var(--filo-10);
-            color: var(--filo-06);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        /* ============================================
-           SIDEBAR
-           ============================================ */
-        .sidebar {
-            position: fixed;
-            top: var(--header-height);
-            left: 0;
-            width: var(--sidebar-width);
-            height: calc(100vh - var(--header-height));
-            background: var(--filo-10);
-            border-right: none;
-            padding: 20px 0;
-            overflow-y: auto;
-            overflow-x: hidden;
-            min-width: 60px;
-            max-width: 400px;
-        }
-
-        .sidebar-section {
-            margin-bottom: 24px;
-        }
-
-        .sidebar-section-title {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--filo-07);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 0 20px;
-            margin-bottom: 8px;
-            white-space: nowrap;
-            overflow: hidden;
-        }
-
-        .sidebar-nav {
-            list-style: none;
-        }
-
-        .sidebar-nav li {
-            margin: 2px 8px;
-        }
-
-        .sidebar-nav a {
             display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 12px;
-            border-radius: 8px;
-            text-decoration: none;
-            color: var(--filo-06);
-            font-size: 14px;
-            font-weight: 400;
-            transition: background 0.15s ease;
-            white-space: nowrap;
-            overflow: hidden;
-        }
-
-        .sidebar-nav a:hover {
-            background: var(--filo-14);
-        }
-
-        .sidebar-nav a.active {
-            background: var(--filo-02);
-            color: white;
-        }
-
-        .sidebar-nav a.active .nav-icon {
-            color: white;
-        }
-
-        .nav-icon {
-            width: 18px;
-            height: 18px;
-            color: var(--filo-07);
-            flex-shrink: 0;
-        }
-
-        .nav-text {
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* Sidebar Resize Handle */
-        .sidebar-resize-handle {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 4px;
-            height: 100%;
-            cursor: col-resize;
-            background: transparent;
-            z-index: 10;
-            transition: background 0.15s ease;
-        }
-
-        .sidebar-resize-handle:hover,
-        .sidebar-resize-handle.dragging {
-            background: var(--filo-02);
-        }
-
-        .sidebar-resize-handle::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 1px;
-            height: 100%;
-            background: var(--filo-08);
-        }
-
-        body.resizing {
-            cursor: col-resize;
-            user-select: none;
-        }
-
-        body.resizing * {
-            cursor: col-resize !important;
-        }
-
-        /* ============================================
-           MAIN CONTENT
-           ============================================ */
-        .main-content {
-            position: fixed;
-            top: var(--header-height);
-            left: var(--sidebar-width);
-            right: 0;
-            bottom: 0;
-            background: var(--filo-09);
-        }
-
-        .content-iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* Welcome screen */
-        .welcome {
-            display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100%;
-            text-align: center;
-            padding: 40px;
+            border-radius: 8px;
+            transition: opacity 0.15s ease;
         }
 
-        .welcome-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 20px;
-            overflow: hidden;
-            margin-bottom: 24px;
+        .lang-btn:hover { opacity: 0.7; }
+        .lang-btn svg { width: 32px; height: 32px; }
+
+        .lang-dropdown {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 0;
+            padding: 4px 0;
         }
 
-        .welcome-icon svg {
-            width: 80px;
-            height: 80px;
-        }
+        .lang-dropdown.open { display: block; }
 
-        .welcome h1 {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .welcome p {
-            font-size: 15px;
-            color: var(--filo-07);
-            max-width: 400px;
-            line-height: 1.5;
-        }
-
-        .welcome-hint {
-            margin-top: 32px;
+        .lang-option {
+            padding: 6px 0;
             font-size: 13px;
-            color: var(--filo-07);
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: color 0.15s ease;
+            letter-spacing: -0.1px;
+            white-space: nowrap;
+            text-align: right;
+        }
+
+        .lang-option:hover { color: rgba(255, 255, 255, 0.6); }
+
+        .lang-option.active {
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 600;
         }
 
         /* ============================================
-           FOOTER LINKS
+           NUTRITION FACTS CARD
            ============================================ */
-        .sidebar-footer {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 16px 20px;
-            border-top: 0.5px solid var(--filo-08);
+        .facts-card {
+            width: 480px;
             background: var(--filo-10);
+            border: 2px solid var(--filo-06);
+            padding: 16px;
         }
 
-        .sidebar-footer a {
+        .facts-inner {
+            border: none;
+            padding: 8px 8px 12px;
+        }
+
+        /* Title — H1: 40px / 700 */
+        .facts-title {
+            font-size: 60px;
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -1px;
+            color: var(--filo-06);
+            margin-bottom: 24px;
+            padding-bottom: 4px;
+        }
+
+        /* Thick dividers */
+        .divider-thick {
+            height: 10px;
+            background: var(--filo-06);
+            margin: 6px 0;
+        }
+
+        .divider-medium {
+            height: 4px;
+            background: var(--filo-06);
+            margin: 6px 0;
+        }
+
+        .divider-thin {
+            height: 1px;
+            background: var(--filo-06);
+            margin: 3px 0;
+        }
+
+        /* Subtitle row — P3_R: 15px / 400 */
+        .facts-subtitle {
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 1.35;
+            letter-spacing: -0.2px;
+            color: var(--filo-06);
+        }
+
+        /* Serving row — P2_B + P2_R */
+        .facts-serving {
             display: flex;
-            align-items: center;
-            gap: 8px;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 2px 0;
+        }
+
+        .facts-serving .label {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+        }
+
+        .facts-serving .value {
+            font-size: 16px;
+            font-weight: 400;
+            letter-spacing: -0.2px;
+        }
+
+        /* Section header — P3.1_M: 14px / 510 */
+        .section-header {
+            font-size: 14px;
+            font-weight: 510;
+            letter-spacing: -0.2px;
+            color: var(--filo-06);
+            padding: 2px 0;
+        }
+
+        /* Calories row — large */
+        .calories-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 4px 0 2px;
+        }
+
+        .calories-label {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        /* H3: 28px / 700 */
+        .calories-value {
+            font-size: 28px;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        /* % Daily Value header — P4_B: 13px / 700 */
+        .dv-header {
             font-size: 13px;
-            color: var(--filo-07);
+            font-weight: 700;
+            text-align: right;
+            padding: 2px 0;
+        }
+
+        /* Row items */
+        .facts-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 7px 0;
+            cursor: pointer;
+            border-radius: 4px;
+            margin: 0 -4px;
+            padding-left: 4px;
+            padding-right: 4px;
             text-decoration: none;
-            transition: color 0.15s ease;
+            color: var(--filo-06);
         }
 
-        .sidebar-footer a:hover {
-            color: var(--filo-02);
+        .facts-row:hover .name,
+        .facts-row:hover .name-regular {
+            letter-spacing: 1.5px;
+            transition: letter-spacing 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        .sidebar-footer svg {
-            width: 14px;
-            height: 14px;
+        .facts-row:hover .tokens {
+            color: var(--filo-06);
+            transition: color 0.2s ease;
+        }
+
+        .facts-row:active .name,
+        .facts-row:active .name-regular {
+            letter-spacing: 3px;
+        }
+
+        .facts-row .name {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+            transition: letter-spacing 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .facts-row .name-regular {
+            font-weight: 400;
+        }
+
+        .facts-row .tokens {
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--filo-07);
+            text-align: right;
+            flex-shrink: 0;
+            transition: color 0.2s ease;
+        }
+
+        /* Indented sub-rows */
+        .facts-row.indent {
+            padding-left: 20px;
+        }
+
+        .facts-row.indent .name {
+            font-weight: 400;
+        }
+
+        /* Coming soon / disabled rows */
+        .facts-row.disabled {
+            cursor: default;
+            opacity: 0.5;
+        }
+
+        .facts-row.disabled:hover {
+            background: none;
+        }
+
+        .coming-soon {
+            font-size: 11px;
+            font-weight: 510;
+            color: var(--filo-07);
+            background: var(--filo-14);
+            padding: 2px 6px;
+            border-radius: 4px;
+            letter-spacing: 0;
+        }
+
+        /* Footer — P4_R: 13px / 400 */
+        .facts-footer {
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 1.4;
+            color: var(--filo-06);
+            padding-top: 8px;
+        }
+
+        /* Version badge */
+        .version {
+            font-size: 13px;
+            font-weight: 510;
+            color: var(--filo-07);
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-left">
-            <div class="header-logo">
-                <svg viewBox="0 0 200 200" fill="none">
-                    <path d="M146.323 0H53.6769C24.0319 0 0 24.0319 0 53.6769V146.323C0 175.968 24.0319 200 53.6769 200H146.323C175.968 200 200 175.968 200 146.323V53.6769C200 24.0319 175.968 0 146.323 0Z" fill="url(#headerGradient)"/>
-                    <g transform="translate(12.5, 28.84)">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M126.348 0C144.473 0.000194164 159.165 14.6935 159.165 32.8187V61.6012C164.304 60.9327 169.529 60.4924 174.794 60.2906C175.105 60.2784 175.202 60.7085 174.92 60.835C169.616 63.2027 164.37 65.6608 159.165 68.2401C136.339 79.4468 114.557 92.4286 93.9912 107.014C87.0144 111.974 80.1834 117.103 73.4984 122.426C67.5765 127.106 61.7567 131.954 56.0634 136.93C55.8227 137.139 55.4699 136.849 55.6304 136.572C59.4226 130.04 63.6384 123.8 68.2718 117.854C65.4761 115.472 62.6557 113.162 59.7629 110.877C46.3197 100.229 31.9522 90.6752 16.8074 82.337C11.3573 79.3519 5.80041 76.5147 0.160728 73.8237C-0.116402 73.69 -0.0119047 73.27 0.296829 73.2846C5.87082 73.5569 11.3816 74.1156 16.8074 74.8984V32.8187C16.8074 14.6934 31.5007 0 49.626 0H126.348ZM115.875 26.2037C113.485 23.8165 109.615 23.8166 107.226 26.2037L80.1275 53.3018L72.2708 45.4451C68.96 42.1343 67.302 40.4759 65.2917 40.184C64.7109 40.0989 64.1174 40.099 63.5365 40.184C61.5261 40.4757 59.87 42.1316 56.5566 45.4451C53.2458 48.7559 51.5881 50.4139 51.2964 52.4242C51.2113 53.0051 51.2113 53.5984 51.2964 54.1793C51.5881 56.1897 53.2433 57.8452 56.5566 61.1584L75.8006 80.4025C78.1878 82.7895 82.0604 82.7896 84.45 80.4025L122.939 41.9179C125.326 39.5307 125.326 35.6582 122.939 33.2685L115.875 26.2037Z" fill="white"/>
-                    </g>
-                    <defs>
-                        <linearGradient id="headerGradient" x1="100" y1="199.351" x2="100.034" y2="0" gradientUnits="userSpaceOnUse">
-                            <stop stop-color="#0D93F3"/>
-                            <stop offset="0.2" stop-color="#22A0FB"/>
-                            <stop offset="1" stop-color="#9DDEFF"/>
-                        </linearGradient>
-                    </defs>
-                </svg>
+    <!-- Language Switcher -->
+    <div class="lang-switcher">
+        <button class="lang-btn" onclick="toggleLangDropdown()" title="Language">
+            <svg viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 3.6092C7.36589 3.6092 3.6092 7.36589 3.6092 12C3.6092 16.6341 7.36589 20.3908 12 20.3908C16.6341 20.3908 20.3908 16.6341 20.3908 12C20.3908 7.36589 16.6341 3.6092 12 3.6092ZM2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M2 12C2 11.5556 2.36023 11.1954 2.8046 11.1954H21.1954C21.6398 11.1954 22 11.5556 22 12C22 12.4443 21.6398 12.8046 21.1954 12.8046H2.8046C2.36023 12.8046 2 12.4443 2 12Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M12.0013 2C12.2273 2 12.4429 2.09507 12.5954 2.26196C15.0269 4.92399 16.4088 8.37862 16.4839 11.9832C16.4841 11.9944 16.4841 12.0056 16.4839 12.0168C16.4088 15.6214 15.0269 19.076 12.5954 21.738C12.4429 21.9049 12.2273 22 12.0013 22C11.7753 22 11.5597 21.9049 11.4072 21.738C8.97568 19.076 7.59382 15.6214 7.51873 12.0168C7.5185 12.0056 7.5185 11.9944 7.51873 11.9832C7.59382 8.37862 8.97568 4.92399 11.4072 2.26196C11.5597 2.09507 11.7753 2 12.0013 2ZM9.12794 12C9.19207 14.9024 10.2061 17.6949 12.0013 19.9555C13.7965 17.6949 14.8106 14.9024 14.8747 12C14.8106 9.09763 13.7965 6.30513 12.0013 4.04449C10.2061 6.30513 9.19207 9.09763 9.12794 12Z" fill="currentColor"/></svg>
+        </button>
+        <div class="lang-dropdown" id="langDropdown">
+            <div class="lang-option active" onclick="setLang('en', this)">English (United States)</div>
+            <div class="lang-option" onclick="setLang('es', this)">Español</div>
+            <div class="lang-option" onclick="setLang('fr', this)">Français</div>
+            <div class="lang-option" onclick="setLang('it', this)">Italiano</div>
+            <div class="lang-option" onclick="setLang('de', this)">Deutsch</div>
+            <div class="lang-option" onclick="setLang('ja', this)">日本語</div>
+            <div class="lang-option" onclick="setLang('zh-TW', this)">繁體中文</div>
+            <div class="lang-option" onclick="setLang('zh-CN', this)">简体中文</div>
+        </div>
+    </div>
+
+    <div class="facts-card">
+        <div class="facts-inner">
+            <div class="facts-title" data-i18n="title">Design Recipe</div>
+            <div class="divider-thick"></div>
+
+            <div class="facts-serving">
+                <span class="facts-subtitle" data-i18n="subtitle">FiloMail — Component Library</span>
             </div>
-            <span class="header-title">Filo Design System</span>
-        </div>
-        <div class="header-right">
-            <div class="mode-toggle">
-                <button class="mode-btn active" onclick="setMode('light')">Light</button>
-                <button class="mode-btn" onclick="setMode('dark')">Dark</button>
+            <div class="facts-serving">
+                <span class="label" data-i18n="version">Version</span>
+                <span class="value">2.1.0</span>
             </div>
-        </div>
-    </header>
+            <div class="divider-medium"></div>
 
-    <!-- Sidebar -->
-    <nav class="sidebar" id="sidebar">
-        <div class="sidebar-resize-handle" id="resizeHandle"></div>
-        
-        <div class="sidebar-section">
-            <h3 class="sidebar-section-title">Foundation</h3>
-            <ul class="sidebar-nav">
-                <li>
-                    <a href="#colors" onclick="loadPage('colors.html', this)">
-                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
-                            <path d="M12 3V12L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                        <span class="nav-text">Colors</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#typography" onclick="loadPage('typography.html', this)">
-                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                            <path d="M4 7V4H20V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12 4V20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            <path d="M8 20H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                        <span class="nav-text">Typography</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#icons" onclick="loadPage('icons.html', this)">
-                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                            <rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
-                            <rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
-                            <rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
-                            <rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
-                        </svg>
-                        <span class="nav-text">Icons</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
+            <div class="section-header" data-i18n="foundation">Foundation</div>
+            <div class="calories-row">
+                <span class="calories-label" data-i18n="platforms">Platforms</span>
+                <span class="calories-value" data-i18n="platformsVal">Mobile & Desktop</span>
+            </div>
+            <div class="divider-medium"></div>
 
-        <div class="sidebar-section">
-            <h3 class="sidebar-section-title">Components</h3>
-            <ul class="sidebar-nav">
-                <li>
-                    <a href="#buttons" onclick="loadPage('buttons.html', this)">
-                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                            <rect x="3" y="8" width="18" height="8" rx="4" stroke="currentColor" stroke-width="2"/>
-                        </svg>
-                        <span class="nav-text">Buttons</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#cards" onclick="loadPage('cards.html', this)">
-                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                            <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
-                            <path d="M3 10H21" stroke="currentColor" stroke-width="2"/>
-                        </svg>
-                        <span class="nav-text">Cards</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#bars" onclick="loadPage('bars.html', this)">
-                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                            <rect x="3" y="17" width="18" height="4" rx="1" stroke="currentColor" stroke-width="2"/>
-                            <rect x="3" y="3" width="18" height="4" rx="1" stroke="currentColor" stroke-width="2"/>
-                        </svg>
-                        <span class="nav-text">Bars</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
+            <div class="dv-header" data-i18n="specs">Specs</div>
+            <div class="divider-thin"></div>
 
-        <div class="sidebar-footer">
-            <a href="https://filo-mail.gitbook.io/filo-mail-docs" target="_blank">
-                <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M18 13V19C18 20.1046 17.1046 21 16 21H5C3.89543 21 3 20.1046 3 19V8C3 6.89543 3.89543 6 5 6H11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M15 3H21V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                <span class="nav-text">Filo Documentation</span>
+            <a class="facts-row" href="colors.html">
+                <span class="name" data-i18n="colors">Colors</span>
+                <span class="tokens" data-i18n="colorsT">25 tokens, light + dark</span>
             </a>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <main class="main-content" id="mainContent">
-        <div class="welcome" id="welcome">
-            <div class="welcome-icon">
-                <svg viewBox="0 0 200 200" fill="none">
-                    <path d="M146.323 0H53.6769C24.0319 0 0 24.0319 0 53.6769V146.323C0 175.968 24.0319 200 53.6769 200H146.323C175.968 200 200 175.968 200 146.323V53.6769C200 24.0319 175.968 0 146.323 0Z" fill="url(#welcomeGradient)"/>
-                    <g transform="translate(12.5, 28.84)">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M126.348 0C144.473 0.000194164 159.165 14.6935 159.165 32.8187V61.6012C164.304 60.9327 169.529 60.4924 174.794 60.2906C175.105 60.2784 175.202 60.7085 174.92 60.835C169.616 63.2027 164.37 65.6608 159.165 68.2401C136.339 79.4468 114.557 92.4286 93.9912 107.014C87.0144 111.974 80.1834 117.103 73.4984 122.426C67.5765 127.106 61.7567 131.954 56.0634 136.93C55.8227 137.139 55.4699 136.849 55.6304 136.572C59.4226 130.04 63.6384 123.8 68.2718 117.854C65.4761 115.472 62.6557 113.162 59.7629 110.877C46.3197 100.229 31.9522 90.6752 16.8074 82.337C11.3573 79.3519 5.80041 76.5147 0.160728 73.8237C-0.116402 73.69 -0.0119047 73.27 0.296829 73.2846C5.87082 73.5569 11.3816 74.1156 16.8074 74.8984V32.8187C16.8074 14.6934 31.5007 0 49.626 0H126.348ZM115.875 26.2037C113.485 23.8165 109.615 23.8166 107.226 26.2037L80.1275 53.3018L72.2708 45.4451C68.96 42.1343 67.302 40.4759 65.2917 40.184C64.7109 40.0989 64.1174 40.099 63.5365 40.184C61.5261 40.4757 59.87 42.1316 56.5566 45.4451C53.2458 48.7559 51.5881 50.4139 51.2964 52.4242C51.2113 53.0051 51.2113 53.5984 51.2964 54.1793C51.5881 56.1897 53.2433 57.8452 56.5566 61.1584L75.8006 80.4025C78.1878 82.7895 82.0604 82.7896 84.45 80.4025L122.939 41.9179C125.326 39.5307 125.326 35.6582 122.939 33.2685L115.875 26.2037Z" fill="white"/>
-                    </g>
-                    <defs>
-                        <linearGradient id="welcomeGradient" x1="100" y1="199.351" x2="100.034" y2="0" gradientUnits="userSpaceOnUse">
-                            <stop stop-color="#0D93F3"/>
-                            <stop offset="0.2" stop-color="#22A0FB"/>
-                            <stop offset="1" stop-color="#9DDEFF"/>
-                        </linearGradient>
-                    </defs>
-                </svg>
+            <div class="divider-thin"></div>
+            <a class="facts-row" href="typography.html">
+                <span class="name" data-i18n="typography">Typography</span>
+                <span class="tokens" data-i18n="typographyT">20 styles, 3 weights</span>
+            </a>
+            <div class="divider-thin"></div>
+            <a class="facts-row" href="icons.html">
+                <span class="name" data-i18n="icons">Icons</span>
+                <span class="tokens" data-i18n="iconsT">100+ SVGs</span>
+            </a>
+            <div class="divider-thin"></div>
+            <div class="facts-row disabled">
+                <span class="name"><span class="name-regular" data-i18n="spacing">Spacing</span></span>
+                <span class="coming-soon" data-i18n="comingSoon">Coming Soon</span>
             </div>
-            <h1>Filo Design System</h1>
-            <p>A comprehensive design system for Filo email client. Browse colors, typography, icons, and components.</p>
-            <p class="welcome-hint">Select a category from the sidebar to get started.</p>
+            <div class="divider-thin"></div>
+            <div class="facts-row disabled">
+                <span class="name"><span class="name-regular" data-i18n="radius">Radius</span></span>
+                <span class="coming-soon" data-i18n="comingSoon">Coming Soon</span>
+            </div>
+            <div class="divider-thin"></div>
+            <div class="facts-row disabled">
+                <span class="name"><span class="name-regular" data-i18n="dividers">Dividers</span></span>
+                <span class="coming-soon" data-i18n="comingSoon">Coming Soon</span>
+            </div>
+            <div class="divider-thick"></div>
+
+            <div class="section-header" data-i18n="components">Components</div>
+            <div class="divider-thin"></div>
+            <a class="facts-row" href="buttons.html">
+                <span class="name" data-i18n="buttons">Buttons</span>
+                <span class="tokens" data-i18n="buttonsT">pills, labels, minitools</span>
+            </a>
+            <div class="divider-thin"></div>
+            <a class="facts-row" href="cards.html">
+                <span class="name" data-i18n="cards">Cards</span>
+                <span class="tokens" data-i18n="cardsT">summary, todo, tips, AI</span>
+            </a>
+            <div class="divider-thin"></div>
+            <a class="facts-row" href="bars.html">
+                <span class="name" data-i18n="bars">Bars</span>
+                <span class="tokens" data-i18n="barsT">tab bars, toolbars, nav</span>
+            </a>
+            <div class="divider-thin"></div>
+            <div class="facts-row disabled">
+                <span class="name"><span class="name-regular" data-i18n="lists">Lists</span></span>
+                <span class="coming-soon" data-i18n="comingSoon">Coming Soon</span>
+            </div>
+            <div class="divider-thin"></div>
+            <div class="facts-row disabled">
+                <span class="name"><span class="name-regular" data-i18n="inputs">Inputs</span></span>
+                <span class="coming-soon" data-i18n="comingSoon">Coming Soon</span>
+            </div>
+            <div class="divider-thin"></div>
+            <div class="facts-row disabled">
+                <span class="name"><span class="name-regular" data-i18n="modals">Modals</span></span>
+                <span class="coming-soon" data-i18n="comingSoon">Coming Soon</span>
+            </div>
+            <div class="divider-medium"></div>
+
+            <div style="margin-top: 12px; font-size: 11px; color: var(--filo-08); text-align: right; letter-spacing: 0;" data-i18n="credit">Crafted by Connie Liang & AI · Jan 2026</div>
         </div>
-    </main>
+    </div>
 
     <script>
-        // Store current mode
-        let currentMode = 'light';
-        
-        // Sidebar resize functionality
-        let isResizing = false;
-        let sidebarWidth = 280;
-        
-        const sidebar = document.getElementById('sidebar');
-        const resizeHandle = document.getElementById('resizeHandle');
-        const mainContent = document.getElementById('mainContent');
-        
-        resizeHandle.addEventListener('mousedown', (e) => {
-            isResizing = true;
-            document.body.classList.add('resizing');
-            resizeHandle.classList.add('dragging');
-        });
-        
-        document.addEventListener('mousemove', (e) => {
-            if (!isResizing) return;
-            
-            const newWidth = e.clientX;
-            if (newWidth >= 60 && newWidth <= 400) {
-                sidebarWidth = newWidth;
-                sidebar.style.width = newWidth + 'px';
-                mainContent.style.left = newWidth + 'px';
-            }
-        });
-        
-        document.addEventListener('mouseup', () => {
-            if (isResizing) {
-                isResizing = false;
-                document.body.classList.remove('resizing');
-                resizeHandle.classList.remove('dragging');
-            }
-        });
-        
-        function setMode(mode) {
-            currentMode = mode;
-            
-            // Update main page
-            if (mode === 'dark') {
-                document.body.classList.add('dark-mode');
-            } else {
-                document.body.classList.remove('dark-mode');
-            }
-            
-            // Update toggle buttons
-            document.querySelectorAll('.mode-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.textContent.toLowerCase() === mode);
-            });
-            
-            // Reload iframe with new mode parameter
-            const iframe = document.getElementById('contentFrame');
-            if (iframe && iframe.src) {
-                const baseSrc = iframe.src.split('?')[0];
-                iframe.src = baseSrc + '?mode=' + mode;
-            }
-        }
-        
-        function syncIframeMode() {
-            const iframe = document.getElementById('contentFrame');
-            if (iframe && iframe.contentWindow && iframe.contentWindow.document && iframe.contentWindow.document.body) {
-                try {
-                    if (currentMode === 'dark') {
-                        iframe.contentWindow.document.body.classList.add('dark-mode');
-                    } else {
-                        iframe.contentWindow.document.body.classList.remove('dark-mode');
-                    }
-                } catch(e) {
-                    console.log('Could not sync iframe mode:', e);
-                }
-            }
+        const translations = {
+            en: { title: 'Design Recipe', subtitle: 'FiloMail — Component Library', version: 'Version', foundation: 'Foundation', platforms: 'Platforms', platformsVal: 'Mobile & Desktop', specs: 'Specs', colors: 'Colors', colorsT: '25 tokens, light + dark', typography: 'Typography', typographyT: '20 styles, 3 weights', icons: 'Icons', iconsT: '100+ SVGs', spacing: 'Spacing', radius: 'Radius', dividers: 'Dividers', components: 'Components', buttons: 'Buttons', buttonsT: 'pills, labels, minitools', cards: 'Cards', cardsT: 'summary, todo, tips, AI', bars: 'Bars', barsT: 'tab bars, toolbars, nav', lists: 'Lists', inputs: 'Inputs', modals: 'Modals', comingSoon: 'Coming Soon', credit: 'Crafted by Connie Liang & AI · Jan 2026' },
+            es: { title: 'Receta de Diseño', subtitle: 'FiloMail — Biblioteca de Componentes', version: 'Versión', foundation: 'Fundamentos', platforms: 'Plataformas', platformsVal: 'Móvil y Escritorio', specs: 'Especificaciones', colors: 'Colores', colorsT: '25 tokens, claro + oscuro', typography: 'Tipografía', typographyT: '20 estilos, 3 pesos', icons: 'Iconos', iconsT: '100+ SVGs', spacing: 'Espaciado', radius: 'Radio', dividers: 'Divisores', components: 'Componentes', buttons: 'Botones', buttonsT: 'pastillas, etiquetas, mini', cards: 'Tarjetas', cardsT: 'resumen, tareas, tips, IA', bars: 'Barras', barsT: 'pestañas, herramientas, nav', lists: 'Listas', inputs: 'Entradas', modals: 'Modales', comingSoon: 'Próximamente', credit: 'Creado por Connie Liang & IA · Ene 2026' },
+            fr: { title: 'Recette Design', subtitle: 'FiloMail — Bibliothèque de Composants', version: 'Version', foundation: 'Fondation', platforms: 'Plateformes', platformsVal: 'Mobile et Bureau', specs: 'Spécifications', colors: 'Couleurs', colorsT: '25 jetons, clair + sombre', typography: 'Typographie', typographyT: '20 styles, 3 graisses', icons: 'Icônes', iconsT: '100+ SVGs', spacing: 'Espacement', radius: 'Rayon', dividers: 'Séparateurs', components: 'Composants', buttons: 'Boutons', buttonsT: 'pilules, étiquettes, mini', cards: 'Cartes', cardsT: 'résumé, tâches, astuces, IA', bars: 'Barres', barsT: 'onglets, outils, nav', lists: 'Listes', inputs: 'Entrées', modals: 'Modales', comingSoon: 'Bientôt', credit: 'Conçu par Connie Liang & IA · Jan 2026' },
+            it: { title: 'Ricetta di Design', subtitle: 'FiloMail — Libreria Componenti', version: 'Versione', foundation: 'Fondamenta', platforms: 'Piattaforme', platformsVal: 'Mobile e Desktop', specs: 'Specifiche', colors: 'Colori', colorsT: '25 token, chiaro + scuro', typography: 'Tipografia', typographyT: '20 stili, 3 pesi', icons: 'Icone', iconsT: '100+ SVG', spacing: 'Spaziatura', radius: 'Raggio', dividers: 'Divisori', components: 'Componenti', buttons: 'Pulsanti', buttonsT: 'pillole, etichette, mini', cards: 'Schede', cardsT: 'riepilogo, attività, suggerimenti, IA', bars: 'Barre', barsT: 'schede, strumenti, nav', lists: 'Liste', inputs: 'Input', modals: 'Modali', comingSoon: 'In Arrivo', credit: 'Creato da Connie Liang & IA · Gen 2026' },
+            de: { title: 'Design-Rezept', subtitle: 'FiloMail — Komponentenbibliothek', version: 'Version', foundation: 'Grundlagen', platforms: 'Plattformen', platformsVal: 'Mobil & Desktop', specs: 'Spezifikationen', colors: 'Farben', colorsT: '25 Token, Hell + Dunkel', typography: 'Typografie', typographyT: '20 Stile, 3 Stärken', icons: 'Symbole', iconsT: '100+ SVGs', spacing: 'Abstände', radius: 'Radius', dividers: 'Trennlinien', components: 'Komponenten', buttons: 'Schaltflächen', buttonsT: 'Pillen, Labels, Minitools', cards: 'Karten', cardsT: 'Zusammenfassung, Aufgaben, Tipps, KI', bars: 'Leisten', barsT: 'Tabs, Werkzeuge, Nav', lists: 'Listen', inputs: 'Eingaben', modals: 'Modale', comingSoon: 'Demnächst', credit: 'Erstellt von Connie Liang & KI · Jan 2026' },
+            ja: { title: 'デザインレシピ', subtitle: 'FiloMail — コンポーネントライブラリ', version: 'バージョン', foundation: '基盤', platforms: 'プラットフォーム', platformsVal: 'モバイル & デスクトップ', specs: '仕様', colors: 'カラー', colorsT: '25トークン、ライト+ダーク', typography: 'タイポグラフィ', typographyT: '20スタイル、3ウェイト', icons: 'アイコン', iconsT: '100+ SVG', spacing: 'スペーシング', radius: '角丸', dividers: 'ディバイダー', components: 'コンポーネント', buttons: 'ボタン', buttonsT: 'ピル、ラベル、ミニツール', cards: 'カード', cardsT: '要約、ToDo、ヒント、AI', bars: 'バー', barsT: 'タブバー、ツールバー、ナビ', lists: 'リスト', inputs: '入力', modals: 'モーダル', comingSoon: '近日公開', credit: 'Connie Liang & AI 制作 · 2026年1月' },
+            'zh-TW': { title: '設計食譜', subtitle: 'FiloMail — 元件庫', version: '版本', foundation: '基礎', platforms: '平台', platformsVal: '行動裝置與桌面', specs: '規格', colors: '色彩', colorsT: '25 色彩變數，淺色+深色', typography: '字型', typographyT: '20 樣式，3 字重', icons: '圖示', iconsT: '100+ SVG', spacing: '間距', radius: '圓角', dividers: '分隔線', components: '元件', buttons: '按鈕', buttonsT: '膠囊、標籤、迷你工具', cards: '卡片', cardsT: '摘要、待辦、提示、AI', bars: '列', barsT: '標籤列、工具列、導覽', lists: '列表', inputs: '輸入', modals: '彈窗', comingSoon: '即將推出', credit: 'Connie Liang & AI 製作 · 2026年1月' },
+            'zh-CN': { title: '设计食谱', subtitle: 'FiloMail — 组件库', version: '版本', foundation: '基础', platforms: '平台', platformsVal: '移动端与桌面端', specs: '规格', colors: '色彩', colorsT: '25 色彩变量，浅色+深色', typography: '字体', typographyT: '20 样式，3 字重', icons: '图标', iconsT: '100+ SVG', spacing: '间距', radius: '圆角', dividers: '分隔线', components: '组件', buttons: '按钮', buttonsT: '胶囊、标签、迷你工具', cards: '卡片', cardsT: '摘要、待办、提示、AI', bars: '栏', barsT: '标签栏、工具栏、导航', lists: '列表', inputs: '输入', modals: '弹窗', comingSoon: '即将推出', credit: 'Connie Liang & AI 制作 · 2026年1月' }
+        };
+
+        function toggleLangDropdown() {
+            document.getElementById('langDropdown').classList.toggle('open');
         }
 
-        function loadPage(page, element) {
-            // Update active state
-            document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
-            element.classList.add('active');
-            
-            // Hide welcome, show iframe
-            document.getElementById('welcome').style.display = 'none';
-            
-            // Check if iframe exists, create if not
-            let iframe = document.getElementById('contentFrame');
-            if (!iframe) {
-                iframe = document.createElement('iframe');
-                iframe.id = 'contentFrame';
-                iframe.className = 'content-iframe';
-                document.getElementById('mainContent').appendChild(iframe);
-            }
-            
-            // Pass mode via URL parameter
-            iframe.src = page + '?mode=' + currentMode;
-            iframe.style.display = 'block';
-            
-            // Also try to sync via JS after load
-            iframe.onload = function() {
-                syncIframeMode();
-            };
-            
-            return false;
+        function setLang(code, el) {
+            document.querySelectorAll('.lang-option').forEach(o => o.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('langDropdown').classList.remove('open');
+
+            const t = translations[code];
+            document.querySelector('[data-i18n="title"]').textContent = t.title;
+            document.querySelector('[data-i18n="subtitle"]').textContent = t.subtitle;
+            document.querySelector('[data-i18n="version"]').textContent = t.version;
+            document.querySelector('[data-i18n="foundation"]').textContent = t.foundation;
+            document.querySelector('[data-i18n="platforms"]').textContent = t.platforms;
+            document.querySelector('[data-i18n="platformsVal"]').textContent = t.platformsVal;
+            document.querySelector('[data-i18n="specs"]').textContent = t.specs;
+            document.querySelector('[data-i18n="colors"]').textContent = t.colors;
+            document.querySelector('[data-i18n="colorsT"]').textContent = t.colorsT;
+            document.querySelector('[data-i18n="typography"]').textContent = t.typography;
+            document.querySelector('[data-i18n="typographyT"]').textContent = t.typographyT;
+            document.querySelector('[data-i18n="icons"]').textContent = t.icons;
+            document.querySelector('[data-i18n="iconsT"]').textContent = t.iconsT;
+            document.querySelector('[data-i18n="spacing"]').textContent = t.spacing;
+            document.querySelector('[data-i18n="radius"]').textContent = t.radius;
+            document.querySelector('[data-i18n="dividers"]').textContent = t.dividers;
+            document.querySelector('[data-i18n="components"]').textContent = t.components;
+            document.querySelector('[data-i18n="buttons"]').textContent = t.buttons;
+            document.querySelector('[data-i18n="buttonsT"]').textContent = t.buttonsT;
+            document.querySelector('[data-i18n="cards"]').textContent = t.cards;
+            document.querySelector('[data-i18n="cardsT"]').textContent = t.cardsT;
+            document.querySelector('[data-i18n="bars"]').textContent = t.bars;
+            document.querySelector('[data-i18n="barsT"]').textContent = t.barsT;
+            document.querySelector('[data-i18n="lists"]').textContent = t.lists;
+            document.querySelector('[data-i18n="inputs"]').textContent = t.inputs;
+            document.querySelector('[data-i18n="modals"]').textContent = t.modals;
+            document.querySelectorAll('[data-i18n="comingSoon"]').forEach(el => el.textContent = t.comingSoon);
+            document.querySelector('[data-i18n="credit"]').textContent = t.credit;
         }
 
-        // Handle hash navigation on load
-        window.addEventListener('load', function() {
-            const hash = window.location.hash.substring(1);
-            if (hash) {
-                const link = document.querySelector(`a[href="#${hash}"]`);
-                if (link) {
-                    link.click();
-                }
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.lang-switcher')) {
+                document.getElementById('langDropdown').classList.remove('open');
             }
         });
     </script>
