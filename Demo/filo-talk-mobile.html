@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filo Talk - Idle Screen (Mobile)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --filo-01: #1F9EFA;
+            --filo-02: #22A0FB;
+            --filo-04: #5ABEFF;
+            --filo-05: #E8EEF2;
+            --filo-06: #000000;
+            --filo-07: #707070;
+            --filo-08: #D5D5D5;
+            --filo-09: #F5F5F5;
+            --filo-10: #FFFFFF;
+            --filo-14: rgba(0, 0, 0, 0.04);
+            --filo-25: #9E9E9E;
+            --bg: #F5F5F5;
+        }
+
+        body.dark-mode {
+            --filo-01: #6CC1FF;
+            --filo-02: #45B1FF;
+            --filo-04: #2E5168;
+            --filo-05: #344352;
+            --filo-06: #FFFFFF;
+            --filo-07: #8B8B8B;
+            --filo-08: #414149;
+            --filo-09: #2A2A30;
+            --filo-10: #1D1D21;
+            --filo-14: rgba(255, 255, 255, 0.06);
+            --filo-25: #727272;
+            --bg: #121212;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            padding: 20px 80px 60px;
+            color: var(--filo-06);
+        }
+
+        .page-header { margin-bottom: 40px; }
+        .page-header h1 { font-size: 32px; font-weight: 700; margin-bottom: 20px; color: var(--filo-06); }
+        .page-subtitle { font-size: 15px; color: var(--filo-07); margin-bottom: 16px; max-width: 800px; line-height: 1.5; }
+        .page-meta { display: flex; gap: 16px; font-size: 13px; color: var(--filo-07); align-items: center; }
+        .meta-item { display: flex; align-items: center; gap: 6px; }
+        .meta-item svg { width: 14px; height: 14px; }
+        .meta-link { color: var(--filo-02); text-decoration: none; }
+        .meta-link:hover { text-decoration: underline; }
+
+        .controls { position: fixed; top: 20px; right: 80px; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; z-index: 100; }
+        .toggle-group { display: flex; background: var(--filo-14); border-radius: 8px; padding: 4px; }
+        .mode-btn { padding: 6px 12px; border: none; background: none; border-radius: 6px; cursor: pointer; font-size: 13px; color: var(--filo-07); transition: all 0.2s; }
+        .mode-btn.active { background: var(--filo-10); color: var(--filo-06); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .meta-divider { color: var(--filo-08); }
+        .screen-nav { display: flex; gap: 72px; margin-top: 8px; border-bottom: 1px solid var(--filo-08); }
+        .screen-nav .mode-btn { background: none; font-size: 15px; font-weight: 400; padding: 8px 0; color: var(--filo-07); border: none; border-bottom: 2px solid transparent; border-radius: 0; margin-bottom: -1px; }
+        .screen-nav .mode-btn.active { background: none; color: var(--filo-06); font-weight: 600; box-shadow: none; border-bottom-color: var(--filo-02); }
+
+        .screen-container { display: flex; justify-content: center; padding: 40px 0; }
+
+        .iphone-frame {
+            width: 390px;
+            height: 844px;
+            background: var(--filo-10);
+            border-radius: 48px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .status-bar { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; position: relative; z-index: 10; }
+        .status-time { flex: 1; padding-left: 28px; }
+        .status-time span { font-size: 17px; font-weight: 600; color: var(--filo-06); }
+        .status-island { width: 124px; height: 36px; background: #000; border-radius: 24px; }
+        .status-icons { flex: 1; display: flex; align-items: center; justify-content: flex-end; gap: 6px; padding-right: 20px; }
+        .status-icons svg { height: 12px; color: var(--filo-06); }
+
+        .chat-area { flex: 1; padding: 20px 0 0; display: flex; flex-direction: column; gap: 20px; position: relative; z-index: 10; }
+        .ai-message { font-size: 17px; font-weight: 400; line-height: 1.4; letter-spacing: -0.2px; color: var(--filo-06); padding: 0 20px; }
+        .user-message { display: flex; flex-direction: column; align-items: flex-end; padding: 0 20px 0 80px; }
+        .user-bubble { background: rgba(76, 180, 255, 0.12); padding: 8px 12px; font-size: 17px; font-weight: 400; line-height: 1.4; letter-spacing: -0.2px; color: var(--filo-06); }
+        .user-bubble.pill { border-radius: 999px; }
+        .user-bubble.rect { border-radius: 20px; width: 100%; }
+        body.dark-mode .user-bubble { background: rgba(76, 180, 255, 0.12); }
+
+        /* Gradient Background */
+        .gradient-bg {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 350px;
+            pointer-events: none;
+            overflow: hidden;
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 30%);
+            mask-image: linear-gradient(to bottom, transparent 0%, black 30%);
+        }
+
+        .gradient-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(45px);
+            opacity: 0.6;
+        }
+
+        .blob-1 {
+            width: 220px; height: 220px;
+            background: rgba(157, 222, 255, 0.7);
+            bottom: -30px; left: 50%; transform: translateX(-50%);
+            animation: blobFloat1 4s ease-in-out infinite;
+        }
+        body.dark-mode .blob-1 { background: rgba(69, 177, 255, 0.25); }
+
+        .blob-2 {
+            width: 180px; height: 180px;
+            background: rgba(127, 110, 255, 0.45);
+            bottom: -10px; left: 28%; transform: translateX(-50%);
+            animation: blobFloat2 5s ease-in-out infinite;
+        }
+        body.dark-mode .blob-2 { background: rgba(127, 110, 255, 0.2); }
+
+        .blob-3 {
+            width: 160px; height: 160px;
+            background: rgba(34, 160, 251, 0.4);
+            bottom: -20px; left: 68%; transform: translateX(-50%);
+            animation: blobFloat3 4.5s ease-in-out infinite;
+        }
+        body.dark-mode .blob-3 { background: rgba(69, 177, 255, 0.18); }
+
+        @keyframes blobFloat1 {
+            0% { transform: translate(-50%, 0) scale(1); }
+            25% { transform: translate(-30%, -60px) scale(1.3); }
+            50% { transform: translate(-55%, -30px) scale(0.85); }
+            75% { transform: translate(-45%, -70px) scale(1.2); }
+            100% { transform: translate(-50%, 0) scale(1); }
+        }
+
+        @keyframes blobFloat2 {
+            0% { transform: translate(-50%, 0) scale(1); }
+            33% { transform: translate(-70%, -50px) scale(1.25); }
+            66% { transform: translate(-30%, -20px) scale(0.8); }
+            100% { transform: translate(-50%, 0) scale(1); }
+        }
+
+        @keyframes blobFloat3 {
+            0% { transform: translate(-50%, 0) scale(1); }
+            20% { transform: translate(-40%, -40px) scale(1.15); }
+            50% { transform: translate(-60%, -70px) scale(1.35); }
+            80% { transform: translate(-45%, -20px) scale(0.9); }
+            100% { transform: translate(-50%, 0) scale(1); }
+        }
+
+        /* Talk Button */
+        .talk-button {
+            position: absolute;
+            bottom: 56px; left: 50%; transform: translateX(-50%);
+            z-index: 20;
+            display: flex; align-items: center; gap: 8px;
+            padding: 12px 20px;
+            background: var(--filo-06);
+            border: none; border-radius: 999px;
+            cursor: pointer;
+            transition: transform 0.15s, opacity 0.15s;
+        }
+        .talk-button:active { transform: translateX(-50%) scale(0.95); }
+        .talk-button svg { width: 24px; height: 24px; color: var(--filo-10); }
+        .talk-button span { font-size: 17px; font-weight: 400; line-height: 1.4; letter-spacing: -0.2px; color: var(--filo-10); }
+
+        .waveform { display: flex; align-items: center; gap: 2px; height: 24px; padding: 4px 0; }
+        .waveform .bar { width: 3px; background: var(--filo-10); border-radius: 2px; animation: waveAnim 1.2s ease-in-out infinite; }
+        .waveform .bar:nth-child(1) { height: 8px; animation-delay: 0s; }
+        .waveform .bar:nth-child(2) { height: 14px; animation-delay: 0.1s; }
+        .waveform .bar:nth-child(3) { height: 20px; animation-delay: 0.2s; }
+        .waveform .bar:nth-child(4) { height: 14px; animation-delay: 0.3s; }
+        .waveform .bar:nth-child(5) { height: 8px; animation-delay: 0.4s; }
+
+        @keyframes waveAnim {
+            0%, 100% { transform: scaleY(0.5); }
+            50% { transform: scaleY(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1>Filo Talk - Mobile</h1>
+        <p class="page-subtitle">A voice-driven AI conversation inside Filo's AI Tab. The user speaks, Filo acts on their email (search, archive, compose, reply, create tasks, set rules), and responds with voice. The conversation is continuous, no re-tapping, no re-prompting, until the user decides they're done. &nbsp;&nbsp; <a href="https://tryfilo.atlassian.net/browse/FILO-1674" target="_blank" class="meta-link">Jira-1674</a> &nbsp;·&nbsp; <a href="https://www.figma.com/design/7tXBqwb5MkT6wIwnjgeA4g/%F0%9F%8D%8E-Mobile?node-id=6868-113293" target="_blank" class="meta-link">Figma</a></p>
+        <div class="screen-nav">
+            <button class="mode-btn" onclick="setScreen('idle')">Idle</button>
+            <button class="mode-btn" onclick="setScreen('onboarding')">Onboarding</button>
+            <button class="mode-btn active" onclick="setScreen('conversation')">Conversation</button>
+            <button class="mode-btn" onclick="setScreen('error')">Error</button>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div class="toggle-group">
+            <button class="mode-btn active" onclick="setTheme('light')">Light</button>
+            <button class="mode-btn" onclick="setTheme('dark')">Dark</button>
+        </div>
+    </div>
+
+    <div class="screen-container">
+        <div class="iphone-frame">
+            <div class="status-bar">
+                <div class="status-time"><span>9:41</span></div>
+                <div class="status-island"></div>
+                <div class="status-icons">
+                    <svg viewBox="0 0 18 12" fill="none"><rect x="0" y="8" width="3" height="4" rx="1" fill="currentColor"/><rect x="5" y="5" width="3" height="7" rx="1" fill="currentColor"/><rect x="10" y="2" width="3" height="10" rx="1" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx="1" fill="currentColor"/></svg>
+                    <svg viewBox="0 0 16 12" fill="none"><path d="M8 2C5.5 2 3.2 2.9 1.5 4.4L3 6C4.3 4.9 6.1 4.2 8 4.2C9.9 4.2 11.7 4.9 13 6L14.5 4.4C12.8 2.9 10.5 2 8 2ZM8 6C6.6 6 5.3 6.5 4.3 7.3L6 9C6.6 8.5 7.3 8.2 8 8.2C8.7 8.2 9.4 8.5 10 9L11.7 7.3C10.7 6.5 9.4 6 8 6ZM8 10C7.4 10 7 10.4 7 11C7 11.6 7.4 12 8 12C8.6 12 9 11.6 9 11C9 10.4 8.6 10 8 10Z" fill="currentColor"/></svg>
+                    <svg viewBox="0 0 28 13" fill="none"><rect x="0.5" y="0.5" width="24" height="12" rx="3" stroke="currentColor" opacity="0.35"/><rect x="2" y="2" width="21" height="9" rx="2" fill="currentColor"/></svg>
+                </div>
+            </div>
+
+            <div class="chat-area">
+                <p class="ai-message">👋 Morning, Adam. You have 3 emails that need a reply.</p>
+
+                <div class="user-message">
+                    <div class="user-bubble pill">Read me the important ones.</div>
+                </div>
+
+                <p class="ai-message">Sarah from HR says the benefits deadline is tomorrow. Mike wants to confirm the project timeline. And your manager asked about the Q4 report.</p>
+
+                <div class="user-message">
+                    <div class="user-bubble rect">Reply to Sarah. Tell her I'll submit by the end of the day.</div>
+                </div>
+            </div>
+
+            <div class="gradient-bg">
+                <div class="gradient-blob blob-1"></div>
+                <div class="gradient-blob blob-2"></div>
+                <div class="gradient-blob blob-3"></div>
+            </div>
+
+            <button class="talk-button" id="talkBtn" onclick="toggleState()">
+                <div class="waveform" id="waveform">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+                <span id="talkLabel">Stop</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function setTheme(theme) {
+            document.body.classList.toggle('dark-mode', theme === 'dark');
+            const group = event.target.parentElement;
+            group.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function setScreen(screen) {
+            const nav = document.querySelector('.screen-nav');
+            nav.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        let isListening = true;
+
+        function toggleState() {
+            isListening = !isListening;
+            const label = document.getElementById('talkLabel');
+            const waveform = document.getElementById('waveform');
+            const blobs = document.querySelectorAll('.gradient-blob');
+
+            if (isListening) {
+                label.textContent = 'Stop';
+                waveform.style.display = 'flex';
+                blobs.forEach(b => { b.style.animationPlayState = 'running'; b.style.opacity = '0.5'; });
+            } else {
+                label.textContent = 'Talk';
+                waveform.style.display = 'none';
+                blobs.forEach(b => { b.style.animationPlayState = 'paused'; b.style.opacity = '0.25'; });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FILO-1674 — Filo Talk — Flow Charts</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+    background: #fff;
+    color: #222;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 40px;
+  }
+  h1 { font-size: 24px; font-weight: 600; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #999; margin-bottom: 48px; }
+  .flow-section { margin-bottom: 64px; text-align: center; }
+  .flow-section svg { display: inline-block; }
+  .flow-title { font-size: 16px; font-weight: 600; margin-bottom: 4px; text-align: left; }
+  .flow-desc { font-size: 12px; color: #999; margin-bottom: 20px; text-align: left; }
+  svg text { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif; }
+
+  .lang-switch {
+    position: fixed;
+    top: 20px;
+    right: 24px;
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+    font-size: 13px;
+    z-index: 100;
+    background: #fff;
+  }
+  .lang-switch button {
+    padding: 6px 14px;
+    border: none;
+    background: #fff;
+    color: #999;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .lang-switch button.active {
+    background: #222;
+    color: #fff;
+  }
+</style>
+</head>
+<body>
+
+<div class="lang-switch">
+  <button id="btn-en" class="active" onclick="setLang('en')">En</button>
+  <button id="btn-zh" onclick="setLang('zh')">中文</button>
+</div>
+
+<h1>FILO-1674 — Filo Talk</h1>
+<p class="subtitle" data-t="subtitle">User flow charts</p>
+
+<!-- ====== FLOW 1: First-Time User ====== -->
+<div class="flow-section">
+<div class="flow-title" data-t="f1_title">Flow 1 — First-Time User</div>
+<p class="flow-desc" data-t="f1_desc">Permission gate → onboarding → idle. Every new user goes through this once.</p>
+
+<svg width="980" height="540" viewBox="-80 0 980 540">
+  <defs>
+    <marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#999"/></marker>
+  </defs>
+
+  <!-- ===== MAIN SPINE (center column) ===== -->
+
+  <!-- Start -->
+  <rect x="340" y="10" width="180" height="36" rx="18" fill="#d4edda" stroke="#6abf7b" stroke-width="1.5"/>
+  <text x="430" y="33" text-anchor="middle" font-size="12" font-weight="500" fill="#333">User taps AI Tab</text>
+
+  <line x1="430" y1="46" x2="430" y2="76" stroke="#999" stroke-width="1.2" marker-end="url(#arrow1)"/>
+
+  <!-- Decision 1: Mic permission -->
+  <polygon points="430,80 530,130 430,180 330,130" fill="#fff" stroke="#4a90d9" stroke-width="1.5"/>
+  <text x="430" y="127" text-anchor="middle" font-size="11" fill="#333">Mic permission</text>
+  <text x="430" y="140" text-anchor="middle" font-size="11" fill="#333">granted?</text>
+
+  <!-- YES → straight down to onboarding check -->
+  <line x1="430" y1="180" x2="430" y2="220" stroke="#999" stroke-width="1.2" marker-end="url(#arrow1)"/>
+  <text x="442" y="200" font-size="10" fill="#999">Yes</text>
+
+  <!-- Decision 2: Seen onboarding? -->
+  <polygon points="430,224 530,274 430,324 330,274" fill="#fff" stroke="#4a90d9" stroke-width="1.5"/>
+  <text x="430" y="268" text-anchor="middle" font-size="11" fill="#333">Seen</text>
+  <text x="430" y="281" text-anchor="middle" font-size="11" fill="#333">onboarding?</text>
+
+  <!-- YES → Idle -->
+  <line x1="430" y1="324" x2="430" y2="370" stroke="#999" stroke-width="1.2" marker-end="url(#arrow1)"/>
+  <text x="442" y="350" font-size="10" fill="#999">Yes</text>
+
+  <rect x="360" y="374" width="140" height="36" rx="18" fill="#d4edda" stroke="#6abf7b" stroke-width="1.5"/>
+  <text x="430" y="396" text-anchor="middle" font-size="12" font-weight="500" fill="#333">Idle state</text>
+
+  <!-- NO → Onboarding → Idle -->
+  <line x1="530" y1="274" x2="640" y2="274" stroke="#999" stroke-width="1.2" marker-end="url(#arrow1)"/>
+  <text x="580" y="266" text-anchor="middle" font-size="10" fill="#999">No</text>
+
+  <rect x="643" y="256" width="120" height="36" rx="6" fill="#dce8f5" stroke="#4a90d9" stroke-width="1.2"/>
+  <text x="703" y="278" text-anchor="middle" font-size="11" fill="#333">Onboarding</text>
+
+  <line x1="703" y1="292" x2="703" y2="392" stroke="#999" stroke-width="1.2"/>
+  <line x1="703" y1="392" x2="500" y2="392" stroke="#999" stroke-width="1.2" marker-end="url(#arrow1)"/>
+
+  <!-- ===== NO PERMISSION BRANCH (left) ===== -->
+
+  <line x1="330" y1="130" x2="210" y2="130" stroke="#999" stroke-width="1.2" marker-end="url(#arrow1)"/>
+  <text x="275" y="122" text-anchor="middle" font-size="10" fill="#999">No</text>
+
+  <rect x="90" y="112" width="120" height="36" rx="6" fill="#dce8f5" stroke="#4a90d9" stroke-width="1.2"/>
+  <text x="150" y="134" text-anchor="middle" font-size="11" fill="#333">Permission primer</text>
+
+  <line x1="150" y1="148" x2="150" y2="188" stroke="#999" stroke-width="1.2" marker-end="url(#arrow1)"/>
+
+  <!-- Decision: User taps -->
+  <polygon points="150,192 230,232 150,272 70,232" fill="#fff" stroke="#4a90d9" stroke-width="1.5"/>
+  <text x="150" y="236" text-anchor="middle" font-size="11" fill="#333">User taps...</text>
+
+  <!-- Not now → Idle (text-only) -->
+  <line x1="230" y1="232" x2="300" y2="232" stroke="#999" stroke-width="1.2" marker-end="url(#arrow1)"/>
+  <text x="262" y="224" text-anchor="middle" font-size="10" fill="#999">Not now</text>
+
+  <rect x="303" y="214" width="120" height="36" rx="6" fill="#fde8e8" stroke="#d9534f" stroke-width="1.2"/>
+  <text x="363" y="230" text-anchor="middle" font-size="10" fill="#333">Idle (text-only)</text>
+  <text x="363" y="242" text-anchor="middle" font-size="9" fill="#999">Mic hint on tap</text>
+
+  <!-- Allow → iOS dialog -->
+  <line x1="70" y1="232" x2="20" y2="232" stroke="#999" stroke-width="1.2"/>
+  <line x1="20" y1="232" x2="20" y2="290" stroke="#999" stroke-width="1.2" marker-end="url(#arrow1)"/>
+  <text x="44" y="224" text-anchor="middle" font-size="10" fill="#999">Allow</text>
+
+  <rect x="-50" y="294" width="140" height="36" rx="6" fill="#dce8f5" stroke="#4a90d9" stroke-width="1.2"/>
+  <text x="20" y="316" text-anchor="middle" font-size="11" fill="#333">iOS system dialog</text>
+
+  <line x1="20" y1="330" x2="20" y2="370" stroke="#999" stroke-width="1.2" marker-end="url(#arrow1)"/>
+
+  <!-- Decision: Granted? -->
+  <polygon points="20,374 100,414 20,454 -60,414" fill="#fff" stroke="#4a90d9" stroke-width="1.5"/>
+  <text x="20" y="418" text-anchor="middle" font-size="11" fill="#333">Granted?</text>
+
+  <!-- Granted YES → goes right and up to the onboarding check -->
+  <line x1="100" y1="414" x2="180" y2="414" stroke="#999" stroke-width="1.2"/>
+  <line x1="180" y1="414" x2="180" y2="274" stroke="#999" stroke-width="1.2"/>
+  <line x1="180" y1="274" x2="330" y2="274" stroke="#999" stroke-width="1.2" marker-end="url(#arrow1)"/>
+  <text x="136" y="406" text-anchor="middle" font-size="10" fill="#999">Yes</text>
+
+  <!-- Granted NO → Idle (text-only) -->
+  <line x1="20" y1="454" x2="20" y2="490" stroke="#999" stroke-width="1.2" marker-end="url(#arrow1)"/>
+  <text x="32" y="474" font-size="10" fill="#999">No</text>
+
+  <rect x="-60" y="494" width="160" height="36" rx="6" fill="#fde8e8" stroke="#d9534f" stroke-width="1.2"/>
+  <text x="20" y="510" text-anchor="middle" font-size="10" fill="#333">Idle (text-only)</text>
+  <text x="20" y="522" text-anchor="middle" font-size="9" fill="#999">"Enable in Settings" link</text>
+
+</svg>
+</div>
+
+<!-- ====== FLOW 2: Onboarding ====== -->
+<div class="flow-section">
+<div class="flow-title" data-t="f2_title">Flow 2 — Onboarding</div>
+<p class="flow-desc" data-t="f2_desc">First-time only. Triggers when mic permission is granted and hasSeenAITutorial is false.</p>
+
+<svg width="820" height="120" viewBox="0 0 820 120">
+  <defs>
+    <marker id="arrow2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#999"/></marker>
+  </defs>
+
+  <!-- Step 1 -->
+  <rect x="0" y="30" width="150" height="50" rx="6" fill="#dce8f5" stroke="#4a90d9" stroke-width="1.2"/>
+  <text x="75" y="52" text-anchor="middle" font-size="11" font-weight="500" fill="#333">AI greeting</text>
+  <text x="75" y="66" text-anchor="middle" font-size="9" fill="#999">Text bubble, no audio</text>
+
+  <line x1="150" y1="55" x2="180" y2="55" stroke="#999" stroke-width="1.2" marker-end="url(#arrow2)"/>
+
+  <!-- Step 2 -->
+  <rect x="183" y="30" width="150" height="50" rx="6" fill="#dce8f5" stroke="#4a90d9" stroke-width="1.2"/>
+  <text x="258" y="52" text-anchor="middle" font-size="11" font-weight="500" fill="#333">Quick commands</text>
+  <text x="258" y="66" text-anchor="middle" font-size="9" fill="#999">3 pills animate in</text>
+
+  <line x1="333" y1="55" x2="363" y2="55" stroke="#999" stroke-width="1.2" marker-end="url(#arrow2)"/>
+
+  <!-- Step 3 -->
+  <rect x="366" y="30" width="150" height="50" rx="6" fill="#dce8f5" stroke="#4a90d9" stroke-width="1.2"/>
+  <text x="441" y="52" text-anchor="middle" font-size="11" font-weight="500" fill="#333">Try voice</text>
+  <text x="441" y="66" text-anchor="middle" font-size="9" fill="#999">Mic button pulses</text>
+
+  <line x1="516" y1="55" x2="546" y2="55" stroke="#999" stroke-width="1.2" marker-end="url(#arrow2)"/>
+
+  <!-- Step 4 -->
+  <rect x="549" y="30" width="150" height="50" rx="6" fill="#dce8f5" stroke="#4a90d9" stroke-width="1.2"/>
+  <text x="624" y="52" text-anchor="middle" font-size="11" font-weight="500" fill="#333">AI responds</text>
+  <text x="624" y="66" text-anchor="middle" font-size="9" fill="#999">Mark tutorial done</text>
+
+  <line x1="699" y1="55" x2="729" y2="55" stroke="#999" stroke-width="1.2" marker-end="url(#arrow2)"/>
+
+  <!-- End -->
+  <rect x="732" y="37" width="80" height="36" rx="18" fill="#d4edda" stroke="#6abf7b" stroke-width="1.5"/>
+  <text x="772" y="59" text-anchor="middle" font-size="11" font-weight="500" fill="#333">Idle</text>
+</svg>
+</div>
+
+<!-- ====== FLOW 3: Core Voice Loop ====== -->
+<div class="flow-section">
+<div class="flow-title" data-t="f3_title">Flow 3 — Voice Conversation</div>
+<p class="flow-desc" data-t="f3_desc">Core loop. Idle → Listening → Processing → result → continue or return to Idle.</p>
+
+<svg width="960" height="580" viewBox="0 0 960 580">
+  <defs>
+    <marker id="arrow3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#999"/></marker>
+  </defs>
+
+  <!-- IDLE -->
+  <rect x="30" y="240" width="140" height="50" rx="6" fill="#f0f0f0" stroke="#bbb" stroke-width="1.2"/>
+  <text x="100" y="260" text-anchor="middle" font-size="12" font-weight="600" fill="#333">Idle</text>
+  <text x="100" y="274" text-anchor="middle" font-size="9" fill="#999">Chat + input + mic</text>
+
+  <!-- Two paths from Idle -->
+  <!-- Path 1: Tap mic -->
+  <line x1="170" y1="252" x2="240" y2="252" stroke="#999" stroke-width="1.2" marker-end="url(#arrow3)"/>
+  <text x="205" y="244" text-anchor="middle" font-size="10" fill="#999">Tap mic</text>
+
+  <!-- Path 2: Type text -->
+  <line x1="170" y1="278" x2="240" y2="278" stroke="#999" stroke-width="1.2"/>
+  <line x1="240" y1="278" x2="240" y2="360" stroke="#999" stroke-width="1.2"/>
+  <line x1="240" y1="360" x2="460" y2="360" stroke="#999" stroke-width="1.2" marker-end="url(#arrow3)"/>
+  <text x="205" y="290" text-anchor="middle" font-size="10" fill="#999">Type text</text>
+
+  <!-- LISTENING -->
+  <rect x="243" y="228" width="160" height="50" rx="6" fill="#dce8f5" stroke="#4a90d9" stroke-width="1.2"/>
+  <text x="323" y="248" text-anchor="middle" font-size="12" font-weight="600" fill="#4a90d9">Listening</text>
+  <text x="323" y="262" text-anchor="middle" font-size="9" fill="#999">Gradient + transcription</text>
+
+  <!-- Listening exits -->
+  <line x1="403" y1="253" x2="460" y2="253" stroke="#999" stroke-width="1.2" marker-end="url(#arrow3)"/>
+  <text x="432" y="245" text-anchor="middle" font-size="10" fill="#999">Pause / Stop</text>
+
+  <!-- Silence timeout branch -->
+  <line x1="323" y1="228" x2="323" y2="170" stroke="#999" stroke-width="1.2"/>
+  <line x1="323" y1="170" x2="100" y2="170" stroke="#999" stroke-width="1.2"/>
+  <line x1="100" y1="170" x2="100" y2="240" stroke="#999" stroke-width="1.2" marker-end="url(#arrow3)"/>
+  <text x="220" y="162" text-anchor="middle" font-size="10" fill="#999">Silence 10s → "Still there?" → Idle</text>
+
+  <!-- PROCESSING -->
+  <rect x="463" y="228" width="160" height="50" rx="6" fill="#e8e6f5" stroke="#7f6eff" stroke-width="1.2"/>
+  <text x="543" y="248" text-anchor="middle" font-size="12" font-weight="600" fill="#7f6eff">Processing</text>
+  <text x="543" y="262" text-anchor="middle" font-size="9" fill="#999">Thinking → streaming</text>
+
+  <!-- Interrupt (Stop) back to Idle -->
+  <line x1="543" y1="228" x2="543" y2="140" stroke="#999" stroke-width="1.2"/>
+  <line x1="543" y1="140" x2="100" y2="140" stroke="#999" stroke-width="1.2"/>
+  <line x1="100" y1="140" x2="100" y2="240" stroke="#999" stroke-width="1.2"/>
+  <text x="340" y="132" text-anchor="middle" font-size="10" fill="#999">User taps Stop → Idle</text>
+
+  <!-- Decision: What type of result? -->
+  <line x1="623" y1="253" x2="680" y2="253" stroke="#999" stroke-width="1.2" marker-end="url(#arrow3)"/>
+
+  <polygon points="760,203 840,253 760,303 680,253" fill="#fff" stroke="#4a90d9" stroke-width="1.5"/>
+  <text x="760" y="250" text-anchor="middle" font-size="11" fill="#333">Result</text>
+  <text x="760" y="262" text-anchor="middle" font-size="11" fill="#333">type?</text>
+
+  <!-- Branch: Simple reply -->
+  <line x1="840" y1="253" x2="900" y2="253" stroke="#999" stroke-width="1.2"/>
+  <line x1="900" y1="253" x2="900" y2="50" stroke="#999" stroke-width="1.2"/>
+  <line x1="900" y1="50" x2="323" y2="50" stroke="#999" stroke-width="1.2"/>
+  <line x1="323" y1="50" x2="323" y2="228" stroke="#999" stroke-width="1.2" marker-end="url(#arrow3)"/>
+  <text x="920" y="150" font-size="10" fill="#999" transform="rotate(90,910,150)">Continue listening</text>
+
+  <!-- Simple reply node -->
+  <rect x="740" y="320" width="130" height="40" rx="6" fill="#dce8f5" stroke="#4a90d9" stroke-width="1.2"/>
+  <text x="805" y="344" text-anchor="middle" font-size="10" fill="#333">Simple reply</text>
+  <line x1="760" y1="303" x2="760" y2="310" stroke="#999" stroke-width="1.2"/>
+  <line x1="760" y1="310" x2="805" y2="310" stroke="#999" stroke-width="1.2"/>
+  <line x1="805" y1="310" x2="805" y2="320" stroke="#999" stroke-width="1.2" marker-end="url(#arrow3)"/>
+
+  <!-- Search node -->
+  <rect x="600" y="320" width="130" height="40" rx="6" fill="#dce8f5" stroke="#4a90d9" stroke-width="1.2"/>
+  <text x="665" y="338" text-anchor="middle" font-size="10" fill="#333">Search emails</text>
+  <text x="665" y="350" text-anchor="middle" font-size="9" fill="#999">Cards inline, max 5</text>
+  <line x1="730" y1="303" x2="665" y2="320" stroke="#999" stroke-width="1.2" marker-end="url(#arrow3)"/>
+
+  <!-- Compose node -->
+  <rect x="460" y="320" width="130" height="40" rx="6" fill="#dce8f5" stroke="#4a90d9" stroke-width="1.2"/>
+  <text x="525" y="338" text-anchor="middle" font-size="10" fill="#333">Compose / Reply</text>
+  <text x="525" y="350" text-anchor="middle" font-size="9" fill="#999">Half-sheet, pre-filled</text>
+  <line x1="720" y1="303" x2="525" y2="320" stroke="#999" stroke-width="1.2" marker-end="url(#arrow3)"/>
+
+  <!-- Batch action node -->
+  <rect x="460" y="400" width="130" height="40" rx="6" fill="#dce8f5" stroke="#4a90d9" stroke-width="1.2"/>
+  <text x="525" y="418" text-anchor="middle" font-size="10" fill="#333">Batch action</text>
+  <text x="525" y="430" text-anchor="middle" font-size="9" fill="#999">Confirm + undo toast</text>
+  <line x1="740" y1="303" x2="740" y2="420" stroke="#999" stroke-width="1.2"/>
+  <line x1="740" y1="420" x2="590" y2="420" stroke="#999" stroke-width="1.2" marker-end="url(#arrow3)"/>
+
+  <!-- Create task node -->
+  <rect x="600" y="400" width="130" height="40" rx="6" fill="#dce8f5" stroke="#4a90d9" stroke-width="1.2"/>
+  <text x="665" y="418" text-anchor="middle" font-size="10" fill="#333">Create task</text>
+  <text x="665" y="430" text-anchor="middle" font-size="9" fill="#999">Task card in chat</text>
+  <line x1="750" y1="420" x2="730" y2="420" stroke="#999" stroke-width="1.2" marker-end="url(#arrow3)"/>
+
+  <!-- Create rule node -->
+  <rect x="740" y="400" width="130" height="40" rx="6" fill="#dce8f5" stroke="#4a90d9" stroke-width="1.2"/>
+  <text x="805" y="418" text-anchor="middle" font-size="10" fill="#333">Create rule</text>
+  <text x="805" y="430" text-anchor="middle" font-size="9" fill="#999">Rule card in chat</text>
+
+  <!-- All results loop back label -->
+  <text x="660" y="475" text-anchor="middle" font-size="10" fill="#999">All results → continue listening (Live mode) or → Idle</text>
+
+</svg>
+</div>
+
+<!-- ====== FLOW 4: Error States ====== -->
+<div class="flow-section">
+<div class="flow-title" data-t="f4_title">Flow 4 — Error & Edge Cases</div>
+<p class="flow-desc" data-t="f4_desc">Every error path and what the user sees.</p>
+
+<svg width="860" height="520" viewBox="0 0 860 520">
+  <defs>
+    <marker id="arrow4" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#999"/></marker>
+  </defs>
+
+  <!-- Row 1: Mic permission denied -->
+  <rect x="0" y="10" width="170" height="36" rx="6" fill="#f0f0f0" stroke="#bbb" stroke-width="1.2"/>
+  <text x="85" y="32" text-anchor="middle" font-size="11" fill="#333">Tap mic (no permission)</text>
+
+  <line x1="170" y1="28" x2="210" y2="28" stroke="#999" stroke-width="1.2" marker-end="url(#arrow4)"/>
+
+  <rect x="213" y="10" width="170" height="36" rx="6" fill="#dce8f5" stroke="#4a90d9" stroke-width="1.2"/>
+  <text x="298" y="32" text-anchor="middle" font-size="11" fill="#333">Permission primer</text>
+
+  <line x1="383" y1="28" x2="423" y2="28" stroke="#999" stroke-width="1.2" marker-end="url(#arrow4)"/>
+
+  <polygon points="498,0 558,28 498,56 438,28" fill="#fff" stroke="#4a90d9" stroke-width="1.2"/>
+  <text x="498" y="32" text-anchor="middle" font-size="10" fill="#333">Allow?</text>
+
+  <line x1="558" y1="28" x2="598" y2="28" stroke="#999" stroke-width="1.2" marker-end="url(#arrow4)"/>
+  <text x="575" y="20" font-size="9" fill="#999">Yes</text>
+  <rect x="601" y="10" width="100" height="36" rx="18" fill="#d4edda" stroke="#6abf7b" stroke-width="1.2"/>
+  <text x="651" y="32" text-anchor="middle" font-size="11" fill="#333">Listening</text>
+
+  <line x1="498" y1="56" x2="498" y2="70" stroke="#999" stroke-width="1.2" marker-end="url(#arrow4)"/>
+  <text x="510" y="66" font-size="9" fill="#999">No</text>
+  <rect x="428" y="74" width="140" height="36" rx="6" fill="#fde8e8" stroke="#d9534f" stroke-width="1.2"/>
+  <text x="498" y="90" text-anchor="middle" font-size="10" fill="#333">Idle (text-only)</text>
+  <text x="498" y="102" text-anchor="middle" font-size="9" fill="#999">"Enable in Settings"</text>
+
+  <!-- Row 2: Mic permanently denied -->
+  <rect x="0" y="140" width="170" height="36" rx="6" fill="#f0f0f0" stroke="#bbb" stroke-width="1.2"/>
+  <text x="85" y="156" text-anchor="middle" font-size="11" fill="#333">Tap mic (denied in iOS)</text>
+
+  <line x1="170" y1="158" x2="210" y2="158" stroke="#999" stroke-width="1.2" marker-end="url(#arrow4)"/>
+
+  <rect x="213" y="140" width="200" height="36" rx="6" fill="#fde8e8" stroke="#d9534f" stroke-width="1.2"/>
+  <text x="313" y="156" text-anchor="middle" font-size="10" fill="#333">Banner: "Enable in Settings"</text>
+  <text x="313" y="168" text-anchor="middle" font-size="9" fill="#999">Deep link to iOS Settings</text>
+
+  <!-- Row 3: Network error -->
+  <rect x="0" y="200" width="170" height="36" rx="6" fill="#f0f0f0" stroke="#bbb" stroke-width="1.2"/>
+  <text x="85" y="222" text-anchor="middle" font-size="11" fill="#333">Network lost</text>
+
+  <line x1="170" y1="218" x2="210" y2="218" stroke="#999" stroke-width="1.2" marker-end="url(#arrow4)"/>
+
+  <rect x="213" y="200" width="170" height="36" rx="6" fill="#fde8e8" stroke="#d9534f" stroke-width="1.2"/>
+  <text x="298" y="216" text-anchor="middle" font-size="10" fill="#333">"Connection lost"</text>
+  <text x="298" y="228" text-anchor="middle" font-size="9" fill="#999">Retry button in chat</text>
+
+  <!-- Row 4: STT failure -->
+  <rect x="0" y="260" width="170" height="36" rx="6" fill="#f0f0f0" stroke="#bbb" stroke-width="1.2"/>
+  <text x="85" y="282" text-anchor="middle" font-size="11" fill="#333">Speech not understood</text>
+
+  <line x1="170" y1="278" x2="210" y2="278" stroke="#999" stroke-width="1.2" marker-end="url(#arrow4)"/>
+
+  <rect x="213" y="260" width="200" height="36" rx="6" fill="#dce8f5" stroke="#4a90d9" stroke-width="1.2"/>
+  <text x="313" y="282" text-anchor="middle" font-size="10" fill="#333">"Didn't catch that. Try again?"</text>
+
+  <line x1="413" y1="278" x2="453" y2="278" stroke="#999" stroke-width="1.2" marker-end="url(#arrow4)"/>
+
+  <rect x="456" y="260" width="100" height="36" rx="18" fill="#d4edda" stroke="#6abf7b" stroke-width="1.2"/>
+  <text x="506" y="282" text-anchor="middle" font-size="11" fill="#333">Listening</text>
+
+  <!-- Row 5: Tool failure -->
+  <rect x="0" y="320" width="170" height="36" rx="6" fill="#f0f0f0" stroke="#bbb" stroke-width="1.2"/>
+  <text x="85" y="342" text-anchor="middle" font-size="11" fill="#333">Action failed</text>
+
+  <line x1="170" y1="338" x2="210" y2="338" stroke="#999" stroke-width="1.2" marker-end="url(#arrow4)"/>
+
+  <rect x="213" y="320" width="200" height="36" rx="6" fill="#fde8e8" stroke="#d9534f" stroke-width="1.2"/>
+  <text x="313" y="336" text-anchor="middle" font-size="10" fill="#333">"Couldn't do that"</text>
+  <text x="313" y="348" text-anchor="middle" font-size="9" fill="#999">Retry + manual fallback</text>
+
+  <!-- Row 6: Silence -->
+  <rect x="0" y="380" width="170" height="36" rx="6" fill="#f0f0f0" stroke="#bbb" stroke-width="1.2"/>
+  <text x="85" y="402" text-anchor="middle" font-size="11" fill="#333">Silence 10s</text>
+
+  <line x1="170" y1="398" x2="210" y2="398" stroke="#999" stroke-width="1.2" marker-end="url(#arrow4)"/>
+
+  <rect x="213" y="380" width="120" height="36" rx="6" fill="#dce8f5" stroke="#4a90d9" stroke-width="1.2"/>
+  <text x="273" y="402" text-anchor="middle" font-size="10" fill="#333">"Still there?"</text>
+
+  <line x1="333" y1="398" x2="360" y2="398" stroke="#999" stroke-width="1.2"/>
+  <text x="380" y="390" font-size="9" fill="#999">+5s</text>
+  <line x1="360" y1="398" x2="400" y2="398" stroke="#999" stroke-width="1.2" marker-end="url(#arrow4)"/>
+
+  <rect x="403" y="380" width="80" height="36" rx="18" fill="#f0f0f0" stroke="#bbb" stroke-width="1.2"/>
+  <text x="443" y="402" text-anchor="middle" font-size="11" fill="#333">Idle</text>
+
+  <!-- Row 7: Quota -->
+  <rect x="0" y="440" width="170" height="36" rx="6" fill="#f0f0f0" stroke="#bbb" stroke-width="1.2"/>
+  <text x="85" y="462" text-anchor="middle" font-size="11" fill="#333">Voice quota exceeded</text>
+
+  <line x1="170" y1="458" x2="210" y2="458" stroke="#999" stroke-width="1.2" marker-end="url(#arrow4)"/>
+
+  <rect x="213" y="440" width="200" height="36" rx="6" fill="#fde8e8" stroke="#d9534f" stroke-width="1.2"/>
+  <text x="313" y="456" text-anchor="middle" font-size="10" fill="#333">"Daily limit reached"</text>
+  <text x="313" y="468" text-anchor="middle" font-size="9" fill="#999">Subtle upgrade card, text still works</text>
+
+</svg>
+</div>
+
+<script>
+const translations = {
+  // HTML elements
+  subtitle:  { en: 'User flow charts', zh: '用户流程图' },
+  f1_title:  { en: 'Flow 1 — First-Time User', zh: '流程 1 — 首次使用' },
+  f1_desc:   { en: 'Permission gate → onboarding → idle. Every new user goes through this once.', zh: '权限授权 → 新手引导 → 空闲态。每位新用户只经历一次。' },
+  f2_title:  { en: 'Flow 2 — Onboarding', zh: '流程 2 — 新手引导' },
+  f2_desc:   { en: 'First-time only. Triggers when mic permission is granted and hasSeenAITutorial is false.', zh: '仅首次触发。条件：麦克风权限已授权且 hasSeenAITutorial 为 false。' },
+  f3_title:  { en: 'Flow 3 — Voice Conversation', zh: '流程 3 — 语音对话' },
+  f3_desc:   { en: 'Core loop. Idle → Listening → Processing → result → continue or return to Idle.', zh: '核心循环。空闲 → 聆听 → 处理 → 结果 → 继续聆听或返回空闲。' },
+  f4_title:  { en: 'Flow 4 — Error & Edge Cases', zh: '流程 4 — 异常与边界场景' },
+  f4_desc:   { en: 'Every error path and what the user sees.', zh: '所有异常路径及用户所见。' },
+};
+
+const svgTranslations = {
+  // Flow 1
+  'User taps AI Tab': '用户点击 AI Tab',
+  'Mic permission': '麦克风权限',
+  'granted?': '已授权？',
+  'Seen': '已看过',
+  'onboarding?': '新手引导？',
+  'Idle state': '空闲态',
+  'Onboarding': '新手引导',
+  'Permission primer': '权限引导页',
+  'User taps...': '用户点击...',
+  'Idle (text-only)': '空闲（仅文本）',
+  'Mic hint on tap': '点击提示开启麦克风',
+  'iOS system dialog': 'iOS 系统弹窗',
+  'Granted?': '已授权？',
+  '"Enable in Settings" link': '"前往设置开启"链接',
+  'Allow': '允许',
+  'Not now': '暂不',
+  'Yes': '是',
+  'No': '否',
+
+  // Flow 2
+  'AI greeting': 'AI 问候',
+  'Text bubble, no audio': '文本气泡，无音频',
+  'Quick commands': '快捷指令',
+  '3 pills animate in': '3 个按钮依次出现',
+  'Try voice': '尝试语音',
+  'Mic button pulses': '麦克风按钮脉动',
+  'AI responds': 'AI 回复',
+  'Mark tutorial done': '标记引导完成',
+  'Idle': '空闲',
+
+  // Flow 3
+  'Chat + input + mic': '聊天 + 输入 + 麦克风',
+  'Tap mic': '点击麦克风',
+  'Type text': '输入文本',
+  'Listening': '聆听中',
+  'Gradient + transcription': '渐变动画 + 实时转写',
+  'Pause / Stop': '停顿 / 停止',
+  'Silence 10s → "Still there?" → Idle': '静默 10 秒 → "还在吗？" → 空闲',
+  'Processing': '处理中',
+  'Thinking → streaming': '思考 → 流式输出',
+  'User taps Stop → Idle': '用户点击停止 → 空闲',
+  'Result': '结果',
+  'type?': '类型？',
+  'Continue listening': '继续聆听',
+  'Simple reply': '简单回复',
+  'Search emails': '搜索邮件',
+  'Cards inline, max 5': '内嵌卡片，最多 5 张',
+  'Compose / Reply': '写信 / 回复',
+  'Half-sheet, pre-filled': '半屏弹窗，预填内容',
+  'Batch action': '批量操作',
+  'Confirm + undo toast': '确认 + 撤销提示',
+  'Create task': '创建任务',
+  'Task card in chat': '任务卡片显示在对话中',
+  'Create rule': '创建规则',
+  'Rule card in chat': '规则卡片显示在对话中',
+  'All results → continue listening (Live mode) or → Idle': '所有结果 → 继续聆听（Live 模式）或 → 空闲',
+
+  // Flow 4
+  'Tap mic (no permission)': '点击麦克风（无权限）',
+  'Permission primer': '权限引导页',
+  'Allow?': '允许？',
+  'Idle (text-only)': '空闲（仅文本）',
+  '"Enable in Settings"': '"前往设置开启"',
+  'Tap mic (denied in iOS)': '点击麦克风（iOS 已拒绝）',
+  'Banner: "Enable in Settings"': '横幅："前往设置开启"',
+  'Deep link to iOS Settings': '深度链接到 iOS 设置',
+  'Network lost': '网络中断',
+  '"Connection lost"': '"连接中断"',
+  'Retry button in chat': '对话中的重试按钮',
+  'Speech not understood': '语音未识别',
+  '"Didn\'t catch that. Try again?"': '"没听清，再说一次？"',
+  'Action failed': '操作失败',
+  '"Couldn\'t do that"': '"无法执行"',
+  'Retry + manual fallback': '重试 + 手动操作提示',
+  'Silence 10s': '静默 10 秒',
+  '"Still there?"': '"还在吗？"',
+  '+5s': '+5 秒',
+  'Voice quota exceeded': '语音额度已用完',
+  '"Daily limit reached"': '"已达今日上限"',
+  'Subtle upgrade card, text still works': '升级提示，文本功能正常',
+};
+
+let currentLang = 'en';
+let originalSvgTexts = null;
+
+function cacheSvgTexts() {
+  if (originalSvgTexts) return;
+  originalSvgTexts = new Map();
+  document.querySelectorAll('svg text').forEach((el, i) => {
+    originalSvgTexts.set(el, el.textContent);
+  });
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
+
+  cacheSvgTexts();
+
+  document.querySelectorAll('[data-t]').forEach(el => {
+    const key = el.getAttribute('data-t');
+    if (translations[key] && translations[key][lang]) {
+      el.textContent = translations[key][lang];
+    }
+  });
+
+  document.querySelectorAll('svg text').forEach(el => {
+    const original = originalSvgTexts.get(el);
+    if (lang === 'zh' && svgTranslations[original]) {
+      el.textContent = svgTranslations[original];
+    } else if (lang === 'en') {
+      el.textContent = original;
+    }
+  });
+}
+</script>
+
+</body>
+</html>
