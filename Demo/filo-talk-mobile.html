@@ -455,14 +455,16 @@
             background: var(--filo-10);
             padding: 5px 10px; border-radius: 8px;
             box-shadow: 0 4px 20px rgba(34, 160, 251, 0.35);
-            animation: tooltipFade 13s ease forwards;
+            animation: tooltipIn 0.8s ease forwards, tooltipFloat 1.5s ease-in-out 0.8s infinite;
             pointer-events: none;
         }
-        @keyframes tooltipFade {
-            0%, 5% { opacity: 0; transform: translateY(4px); }
-            15% { opacity: 1; transform: translateY(0); }
-            85% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(0); }
+        @keyframes tooltipIn {
+            0% { opacity: 0; transform: translateY(4px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes tooltipFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
         }
 
         /* ===== ONBOARDING STATE ===== */
@@ -1500,25 +1502,32 @@
             setOverlayBlobState(overlayId, null);
         }
 
-        function playSfx() { new Audio('../Resources/Sounds/alert.mp3').play().catch(() => {}); }
+        const sfxOn = new Audio('../Resources/Sounds/on.mp3');
+        const sfxOff = new Audio('../Resources/Sounds/off.mp3');
+        sfxOn.load(); sfxOff.load();
+
+        function playSfx(name) {
+            const sfx = name === 'on' ? sfxOn.cloneNode() : sfxOff.cloneNode();
+            sfx.play().catch(() => {});
+        }
 
         function openTalkOverlay() {
-            playSfx();
+            playSfx('on');
             document.getElementById('talkOverlay').classList.add('visible');
             animateOverlayWords('talkOverlay');
         }
         function closeTalkOverlay() {
-            playSfx();
+            playSfx('off');
             document.getElementById('talkOverlay').classList.remove('visible');
             resetOverlayWords('talkOverlay');
         }
         function openTalkOverlay2() {
-            playSfx();
+            playSfx('on');
             document.getElementById('talkOverlay2').classList.add('visible');
             animateOverlayWords('talkOverlay2');
         }
         function closeTalkOverlay2() {
-            playSfx();
+            playSfx('off');
             document.getElementById('talkOverlay2').classList.remove('visible');
             resetOverlayWords('talkOverlay2');
         }

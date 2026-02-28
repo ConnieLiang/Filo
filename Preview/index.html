@@ -16,76 +16,164 @@
             --filo-10: #FFFFFF;
             --filo-14: rgba(0, 0, 0, 0.04);
             --font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            --rail-width: 52px;
+            --sidebar-width: 220px;
         }
 
         body {
             font-family: var(--font-family);
             background: #181818;
             color: var(--filo-06);
-            min-height: 100vh;
+            height: 100vh;
+            overflow: hidden;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-        }
-
-        /* Language Switcher */
-        .lang-switcher {
-            position: fixed;
-            top: 24px;
-            right: 24px;
-            z-index: 100;
-        }
-
-        .lang-btn {
-            width: 32px;
-            height: 32px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--filo-07);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            transition: opacity 0.15s ease;
-        }
-
-        .lang-btn:hover { opacity: 0.7; }
-        .lang-btn svg { width: 32px; height: 32px; }
-
-        .lang-dropdown {
-            display: none;
-            position: absolute;
-            top: 40px;
-            right: 0;
-            padding: 4px 0;
-        }
-
-        .lang-dropdown.open { display: block; }
-
-        .lang-option {
-            padding: 6px 0;
-            font-size: 13px;
-            font-weight: 400;
-            color: rgba(255, 255, 255, 0.3);
-            cursor: pointer;
-            transition: color 0.15s ease;
-            letter-spacing: -0.1px;
-            white-space: nowrap;
-            text-align: right;
-        }
-
-        .lang-option:hover { color: rgba(255, 255, 255, 0.6); }
-
-        .lang-option.active {
-            color: rgba(255, 255, 255, 0.85);
-            font-weight: 600;
         }
 
         /* ============================================
-           NUTRITION FACTS CARD
+           SIDEBAR RAIL (collapsed)
            ============================================ */
+        .sidebar-rail {
+            width: var(--rail-width);
+            height: 100vh;
+            background: #1f1f1f;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px 0;
+            gap: 4px;
+            flex-shrink: 0;
+            z-index: 50;
+            border-right: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .rail-home {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            margin-bottom: 12px;
+            opacity: 0.8;
+            transition: opacity 0.15s;
+        }
+
+        .rail-home:hover { opacity: 1; }
+        .rail-home { color: #FFFFFF; }
+        .rail-home svg { width: 24px; height: 24px; }
+
+        .rail-divider {
+            width: 24px;
+            height: 1px;
+            background: rgba(255,255,255,0.08);
+            margin: 4px 0;
+        }
+
+        .rail-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: rgba(255,255,255,0.3);
+            transition: all 0.15s ease;
+        }
+
+        .rail-icon:hover { color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.06); }
+        .rail-icon.active { color: var(--filo-02); }
+        .rail-icon.disabled { cursor: default; opacity: 0.2; }
+        .rail-icon.disabled:hover { color: rgba(255,255,255,0.3); background: none; }
+        .rail-icon svg { width: 20px; height: 20px; }
+
+        /* ============================================
+           SIDEBAR EXPANDED (overlay on hover)
+           ============================================ */
+        .sidebar-expanded {
+            position: fixed;
+            top: 0;
+            left: var(--rail-width);
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: #1f1f1f;
+            border-right: 1px solid rgba(255,255,255,0.06);
+            padding: 20px 0;
+            z-index: 40;
+            transform: translateX(-100%);
+            opacity: 0;
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.15s ease;
+            overflow-y: auto;
+        }
+
+        .sidebar-rail:hover:not(:has(.lang-switcher:hover)) + .sidebar-expanded,
+        .sidebar-expanded:hover {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .sidebar-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 12px 16px 6px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.6);
+            cursor: pointer;
+            transition: all 0.12s ease;
+            text-decoration: none;
+        }
+
+        .sidebar-item:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.04); }
+        .sidebar-item.active { color: var(--filo-02); font-weight: 600; }
+        .sidebar-item.disabled { color: rgba(255,255,255,0.2); cursor: default; }
+        .sidebar-item.disabled:hover { background: none; color: rgba(255,255,255,0.2); }
+        .sidebar-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+        .sidebar-item .coming-badge {
+            font-size: 10px;
+            font-weight: 510;
+            color: rgba(255,255,255,0.25);
+            margin-left: auto;
+        }
+
+        /* ============================================
+           MAIN CONTENT
+           ============================================ */
+        .main-content {
+            flex: 1;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .main-content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: none;
+        }
+
+        /* ============================================
+           HOME — Design Recipe card
+           ============================================ */
+        .home-view {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
         .facts-card {
             width: 480px;
             background: var(--filo-10);
@@ -93,12 +181,8 @@
             padding: 16px;
         }
 
-        .facts-inner {
-            border: none;
-            padding: 8px 8px 12px;
-        }
+        .facts-inner { padding: 8px 8px 12px; }
 
-        /* Title — H1: 40px / 700 */
         .facts-title {
             font-size: 60px;
             font-weight: 900;
@@ -106,300 +190,189 @@
             letter-spacing: -1px;
             color: var(--filo-06);
             margin-bottom: 24px;
-            padding-bottom: 4px;
         }
 
-        /* Thick dividers */
-        .divider-thick {
-            height: 10px;
-            background: var(--filo-06);
-            margin: 6px 0;
-        }
+        .divider-thick { height: 10px; background: var(--filo-06); margin: 6px 0; }
+        .divider-medium { height: 4px; background: var(--filo-06); margin: 6px 0; }
+        .divider-thin { height: 1px; background: var(--filo-06); margin: 3px 0; }
 
-        .divider-medium {
-            height: 4px;
-            background: var(--filo-06);
-            margin: 6px 0;
-        }
+        .facts-subtitle { font-size: 15px; font-weight: 400; line-height: 1.35; letter-spacing: -0.2px; color: var(--filo-06); }
+        .facts-serving { display: flex; justify-content: space-between; align-items: baseline; padding: 2px 0; }
+        .facts-serving .label { font-size: 16px; font-weight: 700; letter-spacing: -0.2px; }
+        .facts-serving .value { font-size: 16px; font-weight: 400; letter-spacing: -0.2px; }
+        .section-header { font-size: 14px; font-weight: 510; letter-spacing: -0.2px; color: var(--filo-06); padding: 2px 0; }
+        .calories-row { display: flex; justify-content: space-between; align-items: flex-end; padding: 4px 0 2px; }
+        .calories-label { font-size: 16px; font-weight: 700; }
+        .calories-value { font-size: 28px; font-weight: 900; line-height: 1; }
+        .dv-header { font-size: 13px; font-weight: 700; text-align: right; padding: 2px 0; }
 
-        .divider-thin {
-            height: 1px;
-            background: var(--filo-06);
-            margin: 3px 0;
-        }
-
-        /* Subtitle row — P3_R: 15px / 400 */
-        .facts-subtitle {
-            font-size: 15px;
-            font-weight: 400;
-            line-height: 1.35;
-            letter-spacing: -0.2px;
-            color: var(--filo-06);
-        }
-
-        /* Serving row — P2_B + P2_R */
-        .facts-serving {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            padding: 2px 0;
-        }
-
-        .facts-serving .label {
-            font-size: 16px;
-            font-weight: 700;
-            letter-spacing: -0.2px;
-        }
-
-        .facts-serving .value {
-            font-size: 16px;
-            font-weight: 400;
-            letter-spacing: -0.2px;
-        }
-
-        /* Section header — P3.1_M: 14px / 510 */
-        .section-header {
-            font-size: 14px;
-            font-weight: 510;
-            letter-spacing: -0.2px;
-            color: var(--filo-06);
-            padding: 2px 0;
-        }
-
-        /* Calories row — large */
-        .calories-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            padding: 4px 0 2px;
-        }
-
-        .calories-label {
-            font-size: 16px;
-            font-weight: 700;
-        }
-
-        /* H3: 28px / 700 */
-        .calories-value {
-            font-size: 28px;
-            font-weight: 900;
-            line-height: 1;
-        }
-
-        /* % Daily Value header — P4_B: 13px / 700 */
-        .dv-header {
-            font-size: 13px;
-            font-weight: 700;
-            text-align: right;
-            padding: 2px 0;
-        }
-
-        /* Row items */
         .facts-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 7px 0;
-            cursor: pointer;
-            border-radius: 4px;
-            margin: 0 -4px;
-            padding-left: 4px;
-            padding-right: 4px;
-            text-decoration: none;
-            color: var(--filo-06);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 7px 4px; cursor: pointer; border-radius: 4px; margin: 0 -4px;
+            text-decoration: none; color: var(--filo-06);
         }
+        .facts-row:hover .name, .facts-row:hover .name-regular { letter-spacing: 1.5px; }
+        .facts-row:hover .tokens { color: var(--filo-06); }
+        .facts-row:active .name, .facts-row:active .name-regular { letter-spacing: 3px; }
+        .facts-row .name { font-size: 15px; font-weight: 700; letter-spacing: -0.2px; transition: letter-spacing 0.3s cubic-bezier(0.25,0.46,0.45,0.94); }
+        .facts-row .name-regular { font-weight: 400; }
+        .facts-row .tokens { font-size: 13px; font-weight: 400; color: var(--filo-07); text-align: right; flex-shrink: 0; transition: color 0.2s ease; }
+        .facts-row.disabled { cursor: default; opacity: 0.5; }
+        .facts-row.disabled:hover .name { letter-spacing: -0.2px; }
+        .coming-soon { font-size: 11px; font-weight: 510; color: var(--filo-07); background: var(--filo-14); padding: 2px 6px; border-radius: 4px; }
 
-        .facts-row:hover .name,
-        .facts-row:hover .name-regular {
-            letter-spacing: 1.5px;
-            transition: letter-spacing 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
+        /* ============================================
+           LANGUAGE SWITCHER
+           ============================================ */
+        .lang-switcher { margin-top: auto; padding-bottom: 8px; position: relative; }
+        .lang-btn { width: 32px; height: 32px; background: none; border: none; cursor: pointer; color: var(--filo-07); display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: opacity 0.15s; }
+        .lang-btn:hover { opacity: 0.7; }
+        .lang-btn svg { width: 24px; height: 24px; }
+        .lang-dropdown { display: none; position: absolute; top: 40px; right: 0; padding: 4px 0; }
+        .lang-dropdown.open { display: block; }
+        .lang-option { padding: 6px 0; font-size: 13px; font-weight: 400; color: rgba(255,255,255,0.3); cursor: pointer; transition: color 0.15s; white-space: nowrap; text-align: right; }
+        .lang-option:hover { color: rgba(255,255,255,0.6); }
+        .lang-option.active { color: rgba(255,255,255,0.85); font-weight: 600; }
 
-        .facts-row:hover .tokens {
-            color: var(--filo-06);
-            transition: color 0.2s ease;
-        }
-
-        .facts-row:active .name,
-        .facts-row:active .name-regular {
-            letter-spacing: 3px;
-        }
-
-        .facts-row .name {
-            font-size: 15px;
-            font-weight: 700;
-            letter-spacing: -0.2px;
-            transition: letter-spacing 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        .facts-row .name-regular {
-            font-weight: 400;
-        }
-
-        .facts-row .tokens {
-            font-size: 13px;
-            font-weight: 400;
-            color: var(--filo-07);
-            text-align: right;
-            flex-shrink: 0;
-            transition: color 0.2s ease;
-        }
-
-        /* Indented sub-rows */
-        .facts-row.indent {
-            padding-left: 20px;
-        }
-
-        .facts-row.indent .name {
-            font-weight: 400;
-        }
-
-        /* Coming soon / disabled rows */
-        .facts-row.disabled {
-            cursor: default;
-            opacity: 0.5;
-        }
-
-        .facts-row.disabled:hover {
-            background: none;
-        }
-
-        .coming-soon {
-            font-size: 11px;
-            font-weight: 510;
-            color: var(--filo-07);
-            background: var(--filo-14);
-            padding: 2px 6px;
-            border-radius: 4px;
-            letter-spacing: 0;
-        }
-
-        /* Footer — P4_R: 13px / 400 */
-        .facts-footer {
-            font-size: 12px;
-            font-weight: 400;
-            line-height: 1.4;
-            color: var(--filo-06);
-            padding-top: 8px;
-        }
-
-        /* Version badge */
-        .version {
-            font-size: 13px;
-            font-weight: 510;
-            color: var(--filo-07);
-        }
+        /* ============================================
+           LIGHT MODE
+           ============================================ */
+        body.light-mode { background: #F5F5F5; }
+        body.light-mode .sidebar-rail { background: #EBEBEB; border-right-color: rgba(0,0,0,0.06); }
+        body.light-mode .rail-divider { background: rgba(0,0,0,0.08); }
+        body.light-mode .rail-icon { color: rgba(0,0,0,0.3); }
+        body.light-mode .rail-icon:hover { color: rgba(0,0,0,0.7); background: rgba(0,0,0,0.04); }
+        body.light-mode .rail-icon.active { color: var(--filo-02); }
+        body.light-mode .rail-icon.disabled { opacity: 0.2; }
+        body.light-mode .rail-icon.disabled:hover { color: rgba(0,0,0,0.3); background: none; }
+        body.light-mode .rail-home { color: #000000; }
+        body.light-mode .sidebar-expanded { background: #EBEBEB; border-right-color: rgba(0,0,0,0.06); }
+        body.light-mode .sidebar-section-title { color: rgba(0,0,0,0.35); }
+        body.light-mode .sidebar-item { color: rgba(0,0,0,0.5); }
+        body.light-mode .sidebar-item:hover { color: rgba(0,0,0,0.85); background: rgba(0,0,0,0.04); }
+        body.light-mode .sidebar-item.active { color: var(--filo-02); }
+        body.light-mode .sidebar-item.disabled { color: rgba(0,0,0,0.2); }
+        body.light-mode .sidebar-item.disabled:hover { color: rgba(0,0,0,0.2); background: none; }
+        body.light-mode .sidebar-item .coming-badge { color: rgba(0,0,0,0.25); }
+        body.light-mode .lang-btn { color: rgba(0,0,0,0.4); }
+        body.light-mode .lang-option { color: rgba(0,0,0,0.3); }
+        body.light-mode .lang-option:hover { color: rgba(0,0,0,0.6); }
+        body.light-mode .lang-option.active { color: rgba(0,0,0,0.85); }
     </style>
 </head>
 <body>
-    <!-- Language Switcher -->
-    <div class="lang-switcher">
-        <button class="lang-btn" onclick="toggleLangDropdown()" title="Language">
-            <svg viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 3.6092C7.36589 3.6092 3.6092 7.36589 3.6092 12C3.6092 16.6341 7.36589 20.3908 12 20.3908C16.6341 20.3908 20.3908 16.6341 20.3908 12C20.3908 7.36589 16.6341 3.6092 12 3.6092ZM2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M2 12C2 11.5556 2.36023 11.1954 2.8046 11.1954H21.1954C21.6398 11.1954 22 11.5556 22 12C22 12.4443 21.6398 12.8046 21.1954 12.8046H2.8046C2.36023 12.8046 2 12.4443 2 12Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M12.0013 2C12.2273 2 12.4429 2.09507 12.5954 2.26196C15.0269 4.92399 16.4088 8.37862 16.4839 11.9832C16.4841 11.9944 16.4841 12.0056 16.4839 12.0168C16.4088 15.6214 15.0269 19.076 12.5954 21.738C12.4429 21.9049 12.2273 22 12.0013 22C11.7753 22 11.5597 21.9049 11.4072 21.738C8.97568 19.076 7.59382 15.6214 7.51873 12.0168C7.5185 12.0056 7.5185 11.9944 7.51873 11.9832C7.59382 8.37862 8.97568 4.92399 11.4072 2.26196C11.5597 2.09507 11.7753 2 12.0013 2ZM9.12794 12C9.19207 14.9024 10.2061 17.6949 12.0013 19.9555C13.7965 17.6949 14.8106 14.9024 14.8747 12C14.8106 9.09763 13.7965 6.30513 12.0013 4.04449C10.2061 6.30513 9.19207 9.09763 9.12794 12Z" fill="currentColor"/></svg>
-        </button>
-        <div class="lang-dropdown" id="langDropdown">
-            <div class="lang-option active" onclick="setLang('en', this)">English (United States)</div>
-            <div class="lang-option" onclick="setLang('es', this)">Español</div>
-            <div class="lang-option" onclick="setLang('fr', this)">Français</div>
-            <div class="lang-option" onclick="setLang('it', this)">Italiano</div>
-            <div class="lang-option" onclick="setLang('de', this)">Deutsch</div>
-            <div class="lang-option" onclick="setLang('ja', this)">日本語</div>
-            <div class="lang-option" onclick="setLang('zh-TW', this)">繁體中文</div>
-            <div class="lang-option" onclick="setLang('zh-CN', this)">简体中文</div>
+    <!-- Sidebar Rail (always visible) -->
+    <div class="sidebar-rail">
+        <!-- Home / Filo logo -->
+        <div class="rail-home" onclick="goHome()" title="Home" style="display: flex; align-items: center; justify-content: center; background: none; border-radius: 0; overflow: visible;">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none"><path d="M17.5588 0H6.44122C2.88391 0 0 2.88391 0 6.44122V17.5588C0 21.1158 2.88391 24 6.44122 24H17.5588C21.1161 24 24 21.1158 24 17.5588V6.44122C24 2.88391 21.1161 0 17.5588 0ZM20.5733 11.6472C17.824 12.9969 15.2007 14.5604 12.7238 16.3171C11.8835 16.9144 11.0608 17.5321 10.2556 18.1736C9.48851 18.7794 8.73606 19.4092 8.00117 20.0562C8.48426 19.2042 9.02591 18.3932 9.62612 17.6229C9.28942 17.336 8.94979 17.0578 8.60138 16.7826C6.98229 15.5002 5.25194 14.3496 3.4279 13.3453C2.7223 12.9589 2.24682 12.6986 0.955643 12.1391C1.54999 12.1663 2.1584 12.2275 2.55804 12.284L2.55336 6.94569C2.55131 4.51881 4.51823 2.55014 6.9451 2.55014H17.0599C19.4853 2.55014 21.4516 4.51647 21.4516 6.94188V10.6959C21.8559 10.6254 22.3004 10.5955 23.0748 10.5554C22.1212 10.8573 21.2525 11.3105 20.5733 11.6472Z" fill="currentColor"/><path d="M9.51543 7.74411L10.9861 9.21447L14.4842 5.71629C14.7925 5.40799 15.2923 5.40799 15.6006 5.71629L16.5124 6.62802C16.8207 6.93632 16.8207 7.4361 16.5124 7.7444L11.5441 12.7126C11.2358 13.0209 10.736 13.0209 10.4277 12.7126L7.48732 9.77222C7.17931 9.46421 7.17931 8.96472 7.48732 8.65701L8.39992 7.7444C8.70793 7.43639 9.20742 7.43639 9.51513 7.7444" fill="currentColor"/></svg>
+        </div>
+        <div class="rail-divider"></div>
+
+        <!-- Foundation icons -->
+        <div class="rail-icon" data-page="colors.html" onclick="loadPage('colors.html', this)" title="Colors"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 3V12L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div class="rail-icon" data-page="typography.html" onclick="loadPage('typography.html', this)" title="Typography"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7V4H20V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 4V20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 20H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div class="rail-icon" data-page="icons.html" onclick="loadPage('icons.html', this)" title="Icons"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/></svg></div>
+        <div class="rail-icon disabled" title="Spacing"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12H20M4 12L7 9M4 12L7 15M20 12L17 9M20 12L17 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="rail-divider"></div>
+
+        <!-- Component icons -->
+        <div class="rail-icon" data-page="buttons.html" onclick="loadPage('buttons.html', this)" title="Buttons"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="8" width="18" height="8" rx="4" stroke="currentColor" stroke-width="2"/></svg></div>
+        <div class="rail-icon" data-page="cards.html" onclick="loadPage('cards.html', this)" title="Cards"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 10H21" stroke="currentColor" stroke-width="2"/></svg></div>
+        <div class="rail-icon" data-page="bars.html" onclick="loadPage('bars.html', this)" title="Bars"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="17" width="18" height="4" rx="1" stroke="currentColor" stroke-width="2"/><rect x="3" y="3" width="18" height="4" rx="1" stroke="currentColor" stroke-width="2"/></svg></div>
+        <div class="rail-icon disabled" title="Lists"><svg viewBox="0 0 24 24" fill="none"><path d="M8 6H21M8 12H21M8 18H21M3 6H3.01M3 12H3.01M3 18H3.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+
+        <!-- Theme toggle (bottom of rail) -->
+        <div class="rail-icon" onclick="toggleTheme()" title="Toggle theme" style="flex-shrink: 0;">
+            <svg id="themeIcon" viewBox="0 0 24 24" fill="none"><path d="M12 3V4M12 20V21M4 12H3M6.31 6.31L5.6 5.6M17.69 6.31L18.4 5.6M6.31 17.69L5.6 18.4M17.69 17.69L18.4 18.4M21 12H20M16 12C16 14.2091 14.2091 16 12 16C9.79086 16 8 14.2091 8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <!-- Language Switcher (bottom of rail) -->
+        <div class="lang-switcher">
+            <button class="lang-btn" onclick="toggleLangDropdown()" title="Language">
+                <svg viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 3.6092C7.36589 3.6092 3.6092 7.36589 3.6092 12C3.6092 16.6341 7.36589 20.3908 12 20.3908C16.6341 20.3908 20.3908 16.6341 20.3908 12C20.3908 7.36589 16.6341 3.6092 12 3.6092ZM2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M2 12C2 11.5556 2.36023 11.1954 2.8046 11.1954H21.1954C21.6398 11.1954 22 11.5556 22 12C22 12.4443 21.6398 12.8046 21.1954 12.8046H2.8046C2.36023 12.8046 2 12.4443 2 12Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M12.0013 2C12.2273 2 12.4429 2.09507 12.5954 2.26196C15.0269 4.92399 16.4088 8.37862 16.4839 11.9832C16.4841 11.9944 16.4841 12.0056 16.4839 12.0168C16.4088 15.6214 15.0269 19.076 12.5954 21.738C12.4429 21.9049 12.2273 22 12.0013 22C11.7753 22 11.5597 21.9049 11.4072 21.738C8.97568 19.076 7.59382 15.6214 7.51873 12.0168C7.5185 12.0056 7.5185 11.9944 7.51873 11.9832C7.59382 8.37862 8.97568 4.92399 11.4072 2.26196C11.5597 2.09507 11.7753 2 12.0013 2ZM9.12794 12C9.19207 14.9024 10.2061 17.6949 12.0013 19.9555C13.7965 17.6949 14.8106 14.9024 14.8747 12C14.8106 9.09763 13.7965 6.30513 12.0013 4.04449C10.2061 6.30513 9.19207 9.09763 9.12794 12Z" fill="currentColor"/></svg>
+            </button>
+            <div class="lang-dropdown" id="langDropdown" style="bottom: 40px; top: auto; left: 0; right: auto;">
+                <div class="lang-option active" onclick="setLang('en', this)">English (United States)</div>
+                <div class="lang-option" onclick="setLang('es', this)">Español</div>
+                <div class="lang-option" onclick="setLang('fr', this)">Français</div>
+                <div class="lang-option" onclick="setLang('it', this)">Italiano</div>
+                <div class="lang-option" onclick="setLang('de', this)">Deutsch</div>
+                <div class="lang-option" onclick="setLang('ja', this)">日本語</div>
+                <div class="lang-option" onclick="setLang('zh-TW', this)">繁體中文</div>
+                <div class="lang-option" onclick="setLang('zh-CN', this)">简体中文</div>
+            </div>
         </div>
     </div>
 
-    <div class="facts-card">
-        <div class="facts-inner">
-            <div class="facts-title" data-i18n="title">Design Recipe</div>
-            <div class="divider-thick"></div>
+    <!-- Sidebar Expanded (hover overlay) -->
+    <div class="sidebar-expanded">
+        <div class="sidebar-section-title">Foundation</div>
+        <div class="sidebar-item" data-page="colors.html" onclick="loadPage('colors.html', this)"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 3V12L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Colors</div>
+        <div class="sidebar-item" data-page="typography.html" onclick="loadPage('typography.html', this)"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7V4H20V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 4V20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 20H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Typography</div>
+        <div class="sidebar-item" data-page="icons.html" onclick="loadPage('icons.html', this)"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/></svg> Icons</div>
+        <div class="sidebar-item disabled">Spacing <span class="coming-badge">soon</span></div>
+        <div class="sidebar-item disabled">Radius <span class="coming-badge">soon</span></div>
+        <div class="sidebar-item disabled">Dividers <span class="coming-badge">soon</span></div>
 
-            <div class="facts-serving">
-                <span class="facts-subtitle" data-i18n="subtitle">FiloMail — Component Library</span>
-            </div>
-            <div class="facts-serving">
-                <span class="label" data-i18n="version">Version</span>
-                <span class="value">2.1.0</span>
-            </div>
-            <div class="divider-medium"></div>
-
-            <div class="section-header" data-i18n="foundation">Foundation</div>
-            <div class="calories-row">
-                <span class="calories-label" data-i18n="platforms">Platforms</span>
-                <span class="calories-value" data-i18n="platformsVal">Mobile & Desktop</span>
-            </div>
-            <div class="divider-medium"></div>
-
-            <div class="dv-header" data-i18n="specs">Specs</div>
-            <div class="divider-thin"></div>
-
-            <a class="facts-row" href="colors.html">
-                <span class="name" data-i18n="colors">Colors</span>
-                <span class="tokens" data-i18n="colorsT">25 tokens, light + dark</span>
-            </a>
-            <div class="divider-thin"></div>
-            <a class="facts-row" href="typography.html">
-                <span class="name" data-i18n="typography">Typography</span>
-                <span class="tokens" data-i18n="typographyT">20 styles, 3 weights</span>
-            </a>
-            <div class="divider-thin"></div>
-            <a class="facts-row" href="icons.html">
-                <span class="name" data-i18n="icons">Icons</span>
-                <span class="tokens" data-i18n="iconsT">100+ SVGs</span>
-            </a>
-            <div class="divider-thin"></div>
-            <div class="facts-row disabled">
-                <span class="name"><span class="name-regular" data-i18n="spacing">Spacing</span></span>
-                <span class="coming-soon" data-i18n="comingSoon">Coming Soon</span>
-            </div>
-            <div class="divider-thin"></div>
-            <div class="facts-row disabled">
-                <span class="name"><span class="name-regular" data-i18n="radius">Radius</span></span>
-                <span class="coming-soon" data-i18n="comingSoon">Coming Soon</span>
-            </div>
-            <div class="divider-thin"></div>
-            <div class="facts-row disabled">
-                <span class="name"><span class="name-regular" data-i18n="dividers">Dividers</span></span>
-                <span class="coming-soon" data-i18n="comingSoon">Coming Soon</span>
-            </div>
-            <div class="divider-thick"></div>
-
-            <div class="section-header" data-i18n="components">Components</div>
-            <div class="divider-thin"></div>
-            <a class="facts-row" href="buttons.html">
-                <span class="name" data-i18n="buttons">Buttons</span>
-                <span class="tokens" data-i18n="buttonsT">pills, labels, minitools</span>
-            </a>
-            <div class="divider-thin"></div>
-            <a class="facts-row" href="cards.html">
-                <span class="name" data-i18n="cards">Cards</span>
-                <span class="tokens" data-i18n="cardsT">summary, todo, tips, AI</span>
-            </a>
-            <div class="divider-thin"></div>
-            <a class="facts-row" href="bars.html">
-                <span class="name" data-i18n="bars">Bars</span>
-                <span class="tokens" data-i18n="barsT">tab bars, toolbars, nav</span>
-            </a>
-            <div class="divider-thin"></div>
-            <div class="facts-row disabled">
-                <span class="name"><span class="name-regular" data-i18n="lists">Lists</span></span>
-                <span class="coming-soon" data-i18n="comingSoon">Coming Soon</span>
-            </div>
-            <div class="divider-thin"></div>
-            <div class="facts-row disabled">
-                <span class="name"><span class="name-regular" data-i18n="inputs">Inputs</span></span>
-                <span class="coming-soon" data-i18n="comingSoon">Coming Soon</span>
-            </div>
-            <div class="divider-thin"></div>
-            <div class="facts-row disabled">
-                <span class="name"><span class="name-regular" data-i18n="modals">Modals</span></span>
-                <span class="coming-soon" data-i18n="comingSoon">Coming Soon</span>
-            </div>
-            <div class="divider-medium"></div>
-
-            <div style="margin-top: 12px; font-size: 11px; color: var(--filo-08); text-align: right; letter-spacing: 0;" data-i18n="credit">Crafted by Connie Liang & AI · Jan 2026</div>
-        </div>
+        <div class="sidebar-section-title">Components</div>
+        <div class="sidebar-item" data-page="buttons.html" onclick="loadPage('buttons.html', this)"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="8" width="18" height="8" rx="4" stroke="currentColor" stroke-width="2"/></svg> Buttons</div>
+        <div class="sidebar-item" data-page="cards.html" onclick="loadPage('cards.html', this)"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 10H21" stroke="currentColor" stroke-width="2"/></svg> Cards</div>
+        <div class="sidebar-item" data-page="bars.html" onclick="loadPage('bars.html', this)"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="17" width="18" height="4" rx="1" stroke="currentColor" stroke-width="2"/><rect x="3" y="3" width="18" height="4" rx="1" stroke="currentColor" stroke-width="2"/></svg> Bars</div>
+        <div class="sidebar-item disabled">Lists <span class="coming-badge">soon</span></div>
+        <div class="sidebar-item disabled">Inputs <span class="coming-badge">soon</span></div>
+        <div class="sidebar-item disabled">Modals <span class="coming-badge">soon</span></div>
     </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Home: Design Recipe card -->
+        <div class="home-view" id="homeView">
+            <div class="facts-card">
+                <div class="facts-inner">
+                    <div class="facts-title" data-i18n="title">Design Recipe</div>
+                    <div class="divider-thick"></div>
+                    <div class="facts-serving"><span class="facts-subtitle" data-i18n="subtitle">FiloMail — Component Library</span></div>
+                    <div class="facts-serving"><span class="label" data-i18n="version">Version</span><span class="value">2.1.0</span></div>
+                    <div class="divider-medium"></div>
+                    <div class="section-header" data-i18n="foundation">Foundation</div>
+                    <div class="calories-row"><span class="calories-label" data-i18n="platforms">Platforms</span><span class="calories-value" data-i18n="platformsVal">Mobile & Desktop</span></div>
+                    <div class="divider-medium"></div>
+                    <div class="dv-header" data-i18n="specs">Specs</div>
+                    <div class="divider-thin"></div>
+                    <a class="facts-row" href="javascript:void(0)" onclick="loadPage('colors.html')"><span class="name" data-i18n="colors">Colors</span><span class="tokens" data-i18n="colorsT">25 tokens, light + dark</span></a>
+                    <div class="divider-thin"></div>
+                    <a class="facts-row" href="javascript:void(0)" onclick="loadPage('typography.html')"><span class="name" data-i18n="typography">Typography</span><span class="tokens" data-i18n="typographyT">20 styles, 3 weights</span></a>
+                    <div class="divider-thin"></div>
+                    <a class="facts-row" href="javascript:void(0)" onclick="loadPage('icons.html')"><span class="name" data-i18n="icons">Icons</span><span class="tokens" data-i18n="iconsT">100+ SVGs</span></a>
+                    <div class="divider-thin"></div>
+                    <div class="facts-row disabled"><span class="name"><span class="name-regular" data-i18n="spacing">Spacing</span></span><span class="coming-soon" data-i18n="comingSoon">Coming Soon</span></div>
+                    <div class="divider-thin"></div>
+                    <div class="facts-row disabled"><span class="name"><span class="name-regular" data-i18n="radius">Radius</span></span><span class="coming-soon" data-i18n="comingSoon">Coming Soon</span></div>
+                    <div class="divider-thin"></div>
+                    <div class="facts-row disabled"><span class="name"><span class="name-regular" data-i18n="dividers">Dividers</span></span><span class="coming-soon" data-i18n="comingSoon">Coming Soon</span></div>
+                    <div class="divider-thick"></div>
+                    <div class="section-header" data-i18n="components">Components</div>
+                    <div class="divider-thin"></div>
+                    <a class="facts-row" href="javascript:void(0)" onclick="loadPage('buttons.html')"><span class="name" data-i18n="buttons">Buttons</span><span class="tokens" data-i18n="buttonsT">pills, labels, minitools</span></a>
+                    <div class="divider-thin"></div>
+                    <a class="facts-row" href="javascript:void(0)" onclick="loadPage('cards.html')"><span class="name" data-i18n="cards">Cards</span><span class="tokens" data-i18n="cardsT">summary, todo, tips, AI</span></a>
+                    <div class="divider-thin"></div>
+                    <a class="facts-row" href="javascript:void(0)" onclick="loadPage('bars.html')"><span class="name" data-i18n="bars">Bars</span><span class="tokens" data-i18n="barsT">tab bars, toolbars, nav</span></a>
+                    <div class="divider-thin"></div>
+                    <div class="facts-row disabled"><span class="name"><span class="name-regular" data-i18n="lists">Lists</span></span><span class="coming-soon" data-i18n="comingSoon">Coming Soon</span></div>
+                    <div class="divider-thin"></div>
+                    <div class="facts-row disabled"><span class="name"><span class="name-regular" data-i18n="inputs">Inputs</span></span><span class="coming-soon" data-i18n="comingSoon">Coming Soon</span></div>
+                    <div class="divider-thin"></div>
+                    <div class="facts-row disabled"><span class="name"><span class="name-regular" data-i18n="modals">Modals</span></span><span class="coming-soon" data-i18n="comingSoon">Coming Soon</span></div>
+                    <div class="divider-medium"></div>
+                    <div style="margin-top: 12px; font-size: 11px; color: var(--filo-08); text-align: right;" data-i18n="credit">Crafted by Connie Liang & AI · Jan 2026</div>
+                </div>
+            </div>
+        </div>
+        <!-- Iframe for category pages -->
+        <iframe id="contentFrame"></iframe>
+    </div>
+
 
     <script>
         const translations = {
@@ -413,6 +386,25 @@
             'zh-CN': { title: '设计食谱', subtitle: 'FiloMail — 组件库', version: '版本', foundation: '基础', platforms: '平台', platformsVal: '移动端与桌面端', specs: '规格', colors: '色彩', colorsT: '25 色彩变量，浅色+深色', typography: '字体', typographyT: '20 样式，3 字重', icons: '图标', iconsT: '100+ SVG', spacing: '间距', radius: '圆角', dividers: '分隔线', components: '组件', buttons: '按钮', buttonsT: '胶囊、标签、迷你工具', cards: '卡片', cardsT: '摘要、待办、提示、AI', bars: '栏', barsT: '标签栏、工具栏、导航', lists: '列表', inputs: '输入', modals: '弹窗', comingSoon: '即将推出', credit: 'Connie Liang & AI 制作 · 2026年1月' }
         };
 
+        function goHome() {
+            document.getElementById('homeView').style.display = 'flex';
+            document.getElementById('contentFrame').style.display = 'none';
+            document.querySelectorAll('.rail-icon').forEach(i => i.classList.remove('active'));
+            document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+        }
+
+        function loadPage(page, el) {
+            document.getElementById('homeView').style.display = 'none';
+            const iframe = document.getElementById('contentFrame');
+            iframe.src = page;
+            iframe.style.display = 'block';
+
+            // Update active states
+            document.querySelectorAll('.rail-icon').forEach(i => i.classList.remove('active'));
+            document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+            document.querySelectorAll(`[data-page="${page}"]`).forEach(i => i.classList.add('active'));
+        }
+
         function toggleLangDropdown() {
             document.getElementById('langDropdown').classList.toggle('open');
         }
@@ -421,42 +413,27 @@
             document.querySelectorAll('.lang-option').forEach(o => o.classList.remove('active'));
             el.classList.add('active');
             document.getElementById('langDropdown').classList.remove('open');
-
             const t = translations[code];
-            document.querySelector('[data-i18n="title"]').textContent = t.title;
-            document.querySelector('[data-i18n="subtitle"]').textContent = t.subtitle;
-            document.querySelector('[data-i18n="version"]').textContent = t.version;
-            document.querySelector('[data-i18n="foundation"]').textContent = t.foundation;
-            document.querySelector('[data-i18n="platforms"]').textContent = t.platforms;
-            document.querySelector('[data-i18n="platformsVal"]').textContent = t.platformsVal;
-            document.querySelector('[data-i18n="specs"]').textContent = t.specs;
-            document.querySelector('[data-i18n="colors"]').textContent = t.colors;
-            document.querySelector('[data-i18n="colorsT"]').textContent = t.colorsT;
-            document.querySelector('[data-i18n="typography"]').textContent = t.typography;
-            document.querySelector('[data-i18n="typographyT"]').textContent = t.typographyT;
-            document.querySelector('[data-i18n="icons"]').textContent = t.icons;
-            document.querySelector('[data-i18n="iconsT"]').textContent = t.iconsT;
-            document.querySelector('[data-i18n="spacing"]').textContent = t.spacing;
-            document.querySelector('[data-i18n="radius"]').textContent = t.radius;
-            document.querySelector('[data-i18n="dividers"]').textContent = t.dividers;
-            document.querySelector('[data-i18n="components"]').textContent = t.components;
-            document.querySelector('[data-i18n="buttons"]').textContent = t.buttons;
-            document.querySelector('[data-i18n="buttonsT"]').textContent = t.buttonsT;
-            document.querySelector('[data-i18n="cards"]').textContent = t.cards;
-            document.querySelector('[data-i18n="cardsT"]').textContent = t.cardsT;
-            document.querySelector('[data-i18n="bars"]').textContent = t.bars;
-            document.querySelector('[data-i18n="barsT"]').textContent = t.barsT;
-            document.querySelector('[data-i18n="lists"]').textContent = t.lists;
-            document.querySelector('[data-i18n="inputs"]').textContent = t.inputs;
-            document.querySelector('[data-i18n="modals"]').textContent = t.modals;
-            document.querySelectorAll('[data-i18n="comingSoon"]').forEach(el => el.textContent = t.comingSoon);
-            document.querySelector('[data-i18n="credit"]').textContent = t.credit;
+            document.querySelectorAll('[data-i18n]').forEach(node => {
+                const key = node.getAttribute('data-i18n');
+                if (t[key]) node.textContent = t[key];
+            });
+        }
+
+        let isDark = true;
+        function toggleTheme() {
+            isDark = !isDark;
+            document.body.classList.toggle('light-mode', !isDark);
+            const icon = document.getElementById('themeIcon');
+            if (isDark) {
+                icon.innerHTML = '<path d="M12 3V4M12 20V21M4 12H3M6.31 6.31L5.6 5.6M17.69 6.31L18.4 5.6M6.31 17.69L5.6 18.4M17.69 17.69L18.4 18.4M21 12H20M16 12C16 14.2091 14.2091 16 12 16C9.79086 16 8 14.2091 8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>';
+            } else {
+                icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+            }
         }
 
         document.addEventListener('click', function(e) {
-            if (!e.target.closest('.lang-switcher')) {
-                document.getElementById('langDropdown').classList.remove('open');
-            }
+            if (!e.target.closest('.lang-switcher')) document.getElementById('langDropdown').classList.remove('open');
         });
     </script>
 </body>

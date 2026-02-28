@@ -1,13 +1,15 @@
-# FILO-1740 — Filo AI 支持语音 (Filo Talk) — iOS Implementation
+# FILO-1740 — Filo Talk — iOS Implementation
 
 > Sub-task of [FILO-1674](https://xindong.atlassian.net/browse/FILO-1674)
 
-| Field | Value |
-|-------|-------|
-| Jira | [FILO-1740](https://xindong.atlassian.net/browse/FILO-1740) |
-| Parent | [FILO-1674](https://xindong.atlassian.net/browse/FILO-1674) |
-| Platform | iOS |
-| Figma | [🍎 Mobile — Talk](https://www.figma.com/design/7tXBqwb5MkT6wIwnjgeA4g/%F0%9F%8D%8E-Mobile?node-id=6847-80968&t=Akwp3eIlpUX1ahrS-1) |
+
+| Field    | Value                                                                                                                               |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Jira     | [FILO-1740](https://xindong.atlassian.net/browse/FILO-1740)                                                                         |
+| Parent   | [FILO-1674](https://xindong.atlassian.net/browse/FILO-1674)                                                                         |
+| Platform | iOS                                                                                                                                 |
+| Figma    | [🍎 Mobile — Talk](https://www.figma.com/design/7tXBqwb5MkT6wIwnjgeA4g/%F0%9F%8D%8E-Mobile?node-id=6847-80968&t=Akwp3eIlpUX1ahrS-1) |
+
 
 ---
 
@@ -24,6 +26,7 @@ A fully interactive HTML prototype has been built covering all screen states, an
 **File:** `Demo/filo-talk-mobile.html`
 
 **Audio assets:** `Demo/audio/` — 33 MP3 files
+
 - 20 greeting variations (`greeting-0` through `greeting-19`)
 - 4 conversation AI responses (`conv-ai-1` through `conv-ai-4`)
 - 3 onboarding audio (`onboarding-greeting`, `onboarding-pills`, `onboarding-reply`)
@@ -96,38 +99,42 @@ A fully interactive HTML prototype has been built covering all screen states, an
 
 ### Color Tokens (Light / Dark)
 
-| Token | Light | Dark |
-|-------|-------|------|
-| Primary Blue | `#1F9EFA` | `#6CC1FF` |
-| Background | `#FFFFFF` | `#1D1D21` |
-| Surface | `#F5F5F5` | `#2A2A30` |
-| Text Primary | `#000000` | `#FFFFFF` |
-| Text Secondary | `#707070` | `#8B8B8B` |
-| Text Tertiary | `#9E9E9E` | `#727272` |
-| Divider | `#D5D5D5` | `#414149` |
-| User Bubble BG | `rgba(76,180,255,0.12)` | `rgba(76,180,255,0.12)` |
-| Error BG | `#FFE5E7` | `#461D21` |
-| Blob 1 (Blue) | `rgba(157,222,255,0.7)` | `rgba(69,177,255,0.25)` |
-| Blob 2 (Purple) | `rgba(127,110,255,0.45)` | `rgba(127,110,255,0.2)` |
-| Blob 3 (Blue) | `rgba(34,160,251,0.4)` | `rgba(69,177,255,0.18)` |
-| Glass Pill Tab | `rgba(247,247,247,0.85)` | `rgba(40,40,40,0.85)` |
-| Subtle BG | `rgba(0,0,0,0.04)` | `rgba(255,255,255,0.06)` |
+
+| Token           | Light                    | Dark                     |
+| --------------- | ------------------------ | ------------------------ |
+| Primary Blue    | `#1F9EFA`                | `#6CC1FF`                |
+| Background      | `#FFFFFF`                | `#1D1D21`                |
+| Surface         | `#F5F5F5`                | `#2A2A30`                |
+| Text Primary    | `#000000`                | `#FFFFFF`                |
+| Text Secondary  | `#707070`                | `#8B8B8B`                |
+| Text Tertiary   | `#9E9E9E`                | `#727272`                |
+| Divider         | `#D5D5D5`                | `#414149`                |
+| User Bubble BG  | `rgba(76,180,255,0.12)`  | `rgba(76,180,255,0.12)`  |
+| Error BG        | `#FFE5E7`                | `#461D21`                |
+| Blob 1 (Blue)   | `rgba(157,222,255,0.7)`  | `rgba(69,177,255,0.25)`  |
+| Blob 2 (Purple) | `rgba(127,110,255,0.45)` | `rgba(127,110,255,0.2)`  |
+| Blob 3 (Blue)   | `rgba(34,160,251,0.4)`   | `rgba(69,177,255,0.18)`  |
+| Glass Pill Tab  | `rgba(247,247,247,0.85)` | `rgba(40,40,40,0.85)`    |
+| Subtle BG       | `rgba(0,0,0,0.04)`       | `rgba(255,255,255,0.06)` |
+
 
 ### Animation Specs
 
-| Animation | Duration / Easing | Notes |
-|-----------|-------------------|-------|
-| Talk Overlay open | 0.55s `cubic-bezier(0,0,0.2,1)` | clip-path circle morph from mic button |
-| Talk Overlay close | 0.4s `cubic-bezier(0.4,0,1,1)` | Circle shrinks back to origin |
-| Word reveal | 0.5s per word, 220ms stagger | Gradient background-position sweep |
-| Blob float (idle) | 4–6s ease-in-out infinite | translate + scale keyframes, 3 blobs |
-| Blob float (quiet) | 8s | Scale 0.9, opacity 0.55 |
-| Blob float (active) | 2.5s | Scale 1.15, opacity 1.0 |
-| Mic glow | 2.5s ease-in-out infinite | box-shadow pulse: 12px→24px blue glow |
-| Waveform bars | 1.2s ease-in-out infinite | 5 bars, scaleY(0.5→1), 0.1s stagger |
-| Onboarding pill appear | 0.4s ease + cubic-bezier(0.2,0,0,1) | translateY(12→0), scale(0.95→1) |
-| Message appear | 0.35s ease | translateY(8→0), opacity(0→1) |
-| Tooltip auto-fade | 13s total | Fade in at 15%, fade out at 85% |
+
+| Animation              | Duration / Easing                   | Notes                                  |
+| ---------------------- | ----------------------------------- | -------------------------------------- |
+| Talk Overlay open      | 0.55s `cubic-bezier(0,0,0.2,1)`     | clip-path circle morph from mic button |
+| Talk Overlay close     | 0.4s `cubic-bezier(0.4,0,1,1)`      | Circle shrinks back to origin          |
+| Word reveal            | 0.5s per word, 220ms stagger        | Gradient background-position sweep     |
+| Blob float (idle)      | 4–6s ease-in-out infinite           | translate + scale keyframes, 3 blobs   |
+| Blob float (quiet)     | 8s                                  | Scale 0.9, opacity 0.55                |
+| Blob float (active)    | 2.5s                                | Scale 1.15, opacity 1.0                |
+| Mic glow               | 2.5s ease-in-out infinite           | box-shadow pulse: 12px→24px blue glow  |
+| Waveform bars          | 1.2s ease-in-out infinite           | 5 bars, scaleY(0.5→1), 0.1s stagger    |
+| Onboarding pill appear | 0.4s ease + cubic-bezier(0.2,0,0,1) | translateY(12→0), scale(0.95→1)        |
+| Message appear         | 0.35s ease                          | translateY(8→0), opacity(0→1)          |
+| Tooltip auto-fade      | 13s total                           | Fade in at 15%, fade out at 85%        |
+
 
 ---
 
@@ -269,3 +276,4 @@ User speaks → AVAudioEngine (mic input)
 8. Error states show correct error card / retry button / permission screen
 9. Entry point from Email Detail opens Talk Overlay with correct context
 10. Reduced Motion is respected — no blob animation, opacity-only transitions
+
