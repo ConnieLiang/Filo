@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
     <title>Filo Talk - Idle Screen (Mobile)</title>
     <style>
         * {
@@ -64,10 +66,10 @@
         .mode-btn.active { background: var(--filo-10); color: var(--filo-06); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .meta-divider { color: var(--filo-08); }
         .screen-nav { display: flex; gap: 72px; margin-top: 8px; border-bottom: 1px solid var(--filo-08); }
-        .screen-nav .mode-btn { background: none; font-size: 15px; font-weight: 400; padding: 8px 0; color: var(--filo-07); border: none; border-bottom: 2px solid transparent; border-radius: 0; margin-bottom: -1px; }
+        .screen-nav .mode-btn { background: none; font-size: 15px; font-weight: 400; padding: 8px 0; color: var(--filo-07); border: none; border-bottom: 2px solid transparent; border-radius: 0; margin-bottom: -1px; transition: color 0.1s, border-color 0.1s; }
         .screen-nav .mode-btn.active { background: none; color: var(--filo-06); font-weight: 600; box-shadow: none; border-bottom-color: var(--filo-02); }
 
-        .screen-container { display: flex; justify-content: center; padding: 40px 0; }
+        .screen-container { display: flex; justify-content: center; gap: 128px; padding: 40px 0; align-items: flex-start; }
 
         .iphone-frame {
             width: 390px;
@@ -81,32 +83,115 @@
             position: relative;
         }
 
-        .status-bar { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; position: relative; z-index: 10; }
+        .status-bar { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; position: relative; z-index: 40; }
         .status-time { flex: 1; padding-left: 28px; }
         .status-time span { font-size: 17px; font-weight: 600; color: var(--filo-06); }
         .status-island { width: 124px; height: 36px; background: #000; border-radius: 24px; }
         .status-icons { flex: 1; display: flex; align-items: center; justify-content: flex-end; gap: 6px; padding-right: 20px; }
         .status-icons svg { height: 12px; color: var(--filo-06); }
 
-        .chat-area { flex: 1; padding: 20px 0 0; display: flex; flex-direction: column; gap: 20px; position: relative; z-index: 10; }
+        .chat-area { flex: 1; padding: 44px 0 0; display: flex; flex-direction: column; gap: 20px; position: relative; z-index: 10; }
         .ai-message { font-size: 17px; font-weight: 400; line-height: 1.4; letter-spacing: -0.2px; color: var(--filo-06); padding: 0 20px; }
         .user-message { display: flex; flex-direction: column; align-items: flex-end; padding: 0 20px 0 80px; }
-        .user-bubble { background: rgba(76, 180, 255, 0.12); padding: 8px 12px; font-size: 17px; font-weight: 400; line-height: 1.4; letter-spacing: -0.2px; color: var(--filo-06); }
+        .user-bubble { background: rgba(76, 180, 255, 0.12); padding: 8px 12px; font-size: 17px; font-weight: 400; font-style: italic; line-height: 1.4; letter-spacing: -0.2px; color: var(--filo-06); }
         .user-bubble.pill { border-radius: 999px; }
         .user-bubble.rect { border-radius: 20px; width: 100%; }
         body.dark-mode .user-bubble { background: rgba(76, 180, 255, 0.12); }
 
+        /* Conversation screen animation */
+        #screen-conversation .ai-message,
+        #screen-conversation .user-message {
+            opacity: 0; transform: translateY(8px);
+        }
+        #screen-conversation .ai-message.anim-in,
+        #screen-conversation .user-message.anim-in {
+            opacity: 1; transform: translateY(0);
+            transition: opacity 0.35s ease, transform 0.35s ease;
+        }
+        #screen-conversation .ai-message .word,
+        #errorChatArea .ai-message .word {
+            display: inline-block;
+            background: linear-gradient(to right, var(--filo-06) 40%, var(--filo-08) 60%);
+            background-size: 260% 100%;
+            background-position-x: 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        #screen-conversation .ai-message .word.spoken,
+        #errorChatArea .ai-message .word.spoken {
+            background-position-x: 0%;
+            transition: background-position-x 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #screen-conversation .ai-message .word.emoji {
+            -webkit-text-fill-color: initial;
+            background: none; opacity: 0;
+        }
+        #screen-conversation .ai-message .word.emoji.spoken { opacity: 1; transition: opacity 0.25s ease; }
+        .typing-dots {
+            display: flex; align-items: center; gap: 5px;
+            padding: 6px 4px;
+        }
+        .typing-dots .dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: rgba(0, 0, 0, 0.18);
+            animation: dotPulse 1.4s ease-in-out infinite;
+        }
+        body.dark-mode .typing-dots .dot { background: rgba(255, 255, 255, 0.25); }
+        .typing-dots .dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dots .dot:nth-child(2) { animation-delay: 0.16s; }
+        .typing-dots .dot:nth-child(3) { animation-delay: 0.32s; }
+        @keyframes dotPulse {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.35; }
+            30% { transform: translateY(-4px); opacity: 0.9; }
+        }
+        .user-bubble .bubble-text {
+            display: none;
+        }
+        .user-bubble.done .bubble-text {
+            display: inline;
+            animation: textFadeIn 0.3s ease both;
+        }
+        .user-bubble.done .typing-dots {
+            display: none;
+        }
+        @keyframes textFadeIn {
+            from { opacity: 0; } to { opacity: 1; }
+        }
+
+        /* Conversation & Error blob states */
+        #screen-conversation .gradient-bg,
+        #errorGradient {
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            transform-origin: center bottom;
+        }
+        #screen-conversation .gradient-bg.blobs-quiet,
+        #errorGradient.blobs-quiet {
+            opacity: 0.55; transform: scale(0.9) translateY(10px);
+        }
+        #screen-conversation .gradient-bg.blobs-quiet .gradient-blob,
+        #errorGradient.blobs-quiet .gradient-blob {
+            animation-duration: 8s;
+        }
+        #screen-conversation .gradient-bg.blobs-active,
+        #errorGradient.blobs-active {
+            opacity: 1; transform: scale(1.15) translateY(-10px);
+        }
+        #screen-conversation .gradient-bg.blobs-active .gradient-blob,
+        #errorGradient.blobs-active .gradient-blob {
+            animation-duration: 2.5s;
+        }
+
         /* Gradient Background */
         .gradient-bg {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 350px;
+            bottom: -40px;
+            left: -20%;
+            width: 140%;
+            height: 400px;
             pointer-events: none;
-            overflow: hidden;
-            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 30%);
-            mask-image: linear-gradient(to bottom, transparent 0%, black 30%);
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25%);
+            mask-image: linear-gradient(to bottom, transparent 0%, black 25%);
         }
 
         .gradient-blob {
@@ -163,10 +248,635 @@
             100% { transform: translate(-50%, 0) scale(1); }
         }
 
+        /* Screen switching */
+        .screen { display: none; }
+        .screen.active { display: contents; }
+
+        /* Talk overlay — morphs from trigger button via clip-path circle */
+        .talk-overlay {
+            position: absolute; inset: 0; z-index: 30;
+            background: var(--filo-10);
+            display: flex; flex-direction: column;
+            pointer-events: none;
+            overflow: hidden;
+            clip-path: circle(0% at var(--morph-x, 88%) var(--morph-y, 84%));
+            will-change: clip-path;
+            transition: clip-path 0.4s cubic-bezier(0.4, 0, 1, 1);
+        }
+        .talk-overlay.visible {
+            pointer-events: auto;
+            clip-path: circle(150% at 50% 50%);
+            transition: clip-path 0.55s cubic-bezier(0.0, 0.0, 0.2, 1);
+        }
+        .talk-overlay .overlay-message {
+            padding: 108px 62px 0 20px;
+            font-size: 17px; font-weight: 400; line-height: 1.4;
+            letter-spacing: -0.2px; color: var(--filo-06);
+            opacity: 0; transition: opacity 0.15s ease;
+        }
+        .talk-overlay.visible .overlay-message {
+            opacity: 1; transition: opacity 0.3s ease 0.55s;
+        }
+        .overlay-message .word {
+            display: inline-block;
+            background: linear-gradient(to right, var(--filo-06) 40%, var(--filo-08) 60%);
+            background-size: 260% 100%;
+            background-position-x: 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .overlay-message .word.spoken {
+            background-position-x: 0%;
+            transition: background-position-x 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .talk-overlay .overlay-gradient {
+            position: absolute; bottom: -40px; left: -20%; width: 140%; height: 400px;
+            pointer-events: none;
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25%);
+            mask-image: linear-gradient(to bottom, transparent 0%, black 25%);
+            opacity: 0; transition: opacity 0.15s ease;
+            transform-origin: center bottom;
+        }
+        .talk-overlay .overlay-gradient.blobs-quiet {
+            opacity: 0.55; transform: scale(0.9) translateY(10px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .talk-overlay .overlay-gradient.blobs-quiet .gradient-blob { animation-duration: 8s; }
+        .talk-overlay .overlay-gradient.blobs-active {
+            opacity: 1; transform: scale(1.15) translateY(-10px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .talk-overlay .overlay-gradient.blobs-active .gradient-blob { animation-duration: 2.5s; }
+        .talk-overlay.visible .overlay-gradient:not(.blobs-quiet):not(.blobs-active) {
+            opacity: 1; transition: opacity 0.4s ease 0.1s;
+        }
+        .talk-overlay .overlay-stop {
+            position: absolute; bottom: 46px; left: 50%; transform: translateX(-50%);
+            display: flex; align-items: center; gap: 8px;
+            padding: 12px 20px; background: var(--filo-06);
+            border: none; border-radius: 999px; cursor: pointer;
+            opacity: 0; transition: opacity 0.15s ease;
+        }
+        .talk-overlay.visible .overlay-stop {
+            opacity: 1; transition: opacity 0.3s ease 0.3s;
+        }
+        .talk-overlay .overlay-settings-wrap {
+            position: absolute; top: 64px; right: 20px;
+            opacity: 0; transition: opacity 0.15s ease;
+        }
+        .talk-overlay.visible .overlay-settings-wrap { opacity: 1; transition: opacity 0.3s ease 0.3s; }
+        .talk-overlay .overlay-stop span { font-size: 17px; font-weight: 400; line-height: 1.4; letter-spacing: -0.2px; color: var(--filo-10); }
+        .talk-overlay .overlay-stop .waveform { display: flex; align-items: center; gap: 2px; height: 24px; padding: 4px 0; }
+        .talk-overlay .overlay-stop .waveform .bar { width: 3px; background: var(--filo-10); border-radius: 2px; animation: waveAnim 1.2s ease-in-out infinite; }
+        .talk-overlay .overlay-stop .waveform .bar:nth-child(1) { height: 8px; animation-delay: 0s; }
+        .talk-overlay .overlay-stop .waveform .bar:nth-child(2) { height: 14px; animation-delay: 0.1s; }
+        .talk-overlay .overlay-stop .waveform .bar:nth-child(3) { height: 20px; animation-delay: 0.2s; }
+        .talk-overlay .overlay-stop .waveform .bar:nth-child(4) { height: 14px; animation-delay: 0.3s; }
+        .talk-overlay .overlay-stop .waveform .bar:nth-child(5) { height: 8px; animation-delay: 0.4s; }
+
+        /* ===== IDLE STATE ===== */
+        .idle-nav {
+            display: flex; align-items: center; justify-content: center;
+            padding: 12px 20px; position: relative; z-index: 10;
+        }
+        .idle-nav-title { font-size: 17px; font-weight: 700; line-height: 1.4; letter-spacing: -0.2px; color: var(--filo-06); }
+        .idle-nav-btn {
+            position: absolute; right: 20px;
+            width: 42px; height: 42px; border-radius: 100px;
+            background: rgba(247, 247, 247, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        body.dark-mode .idle-nav-btn { background: rgba(40, 40, 40, 0.85); }
+        .idle-nav-btn svg { width: 20px; height: 20px; color: var(--filo-06); }
+
+        .idle-gradient {
+            position: absolute; top: calc(15% - 20px); left: -10%; right: -10%;
+            height: 400px;
+            pointer-events: none;
+            overflow: visible;
+            -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 70%);
+            mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 70%);
+        }
+        .idle-gradient .gradient-blob {
+            filter: blur(40px);
+            opacity: 0.24;
+        }
+        .idle-gradient .blob-1 {
+            width: 400px; height: 400px;
+            bottom: auto; top: 35%; left: 45%;
+            animation: idleBlob1 5s ease-in-out infinite;
+        }
+        .idle-gradient .blob-2 {
+            width: 350px; height: 350px;
+            bottom: auto; top: 25%; left: 25%;
+            animation: idleBlob2 6s ease-in-out infinite;
+        }
+        .idle-gradient .blob-3 {
+            width: 320px; height: 320px;
+            bottom: auto; top: 45%; left: 60%;
+            animation: idleBlob3 5.5s ease-in-out infinite;
+        }
+
+        @keyframes idleBlob1 {
+            0% { transform: translate(-50%, 0) scale(1); }
+            25% { transform: translate(-35%, -40px) scale(1.2); }
+            50% { transform: translate(-55%, 20px) scale(0.9); }
+            75% { transform: translate(-40%, -30px) scale(1.15); }
+            100% { transform: translate(-50%, 0) scale(1); }
+        }
+        @keyframes idleBlob2 {
+            0% { transform: translate(-50%, 0) scale(1); }
+            33% { transform: translate(-65%, -35px) scale(1.25); }
+            66% { transform: translate(-35%, 15px) scale(0.85); }
+            100% { transform: translate(-50%, 0) scale(1); }
+        }
+        @keyframes idleBlob3 {
+            0% { transform: translate(-50%, 0) scale(1); }
+            20% { transform: translate(-45%, -25px) scale(1.1); }
+            50% { transform: translate(-60%, -50px) scale(1.3); }
+            80% { transform: translate(-40%, 10px) scale(0.9); }
+            100% { transform: translate(-50%, 0) scale(1); }
+        }
+
+        .quick-commands {
+            position: absolute; left: 20px; right: 20px; bottom: 232px;
+            display: flex; flex-direction: column; align-items: flex-start; gap: 12px;
+            z-index: 10;
+        }
+        .quick-cmd {
+            display: flex; align-items: center; gap: 4px;
+            padding: 10px 12px; border-radius: 999px;
+            background: var(--filo-14); border: none; cursor: pointer;
+            font-size: 15px; font-weight: 400; line-height: 1.35;
+            letter-spacing: -0.2px; color: var(--filo-06);
+        }
+        .quick-cmd svg { width: 16px; height: 16px; color: var(--filo-02); flex-shrink: 0; }
+        .quick-cmd:hover { background: rgba(0,0,0,0.07); }
+        body.dark-mode .quick-cmd:hover { background: rgba(255,255,255,0.1); }
+
+        .idle-input {
+            position: absolute; left: 20px; right: 20px; bottom: 112px;
+            height: 108px; border-radius: 24px;
+            background: var(--filo-14);
+            padding: 12px 8px 8px 12px;
+            display: flex; flex-direction: column;
+            justify-content: space-between; align-items: flex-end;
+            z-index: 10;
+        }
+        .idle-input-text {
+            display: flex; align-items: center; gap: 4px;
+            width: 100%; font-size: 16px; color: var(--filo-25);
+            line-height: 1.3; letter-spacing: -0.2px;
+        }
+        .idle-input-text svg { width: 16px; height: 16px; color: var(--filo-02); flex-shrink: 0; }
+        .idle-mic-wrap {
+            position: relative;
+        }
+        .idle-mic {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: var(--filo-06); border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            position: relative; z-index: 2;
+            box-shadow: 0 0 0 0 rgba(34, 160, 251, 0);
+            animation: micGlow 2.5s ease-in-out infinite;
+        }
+        .idle-mic svg { width: 20px; height: 20px; color: var(--filo-10); }
+        @keyframes micGlow {
+            0%, 100% { box-shadow: 0 0 12px 4px rgba(34, 160, 251, 0.25); }
+            50% { box-shadow: 0 0 24px 10px rgba(34, 160, 251, 0.5); }
+        }
+        .mic-tooltip {
+            position: absolute; bottom: calc(100% + 10px); right: 0;
+            white-space: nowrap;
+            font-size: 12px; font-weight: 400; line-height: 1.3;
+            letter-spacing: -0.2px; color: var(--filo-06);
+            background: var(--filo-10);
+            padding: 5px 10px; border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(34, 160, 251, 0.35);
+            animation: tooltipFade 13s ease forwards;
+            pointer-events: none;
+        }
+        @keyframes tooltipFade {
+            0%, 5% { opacity: 0; transform: translateY(4px); }
+            15% { opacity: 1; transform: translateY(0); }
+            85% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(0); }
+        }
+
+        /* ===== ONBOARDING STATE ===== */
+        .onboarding-content {
+            position: absolute; top: 112px; left: 0; right: 0;
+            padding: 0 20px;
+            display: flex; flex-direction: column; gap: 12px;
+            z-index: 10;
+        }
+        .onboarding-text {
+            font-size: 17px; font-weight: 400; line-height: 1.4;
+            letter-spacing: -0.2px; color: var(--filo-06);
+        }
+        .onboarding-text .word {
+            display: inline-block;
+            background: linear-gradient(to right, var(--filo-06) 40%, var(--filo-08) 60%);
+            background-size: 260% 100%;
+            background-position-x: 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .onboarding-text .word.spoken {
+            background-position-x: 0%;
+            transition: background-position-x 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .onboarding-pills {
+            display: flex; flex-direction: column; gap: 12px;
+            align-items: flex-start;
+        }
+        .onboarding-pill {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 12px 30px; border-radius: 100px;
+            background: rgba(76, 180, 255, 0.12);
+            font-size: 15px; font-weight: 500; line-height: 1.3;
+            letter-spacing: -0.2px; color: var(--filo-02);
+            border: none; cursor: pointer;
+            align-self: flex-start; width: auto;
+            opacity: 0; transform: translateY(12px) scale(0.95);
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2, 0, 0, 1);
+        }
+        .onboarding-pill.anim-in {
+            opacity: 1; transform: translateY(0) scale(1);
+        }
+        .onboarding-pill:active { background: rgba(76, 180, 255, 0.2); }
+        .onboarding-gradient {
+            position: absolute; bottom: -40px; left: -20%; width: 140%; height: 400px;
+            pointer-events: none;
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25%);
+            mask-image: linear-gradient(to bottom, transparent 0%, black 25%);
+            transform-origin: center bottom;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .onboarding-gradient.blobs-quiet {
+            opacity: 0.55; transform: scale(0.9) translateY(10px);
+        }
+        .onboarding-gradient.blobs-quiet .gradient-blob { animation-duration: 8s; }
+        .onboarding-gradient.blobs-active {
+            opacity: 1; transform: scale(1.15) translateY(-10px);
+        }
+        .onboarding-gradient.blobs-active .gradient-blob { animation-duration: 2.5s; }
+        .onboarding-stop {
+            position: absolute; bottom: 46px; left: 50%; transform: translateX(-50%);
+            display: flex; align-items: center; gap: 8px;
+            padding: 12px 20px; background: var(--filo-06);
+            border: none; border-radius: 999px; pointer-events: none;
+        }
+        .onboarding-stop span { font-size: 17px; font-weight: 400; line-height: 1.4; letter-spacing: -0.2px; color: var(--filo-10); }
+        .onboarding-stop .waveform { display: flex; align-items: center; gap: 2px; height: 24px; padding: 4px 0; }
+        .onboarding-stop .waveform .bar { width: 3px; background: var(--filo-10); border-radius: 2px; animation: waveAnim 1.2s ease-in-out infinite; }
+        .onboarding-stop .waveform .bar:nth-child(1) { height: 8px; animation-delay: 0s; }
+        .onboarding-stop .waveform .bar:nth-child(2) { height: 14px; animation-delay: 0.1s; }
+        .onboarding-stop .waveform .bar:nth-child(3) { height: 20px; animation-delay: 0.2s; }
+        .onboarding-stop .waveform .bar:nth-child(4) { height: 14px; animation-delay: 0.3s; }
+        .onboarding-stop .waveform .bar:nth-child(5) { height: 8px; animation-delay: 0.4s; }
+
+        /* ===== ERROR STATES ===== */
+        /* AI Draft Card */
+        .ai-draft-card {
+            margin: 0 20px; padding: 16px;
+            border-radius: 24px;
+            background: var(--filo-14);
+            display: flex; flex-direction: column; gap: 12px;
+        }
+        .ai-draft-body {
+            font-size: 16px; font-weight: 400; line-height: 1.4;
+            letter-spacing: -0.2px; color: var(--filo-06);
+        }
+        .ai-draft-actions {
+            display: flex; gap: 8px; justify-content: flex-end;
+        }
+        .ai-draft-btn {
+            padding: 8px 12px; border-radius: 100px;
+            font-size: 15px; font-weight: 510; line-height: 1.3;
+            letter-spacing: -0.2px; border: none; cursor: pointer;
+        }
+        .ai-draft-btn.send {
+            background: var(--filo-02); color: #fff;
+        }
+        body.dark-mode .ai-draft-btn.send { background: #45B1FF; color: #000; }
+        .ai-draft-btn.edit {
+            background: rgba(76, 180, 255, 0.12); color: var(--filo-02);
+            border: none;
+        }
+        body.dark-mode .ai-draft-btn.edit { background: rgba(76, 180, 255, 0.16); color: #45B1FF; }
+
+        .error-card-wrap {
+            display: flex; flex-direction: column; align-items: flex-end;
+            padding: 0 20px;
+        }
+        .error-card {
+            padding: 16px; border-radius: 24px; width: 350px; max-width: 100%;
+            background: #FFE5E7;
+            display: flex; flex-direction: column; gap: 16px; align-items: flex-end;
+        }
+        body.dark-mode .error-card { background: #461D21; }
+        .error-card p {
+            font-size: 17px; font-weight: 700; line-height: 1.4;
+            letter-spacing: -0.2px; color: var(--filo-06); width: 100%;
+        }
+        .error-retry {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 8px 12px; border-radius: 999px;
+            background: var(--filo-06); color: var(--filo-10);
+            font-size: 15px; font-weight: 500; line-height: 1.3;
+            letter-spacing: -0.2px; border: none; cursor: pointer;
+        }
+        .perm-screen {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            display: flex; flex-direction: column;
+            align-items: center;
+        }
+        .perm-center {
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 20px;
+            width: 300px;
+        }
+        .perm-icon {
+            width: 50px; height: 50px; color: var(--filo-08);
+        }
+        .perm-caption {
+            display: flex; flex-direction: column; gap: 8px;
+            text-align: center; width: 100%;
+        }
+        .perm-title {
+            font-size: 17px; font-weight: 700; line-height: 1.4;
+            letter-spacing: -0.2px; color: var(--filo-06);
+        }
+        .perm-body {
+            font-size: 16px; font-weight: 400; line-height: 1.3;
+            letter-spacing: -0.2px; color: var(--filo-07);
+        }
+        .perm-actions {
+            display: flex; flex-direction: column; align-items: center;
+            gap: 16px; padding: 0 20px 48px; width: 100%;
+        }
+        .perm-btn {
+            width: 350px; max-width: 100%; padding: 16px 34px;
+            border-radius: 100px;
+            background: var(--filo-02); color: #fff;
+            font-size: 15px; font-weight: 700; line-height: 1.35;
+            letter-spacing: -0.2px; border: none; cursor: pointer;
+            text-align: center;
+        }
+        body.dark-mode .perm-btn { background: #45B1FF; color: #000; }
+        .perm-link {
+            font-size: 15px; font-weight: 500; line-height: 1.3;
+            letter-spacing: -0.2px;
+            color: var(--filo-07); background: none; border: none;
+            cursor: pointer; text-decoration: none;
+        }
+        .error-frame { display: none; }
+        .error-frame.visible { display: flex; flex-direction: column; }
+
+        /* Replay button */
+        .frame-wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+        .frame-with-replay { position: relative; }
+        .replay-btn {
+            position: absolute; bottom: -100px; left: 50%; transform: translateX(-50%);
+            width: 46px; height: 46px; border-radius: 50%;
+            background: var(--filo-14); border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: opacity 0.2s ease;
+        }
+        .replay-btn:hover { opacity: 0.7; }
+        .replay-btn:active { transform: translateX(-50%) scale(0.9); }
+        .replay-btn svg { width: 22px; height: 22px; color: var(--filo-06); }
+
+        /* Bottom Tab Bar - iOS 26 Glass Pill (from Filo component) */
+        .tab-bar-container {
+            position: absolute; bottom: 24px; left: 0; right: 0;
+            padding: 0 24px; z-index: 10;
+        }
+        .tab-bar {
+            display: flex; justify-content: space-between;
+            align-items: center; gap: 8px;
+        }
+        .glass-pill-tabs {
+            display: flex; align-items: center; flex: 1;
+            padding: 4px; border-radius: 100px;
+            background: rgba(247, 247, 247, 0.85);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08), inset 0 0.5px 0 rgba(255,255,255,0.5);
+        }
+        body.dark-mode .glass-pill-tabs {
+            background: rgba(40, 40, 40, 0.85);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.2), inset 0 0.5px 0 rgba(255,255,255,0.1);
+        }
+        .tab-item {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            flex: 1; height: 52px; gap: 2px;
+            cursor: pointer; border-radius: 100px; position: relative;
+            border: none; background: none;
+        }
+        .tab-item.active::before {
+            content: ''; position: absolute; inset: 0;
+            background: var(--filo-14); border-radius: 100px;
+        }
+        .tab-icon { width: 24px; height: 24px; position: relative; z-index: 1; }
+        .tab-icon svg { width: 24px; height: 24px; }
+        .tab-item.active .tab-icon svg { color: var(--filo-02); }
+        .tab-item:not(.active) .tab-icon svg { color: var(--filo-06); }
+        .tab-label { font-size: 10px; font-weight: 510; position: relative; z-index: 1; }
+        .tab-item.active .tab-label { color: var(--filo-02); }
+        .tab-item:not(.active) .tab-label { color: var(--filo-06); }
+        .compose-btn {
+            width: 60px; height: 60px; border-radius: 50%;
+            background: rgba(247, 247, 247, 0.85);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; border: none; flex-shrink: 0;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.5);
+        }
+        body.dark-mode .compose-btn {
+            background: rgba(40, 40, 40, 0.85);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+        .compose-btn svg { width: 28px; height: 28px; color: var(--filo-06); }
+
+        /* Entry Screen (Email Detail) */
+        .entry-frame { display: none; }
+        .entry-frame.visible { display: flex; flex-direction: column; }
+        .entry-label {
+            font-size: 13px; color: var(--filo-07); text-align: center;
+            margin-bottom: 12px; font-weight: 400;
+        }
+        .email-nav {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 8px 20px; z-index: 10;
+        }
+        .email-nav-btn {
+            width: 42px; height: 42px; border-radius: 100px;
+            background: rgba(247, 247, 247, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: none; display: flex; align-items: center; justify-content: center;
+        }
+        body.dark-mode .email-nav-btn { background: rgba(40, 40, 40, 0.85); }
+        .email-nav-btn svg { width: 20px; height: 20px; color: var(--filo-06); }
+        .email-nav-actions {
+            display: flex; align-items: center; gap: 20px;
+            height: 42px; padding: 0 16px; border-radius: 100px;
+            background: rgba(247, 247, 247, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        }
+        body.dark-mode .email-nav-actions { background: rgba(40, 40, 40, 0.85); }
+        .email-nav-actions svg { width: 20px; height: 20px; color: var(--filo-06); }
+        .email-body {
+            flex: 1; padding: 12px 20px; overflow: hidden;
+        }
+        .email-subject { font-size: 26px; font-weight: 700; line-height: 1.3; letter-spacing: 0; color: var(--filo-06); margin-bottom: 12px; }
+        .email-sender { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+        .email-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #8BC6EC, #9599E2); flex-shrink: 0; }
+        .email-sender-info { flex: 1; }
+        .email-sender-name { font-size: 15px; font-weight: 600; color: var(--filo-06); }
+        .email-sender-meta { font-size: 13px; color: var(--filo-07); }
+        .email-sender-actions { display: flex; gap: 12px; }
+        .email-sender-actions svg { width: 20px; height: 20px; color: var(--filo-07); }
+        /* Cards — from Figma (node 6938:210813, 6938:210826) */
+        .filo-card-summary {
+            border-radius: 20px; padding: 12px;
+            display: flex; flex-direction: column; gap: 8px;
+            background: #e9f6ff; overflow: hidden;
+            box-shadow: 0px 1px 2px rgba(0,0,0,0.06);
+            margin-bottom: 12px;
+        }
+        body.dark-mode .filo-card-summary { background: #1a3348; }
+        .filo-card-summary .card-header { display: flex; justify-content: space-between; align-items: center; }
+        .filo-card-summary .card-title { font-size: 19px; font-weight: 700; line-height: 1.4; letter-spacing: -0.2px; color: var(--filo-02); }
+        .filo-card-summary .card-feedback { display: flex; gap: 24px; padding-right: 4px; }
+        .filo-card-summary .card-feedback svg { width: 18px; height: 18px; color: var(--filo-02); cursor: pointer; }
+        .filo-card-summary .bullet-list { list-style: disc; padding-left: 16px; color: var(--filo-06); }
+        .filo-card-summary .bullet-list li { font-size: 16px; font-weight: 400; line-height: 1.3; letter-spacing: -0.2px; }
+        .filo-card-summary .pill-action {
+            height: 32px; padding: 0 12px; border-radius: 100px;
+            font-size: 15px; font-weight: 510; line-height: 1.3; letter-spacing: -0.2px;
+            background: rgba(76, 180, 255, 0.12); color: var(--filo-02);
+            border: none; cursor: pointer;
+            display: inline-flex; align-items: center; justify-content: center;
+            align-self: flex-start;
+        }
+
+        .filo-card-todo {
+            border-radius: 20px; padding: 12px;
+            display: flex; flex-direction: column; gap: 4px;
+            background: #e9f6ff; overflow: hidden;
+            box-shadow: 0px 1px 2px rgba(0,0,0,0.06);
+            margin-bottom: 12px;
+        }
+        body.dark-mode .filo-card-todo { background: #1a3348; }
+        .filo-card-todo .todo-row { display: flex; gap: 8px; align-items: flex-start; }
+        .filo-card-todo .todo-checkbox {
+            width: 20px; height: 20px; flex-shrink: 0;
+            border-radius: 6px; cursor: pointer;
+            border: 1.5px solid #9CD5FF; background: var(--filo-10);
+        }
+        .filo-card-todo .todo-text { font-size: 16px; font-weight: 400; line-height: 1.3; letter-spacing: -0.2px; color: var(--filo-06); flex: 1; }
+        .filo-card-todo .todo-more {
+            width: 21px; height: 21px; border-radius: 50%;
+            background: var(--filo-14); border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .filo-card-todo .todo-more svg { width: 16px; height: 16px; color: var(--filo-02); }
+        .filo-card-todo .tag-row { display: flex; gap: 8px; align-items: center; padding-left: 28px; }
+        .filo-card-todo .tag {
+            background: var(--filo-14); height: 24px; padding: 0 8px; border-radius: 100px;
+            font-size: 13px; font-weight: 500; line-height: 1.2; color: var(--filo-02);
+            display: inline-flex; align-items: center;
+        }
+        .filo-card-todo .time { font-size: 14px; font-weight: 400; line-height: 1.35; letter-spacing: -0.2px; color: var(--filo-07); }
+        .email-text { font-size: 15px; color: var(--filo-06); line-height: 1.6; letter-spacing: -0.2px; }
+        .email-bottom-bar {
+            position: absolute; bottom: 24px; left: 0; right: 0;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 24px; z-index: 10;
+        }
+        .email-reply-bar {
+            display: flex; align-items: center; gap: 20px;
+            height: 50px; padding: 0 20px; border-radius: 100px;
+            background: rgba(247, 247, 247, 0.85);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08), inset 0 0.5px 0 rgba(255,255,255,0.5);
+        }
+        body.dark-mode .email-reply-bar {
+            background: rgba(40, 40, 40, 0.85);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.2), inset 0 0.5px 0 rgba(255,255,255,0.1);
+        }
+        .email-reply-bar svg { width: 24px; height: 24px; color: var(--filo-06); }
+        .email-talk-wrap {
+            position: relative;
+        }
+        .email-talk-btn {
+            width: 50px; height: 50px; border-radius: 50%;
+            background: var(--filo-06);
+            border: none;
+            display: flex; align-items: center; justify-content: center;
+            animation: micGlow 2.5s ease-in-out infinite;
+        }
+        .email-talk-btn svg { width: 24px; height: 24px; color: var(--filo-10); }
+
+        /* Conversation Settings Button */
+        .conv-settings-wrap { position: absolute; top: 64px; right: 20px; z-index: 20; }
+        .conv-settings {
+            width: 42px; height: 42px; border-radius: 100px;
+            background: rgba(247, 247, 247, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        body.dark-mode .conv-settings { background: rgba(40, 40, 40, 0.85); }
+        .conv-settings svg { width: 20px; height: 20px; color: var(--filo-06); }
+
+        /* Voice Menu — Apple iOS Context Menu */
+        .voice-menu {
+            display: none; position: absolute; top: 48px; right: 0;
+            width: 200px; border-radius: 34px; overflow: hidden;
+            padding: 10px 0;
+            backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+            background: rgba(245, 245, 245, 0.4);
+            box-shadow: 0 12px 48px rgba(0,0,0,0.15), 0 0 0 0.5px rgba(0,0,0,0.06);
+            flex-direction: column;
+        }
+        body.dark-mode .voice-menu {
+            background: rgba(44, 44, 46, 0.7);
+            box-shadow: 0 12px 48px rgba(0,0,0,0.5), 0 0 0 0.5px rgba(255,255,255,0.08);
+        }
+        .voice-menu.open { display: flex; }
+        .voice-menu-header {
+            padding: 4px 24px 10px; font-size: 13px; font-weight: 510;
+            color: #bfbfbf; letter-spacing: -0.08px; line-height: 15px;
+        }
+        body.dark-mode .voice-menu-header { color: #7c7c7c; }
+        .voice-menu-item {
+            display: flex; align-items: center; gap: 4px;
+            padding: 0 24px; font-size: 17px; font-weight: 400;
+            color: #333; border: none; background: none;
+            cursor: pointer; text-align: left; width: 100%;
+            letter-spacing: -0.43px; line-height: 20px;
+        }
+        body.dark-mode .voice-menu-item { color: #e5e5e5; }
+        .voice-menu-item:active { background: rgba(0,0,0,0.06); }
+        body.dark-mode .voice-menu-item:active { background: rgba(255,255,255,0.08); }
+        .voice-menu-label { flex: 1; padding: 10px 0 10px 4px; }
+        .voice-menu-check {
+            width: 28px; height: 20px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .voice-menu-check svg { width: 16px; height: 16px; color: #333; }
+        body.dark-mode .voice-menu-check svg { color: #e5e5e5; }
+        .voice-menu-overlay {
+            display: none; position: fixed; inset: 0; z-index: 19;
+        }
+        .voice-menu-overlay.open { display: block; }
+
         /* Talk Button */
         .talk-button {
             position: absolute;
-            bottom: 56px; left: 50%; transform: translateX(-50%);
+            bottom: 46px; left: 50%; transform: translateX(-50%);
             z-index: 20;
             display: flex; align-items: center; gap: 8px;
             padding: 12px 20px;
@@ -196,12 +906,12 @@
 <body>
     <div class="page-header">
         <h1>Filo Talk - Mobile</h1>
-        <p class="page-subtitle">A voice-driven AI conversation inside Filo's AI Tab. The user speaks, Filo acts on their email (search, archive, compose, reply, create tasks, set rules), and responds with voice. The conversation is continuous, no re-tapping, no re-prompting, until the user decides they're done. &nbsp;&nbsp; <a href="https://tryfilo.atlassian.net/browse/FILO-1674" target="_blank" class="meta-link">Jira-1674</a> &nbsp;·&nbsp; <a href="https://www.figma.com/design/7tXBqwb5MkT6wIwnjgeA4g/%F0%9F%8D%8E-Mobile?node-id=6868-113293" target="_blank" class="meta-link">Figma</a></p>
+        <p class="page-subtitle">A voice-driven AI conversation between you and Filo. You speak, Filo acts on your email (search, archive, compose, reply, create tasks, set rules), and responds with voice. The conversation is continuous, no re-tapping, no re-prompting, until you decide to end it. &nbsp;&nbsp; <a href="https://xindong.atlassian.net/browse/FILO-1740" target="_blank" class="meta-link">Jira-1740</a> &nbsp;·&nbsp; <a href="https://www.figma.com/design/7tXBqwb5MkT6wIwnjgeA4g/%F0%9F%8D%8E-Mobile?node-id=6868-113293" target="_blank" class="meta-link">Figma</a></p>
         <div class="screen-nav">
-            <button class="mode-btn" onclick="setScreen('idle')">Idle</button>
-            <button class="mode-btn" onclick="setScreen('onboarding')">Onboarding</button>
-            <button class="mode-btn active" onclick="setScreen('conversation')">Conversation</button>
-            <button class="mode-btn" onclick="setScreen('error')">Error</button>
+                <button class="mode-btn active" onclick="setScreen('idle')">Idle</button>
+                <button class="mode-btn" onclick="setScreen('conversation')">Conversation</button>
+                <button class="mode-btn" onclick="setScreen('onboarding')">Onboarding</button>
+                <button class="mode-btn" onclick="setScreen('error')">Error</button>
         </div>
     </div>
 
@@ -213,7 +923,9 @@
     </div>
 
     <div class="screen-container">
-        <div class="iphone-frame">
+        <div class="frame-with-replay" id="mainWrap">
+        <div class="iphone-frame" id="mainFrame">
+            <!-- Status Bar (shared) -->
             <div class="status-bar">
                 <div class="status-time"><span>9:41</span></div>
                 <div class="status-island"></div>
@@ -224,40 +936,424 @@
                 </div>
             </div>
 
-            <div class="chat-area">
-                <p class="ai-message">👋 Morning, Adam. You have 3 emails that need a reply.</p>
+            <!-- Talk Overlay (appears over idle when talk button tapped) -->
+            <div class="talk-overlay" id="talkOverlay" style="--morph-x: calc(100% - 46px); --morph-y: calc(100% - 138px)">
+                <div class="overlay-settings-wrap">
+                    <button class="conv-settings" onclick="toggleOverlayVoiceMenu('overlayVoiceMenu1', 'overlayVoiceBg1')">
+                        <svg viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.9909 8.06397C14.1645 8.06397 15.9269 9.82641 15.9269 12C15.9269 14.1736 14.1645 15.936 11.9909 15.936C9.81727 15.936 8.05483 14.1736 8.05483 12C8.05483 9.82641 9.81727 8.06397 11.9909 8.06397ZM11.9909 9.8812C10.8205 9.8812 9.87207 10.8296 9.87207 12C9.87207 13.1704 10.8205 14.1188 11.9909 14.1188C13.1613 14.1188 14.1097 13.1704 14.1097 12C14.1097 10.8296 13.1613 9.8812 11.9909 9.8812Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M11.9909 1C12.7316 1 13.4033 1.20499 14.1244 1.54005C14.8273 1.86663 15.6403 2.34842 16.6483 2.94535L17.3411 3.35531C18.3494 3.95245 19.1632 4.43383 19.79 4.89464C20.4334 5.36768 20.9371 5.85926 21.3027 6.50887C21.6677 7.15738 21.8296 7.84706 21.9068 8.65033C21.9822 9.43473 21.9817 10.3949 21.9817 11.59V12.41C21.9817 13.6052 21.9822 14.5653 21.9068 15.3497C21.8296 16.1529 21.6677 16.8426 21.3027 17.4911C20.9371 18.1407 20.4334 18.6323 19.79 19.1054C19.1632 19.5661 18.3493 20.0466 17.3411 20.6437L16.6483 21.0546C15.6403 21.6516 14.8273 22.1334 14.1244 22.46C13.4033 22.795 12.7316 23 11.9909 23C11.2501 23 10.5784 22.795 9.85728 22.46C9.15441 22.1334 8.34144 21.6516 7.33345 21.0546L6.64066 20.6437C5.63245 20.0466 4.8185 19.5661 4.19172 19.1054C3.54834 18.6323 3.04464 18.1407 2.679 17.4911C2.31399 16.8426 2.1521 16.1529 2.0749 15.3497C1.99951 14.5653 2 13.6052 2 12.41V11.59C2 10.3949 1.99951 9.43473 2.0749 8.65033C2.1521 7.84706 2.314 7.15738 2.679 6.50887C3.04464 5.85927 3.54834 5.36768 4.19172 4.89464C4.81855 4.43383 5.63232 3.95245 6.64066 3.35531L7.33345 2.94535C8.34143 2.34842 9.15441 1.86663 9.85728 1.54005C10.5784 1.20499 11.2501 1 11.9909 1ZM11.9909 2.81724C11.6077 2.81724 11.2055 2.91569 10.622 3.18679C10.0204 3.46634 9.29769 3.89311 8.25882 4.50833L7.56603 4.91829C6.52711 5.53354 5.80517 5.9631 5.26787 6.35809C4.74752 6.74066 4.45794 7.05109 4.26169 7.39975C4.06482 7.74956 3.94657 8.16541 3.88326 8.82378C3.81814 9.50139 3.81724 10.3604 3.81724 11.59V12.41C3.81724 13.6396 3.81814 14.4986 3.88326 15.1762C3.94657 15.8346 4.06482 16.2505 4.26169 16.6003C4.45794 16.9489 4.74751 17.2593 5.26787 17.6419C5.80517 18.0369 6.5271 18.4665 7.56603 19.0817L8.25882 19.4917C9.29769 20.1069 10.0204 20.5337 10.622 20.8132C11.2055 21.0843 11.6077 21.1828 11.9909 21.1828C12.374 21.1828 12.7762 21.0843 13.3597 20.8132C13.9613 20.5337 14.684 20.1069 15.7229 19.4917L16.4157 19.0817C17.4546 18.4665 18.1765 18.0369 18.7139 17.6419C19.2342 17.2593 19.5238 16.9489 19.72 16.6003C19.9169 16.2504 20.0352 15.8346 20.0985 15.1762C20.1636 14.4986 20.1645 13.6396 20.1645 12.41V11.59C20.1645 10.3604 20.1636 9.50139 20.0985 8.82378C20.0352 8.16541 19.9169 7.74956 19.72 7.39975C19.5238 7.0511 19.2342 6.74067 18.7139 6.35809C18.1765 5.96309 17.4546 5.53355 16.4157 4.91829L15.7229 4.50833C14.684 3.89311 13.9613 3.46635 13.3597 3.18679C12.7762 2.91569 12.374 2.81724 11.9909 2.81724Z" fill="currentColor"/></svg>
+                    </button>
+                    <div class="voice-menu" id="overlayVoiceMenu1">
+                        <div class="voice-menu-header">Voices</div>
+                        <button class="voice-menu-item" onclick="selectVoice(this)"><span class="voice-menu-check"><svg viewBox="0 0 24 24" fill="none"><path d="M10.1267 19.7574C9.69231 19.7574 9.32127 19.5643 9.01358 19.1782L4.32579 13.3139C4.21116 13.1752 4.1267 13.0394 4.0724 12.9067C4.02413 12.7739 4 12.6382 4 12.4994C4 12.1857 4.10256 11.9263 4.30769 11.7212C4.51885 11.516 4.78431 11.4135 5.10407 11.4135C5.4721 11.4135 5.78281 11.5794 6.0362 11.9112L10.0905 17.1148L17.9457 4.63519C18.0845 4.42402 18.2262 4.27621 18.371 4.19175C18.5158 4.10125 18.7029 4.056 18.9321 4.056C19.2459 4.056 19.5023 4.15555 19.7014 4.35464C19.9005 4.5477 20 4.8011 20 5.11482C20 5.24152 19.9789 5.37123 19.9367 5.50396C19.8944 5.63066 19.8281 5.76641 19.7376 5.9112L11.2308 19.1691C10.9653 19.5613 10.5973 19.7574 10.1267 19.7574Z" fill="currentColor"/></svg></span><span class="voice-menu-label">Alloy</span></button>
+                        <button class="voice-menu-item" onclick="selectVoice(this)"><span class="voice-menu-check"></span><span class="voice-menu-label">Echo</span></button>
+                        <button class="voice-menu-item" onclick="selectVoice(this)"><span class="voice-menu-check"></span><span class="voice-menu-label">Fable</span></button>
+                        <button class="voice-menu-item" onclick="selectVoice(this)"><span class="voice-menu-check"></span><span class="voice-menu-label">Onyx</span></button>
+                        <button class="voice-menu-item" onclick="selectVoice(this)"><span class="voice-menu-check"></span><span class="voice-menu-label">Nova</span></button>
+                        <button class="voice-menu-item" onclick="selectVoice(this)"><span class="voice-menu-check"></span><span class="voice-menu-label">Shimmer</span></button>
+                    </div>
+                </div>
+                <div class="voice-menu-overlay" id="overlayVoiceBg1" onclick="closeOverlayVoiceMenu('overlayVoiceMenu1', 'overlayVoiceBg1')"></div>
+                <p class="overlay-message"><span class="word">How</span> <span class="word">can</span> <span class="word">I</span> <span class="word">help?</span></p>
+                <div class="overlay-gradient">
+                    <div class="gradient-blob blob-1"></div>
+                    <div class="gradient-blob blob-2"></div>
+                    <div class="gradient-blob blob-3"></div>
+                </div>
+                <button class="overlay-stop" onclick="closeTalkOverlay()">
+                    <div class="waveform">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                    <span>Stop</span>
+                </button>
+            </div>
 
-                <div class="user-message">
-                    <div class="user-bubble pill">Read me the important ones.</div>
+            <!-- ===== IDLE SCREEN ===== -->
+            <div class="screen active" id="screen-idle">
+                <div class="idle-nav">
+                    <span class="idle-nav-title">Filo AI</span>
+                    <button class="idle-nav-btn">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M10.124 2.46812C12.3886 2.01495 14.7403 2.36137 16.7783 3.44761C18.2184 4.21514 19.4377 5.31983 20.3428 6.65366L21.6397 5.77378C21.9131 5.58833 22.2787 5.80748 22.2441 6.13609L21.835 10.0326C21.8098 10.2717 21.5753 10.4312 21.3438 10.3666L17.5703 9.30894C17.2525 9.2196 17.184 8.79929 17.457 8.61362L18.8535 7.66441C18.1115 6.57079 17.1122 5.66473 15.9316 5.0355C14.261 4.14518 12.3328 3.86222 10.4766 4.23374C8.62044 4.60536 6.95015 5.60889 5.75098 7.07359C4.55186 8.53838 3.89817 10.3739 3.9004 12.2669C3.90267 14.1599 4.56111 15.9935 5.76368 17.4554C6.96642 18.9174 8.63889 19.9174 10.4961 20.2845C12.3533 20.6517 14.2807 20.3635 15.9492 19.4691C17.6176 18.5747 18.9241 17.1291 19.6465 15.3792C19.8363 14.92 20.3629 14.7014 20.8223 14.891C21.2816 15.0807 21.5001 15.6074 21.3106 16.0667C20.4293 18.2014 18.8352 19.9649 16.7998 21.056C14.7643 22.1471 12.4131 22.4979 10.1475 22.0501C7.88172 21.6023 5.84134 20.3826 4.37403 18.599C2.90676 16.8154 2.10236 14.5785 2.09962 12.2689C2.09692 9.95937 2.89537 7.72 4.35841 5.93296C5.82147 4.14595 7.8594 2.92138 10.124 2.46812Z" fill="currentColor"/><path d="M12.2041 7.7103C12.7012 7.7103 13.1045 8.11364 13.1045 8.61069V12.806L15.4453 14.4779C15.8496 14.7668 15.9431 15.3293 15.6543 15.7337C15.3654 16.138 14.8029 16.2315 14.3984 15.9427L11.7461 14.0482C11.4689 13.8502 11.3039 13.5304 11.3037 13.1898V8.61069C11.3037 8.11364 11.7071 7.71031 12.2041 7.7103Z" fill="currentColor"/></svg>
+                    </button>
                 </div>
 
-                <p class="ai-message">Sarah from HR says the benefits deadline is tomorrow. Mike wants to confirm the project timeline. And your manager asked about the Q4 report.</p>
+                <div class="idle-gradient">
+                    <div class="gradient-blob blob-1"></div>
+                    <div class="gradient-blob blob-2"></div>
+                    <div class="gradient-blob blob-3"></div>
+                </div>
 
-                <div class="user-message">
-                    <div class="user-bubble rect">Reply to Sarah. Tell her I'll submit by the end of the day.</div>
+                <div class="quick-commands">
+                    <button class="quick-cmd">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M12.876 17.7998C13.3727 17.8002 13.7754 18.2034 13.7754 18.7002C13.7754 19.197 13.3727 19.6002 12.876 19.6006H7.10059C6.60355 19.6006 6.20023 19.1972 6.2002 18.7002C6.2002 18.2031 6.60353 17.7998 7.10059 17.7998H12.876Z" fill="currentColor"/><path d="M15.501 14.125C15.9977 14.1254 16.4004 14.5286 16.4004 15.0254C16.4003 15.5221 15.9976 15.9254 15.501 15.9258H7.10059C6.60361 15.9258 6.20033 15.5223 6.2002 15.0254C6.2002 14.5283 6.60353 14.125 7.10059 14.125H15.501Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M14.9756 1C16.2191 1.00013 17.2454 1.91832 17.4209 3.11328C18.1853 3.13106 18.8543 3.17441 19.4307 3.28027C20.2406 3.4291 20.9415 3.71508 21.5137 4.28711C22.1699 4.94344 22.4484 5.76719 22.5771 6.72461C22.7023 7.65617 22.7002 8.84169 22.7002 10.3008V16.6006C22.7002 18.0598 22.7024 19.2461 22.5771 20.1777C22.4484 21.1349 22.1698 21.9581 21.5137 22.6143C20.8573 23.2705 20.0336 23.549 19.0762 23.6777C18.1446 23.8029 16.9592 23.8008 15.5 23.8008H9.2002C7.74083 23.8008 6.55567 23.803 5.62402 23.6777C4.66656 23.549 3.84288 23.2705 3.18652 22.6143C2.53052 21.9582 2.2528 21.1348 2.12402 20.1777C1.99878 19.2461 2 18.0598 2 16.6006V10.3008C2 8.84169 1.99883 7.65617 2.12402 6.72461C2.25276 5.76722 2.53034 4.94342 3.18652 4.28711C3.75877 3.71489 4.46035 3.4291 5.27051 3.28027C5.84664 3.17447 6.51531 3.13108 7.2793 3.11328C7.45487 1.91824 8.4819 1 9.72559 1H14.9756ZM17.416 4.91504C17.2289 6.09639 16.2095 6.99987 14.9756 7H9.72559C8.49142 7 7.47037 6.09654 7.2832 4.91504C6.57937 4.93216 6.03553 4.97002 5.5957 5.05078C5.01495 5.15747 4.69348 5.32605 4.45898 5.56055C4.19314 5.82673 4.00905 6.2075 3.90723 6.96484C3.80195 7.74858 3.80078 8.79108 3.80078 10.3008V16.6006C3.80078 18.1107 3.80185 19.1537 3.90723 19.9375C4.00912 20.695 4.19298 21.0757 4.45898 21.3418C4.72519 21.6079 5.10651 21.7917 5.86426 21.8936C6.64806 21.9989 7.69019 22.001 9.2002 22.001H15.5C17.0103 22.001 18.0531 21.9989 18.8369 21.8936C19.5945 21.7917 19.975 21.6079 20.2412 21.3418L20.3369 21.2363C20.5518 20.9749 20.7038 20.6006 20.793 19.9375C20.8983 19.1537 20.9004 18.1107 20.9004 16.6006V10.3008C20.9004 8.79104 20.8983 7.74859 20.793 6.96484C20.6911 6.20732 20.5072 5.82674 20.2412 5.56055C20.0067 5.32608 19.686 5.15747 19.1055 5.05078C18.6654 4.96994 18.1207 4.93214 17.416 4.91504ZM9.72559 2.80078C9.3528 2.80078 9.05078 3.1028 9.05078 3.47559V4.52539C9.0508 4.89816 9.35281 5.2002 9.72559 5.2002H14.9756C15.3482 5.20005 15.6504 4.89807 15.6504 4.52539V3.47559C15.6504 3.1029 15.3482 2.80092 14.9756 2.80078H9.72559Z" fill="currentColor"/></svg>
+                        Summarize this week's emails
+                    </button>
+                    <button class="quick-cmd">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M10.2432 2.00056C10.9483 2.00057 11.625 2.08221 12.2734 2.2447C11.8717 3.02353 11.2621 3.67263 10.5146 4.12263C10.4248 4.11899 10.3343 4.11677 10.2432 4.11677C9.39933 4.11677 8.60586 4.2751 7.86328 4.59236C7.12072 4.90289 6.4655 5.34172 5.89844 5.90876C5.33813 6.46909 4.89932 7.12125 4.58203 7.86384C4.27159 8.60635 4.11621 9.39998 4.11621 10.2437C4.11627 11.0942 4.27154 11.8909 4.58203 12.6334C4.89931 13.3692 5.33816 14.0174 5.89844 14.5777C6.46549 15.138 7.12074 15.5798 7.86328 15.9039C8.60588 16.2212 9.3993 16.3804 10.2432 16.3804C11.0937 16.3804 11.8872 16.2212 12.623 15.9039C13.3655 15.5799 14.0169 15.1379 14.5771 14.5777C15.1374 14.0174 15.5763 13.3691 15.8936 12.6334C16.2175 11.8909 16.3798 11.0942 16.3799 10.2437C16.3799 9.80077 16.3334 9.37167 16.2441 8.95662C16.7225 8.3633 17.3422 7.89043 18.0537 7.58455C18.3471 8.42292 18.4961 9.30907 18.4961 10.2437C18.496 11.1346 18.3577 11.9816 18.0811 12.7847C17.811 13.5881 17.4363 14.3214 16.957 14.983L21.5742 19.6207C21.7159 19.7556 21.8212 19.9141 21.8887 20.0963C21.9629 20.2784 22 20.4711 22 20.6734C22 20.9568 21.9357 21.2135 21.8076 21.4429C21.6794 21.6724 21.5039 21.8518 21.2812 21.9801C21.0586 22.115 20.8019 22.1822 20.5117 22.1822C20.3092 22.1822 20.1128 22.1451 19.9238 22.0709C19.7418 22.0034 19.5761 21.896 19.4277 21.7476L14.7793 17.0992C14.1314 17.5311 13.4227 17.8719 12.6533 18.1217C11.8905 18.3647 11.087 18.4869 10.2432 18.4869C9.109 18.4869 8.04211 18.2735 7.04297 17.8482C6.05067 17.4229 5.17598 16.8328 4.41992 16.0767C3.66384 15.3207 3.06976 14.446 2.6377 13.4537C2.21244 12.4547 2.00006 11.3845 2 10.2437C2 9.10959 2.21241 8.04567 2.6377 7.0533C3.06973 6.05425 3.6639 5.17654 4.41992 4.42048C5.17602 3.65763 6.0506 3.06357 7.04297 2.63826C8.04212 2.21294 9.10899 2.00056 10.2432 2.00056Z" fill="currentColor"/><path d="M13.5752 2.30427C13.7136 1.89901 14.2864 1.89901 14.4248 2.30427L14.8301 3.4908C15.0998 4.28026 15.7203 4.90088 16.5098 5.17048L17.6963 5.57478C18.1014 5.71327 18.1013 6.28681 17.6963 6.42537L16.5098 6.83064C15.7202 7.1003 15.0997 7.72075 14.8301 8.51033L14.4248 9.69587C14.2864 10.1012 13.7136 10.1012 13.5752 9.69587L13.1699 8.51033C12.9003 7.72075 12.2798 7.1003 11.4902 6.83064L10.3037 6.42537C9.89869 6.28681 9.89863 5.71327 10.3037 5.57478L11.4902 5.17048C12.2797 4.90088 12.9002 4.28026 13.1699 3.4908L13.5752 2.30427Z" fill="currentColor"/><path d="M17.7871 0.151929C17.8564 -0.050521 18.1436 -0.0505209 18.2129 0.151929L18.415 0.745679C18.5499 1.14034 18.8602 1.45074 19.2549 1.58552L19.8477 1.78767C20.0503 1.85688 20.0503 2.14327 19.8477 2.21248L19.2549 2.4156C18.8601 2.55044 18.5498 2.86067 18.415 3.25544L18.2129 3.84822C18.1437 4.05089 17.8563 4.05089 17.7871 3.84822L17.585 3.25544C17.4502 2.86067 17.1399 2.55044 16.7451 2.4156L16.1523 2.21248C15.9497 2.14327 15.9497 1.85688 16.1523 1.78767L16.7451 1.58552C17.1398 1.45074 17.4501 1.14034 17.585 0.745679L17.7871 0.151929Z" fill="currentColor"/></svg>
+                        Find what needs to be done this week
+                    </button>
+                    <button class="quick-cmd">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M4 12C4 11.7069 4.10514 11.4552 4.31541 11.2449C4.52569 11.0283 4.77738 10.92 5.07049 10.92H10.9295V5.07049C10.9295 4.77738 11.0346 4.52569 11.2449 4.31541C11.4552 4.10514 11.7069 4 12 4C12.2995 4 12.5544 4.10514 12.7646 4.31541C12.9749 4.52569 13.08 4.77738 13.08 5.07049V10.92H18.9295C19.2226 10.92 19.4743 11.0283 19.6846 11.2449C19.8949 11.4552 20 11.7069 20 12C20 12.2995 19.8949 12.5544 19.6846 12.7646C19.4743 12.9685 19.2226 13.0705 18.9295 13.0705H13.08V18.9391C13.08 19.2258 12.9749 19.4743 12.7646 19.6846C12.5544 19.8949 12.2995 20 12 20C11.7069 20 11.4552 19.8949 11.2449 19.6846C11.0346 19.4743 10.9295 19.2258 10.9295 18.9391V13.0705H5.07049C4.77738 13.0705 4.52569 12.9685 4.31541 12.7646C4.10514 12.5544 4 12.2995 4 12Z" fill="currentColor"/></svg>
+                        Add a smart filter
+                    </button>
+                </div>
+
+                <div class="idle-input">
+                    <div class="idle-input-text">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M16.2696 13.8423C16.4148 13.418 17.0145 13.418 17.1597 13.8423L17.5843 15.0853C17.8668 15.9125 18.5168 16.5625 19.344 16.845L20.5871 17.2696C21.0112 17.4148 21.0112 18.0145 20.5871 18.1597L19.344 18.5843C18.5168 18.8668 17.8668 19.5168 17.5843 20.344L17.1597 21.5871C17.0145 22.0112 16.4148 22.0112 16.2696 21.5871L15.845 20.344C15.5625 19.5168 14.9125 18.8668 14.0853 18.5843L12.8422 18.1597C12.418 18.0145 12.418 17.4148 12.8422 17.2696L14.0853 16.845C14.9125 16.5625 15.5625 15.9125 15.845 15.0853L16.2696 13.8423Z" fill="currentColor"/><path d="M6.61775 2.47774C6.83527 1.84076 7.73639 1.84076 7.95391 2.47774L8.59027 4.34182C9.01401 5.58266 9.98901 6.55766 11.2299 6.98139L13.0939 7.61776C13.7309 7.83528 13.7309 8.7364 13.0939 8.95392L11.2299 9.59028C9.98901 10.014 9.01401 10.989 8.59027 12.2299L7.95391 14.0939C7.73639 14.7309 6.83527 14.7309 6.61775 14.0939L5.98139 12.2299C5.55766 10.989 4.58266 10.014 3.34181 9.59028L1.47774 8.95392C0.840755 8.7364 0.840755 7.83528 1.47774 7.61776L3.34181 6.98139C4.58266 6.55766 5.55766 5.58266 5.98139 4.34182L6.61775 2.47774Z" fill="currentColor"/><path d="M19.5241 2.23834C19.6331 1.92056 20.0821 1.92054 20.1911 2.23834L20.5103 3.1714C20.7222 3.79142 21.2091 4.27828 21.8291 4.49016L22.7611 4.80937C23.0796 4.91813 23.0796 5.36766 22.7611 5.47642L21.8291 5.79563C21.209 6.00753 20.7222 6.49434 20.5103 7.1144L20.1911 8.04643C20.0824 8.36492 19.6328 8.36492 19.5241 8.04643L19.2049 7.1144C18.993 6.49436 18.5061 6.00755 17.8861 5.79563L16.953 5.47642C16.6352 5.36742 16.6353 4.9184 16.953 4.80937L17.8861 4.49016C18.5061 4.27826 18.993 3.79141 19.2049 3.1714L19.5241 2.23834Z" fill="currentColor"/></svg>
+                        Ask anything
+                    </div>
+                    <div class="idle-mic-wrap">
+                        <span class="mic-tooltip">Tap to talk</span>
+                        <button class="idle-mic" onclick="openTalkOverlay()">
+                            <svg viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M13.1785 2.17852C13.1785 1.52764 12.6509 1 12 1C11.3491 1 10.8215 1.52764 10.8215 2.17852V21.8214C10.8215 22.4722 11.3491 22.9999 12 22.9999C12.6509 22.9999 13.1785 22.4722 13.1785 21.8214V2.17852ZM7.08916 4.77746C7.74005 4.77746 8.26768 5.30511 8.26768 5.95598V18.0439C8.26768 18.6947 7.74005 19.2224 7.08916 19.2224C6.43829 19.2224 5.91065 18.6947 5.91065 18.0439V5.95598C5.91065 5.30511 6.43829 4.77746 7.08916 4.77746ZM2.17852 8.55494C2.8294 8.55494 3.35702 9.08258 3.35702 9.73345V14.2664C3.35702 14.9173 2.8294 15.4449 2.17852 15.4449C1.52764 15.4449 1 14.9173 1 14.2664V9.73345C1 9.08258 1.52764 8.55494 2.17852 8.55494ZM16.9107 4.77746C17.5615 4.77746 18.0892 5.30511 18.0892 5.95598V18.0439C18.0892 18.6947 17.5615 19.2224 16.9107 19.2224C16.2598 19.2224 15.7322 18.6947 15.7322 18.0439V5.95598C15.7322 5.30511 16.2598 4.77746 16.9107 4.77746ZM23 9.73345C23 9.08258 22.4723 8.55494 21.8215 8.55494C21.1706 8.55494 20.643 9.08258 20.643 9.73345V14.2664C20.643 14.9173 21.1706 15.4449 21.8215 15.4449C22.4723 15.4449 23 14.9173 23 14.2664V9.73345Z" fill="currentColor"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="tab-bar-container">
+                    <div class="tab-bar">
+                        <div class="glass-pill-tabs">
+                            <div class="tab-item">
+                                <div class="tab-icon">
+                                    <svg viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M23 5.99979V17.9998C23 19.6521 21.6523 20.9998 20 20.9998H4C2.34772 20.9998 1 19.6521 1 17.9998V5.99979C1 4.34294 2.34315 2.99979 4 2.99979H20C21.6569 2.99979 23 4.34294 23 5.99979ZM3.24859 5.65315C3.16709 5.5961 3.13831 5.48631 3.19771 5.40651C3.38079 5.16057 3.67343 4.99979 4 4.99979H20C20.3266 4.99979 20.6192 5.16057 20.8023 5.40651C20.8617 5.48631 20.8329 5.5961 20.7514 5.65315L12.2867 11.5784C12.1146 11.6989 11.8854 11.6989 11.7133 11.5784L3.24859 5.65315ZM3 8.11251C3 8.03161 3.09107 7.98419 3.15735 8.03059L10.8531 13.4176C11.5417 13.8997 12.4583 13.8997 13.1469 13.4176L20.8427 8.03059C20.9089 7.98419 21 8.03161 21 8.11251V17.9998C21 18.5475 20.5477 18.9998 20 18.9998H4C3.45228 18.9998 3 18.5475 3 17.9998V8.11251Z" fill="currentColor"/></svg>
+                                </div>
+                                <span class="tab-label">Inbox</span>
+                            </div>
+                            <div class="tab-item">
+                                <div class="tab-icon">
+                                    <svg viewBox="0 0 24 24" fill="none"><path d="M2 4H21.1C21.64 4 22.07 4.49 22.07 5.1C22.07 5.7 21.64 6.19 21.1 6.19H2C1.51 6.19 1.07 5.7 1.07 5.1C1.07 4.49 1.51 4 2 4Z" fill="currentColor"/><path d="M15 11.1H21.1C21.64 11.1 22.07 11.59 22.07 12.2C22.07 12.81 21.64 13.3 21.1 13.3H15C14.48 13.3 14.04 12.81 14.04 12.2C14.04 11.59 14.48 11.1 15 11.1Z" fill="currentColor"/><path d="M15 18.21H21.1C21.64 18.21 22.07 18.7 22.07 19.3C22.07 19.91 21.64 20.4 21.1 20.4H15C14.48 20.4 14.04 19.91 14.04 19.3C14.04 18.7 14.48 18.21 15 18.21Z" fill="currentColor"/><path d="M11.57 12.59C11.94 12.11 11.85 11.41 11.38 11.03C10.91 10.66 10.24 10.74 9.87 11.23L5.07 17.53L2.91 14.89C2.52 14.42 1.84 14.36 1.39 14.75C0.93 15.14 0.87 15.84 1.25 16.31L4.28 20C4.48 20.25 4.78 20.39 5.09 20.4C5.41 20.41 5.71 20.27 5.92 20.03L11.57 12.59Z" fill="currentColor"/></svg>
+                                </div>
+                                <span class="tab-label">To-do</span>
+                            </div>
+                            <div class="tab-item active">
+                                <div class="tab-icon">
+                                    <svg viewBox="0 0 24 24" fill="none"><path d="M16.2696 13.8423C16.4148 13.418 17.0145 13.418 17.1597 13.8423L17.5843 15.0853C17.8668 15.9125 18.5168 16.5625 19.344 16.845L20.5871 17.2696C21.0112 17.4148 21.0112 18.0145 20.5871 18.1597L19.344 18.5843C18.5168 18.8668 17.8668 19.5168 17.5843 20.344L17.1597 21.5871C17.0145 22.0112 16.4148 22.0112 16.2696 21.5871L15.845 20.344C15.5625 19.5168 14.9125 18.8668 14.0853 18.5843L12.8422 18.1597C12.418 18.0145 12.418 17.4148 12.8422 17.2696L14.0853 16.845C14.9125 16.5625 15.5625 15.9125 15.845 15.0853L16.2696 13.8423Z" fill="currentColor"/><path d="M6.61775 2.47774C6.83527 1.84076 7.73639 1.84076 7.95391 2.47774L8.59027 4.34182C9.01401 5.58266 9.98901 6.55766 11.2299 6.98139L13.0939 7.61776C13.7309 7.83528 13.7309 8.7364 13.0939 8.95392L11.2299 9.59028C9.98901 10.014 9.01401 10.989 8.59027 12.2299L7.95391 14.0939C7.73639 14.7309 6.83527 14.7309 6.61775 14.0939L5.98139 12.2299C5.55766 10.989 4.58266 10.014 3.34181 9.59028L1.47774 8.95392C0.840755 8.7364 0.840755 7.83528 1.47774 7.61776L3.34181 6.98139C4.58266 6.55766 5.55766 5.58266 5.98139 4.34182L6.61775 2.47774Z" fill="currentColor"/><path d="M19.5241 2.23834C19.6331 1.92056 20.0821 1.92054 20.1911 2.23834L20.5103 3.1714C20.7222 3.79142 21.2091 4.27828 21.8291 4.49016L22.7611 4.80937C23.0796 4.91813 23.0796 5.36766 22.7611 5.47642L21.8291 5.79563C21.209 6.00753 20.7222 6.49434 20.5103 7.1144L20.1911 8.04643C20.0824 8.36492 19.6328 8.36492 19.5241 8.04643L19.2049 7.1144C18.993 6.49436 18.5061 6.00755 17.8861 5.79563L16.953 5.47642C16.6352 5.36742 16.6353 4.9184 16.953 4.80937L17.8861 4.49016C18.5061 4.27826 18.993 3.79141 19.2049 3.1714L19.5241 2.23834Z" fill="currentColor"/></svg>
+                                </div>
+                                <span class="tab-label">AI</span>
+                            </div>
+                        </div>
+                        <button class="compose-btn">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="M17.71 13.8C17.88 13.31 18.56 13.31 18.73 13.8L19.21 15.22C19.53 16.16 20.27 16.9 21.22 17.22L22.64 17.71C23.12 17.87 23.12 18.56 22.64 18.72L21.22 19.21C20.27 19.53 19.53 20.27 19.21 21.22L18.73 22.64C18.56 23.12 17.88 23.12 17.71 22.64L17.23 21.22C16.9 20.27 16.16 19.53 15.22 19.21L13.8 18.72C13.31 18.56 13.31 17.87 13.8 17.71L15.22 17.22C16.16 16.9 16.9 16.16 17.23 15.22L17.71 13.8ZM14.46 1.97C15.76 0.68 17.86 0.68 19.16 1.97C20.46 3.27 20.46 5.38 19.16 6.67L7.78 18.05L7.59 18.22C7.38 18.38 7.16 18.51 6.91 18.59L2.46 20.07L2.3 20.11C1.5 20.26 0.79 19.48 1.06 18.67L2.54 14.22C2.62 13.98 2.75 13.75 2.91 13.55L3.08 13.35L14.46 1.97ZM3.16 17.97L6.33 16.92L4.21 14.8L3.16 17.97ZM5.59 13.43L7.7 15.53L17.78 5.29C18.3 4.78 18.3 3.94 17.78 3.42C17.26 2.91 16.44 2.91 15.92 3.42L5.59 13.43Z" fill="currentColor"/></svg>
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <div class="gradient-bg">
+            <!-- ===== ONBOARDING SCREEN ===== -->
+            <div class="screen" id="screen-onboarding">
+                <div class="conv-settings-wrap" style="z-index:10;">
+                    <button class="conv-settings" style="pointer-events:none;">
+                        <svg viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.9909 8.06397C14.1645 8.06397 15.9269 9.82641 15.9269 12C15.9269 14.1736 14.1645 15.936 11.9909 15.936C9.81727 15.936 8.05483 14.1736 8.05483 12C8.05483 9.82641 9.81727 8.06397 11.9909 8.06397ZM11.9909 9.8812C10.8205 9.8812 9.87207 10.8296 9.87207 12C9.87207 13.1704 10.8205 14.1188 11.9909 14.1188C13.1613 14.1188 14.1097 13.1704 14.1097 12C14.1097 10.8296 13.1613 9.8812 11.9909 9.8812Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M11.9909 1C12.7316 1 13.4033 1.20499 14.1244 1.54005C14.8273 1.86663 15.6403 2.34842 16.6483 2.94535L17.3411 3.35531C18.3494 3.95245 19.1632 4.43383 19.79 4.89464C20.4334 5.36768 20.9371 5.85926 21.3027 6.50887C21.6677 7.15738 21.8296 7.84706 21.9068 8.65033C21.9822 9.43473 21.9817 10.3949 21.9817 11.59V12.41C21.9817 13.6052 21.9822 14.5653 21.9068 15.3497C21.8296 16.1529 21.6677 16.8426 21.3027 17.4911C20.9371 18.1407 20.4334 18.6323 19.79 19.1054C19.1632 19.5661 18.3493 20.0466 17.3411 20.6437L16.6483 21.0546C15.6403 21.6516 14.8273 22.1334 14.1244 22.46C13.4033 22.795 12.7316 23 11.9909 23C11.2501 23 10.5784 22.795 9.85728 22.46C9.15441 22.1334 8.34144 21.6516 7.33345 21.0546L6.64066 20.6437C5.63245 20.0466 4.8185 19.5661 4.19172 19.1054C3.54834 18.6323 3.04464 18.1407 2.679 17.4911C2.31399 16.8426 2.1521 16.1529 2.0749 15.3497C1.99951 14.5653 2 13.6052 2 12.41V11.59C2 10.3949 1.99951 9.43473 2.0749 8.65033C2.1521 7.84706 2.314 7.15738 2.679 6.50887C3.04464 5.85927 3.54834 5.36768 4.19172 4.89464C4.81855 4.43383 5.63232 3.95245 6.64066 3.35531L7.33345 2.94535C8.34143 2.34842 9.15441 1.86663 9.85728 1.54005C10.5784 1.20499 11.2501 1 11.9909 1ZM11.9909 2.81724C11.6077 2.81724 11.2055 2.91569 10.622 3.18679C10.0204 3.46634 9.29769 3.89311 8.25882 4.50833L7.56603 4.91829C6.52711 5.53354 5.80517 5.9631 5.26787 6.35809C4.74752 6.74066 4.45794 7.05109 4.26169 7.39975C4.06482 7.74956 3.94657 8.16541 3.88326 8.82378C3.81814 9.50139 3.81724 10.3604 3.81724 11.59V12.41C3.81724 13.6396 3.81814 14.4986 3.88326 15.1762C3.94657 15.8346 4.06482 16.2505 4.26169 16.6003C4.45794 16.9489 4.74751 17.2593 5.26787 17.6419C5.80517 18.0369 6.5271 18.4665 7.56603 19.0817L8.25882 19.4917C9.29769 20.1069 10.0204 20.5337 10.622 20.8132C11.2055 21.0843 11.6077 21.1828 11.9909 21.1828C12.374 21.1828 12.7762 21.0843 13.3597 20.8132C13.9613 20.5337 14.684 20.1069 15.7229 19.4917L16.4157 19.0817C17.4546 18.4665 18.1765 18.0369 18.7139 17.6419C19.2342 17.2593 19.5238 16.9489 19.72 16.6003C19.9169 16.2504 20.0352 15.8346 20.0985 15.1762C20.1636 14.4986 20.1645 13.6396 20.1645 12.41V11.59C20.1645 10.3604 20.1636 9.50139 20.0985 8.82378C20.0352 8.16541 19.9169 7.74956 19.72 7.39975C19.5238 7.0511 19.2342 6.74067 18.7139 6.35809C18.1765 5.96309 17.4546 5.53355 16.4157 4.91829L15.7229 4.50833C14.684 3.89311 13.9613 3.46635 13.3597 3.18679C12.7762 2.91569 12.374 2.81724 11.9909 2.81724Z" fill="currentColor"/></svg>
+                    </button>
+                </div>
+                <div class="onboarding-content">
+                    <p class="onboarding-text" id="onboardingText">Hi Adam, I'm your Filo AI assistant. I can help you manage emails and tasks by voice. Try asking me something like:</p>
+                    <div class="onboarding-pills" id="obPills">
+                        <button class="onboarding-pill" id="obPill1">Archive read emails</button>
+                        <button class="onboarding-pill" id="obPill2">Any new emails?</button>
+                        <button class="onboarding-pill" id="obPill3">Write a new email</button>
+                    </div>
+                    <div class="user-message" id="obUserMsg" style="opacity:0; transform:translateY(8px); padding-right:0;">
+                        <div class="user-bubble pill">&ldquo;Any new emails?&rdquo;</div>
+                    </div>
+                    <p class="onboarding-text" id="obReplyText" style="opacity:0;">You have 5 new emails since this morning. 2 from your team, 1 from HR about benefits enrollment, and 2 newsletters.</p>
+                </div>
+                <div class="onboarding-gradient gradient-bg">
+                    <div class="gradient-blob blob-1"></div>
+                    <div class="gradient-blob blob-2"></div>
+                    <div class="gradient-blob blob-3"></div>
+                </div>
+                <button class="onboarding-stop">
+                    <div class="waveform">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                    <span>Stop</span>
+                </button>
+            </div>
+
+            <!-- ===== CONVERSATION SCREEN ===== -->
+            <div class="screen" id="screen-conversation">
+                <div class="voice-menu-overlay" id="voiceOverlay" onclick="closeVoiceMenu()"></div>
+                <div class="conv-settings-wrap">
+                    <button class="conv-settings" onclick="toggleVoiceMenu()">
+                        <svg viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.9909 8.06397C14.1645 8.06397 15.9269 9.82641 15.9269 12C15.9269 14.1736 14.1645 15.936 11.9909 15.936C9.81727 15.936 8.05483 14.1736 8.05483 12C8.05483 9.82641 9.81727 8.06397 11.9909 8.06397ZM11.9909 9.8812C10.8205 9.8812 9.87207 10.8296 9.87207 12C9.87207 13.1704 10.8205 14.1188 11.9909 14.1188C13.1613 14.1188 14.1097 13.1704 14.1097 12C14.1097 10.8296 13.1613 9.8812 11.9909 9.8812Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M11.9909 1C12.7316 1 13.4033 1.20499 14.1244 1.54005C14.8273 1.86663 15.6403 2.34842 16.6483 2.94535L17.3411 3.35531C18.3494 3.95245 19.1632 4.43383 19.79 4.89464C20.4334 5.36768 20.9371 5.85926 21.3027 6.50887C21.6677 7.15738 21.8296 7.84706 21.9068 8.65033C21.9822 9.43473 21.9817 10.3949 21.9817 11.59V12.41C21.9817 13.6052 21.9822 14.5653 21.9068 15.3497C21.8296 16.1529 21.6677 16.8426 21.3027 17.4911C20.9371 18.1407 20.4334 18.6323 19.79 19.1054C19.1632 19.5661 18.3493 20.0466 17.3411 20.6437L16.6483 21.0546C15.6403 21.6516 14.8273 22.1334 14.1244 22.46C13.4033 22.795 12.7316 23 11.9909 23C11.2501 23 10.5784 22.795 9.85728 22.46C9.15441 22.1334 8.34144 21.6516 7.33345 21.0546L6.64066 20.6437C5.63245 20.0466 4.8185 19.5661 4.19172 19.1054C3.54834 18.6323 3.04464 18.1407 2.679 17.4911C2.31399 16.8426 2.1521 16.1529 2.0749 15.3497C1.99951 14.5653 2 13.6052 2 12.41V11.59C2 10.3949 1.99951 9.43473 2.0749 8.65033C2.1521 7.84706 2.314 7.15738 2.679 6.50887C3.04464 5.85927 3.54834 5.36768 4.19172 4.89464C4.81855 4.43383 5.63232 3.95245 6.64066 3.35531L7.33345 2.94535C8.34143 2.34842 9.15441 1.86663 9.85728 1.54005C10.5784 1.20499 11.2501 1 11.9909 1ZM11.9909 2.81724C11.6077 2.81724 11.2055 2.91569 10.622 3.18679C10.0204 3.46634 9.29769 3.89311 8.25882 4.50833L7.56603 4.91829C6.52711 5.53354 5.80517 5.9631 5.26787 6.35809C4.74752 6.74066 4.45794 7.05109 4.26169 7.39975C4.06482 7.74956 3.94657 8.16541 3.88326 8.82378C3.81814 9.50139 3.81724 10.3604 3.81724 11.59V12.41C3.81724 13.6396 3.81814 14.4986 3.88326 15.1762C3.94657 15.8346 4.06482 16.2505 4.26169 16.6003C4.45794 16.9489 4.74751 17.2593 5.26787 17.6419C5.80517 18.0369 6.5271 18.4665 7.56603 19.0817L8.25882 19.4917C9.29769 20.1069 10.0204 20.5337 10.622 20.8132C11.2055 21.0843 11.6077 21.1828 11.9909 21.1828C12.374 21.1828 12.7762 21.0843 13.3597 20.8132C13.9613 20.5337 14.684 20.1069 15.7229 19.4917L16.4157 19.0817C17.4546 18.4665 18.1765 18.0369 18.7139 17.6419C19.2342 17.2593 19.5238 16.9489 19.72 16.6003C19.9169 16.2504 20.0352 15.8346 20.0985 15.1762C20.1636 14.4986 20.1645 13.6396 20.1645 12.41V11.59C20.1645 10.3604 20.1636 9.50139 20.0985 8.82378C20.0352 8.16541 19.9169 7.74956 19.72 7.39975C19.5238 7.0511 19.2342 6.74067 18.7139 6.35809C18.1765 5.96309 17.4546 5.53355 16.4157 4.91829L15.7229 4.50833C14.684 3.89311 13.9613 3.46635 13.3597 3.18679C12.7762 2.91569 12.374 2.81724 11.9909 2.81724Z" fill="currentColor"/></svg>
+                    </button>
+                    <div class="voice-menu" id="voiceMenu">
+                        <div class="voice-menu-header">Voices</div>
+                        <button class="voice-menu-item" onclick="selectVoice(this)"><span class="voice-menu-check"><svg viewBox="0 0 24 24" fill="none"><path d="M10.1267 19.7574C9.69231 19.7574 9.32127 19.5643 9.01358 19.1782L4.32579 13.3139C4.21116 13.1752 4.1267 13.0394 4.0724 12.9067C4.02413 12.7739 4 12.6382 4 12.4994C4 12.1857 4.10256 11.9263 4.30769 11.7212C4.51885 11.516 4.78431 11.4135 5.10407 11.4135C5.4721 11.4135 5.78281 11.5794 6.0362 11.9112L10.0905 17.1148L17.9457 4.63519C18.0845 4.42402 18.2262 4.27621 18.371 4.19175C18.5158 4.10125 18.7029 4.056 18.9321 4.056C19.2459 4.056 19.5023 4.15555 19.7014 4.35464C19.9005 4.5477 20 4.8011 20 5.11482C20 5.24152 19.9789 5.37123 19.9367 5.50396C19.8944 5.63066 19.8281 5.76641 19.7376 5.9112L11.2308 19.1691C10.9653 19.5613 10.5973 19.7574 10.1267 19.7574Z" fill="currentColor"/></svg></span><span class="voice-menu-label">Alloy</span></button>
+                        <button class="voice-menu-item" onclick="selectVoice(this)"><span class="voice-menu-check"></span><span class="voice-menu-label">Echo</span></button>
+                        <button class="voice-menu-item" onclick="selectVoice(this)"><span class="voice-menu-check"></span><span class="voice-menu-label">Fable</span></button>
+                        <button class="voice-menu-item" onclick="selectVoice(this)"><span class="voice-menu-check"></span><span class="voice-menu-label">Onyx</span></button>
+                        <button class="voice-menu-item" onclick="selectVoice(this)"><span class="voice-menu-check"></span><span class="voice-menu-label">Nova</span></button>
+                        <button class="voice-menu-item" onclick="selectVoice(this)"><span class="voice-menu-check"></span><span class="voice-menu-label">Shimmer</span></button>
+                    </div>
+                </div>
+                <div class="chat-area">
+                    <p class="ai-message">👋 Morning, Adam. You have 3 emails that need a reply.</p>
+
+                    <div class="user-message">
+                        <div class="user-bubble pill">&ldquo;Read me the important ones.&rdquo;</div>
+                    </div>
+
+                    <p class="ai-message">Sarah from HR says the benefits deadline is tomorrow. Mike wants to confirm the project timeline. And your manager asked about the Q4 report.</p>
+
+                    <div class="user-message">
+                        <div class="user-bubble rect">&ldquo;Reply to Sarah. Tell her I&rsquo;ll submit by the end of the day.&rdquo;</div>
+                    </div>
+
+                    <p class="ai-message">Done. I've drafted a reply to Sarah:</p>
+                    <div class="ai-draft-card" style="opacity:0; transform:translateY(8px);">
+                        <p class="ai-draft-body">Hi Sarah, I'll submit the benefits form by end of day today.</p>
+                        <div class="ai-draft-actions">
+                            <button class="ai-draft-btn edit">Edit in Draft</button>
+                            <button class="ai-draft-btn send">Send Now</button>
+                        </div>
+                    </div>
+                    <p class="ai-message">Want me to send it?</p>
+                </div>
+
+                <div class="gradient-bg">
+                    <div class="gradient-blob blob-1"></div>
+                    <div class="gradient-blob blob-2"></div>
+                    <div class="gradient-blob blob-3"></div>
+                </div>
+
+                <button class="talk-button" id="talkBtn" style="pointer-events:none;">
+                    <div class="waveform" id="waveform">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                    <span id="talkLabel">Stop</span>
+                </button>
+            </div>
+        </div>
+        <button class="replay-btn" id="replayMain" style="display:none;" onclick="replayCurrentScreen()">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M20 13.3501C20 14.8391 19.64 16.1998 18.9199 17.4325C18.1998 18.6529 17.2357 19.6232 16.0275 20.3433C14.8192 21.0633 13.4767 21.4233 12 21.4233C10.5111 21.4233 9.16247 21.0633 7.95423 20.3433C6.746 19.6232 5.78185 18.659 5.06178 17.4508C4.35393 16.2304 4 14.8757 4 13.3867C4 13.1182 4.09764 12.8924 4.29291 12.7094C4.48818 12.5141 4.72006 12.4165 4.98856 12.4165C5.26926 12.4165 5.50725 12.5141 5.70252 12.7094C5.89779 12.8924 5.99542 13.1182 5.99542 13.3867C5.99542 14.5095 6.25782 15.5286 6.78261 16.4439C7.3196 17.3471 8.03966 18.0732 8.94279 18.6224C9.85812 19.1594 10.8772 19.4279 12 19.4279C13.1106 19.4279 14.1175 19.1594 15.0206 18.6224C15.9359 18.0732 16.6621 17.3471 17.1991 16.4439C17.7361 15.5286 18.0046 14.5095 18.0046 13.3867C18.0046 12.2761 17.7361 11.2693 17.1991 10.3661C16.6621 9.4508 15.9359 8.73074 15.0206 8.20595C14.1175 7.66896 13.1106 7.40046 12 7.40046C11.4752 7.40046 11.0481 7.43707 10.7185 7.5103L13.0801 9.83524C13.2876 10.0427 13.3913 10.2868 13.3913 10.5675C13.3913 10.8238 13.2998 11.0435 13.1167 11.2265C12.9336 11.4096 12.714 11.5011 12.4577 11.5011C12.2014 11.5011 11.9878 11.4096 11.8169 11.2265L8.11899 7.47368C7.92372 7.29062 7.82609 7.05873 7.82609 6.77803C7.83829 6.48513 7.93593 6.24104 8.11899 6.04577L11.762 2.32952C11.8474 2.21968 11.9512 2.14035 12.0732 2.09153C12.1953 2.03051 12.3234 2 12.4577 2C12.7262 2 12.9458 2.09153 13.1167 2.2746C13.2998 2.45767 13.3913 2.67735 13.3913 2.93364C13.3913 3.05568 13.3669 3.17773 13.3181 3.29977C13.2815 3.42182 13.2204 3.53166 13.135 3.62929L11.2311 5.53318C11.3776 5.52098 11.5362 5.50877 11.7071 5.49657C11.878 5.47216 12.0488 5.45995 12.2197 5.45995C13.611 5.45995 14.8924 5.81388 16.0641 6.52174C17.2479 7.21739 18.1998 8.16323 18.9199 9.35927C19.64 10.5431 20 11.8734 20 13.3501Z" fill="currentColor"/></svg>
+        </button>
+        </div>
+
+        <!-- ===== ENTRY POINT SCREEN (Email Detail with Talk button) ===== -->
+        <div class="entry-frame iphone-frame" id="entryFrame">
+            <!-- Talk Overlay for entry frame -->
+            <div class="talk-overlay" id="talkOverlay2" style="--morph-x: calc(100% - 49px); --morph-y: calc(100% - 49px)">
+                <div class="overlay-settings-wrap">
+                    <button class="conv-settings" onclick="toggleOverlayVoiceMenu('overlayVoiceMenu2', 'overlayVoiceBg2')">
+                        <svg viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.9909 8.06397C14.1645 8.06397 15.9269 9.82641 15.9269 12C15.9269 14.1736 14.1645 15.936 11.9909 15.936C9.81727 15.936 8.05483 14.1736 8.05483 12C8.05483 9.82641 9.81727 8.06397 11.9909 8.06397ZM11.9909 9.8812C10.8205 9.8812 9.87207 10.8296 9.87207 12C9.87207 13.1704 10.8205 14.1188 11.9909 14.1188C13.1613 14.1188 14.1097 13.1704 14.1097 12C14.1097 10.8296 13.1613 9.8812 11.9909 9.8812Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M11.9909 1C12.7316 1 13.4033 1.20499 14.1244 1.54005C14.8273 1.86663 15.6403 2.34842 16.6483 2.94535L17.3411 3.35531C18.3494 3.95245 19.1632 4.43383 19.79 4.89464C20.4334 5.36768 20.9371 5.85926 21.3027 6.50887C21.6677 7.15738 21.8296 7.84706 21.9068 8.65033C21.9822 9.43473 21.9817 10.3949 21.9817 11.59V12.41C21.9817 13.6052 21.9822 14.5653 21.9068 15.3497C21.8296 16.1529 21.6677 16.8426 21.3027 17.4911C20.9371 18.1407 20.4334 18.6323 19.79 19.1054C19.1632 19.5661 18.3493 20.0466 17.3411 20.6437L16.6483 21.0546C15.6403 21.6516 14.8273 22.1334 14.1244 22.46C13.4033 22.795 12.7316 23 11.9909 23C11.2501 23 10.5784 22.795 9.85728 22.46C9.15441 22.1334 8.34144 21.6516 7.33345 21.0546L6.64066 20.6437C5.63245 20.0466 4.8185 19.5661 4.19172 19.1054C3.54834 18.6323 3.04464 18.1407 2.679 17.4911C2.31399 16.8426 2.1521 16.1529 2.0749 15.3497C1.99951 14.5653 2 13.6052 2 12.41V11.59C2 10.3949 1.99951 9.43473 2.0749 8.65033C2.1521 7.84706 2.314 7.15738 2.679 6.50887C3.04464 5.85927 3.54834 5.36768 4.19172 4.89464C4.81855 4.43383 5.63232 3.95245 6.64066 3.35531L7.33345 2.94535C8.34143 2.34842 9.15441 1.86663 9.85728 1.54005C10.5784 1.20499 11.2501 1 11.9909 1ZM11.9909 2.81724C11.6077 2.81724 11.2055 2.91569 10.622 3.18679C10.0204 3.46634 9.29769 3.89311 8.25882 4.50833L7.56603 4.91829C6.52711 5.53354 5.80517 5.9631 5.26787 6.35809C4.74752 6.74066 4.45794 7.05109 4.26169 7.39975C4.06482 7.74956 3.94657 8.16541 3.88326 8.82378C3.81814 9.50139 3.81724 10.3604 3.81724 11.59V12.41C3.81724 13.6396 3.81814 14.4986 3.88326 15.1762C3.94657 15.8346 4.06482 16.2505 4.26169 16.6003C4.45794 16.9489 4.74751 17.2593 5.26787 17.6419C5.80517 18.0369 6.5271 18.4665 7.56603 19.0817L8.25882 19.4917C9.29769 20.1069 10.0204 20.5337 10.622 20.8132C11.2055 21.0843 11.6077 21.1828 11.9909 21.1828C12.374 21.1828 12.7762 21.0843 13.3597 20.8132C13.9613 20.5337 14.684 20.1069 15.7229 19.4917L16.4157 19.0817C17.4546 18.4665 18.1765 18.0369 18.7139 17.6419C19.2342 17.2593 19.5238 16.9489 19.72 16.6003C19.9169 16.2504 20.0352 15.8346 20.0985 15.1762C20.1636 14.4986 20.1645 13.6396 20.1645 12.41V11.59C20.1645 10.3604 20.1636 9.50139 20.0985 8.82378C20.0352 8.16541 19.9169 7.74956 19.72 7.39975C19.5238 7.0511 19.2342 6.74067 18.7139 6.35809C18.1765 5.96309 17.4546 5.53355 16.4157 4.91829L15.7229 4.50833C14.684 3.89311 13.9613 3.46635 13.3597 3.18679C12.7762 2.91569 12.374 2.81724 11.9909 2.81724Z" fill="currentColor"/></svg>
+                    </button>
+                    <div class="voice-menu" id="overlayVoiceMenu2">
+                        <div class="voice-menu-header">Voices</div>
+                        <button class="voice-menu-item" onclick="selectVoice(this)"><span class="voice-menu-check"><svg viewBox="0 0 24 24" fill="none"><path d="M10.1267 19.7574C9.69231 19.7574 9.32127 19.5643 9.01358 19.1782L4.32579 13.3139C4.21116 13.1752 4.1267 13.0394 4.0724 12.9067C4.02413 12.7739 4 12.6382 4 12.4994C4 12.1857 4.10256 11.9263 4.30769 11.7212C4.51885 11.516 4.78431 11.4135 5.10407 11.4135C5.4721 11.4135 5.78281 11.5794 6.0362 11.9112L10.0905 17.1148L17.9457 4.63519C18.0845 4.42402 18.2262 4.27621 18.371 4.19175C18.5158 4.10125 18.7029 4.056 18.9321 4.056C19.2459 4.056 19.5023 4.15555 19.7014 4.35464C19.9005 4.5477 20 4.8011 20 5.11482C20 5.24152 19.9789 5.37123 19.9367 5.50396C19.8944 5.63066 19.8281 5.76641 19.7376 5.9112L11.2308 19.1691C10.9653 19.5613 10.5973 19.7574 10.1267 19.7574Z" fill="currentColor"/></svg></span><span class="voice-menu-label">Alloy</span></button>
+                        <button class="voice-menu-item" onclick="selectVoice(this)"><span class="voice-menu-check"></span><span class="voice-menu-label">Echo</span></button>
+                        <button class="voice-menu-item" onclick="selectVoice(this)"><span class="voice-menu-check"></span><span class="voice-menu-label">Fable</span></button>
+                        <button class="voice-menu-item" onclick="selectVoice(this)"><span class="voice-menu-check"></span><span class="voice-menu-label">Onyx</span></button>
+                        <button class="voice-menu-item" onclick="selectVoice(this)"><span class="voice-menu-check"></span><span class="voice-menu-label">Nova</span></button>
+                        <button class="voice-menu-item" onclick="selectVoice(this)"><span class="voice-menu-check"></span><span class="voice-menu-label">Shimmer</span></button>
+                    </div>
+                </div>
+                <div class="voice-menu-overlay" id="overlayVoiceBg2" onclick="closeOverlayVoiceMenu('overlayVoiceMenu2', 'overlayVoiceBg2')"></div>
+                <p class="overlay-message"><span class="word">How</span> <span class="word">can</span> <span class="word">I</span> <span class="word">help?</span></p>
+                <div class="overlay-gradient">
+                    <div class="gradient-blob blob-1"></div>
+                    <div class="gradient-blob blob-2"></div>
+                    <div class="gradient-blob blob-3"></div>
+                </div>
+                <button class="overlay-stop" onclick="closeTalkOverlay2()">
+                    <div class="waveform">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                    <span>Stop</span>
+                </button>
+            </div>
+            <div class="status-bar">
+                <div class="status-time"><span>9:41</span></div>
+                <div class="status-island"></div>
+                <div class="status-icons">
+                    <svg viewBox="0 0 18 12" fill="none"><rect x="0" y="8" width="3" height="4" rx="1" fill="currentColor"/><rect x="5" y="5" width="3" height="7" rx="1" fill="currentColor"/><rect x="10" y="2" width="3" height="10" rx="1" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx="1" fill="currentColor"/></svg>
+                    <svg viewBox="0 0 16 12" fill="none"><path d="M8 2C5.5 2 3.2 2.9 1.5 4.4L3 6C4.3 4.9 6.1 4.2 8 4.2C9.9 4.2 11.7 4.9 13 6L14.5 4.4C12.8 2.9 10.5 2 8 2ZM8 6C6.6 6 5.3 6.5 4.3 7.3L6 9C6.6 8.5 7.3 8.2 8 8.2C8.7 8.2 9.4 8.5 10 9L11.7 7.3C10.7 6.5 9.4 6 8 6ZM8 10C7.4 10 7 10.4 7 11C7 11.6 7.4 12 8 12C8.6 12 9 11.6 9 11C9 10.4 8.6 10 8 10Z" fill="currentColor"/></svg>
+                    <svg viewBox="0 0 28 13" fill="none"><rect x="0.5" y="0.5" width="24" height="12" rx="3" stroke="currentColor" opacity="0.35"/><rect x="2" y="2" width="21" height="9" rx="2" fill="currentColor"/></svg>
+                </div>
+            </div>
+
+            <div class="email-nav">
+                <div class="email-nav-btn">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M7 12.1782C7.00507 12.0098 7.04059 11.8558 7.10654 11.7162C7.1725 11.5767 7.27397 11.442 7.41096 11.312L15.0365 4.31038C15.2547 4.10346 15.5236 4 15.8432 4C16.0563 4 16.2491 4.04812 16.4216 4.14436C16.5992 4.24061 16.7387 4.37053 16.8402 4.53415C16.9467 4.69776 17 4.88062 17 5.08273C17 5.38108 16.8808 5.64334 16.6423 5.86951L9.74734 12.171L16.6423 18.4797C16.8808 18.7107 17 18.9729 17 19.2665C17 19.4734 16.9467 19.6587 16.8402 19.8223C16.7387 19.9859 16.5992 20.1158 16.4216 20.2121C16.2491 20.3131 16.0563 20.3636 15.8432 20.3636C15.5236 20.3636 15.2547 20.2578 15.0365 20.046L7.41096 13.0444C7.2689 12.9145 7.16489 12.7797 7.09893 12.6402C7.03298 12.4958 7 12.3418 7 12.1782Z" fill="currentColor"/></svg>
+                </div>
+                <div style="display:flex;gap:8px;align-items:center;">
+                    <div class="email-nav-actions">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M11.1639 3.2736C11.42 2.53678 11.5481 2.16839 11.7375 2.06628C11.9013 1.97791 12.0986 1.97791 12.2626 2.06628C12.4519 2.16839 12.5799 2.53678 12.8361 3.2736L14.5293 8.14471C14.6022 8.35442 14.6386 8.45926 14.7044 8.53735C14.7623 8.60632 14.8364 8.66009 14.9199 8.69395C15.0144 8.73228 15.1254 8.73454 15.3473 8.73907L20.5033 8.84414C21.2832 8.86003 21.6731 8.86798 21.8288 9.01653C21.9635 9.14509 22.0244 9.33278 21.991 9.51595C21.9525 9.72763 21.6417 9.9632 21.0201 10.4346L16.9106 13.55C16.7336 13.6842 16.6452 13.7513 16.5912 13.8378C16.5435 13.9144 16.5153 14.0014 16.5089 14.0912C16.5017 14.193 16.5338 14.2992 16.5981 14.5118L18.0915 19.4478C18.3173 20.1945 18.4303 20.5678 18.3371 20.7617C18.2565 20.9295 18.0968 21.0455 17.9122 21.0704C17.699 21.099 17.3789 20.8763 16.7386 20.4307L12.5056 17.4852C12.3234 17.3584 12.2323 17.295 12.1333 17.2703C12.0457 17.2486 11.9542 17.2486 11.8668 17.2703C11.7678 17.295 11.6766 17.3584 11.4944 17.4852L7.26143 20.4307C6.62114 20.8763 6.301 21.099 6.08778 21.0704C5.90325 21.0455 5.74359 20.9295 5.66294 20.7617C5.56975 20.5678 5.6827 20.1945 5.90859 19.4478L7.40193 14.5118C7.46622 14.2992 7.49836 14.193 7.49112 14.0912C7.48473 14.0014 7.45647 13.9144 7.40879 13.8378C7.35483 13.7513 7.26637 13.6842 7.08945 13.55L2.97999 10.4346C2.35837 9.9632 2.04757 9.72763 2.00898 9.51595C1.97558 9.33278 2.03657 9.14509 2.17126 9.01653C2.32687 8.86798 2.71682 8.86004 3.49672 8.84414L8.65265 8.73907C8.87461 8.73454 8.9856 8.73228 9.08016 8.69395C9.16368 8.66009 9.23768 8.60632 9.2957 8.53735C9.36138 8.45926 9.39782 8.35442 9.47072 8.14471L11.1639 3.2736Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M6.51226 22.4192C5.5251 22.4192 4.77472 22.1691 4.26113 21.6688C3.74754 21.1686 3.49075 20.4249 3.49075 19.4377V8.75238H5.10155V19.5178C5.10155 19.9646 5.22161 20.3082 5.46173 20.5483C5.70185 20.7884 6.04536 20.9085 6.49225 20.9085H17.5078C17.948 20.9085 18.2881 20.7884 18.5283 20.5483C18.7751 20.3082 18.8984 19.9646 18.8984 19.5178V8.75238H20.5093V19.4377C20.5093 20.4182 20.2525 21.1586 19.7389 21.6588C19.2253 22.1658 18.4749 22.4192 17.4877 22.4192H6.51226ZM8.70335 13.5348C8.48991 13.5348 8.31649 13.4681 8.18309 13.3347C8.05636 13.2013 7.993 13.0245 7.993 12.8044V12.4842C7.993 12.2641 8.05636 12.0907 8.18309 11.964C8.31649 11.8306 8.48991 11.7639 8.70335 11.7639H15.3067C15.5201 11.7639 15.6935 11.8306 15.8269 11.964C15.9603 12.0907 16.027 12.2641 16.027 12.4842V12.8044C16.027 13.0245 15.9603 13.2013 15.8269 13.3347C15.6935 13.4681 15.5201 13.5348 15.3067 13.5348H8.70335ZM3.90095 9.50275C3.28731 9.50275 2.81708 9.32266 2.49025 8.96248C2.16342 8.6023 2 8.11873 2 7.51176V5.991C2 5.37736 2.17009 4.89378 2.51026 4.54027C2.85043 4.18009 3.31399 4 3.90095 4H20.0991C20.7127 4 21.1829 4.18009 21.5098 4.54027C21.8366 4.89378 22 5.37736 22 5.991V7.51176C22 8.11873 21.8366 8.6023 21.5098 8.96248C21.1829 9.32266 20.7127 9.50275 20.0991 9.50275H3.90095ZM4.31116 7.992H19.6989C19.9523 7.992 20.1291 7.9353 20.2291 7.82191C20.3358 7.70852 20.3892 7.52843 20.3892 7.28164V6.22111C20.3892 5.96765 20.3358 5.78756 20.2291 5.68084C20.1291 5.56745 19.9523 5.51076 19.6989 5.51076H4.31116C4.0577 5.51076 3.87761 5.56745 3.77089 5.68084C3.66417 5.78756 3.61081 5.96765 3.61081 6.22111V7.28164C3.61081 7.52843 3.66417 7.70852 3.77089 7.82191C3.87761 7.9353 4.0577 7.992 4.31116 7.992Z" fill="currentColor"/></svg>
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M9.1001 10.8999C9.1001 10.4028 9.50293 10 10 10C10.4971 10 10.9001 10.4028 10.9001 10.8999V16.1001C10.9001 16.5972 10.4971 17 10 17C9.50293 17 9.1001 16.5972 9.1001 16.1001V10.8999Z" fill="currentColor"/><path d="M14 10C13.5029 10 13.1001 10.4028 13.1001 10.8999V16.1001C13.1001 16.5972 13.5029 17 14 17C14.4971 17 14.9001 16.5972 14.9001 16.1001V10.8999C14.9001 10.4028 14.4971 10 14 10Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M21 5H17V3.5C17 2.11938 15.8806 1 14.5 1H9.5C8.11938 1 7 2.11938 7 3.5V5H3C2.44775 5 2 5.44775 2 6C2 6.55225 2.44775 7 3 7H4.1001V19C4.1001 21.1538 5.84619 22.8999 8 22.8999H16C18.1541 22.8999 19.9001 21.1538 19.9001 19V7H21C21.5522 7 22 6.55225 22 6C22 5.44775 21.5522 5 21 5ZM18.1001 7H5.90015V19C5.90015 20.1599 6.84033 21.1001 8 21.1001H16C17.1599 21.1001 18.1001 20.1599 18.1001 19V7ZM9.5 2.80005H14.5C14.8867 2.80005 15.2 3.11328 15.2 3.5V5H8.80005V3.5C8.80005 3.11328 9.11328 2.80005 9.5 2.80005Z" fill="currentColor"/></svg>
+                    </div>
+                    <div class="email-nav-btn">
+                        <svg viewBox="0 0 24 24" fill="none"><circle cx="5" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="19" cy="12" r="2" fill="currentColor"/></svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="email-body">
+                <h2 class="email-subject">Quick things before next Tue and stuff</h2>
+                <div class="email-sender">
+                    <div class="email-avatar" style="background: url('assets/emily-avatar.png') center/cover;"></div>
+                    <div class="email-sender-info">
+                        <div class="email-sender-name">Emily Harris <span style="font-weight:400;color:var(--filo-07);font-size:13px;">Yesterday</span></div>
+                        <div class="email-sender-meta">To: me <svg viewBox="0 0 24 24" fill="none" style="width:12px;height:12px;vertical-align:middle;display:inline-block;"><path d="M12.0045 17.28C11.6542 17.28 11.3337 17.1333 11.0428 16.8399L4.33834 9.77974C4.22556 9.65748 4.13949 9.52606 4.08013 9.38547C4.02671 9.24488 4 9.089 4 8.91785C4 8.69168 4.05342 8.48384 4.16027 8.29435C4.26711 8.10486 4.40957 7.95509 4.58765 7.84507C4.77166 7.73504 4.97347 7.68002 5.1931 7.68002C5.52551 7.68002 5.81636 7.80533 6.06567 8.05595L12.414 14.7677H11.6038L17.9343 8.05595C18.1836 7.80533 18.4745 7.68002 18.8069 7.68002C19.0265 7.68002 19.2254 7.73504 19.4035 7.84507C19.5875 7.95509 19.7329 8.10486 19.8397 8.29435C19.9466 8.48384 20 8.69168 20 8.91785C20 9.25404 19.8843 9.53828 19.6528 9.77057L12.9661 16.8399C12.8236 16.9866 12.6722 17.0966 12.512 17.17C12.3576 17.2372 12.1885 17.2739 12.0045 17.28Z" fill="currentColor"/></svg></div>
+                    </div>
+                    <div class="email-sender-actions" style="display:flex;gap:16px;">
+                        <svg viewBox="0 0 24 24" fill="none" style="width:20px;height:20px;color:var(--filo-06);"><path d="M9.07219 5.76759C9.40693 6.10233 9.40693 6.64504 9.07219 6.97977L6.24973 9.80224H17.0375C18.1742 9.80224 19.2643 10.2538 20.068 11.0575C20.8717 11.8612 21.3232 12.9513 21.3232 14.088V17.5165C21.3232 17.9899 20.9395 18.3737 20.4661 18.3737C19.9927 18.3737 19.609 17.9899 19.609 17.5165V14.088C19.609 13.406 19.338 12.7519 18.8558 12.2697C18.3736 11.7874 17.7195 11.5165 17.0375 11.5165H6.2497L9.07219 14.339C9.40693 14.6738 9.40693 15.2165 9.07219 15.5512C8.73746 15.8859 8.19474 15.8859 7.86001 15.5512L3.57429 11.2655C3.49027 11.1815 3.42733 11.0843 3.38549 10.9807C3.34535 10.8814 3.32324 10.773 3.32324 10.6594C3.32324 10.436 3.40866 10.2327 3.5486 10.0801C3.55795 10.0699 3.56753 10.06 3.57735 10.0502L7.86001 5.76759C8.19474 5.43286 8.73746 5.43286 9.07219 5.76759Z" fill="currentColor"/></svg>
+                        <svg viewBox="0 0 24 24" fill="none" style="width:20px;height:20px;color:var(--filo-06);"><circle cx="5" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="19" cy="12" r="2" fill="currentColor"/></svg>
+                    </div>
+                </div>
+
+                <div class="filo-card-summary">
+                    <div class="card-header">
+                        <p class="card-title">Summary</p>
+                        <div class="card-feedback">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="M2 16.0181C2 14.9419 2.18864 13.9647 2.56592 13.0864C2.9432 12.2082 3.45654 11.5093 4.10596 10.9897C4.75537 10.464 5.48519 10.2012 6.29541 10.2012H7.90039C8.40755 9.58268 8.87142 8.99821 9.29199 8.44775C9.71875 7.89111 10.1146 7.34994 10.4795 6.82422C10.8506 6.2985 11.1908 5.77897 11.5 5.26562C11.8154 4.74609 12.1123 4.21729 12.3906 3.6792C12.6999 3.08545 13.0277 2.65869 13.374 2.39893C13.7266 2.13298 14.141 2 14.6172 2C15.0501 2 15.4336 2.10205 15.7676 2.30615C16.1077 2.50407 16.3768 2.7793 16.5747 3.13184C16.7726 3.47819 16.8716 3.87712 16.8716 4.32861C16.8716 4.7863 16.7943 5.25944 16.6396 5.74805C16.4912 6.23047 16.318 6.70052 16.1201 7.1582C15.9284 7.61589 15.7552 8.03337 15.6006 8.41064C15.4521 8.78174 15.3717 9.0848 15.3594 9.31982C15.3594 9.40023 15.3841 9.46208 15.4336 9.50537C15.4893 9.54867 15.5604 9.57031 15.647 9.57031H19.0054C19.4816 9.57031 19.9084 9.68473 20.2856 9.91357C20.6691 10.1362 20.9722 10.4393 21.1948 10.8228C21.4237 11.2062 21.5381 11.6361 21.5381 12.1123C21.5381 12.6813 21.4051 13.173 21.1392 13.5874C21.2257 13.7482 21.2938 13.9338 21.3433 14.144C21.3927 14.3543 21.4175 14.5677 21.4175 14.7842C21.4175 15.1182 21.3618 15.4367 21.2505 15.7397C21.1392 16.0428 20.9784 16.3057 20.7681 16.5283C20.8979 16.8252 20.9629 17.1592 20.9629 17.5303C20.9629 18.3281 20.6413 18.9837 19.998 19.4971C20.029 19.596 20.0506 19.6919 20.063 19.7847C20.0754 19.8836 20.0815 19.9857 20.0815 20.0908C20.0815 20.6722 19.8867 21.1855 19.4971 21.6309C19.1074 22.0762 18.5817 22.3761 17.9199 22.5308C17.5921 22.6173 17.187 22.6792 16.7046 22.7163C16.2222 22.7534 15.6872 22.772 15.0996 22.772H13.8472C13.0493 22.772 12.2917 22.6854 11.5742 22.5122C10.863 22.3452 10.2043 22.1071 9.59814 21.7979H6.63867C5.98307 21.7979 5.37386 21.6463 4.81104 21.3433C4.25439 21.0402 3.7627 20.6227 3.33594 20.0908C2.91536 19.5589 2.58757 18.9466 2.35254 18.2539C2.11751 17.555 2 16.8097 2 16.0181ZM7.61279 15.9438C7.61279 16.952 7.87565 17.8457 8.40137 18.625C8.92708 19.3981 9.66309 20.0042 10.6094 20.4434C11.5618 20.8825 12.6689 21.1051 13.9307 21.1113H15.0161C15.5728 21.1113 16.0614 21.0959 16.4819 21.0649C16.9025 21.0402 17.2427 20.9938 17.5024 20.9258C17.8055 20.8454 18.0282 20.731 18.1704 20.5825C18.3127 20.4403 18.3838 20.2733 18.3838 20.0815C18.3838 19.9764 18.3714 19.8836 18.3467 19.8032C18.3281 19.7228 18.2694 19.562 18.1704 19.3208C18.1086 19.1847 18.0993 19.0487 18.1426 18.9126C18.1859 18.7703 18.2786 18.6559 18.4209 18.5693C18.9837 18.2786 19.2651 17.9292 19.2651 17.521C19.2651 17.3787 19.2404 17.252 19.1909 17.1406C19.1414 17.0231 19.0672 16.8716 18.9683 16.686C18.8817 16.5005 18.86 16.3242 18.9033 16.1572C18.9528 15.9902 19.0548 15.8511 19.2095 15.7397C19.3888 15.6037 19.5218 15.4583 19.6084 15.3037C19.695 15.1429 19.7383 14.9728 19.7383 14.7935C19.7383 14.6326 19.7104 14.4873 19.6548 14.3574C19.5991 14.2214 19.5063 14.0605 19.3765 13.875C19.2775 13.7575 19.2311 13.6245 19.2373 13.4761C19.2497 13.3215 19.3177 13.1854 19.4414 13.0679C19.596 12.9132 19.7043 12.7679 19.7661 12.6318C19.8341 12.4958 19.8682 12.3319 19.8682 12.1401C19.8682 11.8804 19.7816 11.6639 19.6084 11.4907C19.4352 11.3175 19.2188 11.231 18.959 11.231H15.7305C15.1367 11.231 14.645 11.0701 14.2554 10.7485C13.8719 10.4269 13.6802 9.99398 13.6802 9.44971C13.6802 9.0848 13.7544 8.68278 13.9028 8.24365C14.0575 7.80452 14.2337 7.35612 14.4316 6.89844C14.6357 6.43457 14.8151 5.98926 14.9697 5.5625C15.1243 5.13574 15.2017 4.75537 15.2017 4.42139C15.2017 4.20492 15.1491 4.03792 15.0439 3.92041C14.9388 3.8029 14.8027 3.74414 14.6357 3.74414C14.4873 3.74414 14.3574 3.79053 14.2461 3.8833C14.1348 3.97607 14.008 4.16781 13.8657 4.4585C13.4142 5.36149 12.9163 6.20882 12.3721 7.00049C11.834 7.79215 11.2928 8.53434 10.7485 9.22705C10.2104 9.91976 9.71256 10.5692 9.25488 11.1753C8.85286 11.7257 8.53125 12.2422 8.29004 12.7246C8.04883 13.2008 7.87565 13.6987 7.77051 14.2183C7.66536 14.7316 7.61279 15.3068 7.61279 15.9438ZM3.64209 16.0181C3.64209 16.7664 3.77507 17.453 4.04102 18.0776C4.30697 18.7023 4.65951 19.2033 5.09863 19.5806C5.53776 19.9578 6.01709 20.1558 6.53662 20.1743C6.7098 20.1743 6.87988 20.1743 7.04688 20.1743C7.21387 20.1805 7.38086 20.1836 7.54785 20.1836C7.03451 19.6084 6.63867 18.9652 6.36035 18.2539C6.08203 17.5365 5.94287 16.7664 5.94287 15.9438C5.94287 15.1646 6.014 14.444 6.15625 13.7822C6.30469 13.1143 6.53662 12.471 6.85205 11.8525C6.74072 11.8525 6.62321 11.8525 6.49951 11.8525C6.382 11.8525 6.26758 11.8556 6.15625 11.8618C5.71094 11.8804 5.29655 12.0783 4.91309 12.4556C4.52962 12.8267 4.22038 13.3245 3.98535 13.9492C3.75651 14.5677 3.64209 15.2573 3.64209 16.0181Z" fill="currentColor"/></svg>
+                            <svg viewBox="0 0 24 24" fill="none"><path d="M21.5381 8.75391C21.5381 9.83008 21.3464 10.8104 20.9629 11.6948C20.5856 12.5731 20.0723 13.272 19.4229 13.7915C18.7796 14.311 18.0529 14.5708 17.2427 14.5708H15.6284C15.1274 15.1831 14.6636 15.7707 14.2368 16.3335C13.8101 16.8901 13.4142 17.4313 13.0493 17.957C12.6844 18.4766 12.3442 18.993 12.0288 19.5063C11.7134 20.0259 11.4165 20.5578 11.1382 21.1021C10.8289 21.6896 10.498 22.1133 10.1455 22.373C9.79915 22.639 9.39095 22.772 8.9209 22.772C8.48177 22.772 8.09212 22.673 7.75195 22.4751C7.41797 22.2772 7.15202 22.002 6.9541 21.6494C6.76237 21.2969 6.6665 20.8949 6.6665 20.4434C6.6665 19.9919 6.74072 19.5218 6.88916 19.0332C7.0376 18.5384 7.20768 18.0653 7.39941 17.6138C7.59733 17.1561 7.77051 16.7417 7.91895 16.3706C8.07357 15.9933 8.15706 15.6903 8.16943 15.4614C8.17562 15.381 8.15088 15.3192 8.09521 15.2759C8.03955 15.2326 7.96842 15.2109 7.88184 15.2109H4.53271C4.05648 15.2109 3.62663 15.0996 3.24316 14.877C2.8597 14.6481 2.55664 14.342 2.33398 13.9585C2.11133 13.5688 2 13.1359 2 12.6597C2 12.0845 2.12988 11.5959 2.38965 11.1938C2.30306 11.0269 2.23503 10.8382 2.18555 10.6279C2.13607 10.4115 2.11133 10.1981 2.11133 9.98779C2.11133 9.65381 2.16699 9.33529 2.27832 9.03223C2.39583 8.72917 2.55973 8.46631 2.77002 8.24365C2.64014 7.94678 2.5752 7.61279 2.5752 7.2417C2.5752 6.44385 2.89372 5.78825 3.53076 5.2749C3.50602 5.18213 3.48438 5.08626 3.46582 4.9873C3.45345 4.88835 3.44727 4.78939 3.44727 4.69043C3.44727 4.09668 3.64209 3.58024 4.03174 3.14111C4.42139 2.70199 4.9471 2.40202 5.60889 2.24121C5.93669 2.16081 6.3418 2.10205 6.82422 2.06494C7.31283 2.02165 7.84782 2 8.4292 2H9.69092C10.4826 2 11.234 2.08659 11.9453 2.25977C12.6628 2.43294 13.3245 2.67415 13.9307 2.9834H16.8994C17.5488 2.9834 18.1519 3.13493 18.7085 3.43799C19.2713 3.73486 19.763 4.14925 20.1836 4.68115C20.6104 5.21305 20.9412 5.82845 21.1763 6.52734C21.4175 7.22624 21.5381 7.96842 21.5381 8.75391ZM15.916 8.82812C15.916 7.81999 15.6532 6.92936 15.1274 6.15625C14.6079 5.38314 13.8719 4.77702 12.9194 4.33789C11.9731 3.89258 10.866 3.66683 9.59814 3.66064H8.5127C7.96224 3.66064 7.47673 3.67611 7.05615 3.70703C6.63558 3.73796 6.29232 3.78743 6.02637 3.85547C5.72331 3.92969 5.50065 4.04102 5.3584 4.18945C5.21615 4.33171 5.14502 4.4987 5.14502 4.69043C5.14502 4.78939 5.15739 4.88216 5.18213 4.96875C5.20687 5.05534 5.26562 5.21305 5.3584 5.44189C5.42025 5.58415 5.42952 5.7264 5.38623 5.86865C5.34912 6.00472 5.25944 6.11296 5.11719 6.19336C4.54818 6.49642 4.26367 6.85205 4.26367 7.26025C4.26367 7.40251 4.28841 7.53239 4.33789 7.6499C4.38737 7.76123 4.46159 7.90967 4.56055 8.09521C4.64714 8.26839 4.66569 8.44157 4.61621 8.61475C4.57292 8.78174 4.47705 8.91781 4.32861 9.02295C4.14307 9.1652 4.00391 9.31673 3.91113 9.47754C3.82454 9.63216 3.78125 9.80225 3.78125 9.98779C3.78125 10.1424 3.81217 10.2878 3.87402 10.4238C3.93587 10.5537 4.02865 10.7145 4.15234 10.9062C4.25749 11.0176 4.30387 11.1506 4.2915 11.3052C4.27913 11.4598 4.21419 11.5928 4.09668 11.7041C3.94206 11.8587 3.83073 12.0072 3.7627 12.1494C3.70085 12.2855 3.66992 12.4463 3.66992 12.6318C3.66992 12.8916 3.75342 13.1081 3.92041 13.2812C4.09359 13.4544 4.31006 13.541 4.56982 13.541H7.80762C8.39518 13.541 8.88379 13.7018 9.27344 14.0234C9.66309 14.3451 9.85791 14.778 9.85791 15.3223C9.85791 15.6934 9.7806 16.0985 9.62598 16.5376C9.47754 16.9767 9.30127 17.4251 9.09717 17.8828C8.89925 18.3405 8.72298 18.7827 8.56836 19.2095C8.41374 19.6362 8.33643 20.0166 8.33643 20.3506C8.33643 20.5671 8.389 20.734 8.49414 20.8516C8.59928 20.9691 8.73226 21.0278 8.89307 21.0278C9.03532 21.0278 9.16211 20.9814 9.27344 20.8887C9.39095 20.7959 9.52083 20.6073 9.66309 20.3228C10.1146 19.4198 10.6094 18.5724 11.1475 17.7808C11.6917 16.9829 12.236 16.2376 12.7803 15.5449C13.3245 14.8522 13.8224 14.2028 14.2739 13.5967C14.6821 13.0524 15.0068 12.5391 15.248 12.0566C15.4893 11.5742 15.6593 11.0763 15.7583 10.563C15.8634 10.0496 15.916 9.47135 15.916 8.82812ZM19.8867 8.75391C19.8867 8.00553 19.7537 7.3221 19.4878 6.70361C19.2218 6.07894 18.8693 5.57796 18.4302 5.20068C17.991 4.81722 17.5117 4.61621 16.9922 4.59766C16.8252 4.59766 16.6551 4.59766 16.4819 4.59766C16.3149 4.59766 16.1479 4.59766 15.981 4.59766C16.5005 5.16667 16.8963 5.8099 17.1685 6.52734C17.4468 7.24479 17.5859 8.01172 17.5859 8.82812C17.5859 9.60742 17.5117 10.3311 17.3633 10.999C17.221 11.6608 16.9922 12.3009 16.6768 12.9194C16.7943 12.9194 16.9087 12.9194 17.02 12.9194C17.1375 12.9194 17.255 12.9194 17.3726 12.9194C17.8241 12.9009 18.2384 12.703 18.6157 12.3257C18.9992 11.9484 19.3053 11.4505 19.5342 10.832C19.7692 10.2074 19.8867 9.51465 19.8867 8.75391Z" fill="currentColor"/></svg>
+                        </div>
+                    </div>
+                    <ul class="bullet-list">
+                        <li>Emily asked if you've rescheduled your dentist appointment, reminded you to upload missing trip photos.</li>
+                    </ul>
+                    <button class="pill-action">Upload Trip Photos</button>
+                </div>
+
+                <div class="filo-card-todo">
+                    <div class="todo-row">
+                        <div class="todo-checkbox"></div>
+                        <p class="todo-text">Reply to Emily about Friday dinner and upload the missing photos.</p>
+                        <button class="todo-more">
+                            <svg viewBox="0 0 24 24" fill="none"><circle cx="5" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="19" cy="12" r="2" fill="currentColor"/></svg>
+                        </button>
+                    </div>
+                    <div class="tag-row">
+                        <span class="tag">To Respond</span>
+                        <span class="time">July 16, 4:00 PM</span>
+                    </div>
+                </div>
+
+                <p class="email-text">Hey Adam,<br><br>Hope your week's been going okay! I just wanted to touch base on a couple of things before the weekend hits. First off, did you ever manage to reschedule that dentist appointment you canceled last month?<br><br>Also, I bumped into Carla yesterday and she mentioned we're still missing a few photos from your side for the trip album.</p>
+            </div>
+
+            <div class="email-bottom-bar">
+                <div class="email-reply-bar">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M11.0971 20.8C10.8538 20.8 10.6292 20.7485 10.4234 20.6456C10.2222 20.5474 10.007 20.393 9.77778 20.1825L2.60585 13.4737C2.41871 13.3006 2.28772 13.1205 2.21287 12.9333C2.13801 12.7462 2.10059 12.5684 2.10059 12.4C2.10059 12.2269 2.13801 12.0491 2.21287 11.8667C2.28772 11.6795 2.41871 11.4971 2.60585 11.3193L9.77778 4.65263C10.0257 4.42339 10.2456 4.25731 10.4374 4.15439C10.6292 4.05146 10.8444 4 11.083 4C11.4386 4 11.7287 4.12164 11.9532 4.36491C12.1825 4.60351 12.2971 4.89825 12.2971 5.24912V8.49825H12.5287C14.0444 8.49825 15.3684 8.73216 16.5006 9.2C17.6374 9.66316 18.5825 10.3439 19.3357 11.2421C20.0936 12.1357 20.6596 13.2304 21.0339 14.5263C21.4129 15.8222 21.6023 17.2959 21.6023 18.9474C21.6023 19.5415 21.4971 19.9883 21.2865 20.2877C21.076 20.5918 20.8094 20.7439 20.4865 20.7439C20.2433 20.7439 20.0164 20.6877 19.8058 20.5754C19.6 20.4678 19.4082 20.2503 19.2304 19.9228C18.7906 19.076 18.2643 18.3883 17.6515 17.8596C17.0386 17.331 16.3111 16.9474 15.469 16.7088C14.6316 16.4655 13.6515 16.3439 12.5287 16.3439H12.2971V19.593C12.2971 19.9345 12.1825 20.2199 11.9532 20.4491C11.7287 20.683 11.4433 20.8 11.0971 20.8ZM10.5637 18.5404C10.6573 18.5404 10.7041 18.4889 10.7041 18.386V15.0105C10.7041 14.8187 10.8 14.7228 10.9918 14.7228H12.0585C13.4386 14.7228 14.6503 14.8585 15.6936 15.1298C16.7415 15.4012 17.6164 15.8058 18.3181 16.3439C19.0246 16.8772 19.5602 17.5345 19.9251 18.3158C19.9439 18.3485 19.9579 18.3743 19.9673 18.393C19.9813 18.4117 20.0023 18.4211 20.0304 18.4211C20.0772 18.4211 20.1006 18.3883 20.1006 18.3228C20.0725 17.1579 19.8994 16.0772 19.5813 15.0807C19.2678 14.0842 18.7906 13.214 18.1497 12.4702C17.5134 11.7216 16.6901 11.1392 15.6795 10.7228C14.6737 10.3064 13.4667 10.0982 12.0585 10.0982H10.9918C10.8 10.0982 10.7041 10.0023 10.7041 9.81053V6.36491C10.7041 6.26667 10.6573 6.21754 10.5637 6.21754C10.531 6.21754 10.5006 6.22456 10.4725 6.2386C10.4444 6.25263 10.4187 6.27134 10.3953 6.29474L4.19181 12.1825C4.14971 12.2292 4.1193 12.269 4.10059 12.3018C4.08187 12.3345 4.07252 12.3673 4.07252 12.4C4.07252 12.4327 4.07953 12.4678 4.09357 12.5053C4.11228 12.538 4.14503 12.5754 4.19181 12.6175L10.4023 18.4632C10.4585 18.5146 10.5123 18.5404 10.5637 18.5404Z" fill="currentColor"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.4923 6.23824C14.3825 6.12846 14.1948 6.20621 14.1948 6.36147V10.4275C14.1948 10.6322 14.0522 10.8094 13.8522 10.8531L4.1806 12.9688C4.08639 12.9894 4.09049 13.1251 4.18577 13.14L13.8263 14.6463C14.0384 14.6795 14.1948 14.8621 14.1948 15.0768V19.6738C14.1948 19.827 14.3783 19.9056 14.4892 19.8L21.3724 13.2446C21.4078 13.2108 21.4085 13.1545 21.3739 13.1199L14.4923 6.23824ZM12.6263 5.30965C12.6263 4.14521 14.0342 3.56206 14.8576 4.38544L22.483 12.0108C23.1407 12.6685 23.1276 13.7389 22.4541 14.3804L14.8348 21.6368C14.0026 22.4293 12.6263 21.8395 12.6263 20.6904V16.0463L2.1053 14.4024C0.676079 14.1791 0.614598 12.1433 2.02777 11.8342L12.6263 9.51574V5.30965Z" fill="currentColor"/></svg>
+                </div>
+                <div class="email-talk-wrap">
+                    <span class="mic-tooltip">Tap to talk</span>
+                    <button class="email-talk-btn" onclick="openTalkOverlay2()">
+                        <svg viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M13.1785 2.17852C13.1785 1.52764 12.6509 1 12 1C11.3491 1 10.8215 1.52764 10.8215 2.17852V21.8214C10.8215 22.4722 11.3491 22.9999 12 22.9999C12.6509 22.9999 13.1785 22.4722 13.1785 21.8214V2.17852ZM7.08916 4.77746C7.74005 4.77746 8.26768 5.30511 8.26768 5.95598V18.0439C8.26768 18.6947 7.74005 19.2224 7.08916 19.2224C6.43829 19.2224 5.91065 18.6947 5.91065 18.0439V5.95598C5.91065 5.30511 6.43829 4.77746 7.08916 4.77746ZM2.17852 8.55494C2.8294 8.55494 3.35702 9.08258 3.35702 9.73345V14.2664C3.35702 14.9173 2.8294 15.4449 2.17852 15.4449C1.52764 15.4449 1 14.9173 1 14.2664V9.73345C1 9.08258 1.52764 8.55494 2.17852 8.55494ZM16.9107 4.77746C17.5615 4.77746 18.0892 5.30511 18.0892 5.95598V18.0439C18.0892 18.6947 17.5615 19.2224 16.9107 19.2224C16.2598 19.2224 15.7322 18.6947 15.7322 18.0439V5.95598C15.7322 5.30511 16.2598 4.77746 16.9107 4.77746ZM23 9.73345C23 9.08258 22.4723 8.55494 21.8215 8.55494C21.1706 8.55494 20.643 9.08258 20.643 9.73345V14.2664C20.643 14.9173 21.1706 15.4449 21.8215 15.4449C22.4723 15.4449 23 14.9173 23 14.2664V9.73345Z" fill="currentColor"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== ERROR SCREEN A: Conversation Error ===== -->
+        <div class="frame-with-replay" id="errorWrapA" style="display:none;">
+        <div class="error-frame iphone-frame" id="errorFrameA">
+            <div class="status-bar">
+                <div class="status-time"><span>9:41</span></div>
+                <div class="status-island"></div>
+                <div class="status-icons">
+                    <svg viewBox="0 0 18 12" fill="none"><rect x="0" y="8" width="3" height="4" rx="1" fill="currentColor"/><rect x="5" y="5" width="3" height="7" rx="1" fill="currentColor"/><rect x="10" y="2" width="3" height="10" rx="1" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx="1" fill="currentColor"/></svg>
+                    <svg viewBox="0 0 16 12" fill="none"><path d="M8 2C5.5 2 3.2 2.9 1.5 4.4L3 6C4.3 4.9 6.1 4.2 8 4.2C9.9 4.2 11.7 4.9 13 6L14.5 4.4C12.8 2.9 10.5 2 8 2ZM8 6C6.6 6 5.3 6.5 4.3 7.3L6 9C6.6 8.5 7.3 8.2 8 8.2C8.7 8.2 9.4 8.5 10 9L11.7 7.3C10.7 6.5 9.4 6 8 6ZM8 10C7.4 10 7 10.4 7 11C7 11.6 7.4 12 8 12C8.6 12 9 11.6 9 11C9 10.4 8.6 10 8 10Z" fill="currentColor"/></svg>
+                    <svg viewBox="0 0 28 13" fill="none"><rect x="0.5" y="0.5" width="24" height="12" rx="3" stroke="currentColor" opacity="0.35"/><rect x="2" y="2" width="21" height="9" rx="2" fill="currentColor"/></svg>
+                </div>
+            </div>
+            <div class="conv-settings-wrap" style="z-index:10;">
+                <button class="conv-settings" style="pointer-events:none;">
+                    <svg viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.9909 8.06397C14.1645 8.06397 15.9269 9.82641 15.9269 12C15.9269 14.1736 14.1645 15.936 11.9909 15.936C9.81727 15.936 8.05483 14.1736 8.05483 12C8.05483 9.82641 9.81727 8.06397 11.9909 8.06397ZM11.9909 9.8812C10.8205 9.8812 9.87207 10.8296 9.87207 12C9.87207 13.1704 10.8205 14.1188 11.9909 14.1188C13.1613 14.1188 14.1097 13.1704 14.1097 12C14.1097 10.8296 13.1613 9.8812 11.9909 9.8812Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M11.9909 1C12.7316 1 13.4033 1.20499 14.1244 1.54005C14.8273 1.86663 15.6403 2.34842 16.6483 2.94535L17.3411 3.35531C18.3494 3.95245 19.1632 4.43383 19.79 4.89464C20.4334 5.36768 20.9371 5.85926 21.3027 6.50887C21.6677 7.15738 21.8296 7.84706 21.9068 8.65033C21.9822 9.43473 21.9817 10.3949 21.9817 11.59V12.41C21.9817 13.6052 21.9822 14.5653 21.9068 15.3497C21.8296 16.1529 21.6677 16.8426 21.3027 17.4911C20.9371 18.1407 20.4334 18.6323 19.79 19.1054C19.1632 19.5661 18.3493 20.0466 17.3411 20.6437L16.6483 21.0546C15.6403 21.6516 14.8273 22.1334 14.1244 22.46C13.4033 22.795 12.7316 23 11.9909 23C11.2501 23 10.5784 22.795 9.85728 22.46C9.15441 22.1334 8.34144 21.6516 7.33345 21.0546L6.64066 20.6437C5.63245 20.0466 4.8185 19.5661 4.19172 19.1054C3.54834 18.6323 3.04464 18.1407 2.679 17.4911C2.31399 16.8426 2.1521 16.1529 2.0749 15.3497C1.99951 14.5653 2 13.6052 2 12.41V11.59C2 10.3949 1.99951 9.43473 2.0749 8.65033C2.1521 7.84706 2.314 7.15738 2.679 6.50887C3.04464 5.85927 3.54834 5.36768 4.19172 4.89464C4.81855 4.43383 5.63232 3.95245 6.64066 3.35531L7.33345 2.94535C8.34143 2.34842 9.15441 1.86663 9.85728 1.54005C10.5784 1.20499 11.2501 1 11.9909 1ZM11.9909 2.81724C11.6077 2.81724 11.2055 2.91569 10.622 3.18679C10.0204 3.46634 9.29769 3.89311 8.25882 4.50833L7.56603 4.91829C6.52711 5.53354 5.80517 5.9631 5.26787 6.35809C4.74752 6.74066 4.45794 7.05109 4.26169 7.39975C4.06482 7.74956 3.94657 8.16541 3.88326 8.82378C3.81814 9.50139 3.81724 10.3604 3.81724 11.59V12.41C3.81724 13.6396 3.81814 14.4986 3.88326 15.1762C3.94657 15.8346 4.06482 16.2505 4.26169 16.6003C4.45794 16.9489 4.74751 17.2593 5.26787 17.6419C5.80517 18.0369 6.5271 18.4665 7.56603 19.0817L8.25882 19.4917C9.29769 20.1069 10.0204 20.5337 10.622 20.8132C11.2055 21.0843 11.6077 21.1828 11.9909 21.1828C12.374 21.1828 12.7762 21.0843 13.3597 20.8132C13.9613 20.5337 14.684 20.1069 15.7229 19.4917L16.4157 19.0817C17.4546 18.4665 18.1765 18.0369 18.7139 17.6419C19.2342 17.2593 19.5238 16.9489 19.72 16.6003C19.9169 16.2504 20.0352 15.8346 20.0985 15.1762C20.1636 14.4986 20.1645 13.6396 20.1645 12.41V11.59C20.1645 10.3604 20.1636 9.50139 20.0985 8.82378C20.0352 8.16541 19.9169 7.74956 19.72 7.39975C19.5238 7.0511 19.2342 6.74067 18.7139 6.35809C18.1765 5.96309 17.4546 5.53355 16.4157 4.91829L15.7229 4.50833C14.684 3.89311 13.9613 3.46635 13.3597 3.18679C12.7762 2.91569 12.374 2.81724 11.9909 2.81724Z" fill="currentColor"/></svg>
+                </button>
+            </div>
+            <div class="chat-area" id="errorChatArea" style="padding-top:60px;">
+                <div class="user-message" id="errUser1">
+                    <div class="user-bubble pill">&ldquo;Archive all newsletters.&rdquo;</div>
+                </div>
+                <p class="ai-message" id="errMsg2">Archiving your newsletters...</p>
+                <div class="error-card-wrap" id="errCard" style="opacity:0; transform:translateY(8px);">
+                    <div class="error-card">
+                        <p>Something went wrong. I couldn&rsquo;t archive those emails.</p>
+                        <button class="error-retry">Try Again</button>
+                    </div>
+                </div>
+            </div>
+            <div class="gradient-bg" id="errorGradient">
                 <div class="gradient-blob blob-1"></div>
                 <div class="gradient-blob blob-2"></div>
                 <div class="gradient-blob blob-3"></div>
             </div>
-
-            <button class="talk-button" id="talkBtn" onclick="toggleState()">
-                <div class="waveform" id="waveform">
+            <button class="talk-button" style="pointer-events:none;">
+                <div class="waveform" id="errorWaveform">
                     <div class="bar"></div>
                     <div class="bar"></div>
                     <div class="bar"></div>
                     <div class="bar"></div>
                     <div class="bar"></div>
                 </div>
-                <span id="talkLabel">Stop</span>
+                <span>Stop</span>
             </button>
+        </div>
+        <button class="replay-btn" id="replayError" style="display:none;" onclick="startErrorAnim()">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M20 13.3501C20 14.8391 19.64 16.1998 18.9199 17.4325C18.1998 18.6529 17.2357 19.6232 16.0275 20.3433C14.8192 21.0633 13.4767 21.4233 12 21.4233C10.5111 21.4233 9.16247 21.0633 7.95423 20.3433C6.746 19.6232 5.78185 18.659 5.06178 17.4508C4.35393 16.2304 4 14.8757 4 13.3867C4 13.1182 4.09764 12.8924 4.29291 12.7094C4.48818 12.5141 4.72006 12.4165 4.98856 12.4165C5.26926 12.4165 5.50725 12.5141 5.70252 12.7094C5.89779 12.8924 5.99542 13.1182 5.99542 13.3867C5.99542 14.5095 6.25782 15.5286 6.78261 16.4439C7.3196 17.3471 8.03966 18.0732 8.94279 18.6224C9.85812 19.1594 10.8772 19.4279 12 19.4279C13.1106 19.4279 14.1175 19.1594 15.0206 18.6224C15.9359 18.0732 16.6621 17.3471 17.1991 16.4439C17.7361 15.5286 18.0046 14.5095 18.0046 13.3867C18.0046 12.2761 17.7361 11.2693 17.1991 10.3661C16.6621 9.4508 15.9359 8.73074 15.0206 8.20595C14.1175 7.66896 13.1106 7.40046 12 7.40046C11.4752 7.40046 11.0481 7.43707 10.7185 7.5103L13.0801 9.83524C13.2876 10.0427 13.3913 10.2868 13.3913 10.5675C13.3913 10.8238 13.2998 11.0435 13.1167 11.2265C12.9336 11.4096 12.714 11.5011 12.4577 11.5011C12.2014 11.5011 11.9878 11.4096 11.8169 11.2265L8.11899 7.47368C7.92372 7.29062 7.82609 7.05873 7.82609 6.77803C7.83829 6.48513 7.93593 6.24104 8.11899 6.04577L11.762 2.32952C11.8474 2.21968 11.9512 2.14035 12.0732 2.09153C12.1953 2.03051 12.3234 2 12.4577 2C12.7262 2 12.9458 2.09153 13.1167 2.2746C13.2998 2.45767 13.3913 2.67735 13.3913 2.93364C13.3913 3.05568 13.3669 3.17773 13.3181 3.29977C13.2815 3.42182 13.2204 3.53166 13.135 3.62929L11.2311 5.53318C11.3776 5.52098 11.5362 5.50877 11.7071 5.49657C11.878 5.47216 12.0488 5.45995 12.2197 5.45995C13.611 5.45995 14.8924 5.81388 16.0641 6.52174C17.2479 7.21739 18.1998 8.16323 18.9199 9.35927C19.64 10.5431 20 11.8734 20 13.3501Z" fill="currentColor"/></svg>
+        </button>
+        </div>
+
+        <!-- ===== ERROR SCREEN B: Permission Denied ===== -->
+        <div class="error-frame iphone-frame" id="errorFrameB">
+            <div class="status-bar">
+                <div class="status-time"><span>9:41</span></div>
+                <div class="status-island"></div>
+                <div class="status-icons">
+                    <svg viewBox="0 0 18 12" fill="none"><rect x="0" y="8" width="3" height="4" rx="1" fill="currentColor"/><rect x="5" y="5" width="3" height="7" rx="1" fill="currentColor"/><rect x="10" y="2" width="3" height="10" rx="1" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx="1" fill="currentColor"/></svg>
+                    <svg viewBox="0 0 16 12" fill="none"><path d="M8 2C5.5 2 3.2 2.9 1.5 4.4L3 6C4.3 4.9 6.1 4.2 8 4.2C9.9 4.2 11.7 4.9 13 6L14.5 4.4C12.8 2.9 10.5 2 8 2ZM8 6C6.6 6 5.3 6.5 4.3 7.3L6 9C6.6 8.5 7.3 8.2 8 8.2C8.7 8.2 9.4 8.5 10 9L11.7 7.3C10.7 6.5 9.4 6 8 6ZM8 10C7.4 10 7 10.4 7 11C7 11.6 7.4 12 8 12C8.6 12 9 11.6 9 11C9 10.4 8.6 10 8 10Z" fill="currentColor"/></svg>
+                    <svg viewBox="0 0 28 13" fill="none"><rect x="0.5" y="0.5" width="24" height="12" rx="3" stroke="currentColor" opacity="0.35"/><rect x="2" y="2" width="21" height="9" rx="2" fill="currentColor"/></svg>
+                </div>
+            </div>
+            <div class="perm-screen">
+                <div class="perm-center">
+                    <svg class="perm-icon" viewBox="0 0 24 24" fill="none"><path d="M22.3633 15.1709C22.7148 14.8195 23.2853 14.8195 23.6367 15.1709C23.9881 15.5223 23.9881 16.0929 23.6367 16.4443L20.6768 19.4033L23.6357 22.3545C23.9876 22.7055 23.9877 23.2751 23.6367 23.627C23.2856 23.9785 22.716 23.9798 22.3643 23.6289L19.4043 20.6758L16.4443 23.6367C16.0929 23.9881 15.5224 23.9881 15.1709 23.6367C14.8194 23.2853 14.8195 22.7148 15.1709 22.3633L18.1289 19.4043L15.1719 16.4531C14.8204 16.1021 14.8202 15.5325 15.1709 15.1807C15.522 14.829 16.0916 14.8287 16.4434 15.1797L19.4023 18.1309L22.3633 15.1709Z" fill="currentColor"/><path d="M1 8.69141C1.49706 8.69141 1.90039 9.09474 1.90039 9.5918C1.90049 13.8397 5.34383 17.2832 9.5918 17.2832C10.473 17.2832 11.3176 17.1357 12.1035 16.8643C12.5733 16.702 13.0857 16.9512 13.248 17.4209C13.4102 17.8907 13.1612 18.4032 12.6914 18.5654C11.9912 18.8073 11.2543 18.9664 10.4922 19.0381V21.3076C10.4921 21.8046 10.0888 22.208 9.5918 22.208C9.0948 22.208 8.69151 21.8046 8.69141 21.3076V19.0391C3.87166 18.5855 0.0997026 14.5301 0.0996094 9.5918C0.0996094 9.09474 0.502944 8.69141 1 8.69141Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M9.5918 0.0996094C12.677 0.099673 15.1777 2.60127 15.1777 5.68652V9.5918C15.1776 12.677 12.677 15.1777 9.5918 15.1777C6.50656 15.1777 4.00497 12.677 4.00488 9.5918V5.68652C4.00488 2.60123 6.50651 0.0996094 9.5918 0.0996094ZM9.5918 1.90039C7.50062 1.90039 5.80566 3.59535 5.80566 5.68652V9.5918C5.80575 11.6829 7.50068 13.3779 9.5918 13.3779C11.6829 13.3779 13.3778 11.6829 13.3779 9.5918V5.68652C13.3779 3.59539 11.6829 1.90045 9.5918 1.90039Z" fill="currentColor"/></svg>
+                    <div class="perm-caption">
+                        <h2 class="perm-title">Microphone Access Required</h2>
+                        <p class="perm-body">Enable microphone access so I can hear you and act on your email.</p>
+                    </div>
+                </div>
+                <div class="perm-actions">
+                    <button class="perm-btn">Enable Microphone</button>
+                    <button class="perm-link">Not now</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
+        let currentAudio = null;
+        function playVoice(file) {
+            if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+            const a = new Audio('audio/' + file + '.mp3');
+            currentAudio = a;
+            a.play().catch(() => {});
+            return a;
+        }
+        function stopVoice() {
+            if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+        }
+
         function setTheme(theme) {
             document.body.classList.toggle('dark-mode', theme === 'dark');
             const group = event.target.parentElement;
@@ -269,26 +1365,457 @@
             const nav = document.querySelector('.screen-nav');
             nav.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            const target = document.getElementById('screen-' + screen);
+            if (target) target.classList.add('active');
+            document.getElementById('mainWrap').style.display = screen === 'error' ? 'none' : '';
+            document.getElementById('entryFrame').classList.toggle('visible', screen === 'idle');
+            document.getElementById('talkOverlay').classList.remove('visible');
+            resetOverlayWords('talkOverlay');
+            document.getElementById('talkOverlay2').classList.remove('visible');
+            resetOverlayWords('talkOverlay2');
+            document.getElementById('errorWrapA').style.display = screen === 'error' ? '' : 'none';
+            document.getElementById('errorFrameA').classList.toggle('visible', screen === 'error');
+            document.getElementById('errorFrameB').classList.toggle('visible', screen === 'error');
+            if (screen === 'conversation') startConversationAnim();
+            else resetConversationAnim();
+            if (screen === 'onboarding') startOnboardingAnim();
+            else resetOnboardingAnim();
+            if (screen === 'error') startErrorAnim();
+            else resetErrorAnim();
+            document.getElementById('replayMain').style.display = (screen === 'conversation' || screen === 'onboarding') ? '' : 'none';
+            document.getElementById('replayError').style.display = screen === 'error' ? '' : 'none';
+            currentScreen = screen;
         }
 
-        let isListening = true;
+        let currentScreen = 'idle';
+        function replayCurrentScreen() {
+            if (currentScreen === 'conversation') { resetConversationAnim(); startConversationAnim(); }
+            else if (currentScreen === 'onboarding') { resetOnboardingAnim(); startOnboardingAnim(); }
+        }
 
-        function toggleState() {
-            isListening = !isListening;
-            const label = document.getElementById('talkLabel');
-            const waveform = document.getElementById('waveform');
-            const blobs = document.querySelectorAll('.gradient-blob');
+        function toggleVoiceMenu() {
+            document.getElementById('voiceMenu').classList.toggle('open');
+            document.getElementById('voiceOverlay').classList.toggle('open');
+        }
 
-            if (isListening) {
-                label.textContent = 'Stop';
-                waveform.style.display = 'flex';
-                blobs.forEach(b => { b.style.animationPlayState = 'running'; b.style.opacity = '0.5'; });
-            } else {
-                label.textContent = 'Talk';
-                waveform.style.display = 'none';
-                blobs.forEach(b => { b.style.animationPlayState = 'paused'; b.style.opacity = '0.25'; });
+        function closeVoiceMenu() {
+            document.getElementById('voiceMenu').classList.remove('open');
+            document.getElementById('voiceOverlay').classList.remove('open');
+        }
+
+        function toggleOverlayVoiceMenu(menuId, bgId) {
+            document.getElementById(menuId).classList.toggle('open');
+            document.getElementById(bgId).classList.toggle('open');
+        }
+        function closeOverlayVoiceMenu(menuId, bgId) {
+            document.getElementById(menuId).classList.remove('open');
+            document.getElementById(bgId).classList.remove('open');
+        }
+
+        const checkSvg = '<svg viewBox="0 0 24 24" fill="none"><path d="M10.1267 19.7574C9.69231 19.7574 9.32127 19.5643 9.01358 19.1782L4.32579 13.3139C4.21116 13.1752 4.1267 13.0394 4.0724 12.9067C4.02413 12.7739 4 12.6382 4 12.4994C4 12.1857 4.10256 11.9263 4.30769 11.7212C4.51885 11.516 4.78431 11.4135 5.10407 11.4135C5.4721 11.4135 5.78281 11.5794 6.0362 11.9112L10.0905 17.1148L17.9457 4.63519C18.0845 4.42402 18.2262 4.27621 18.371 4.19175C18.5158 4.10125 18.7029 4.056 18.9321 4.056C19.2459 4.056 19.5023 4.15555 19.7014 4.35464C19.9005 4.5477 20 4.8011 20 5.11482C20 5.24152 19.9789 5.37123 19.9367 5.50396C19.8944 5.63066 19.8281 5.76641 19.7376 5.9112L11.2308 19.1691C10.9653 19.5613 10.5973 19.7574 10.1267 19.7574Z" fill="currentColor"/></svg>';
+
+        function selectVoice(el) {
+            document.querySelectorAll('.voice-menu-check').forEach(c => c.innerHTML = '');
+            el.querySelector('.voice-menu-check').innerHTML = checkSvg;
+            closeVoiceMenu();
+        }
+
+        const userName = 'Adam';
+        const greetings = [
+            "Hi {name}, how can I help you today?",
+            "Hey {name}, what's on your mind?",
+            "Good to have you, {name}. What do you need?",
+            "Talk to me, {name}. I'm all yours.",
+            "Ready when you are, {name}. Take your time.",
+            "{name}, what can I help you with?",
+            "Go ahead {name}, I'm listening.",
+            "Hey {name}, what are we working on?",
+            "Welcome back, {name}. What's first?",
+            "Alright {name}, let's get into it.",
+            "{name}, I'm right here. What do you need?",
+            "Hi {name}, good to see you. What's up?",
+            "Hey {name}, tell me what you need.",
+            "{name}, what's on the agenda?",
+            "I'm all ears, {name}. Go ahead.",
+            "Hi {name}, ready to help. Just say the word.",
+            "Hey {name}, let's take care of it.",
+            "{name}, what do you want to tackle first?",
+            "Good timing, {name}. What can I do?",
+            "Hi {name}, I've been expecting you.",
+        ];
+        let lastGreetingIdx = -1;
+        let speechTimers = [];
+
+        function pickGreeting() {
+            let idx;
+            do { idx = Math.floor(Math.random() * greetings.length); }
+            while (idx === lastGreetingIdx && greetings.length > 1);
+            lastGreetingIdx = idx;
+            return greetings[idx].replace('{name}', userName);
+        }
+
+        function setOverlayBlobState(overlayId, state) {
+            const overlay = document.getElementById(overlayId);
+            if (!overlay) return;
+            const grad = overlay.querySelector('.overlay-gradient');
+            const bars = overlay.querySelectorAll('.overlay-stop .bar');
+            if (grad) {
+                grad.classList.remove('blobs-quiet', 'blobs-active');
+                if (state) grad.classList.add(state);
+            }
+            bars.forEach(b => {
+                if (state) { b.style.animation = ''; b.style.transform = ''; }
+                else { b.style.animation = 'none'; b.style.transform = 'scaleY(0.6)'; }
+            });
+        }
+
+        function animateOverlayWords(overlayId) {
+            speechTimers.forEach(t => clearTimeout(t));
+            speechTimers = [];
+            const overlay = document.getElementById(overlayId);
+            const msg = overlay.querySelector('.overlay-message');
+            const greeting = pickGreeting();
+            msg.innerHTML = greeting.split(' ').map(w => '<span class="word">' + w + '</span>').join(' ');
+            const words = msg.querySelectorAll('.word');
+
+            setOverlayBlobState(overlayId, 'blobs-quiet');
+
+            speechTimers.push(setTimeout(() => playVoice('greeting-' + lastGreetingIdx), 950));
+            words.forEach((word, i) => {
+                speechTimers.push(setTimeout(() => word.classList.add('spoken'), 950 + i * 220));
+            });
+
+            const greetingDone = 950 + 2000;
+            speechTimers.push(setTimeout(() => setOverlayBlobState(overlayId, 'blobs-active'), greetingDone));
+            speechTimers.push(setTimeout(() => setOverlayBlobState(overlayId, null), greetingDone + 3000));
+        }
+
+        function resetOverlayWords(overlayId) {
+            speechTimers.forEach(t => clearTimeout(t));
+            speechTimers = [];
+            stopVoice();
+            document.getElementById(overlayId).querySelectorAll('.overlay-message .word')
+                .forEach(w => w.classList.remove('spoken'));
+            setOverlayBlobState(overlayId, null);
+        }
+
+        function playSfx() { new Audio('../Resources/Sounds/alert.mp3').play().catch(() => {}); }
+
+        function openTalkOverlay() {
+            playSfx();
+            document.getElementById('talkOverlay').classList.add('visible');
+            animateOverlayWords('talkOverlay');
+        }
+        function closeTalkOverlay() {
+            playSfx();
+            document.getElementById('talkOverlay').classList.remove('visible');
+            resetOverlayWords('talkOverlay');
+        }
+        function openTalkOverlay2() {
+            playSfx();
+            document.getElementById('talkOverlay2').classList.add('visible');
+            animateOverlayWords('talkOverlay2');
+        }
+        function closeTalkOverlay2() {
+            playSfx();
+            document.getElementById('talkOverlay2').classList.remove('visible');
+            resetOverlayWords('talkOverlay2');
+        }
+
+        const emojiRe = /^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u;
+        let convTimers = [];
+        const convData = [];
+
+        function wrapWordsIn(el, cls) {
+            const raw = el.textContent;
+            el.innerHTML = raw.split(/\s+/).filter(Boolean).map(w => {
+                const isEm = emojiRe.test(w);
+                return '<span class="' + cls + (isEm ? ' emoji' : '') + '">' + w + '</span>';
+            }).join(' ');
+            return el.querySelectorAll('.' + cls);
+        }
+
+        function setBlobState(state) {
+            const bg = document.querySelector('#screen-conversation .gradient-bg');
+            if (!bg) return;
+            bg.classList.remove('blobs-quiet', 'blobs-active');
+            if (state) bg.classList.add(state);
+            const wf = document.getElementById('waveform');
+            if (wf) {
+                const speaking = state === 'blobs-active' || state === 'blobs-quiet';
+                wf.querySelectorAll('.bar').forEach(b => {
+                    if (speaking) {
+                        b.style.animation = '';
+                        b.style.transform = '';
+                    } else {
+                        b.style.animation = 'none';
+                        b.style.transform = 'scaleY(0.6)';
+                    }
+                });
             }
         }
+
+        function startConversationAnim() {
+            convTimers.forEach(t => clearTimeout(t));
+            convTimers = [];
+
+            const chat = document.querySelector('#screen-conversation .chat-area');
+            const msgs = [...chat.children];
+
+            if (!convData.length) {
+                msgs.forEach(m => {
+                    if (m.classList.contains('ai-message')) convData.push({ type: 'ai', text: m.textContent });
+                    else if (m.classList.contains('user-message')) {
+                        const b = m.querySelector('.user-bubble');
+                        convData.push({ type: 'user', text: b.textContent, cls: b.classList.contains('pill') ? 'pill' : 'rect' });
+                    }
+                });
+            }
+
+            msgs.forEach(m => {
+                m.classList.remove('anim-in');
+                m.style.cssText = '';
+                if (m.classList.contains('ai-message')) m.innerHTML = convData.find(d => d.type === 'ai' && d.text === m.textContent)?.text || m.textContent;
+                if (m.classList.contains('ai-draft-card')) { m.style.opacity = '0'; m.style.transform = 'translateY(8px)'; }
+                const b = m.querySelector && m.querySelector('.user-bubble');
+                if (b) { b.classList.remove('done'); b.innerHTML = ''; }
+            });
+
+            setBlobState('blobs-quiet');
+            const convAudio = [
+                { file: 'conv-ai-1', duration: 3096, perWord: 290 },
+                { file: 'conv-ai-2', duration: 8832, perWord: 330 },
+                { file: 'conv-ai-3', duration: 1968, perWord: 250 },
+                { file: 'conv-ai-4', duration: 1104, perWord: 200 }
+            ];
+
+            let d = 400;
+            let aiIdx = 0, userIdx = 0;
+
+            msgs.forEach(m => {
+                if (m.classList.contains('ai-message')) {
+                    const curAiIdx = aiIdx++;
+                    const data = convData.filter(c => c.type === 'ai')[curAiIdx];
+                    if (!data) return;
+                    m.textContent = data.text;
+                    const words = wrapWordsIn(m, 'word');
+                    const a = convAudio[curAiIdx] || { perWord: 300, duration: 3000 };
+
+                    convTimers.push(setTimeout(() => {
+                        setBlobState('blobs-quiet');
+                        m.classList.add('anim-in');
+                        if (a.file) playVoice(a.file);
+                    }, d));
+                    d += 250;
+                    words.forEach((w, i) => {
+                        convTimers.push(setTimeout(() => w.classList.add('spoken'), d + i * a.perWord));
+                    });
+                    d += a.duration + 800;
+
+                } else if (m.classList.contains('ai-draft-card')) {
+                    convTimers.push(setTimeout(() => {
+                        m.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+                        m.style.opacity = '1';
+                        m.style.transform = 'translateY(0)';
+                    }, d));
+                    d += 1500;
+
+                } else if (m.classList.contains('user-message')) {
+                    const curUserIdx = userIdx++;
+                    const data = convData.filter(c => c.type === 'user')[curUserIdx];
+                    if (!data) return;
+                    const bubble = m.querySelector('.user-bubble');
+                    const adamAudio = ['adam-conv-1', 'adam-conv-2'];
+                    const adamDur = [1632, 3384];
+                    bubble.classList.remove('done');
+                    bubble.className = 'user-bubble pill';
+                    bubble.style.width = '';
+                    bubble.innerHTML = '<span class="typing-dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="bubble-text">' + data.text + '</span>';
+
+                    convTimers.push(setTimeout(() => {
+                        setBlobState('blobs-active');
+                        m.classList.add('anim-in');
+                        if (adamAudio[curUserIdx]) playVoice(adamAudio[curUserIdx]);
+                    }, d));
+                    d += (adamDur[curUserIdx] || 2000) + 400;
+                    convTimers.push(setTimeout(() => {
+                        setBlobState('blobs-quiet');
+                        bubble.classList.add('done');
+                        bubble.classList.remove('pill');
+                        bubble.classList.add(data.cls);
+                        if (data.cls === 'rect') bubble.style.width = '100%';
+                    }, d));
+                    d += 800;
+                }
+            });
+
+            convTimers.push(setTimeout(() => setBlobState(null), d));
+        }
+
+        function resetConversationAnim() {
+            convTimers.forEach(t => clearTimeout(t));
+            convTimers = [];
+            setBlobState(null);
+            stopVoice();
+        }
+
+        let obTimers = [];
+        const obGreeting = "Hi Adam, I'm your Filo AI assistant. I can help you manage emails and tasks by voice. Try asking me something like:";
+        const obReply = "You have 5 new emails since this morning. 2 from your team, 1 from HR about benefits enrollment, and 2 newsletters.";
+
+        function setObBlobState(state) {
+            const grad = document.querySelector('.onboarding-gradient');
+            const bars = document.querySelectorAll('.onboarding-stop .bar');
+            if (grad) {
+                grad.classList.remove('blobs-quiet', 'blobs-active');
+                if (state) grad.classList.add(state);
+            }
+            bars.forEach(b => {
+                if (state) { b.style.animation = ''; b.style.transform = ''; }
+                else { b.style.animation = 'none'; b.style.transform = 'scaleY(0.6)'; }
+            });
+        }
+
+        function startOnboardingAnim() {
+            obTimers.forEach(t => clearTimeout(t));
+            obTimers = [];
+
+            const textEl = document.getElementById('onboardingText');
+            const pillsWrap = document.getElementById('obPills');
+            const pills = [document.getElementById('obPill1'), document.getElementById('obPill2'), document.getElementById('obPill3')];
+            const userMsg = document.getElementById('obUserMsg');
+            const replyEl = document.getElementById('obReplyText');
+
+            textEl.innerHTML = obGreeting.split(' ').map(w => '<span class="word">' + w + '</span>').join(' ');
+            const words = textEl.querySelectorAll('.word');
+            pills.forEach(p => p.classList.remove('anim-in'));
+            pillsWrap.style.cssText = 'opacity:0; max-height:0; overflow:hidden;';
+            userMsg.style.cssText = 'opacity:0; transform:translateY(8px); padding-right:0;';
+            replyEl.style.cssText = 'opacity:0;';
+            replyEl.innerHTML = obReply;
+
+            setObBlobState('blobs-quiet');
+
+            let d = 400;
+
+            obTimers.push(setTimeout(() => playVoice('onboarding-greeting'), d));
+            words.forEach((w, i) => {
+                obTimers.push(setTimeout(() => w.classList.add('spoken'), d + i * 300));
+            });
+            d += 7056 + 500;
+
+            obTimers.push(setTimeout(() => {
+                pillsWrap.style.cssText = '';
+                playVoice('onboarding-pills');
+            }, d));
+            pills.forEach((pill, i) => {
+                obTimers.push(setTimeout(() => pill.classList.add('anim-in'), d + i * 1200));
+            });
+            d += 3216 + 800;
+
+            obTimers.push(setTimeout(() => {
+                setObBlobState('blobs-active');
+                pillsWrap.style.transition = 'opacity 0.3s ease, max-height 0.3s ease';
+                pillsWrap.style.opacity = '0';
+                pillsWrap.style.maxHeight = '0';
+                pillsWrap.style.overflow = 'hidden';
+            }, d));
+            d += 400;
+
+            obTimers.push(setTimeout(() => {
+                userMsg.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                userMsg.style.opacity = '1';
+                userMsg.style.transform = 'translateY(0)';
+                playVoice('adam-onboarding');
+            }, d));
+            d += 984 + 800;
+
+            obTimers.push(setTimeout(() => {
+                setObBlobState('blobs-quiet');
+                playVoice('onboarding-reply');
+                replyEl.style.transition = 'opacity 0.3s ease';
+                replyEl.style.opacity = '1';
+                replyEl.innerHTML = obReply.split(' ').map(w => '<span class="word">' + w + '</span>').join(' ');
+                const rWords = replyEl.querySelectorAll('.word');
+                rWords.forEach((w, i) => {
+                    obTimers.push(setTimeout(() => w.classList.add('spoken'), i * 340));
+                });
+            }, d));
+            d += 7872 + 800;
+            obTimers.push(setTimeout(() => setObBlobState(null), d));
+        }
+
+        function resetOnboardingAnim() {
+            obTimers.forEach(t => clearTimeout(t));
+            obTimers = [];
+            setObBlobState(null);
+            stopVoice();
+        }
+
+        let errTimers = [];
+
+        function setErrBlobState(state) {
+            const grad = document.getElementById('errorGradient');
+            const bars = document.querySelectorAll('#errorWaveform .bar');
+            if (grad) {
+                grad.classList.remove('blobs-quiet', 'blobs-active');
+                if (state) grad.classList.add(state);
+            }
+            bars.forEach(b => {
+                if (state) { b.style.animation = ''; b.style.transform = ''; }
+                else { b.style.animation = 'none'; b.style.transform = 'scaleY(0.6)'; }
+            });
+        }
+
+        function startErrorAnim() {
+            errTimers.forEach(t => clearTimeout(t));
+            errTimers = [];
+
+            const u1 = document.getElementById('errUser1');
+            const m2 = document.getElementById('errMsg2');
+            const ec = document.getElementById('errCard');
+
+            [u1, m2, ec].forEach(m => { m.style.opacity = '0'; m.style.transform = 'translateY(8px)'; m.style.transition = ''; });
+            m2.textContent = 'Archiving your newsletters...';
+
+            const ub = u1.querySelector('.user-bubble');
+            ub.className = 'user-bubble pill';
+            ub.innerHTML = '\u201CArchive all newsletters.\u201D';
+
+            setErrBlobState('blobs-active');
+            let d = 400;
+
+            errTimers.push(setTimeout(() => { u1.style.transition = 'opacity 0.3s ease, transform 0.3s ease'; u1.style.opacity = '1'; u1.style.transform = 'translateY(0)'; playVoice('adam-error'); }, d));
+            d += 1488 + 500;
+
+            errTimers.push(setTimeout(() => setErrBlobState('blobs-quiet'), d));
+
+            m2.innerHTML = 'Archiving your newsletters...'.split(' ').map(w => '<span class="word">' + w + '</span>').join(' ');
+            const w2 = m2.querySelectorAll('.word');
+            errTimers.push(setTimeout(() => { playVoice('error-archiving'); m2.style.transition = 'opacity 0.3s ease, transform 0.3s ease'; m2.style.opacity = '1'; m2.style.transform = 'translateY(0)'; }, d));
+            d += 250;
+            w2.forEach((w, i) => { errTimers.push(setTimeout(() => w.classList.add('spoken'), d + i * 560)); });
+            d += 2040 + 800;
+
+            errTimers.push(setTimeout(() => { playVoice('error-card'); ec.style.transition = 'opacity 0.35s ease, transform 0.35s ease'; ec.style.opacity = '1'; ec.style.transform = 'translateY(0)'; }, d));
+            d += 6000;
+
+            errTimers.push(setTimeout(() => setErrBlobState(null), d - 500));
+        }
+
+        function resetErrorAnim() {
+            errTimers.forEach(t => clearTimeout(t));
+            errTimers = [];
+            setErrBlobState(null);
+            stopVoice();
+        }
+
+        document.getElementById('entryFrame').classList.add('visible');
     </script>
+
+    <footer style="padding:140px 0 40px; max-width:50%;">
+        <p style="font-size:9px; line-height:1.2; color:var(--filo-08); font-weight:400; letter-spacing:0;">Internal Use Only. This is a feature preview for Filo, an AI-native email client developed by XD Inc. All designs, interactions, and content shown are proprietary and subject to change. Filo, FiloMail, and the Filo logo are trademarks of XD Inc. &copy; 2026 XD Inc. All rights reserved.</p>
+    </footer>
 </body>
 </html>

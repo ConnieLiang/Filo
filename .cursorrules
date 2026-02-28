@@ -54,9 +54,12 @@ Filo is an AI-native email client designed to reduce cognitive load. It helps pe
 ## UI/UX Guidelines
 
 When drawing UI:
+- **Figma design always comes first.** When a Figma link or node is provided, pull the exact specs (colors, spacing, typography, border radius, shadows) before writing any CSS. Never assume or invent styles.
+- **Never default to Tailwind CSS patterns.** No generic "alert cards," "callout borders," or component library defaults. If a component isn't in Filo's design system or Figma, ask — don't improvise.
+- **Source priority:** (1) Figma specs from the designer, (2) `Design Guidelines/` tokens and components, (3) existing Demo pages for reference. Never use generic web patterns as a fallback.
+- Use the design system from `Design Guidelines/` (colors, typography, icons, components)
 - Keep interfaces calm and minimal
 - Prioritize clarity over customization
-- Use the design system from `Design Guidelines/` (colors, typography, icons)
 - No visual clutter or unnecessary elements
 - Design for scanning, not reading
 
@@ -66,6 +69,15 @@ When drawing UI:
 - Don't commit API keys or secrets
 - Don't add features that increase cognitive load
 - Don't create dopamine-driven or attention-grabbing UI patterns
+
+## On Conversation Start
+
+At the start of every new conversation, **proactively check for new Jira tickets** assigned to LiangXi:
+1. Use the `jira-ticket-triage` skill to pull recent tickets
+2. Report any **new or updated tickets** since the last check
+3. Flag tickets that need triage, have new comments, or are awaiting response
+
+This acts as a notification system within Cursor. Do not wait for the user to ask — check automatically.
 
 ## Current Focus
 - iOS MVP

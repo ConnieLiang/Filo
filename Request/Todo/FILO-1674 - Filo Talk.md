@@ -14,7 +14,7 @@
 
 ## What This Is
 
-Filo Talk is a voice-driven AI conversation inside Filo's AI Tab. The user speaks, Filo acts on their email (search, archive, compose, reply, create tasks, set rules), and responds with voice + text. The conversation is continuous — no re-tapping, no re-prompting — until the user decides they're done.
+Filo Talk is a voice-driven AI conversation between you and Filo. You speak, Filo acts on your email (search, archive, compose, reply, create tasks, set rules), and responds with voice. The conversation is continuous, no re-tapping, no re-prompting, until you decide to end it.
 
 ---
 
