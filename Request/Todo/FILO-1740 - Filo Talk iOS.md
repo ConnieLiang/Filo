@@ -1,4 +1,4 @@
-# FILO-1740 — Filo Talk — iOS Implementation
+# FILO-1740 — Filo Talk — iOS & Android Implementation
 
 > Sub-task of [FILO-1674](https://xindong.atlassian.net/browse/FILO-1674)
 
@@ -7,7 +7,7 @@
 | -------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | Jira     | [FILO-1740](https://xindong.atlassian.net/browse/FILO-1740)                                                                         |
 | Parent   | [FILO-1674](https://xindong.atlassian.net/browse/FILO-1674)                                                                         |
-| Platform | iOS                                                                                                                                 |
+| Platform | iOS, Android                                                                                                                        |
 | Figma    | [🍎 Mobile — Talk](https://www.figma.com/design/7tXBqwb5MkT6wIwnjgeA4g/%F0%9F%8D%8E-Mobile?node-id=6847-80968&t=Akwp3eIlpUX1ahrS-1) |
 
 
@@ -21,7 +21,7 @@ Filo Talk is a voice-driven AI conversation inside Filo's AI Tab. The user speak
 
 ## Design Prototype (HTML)
 
-A fully interactive HTML prototype has been built covering all screen states, animations, dark mode, and voice playback. This is the **primary reference** for implementing Filo Talk on iOS.
+A fully interactive HTML prototype has been built covering all screen states, animations, dark mode, and voice playback. This is the **primary reference** for implementing Filo Talk on iOS and Android.
 
 **File:** `Demo/filo-talk-mobile.html`
 
@@ -35,7 +35,7 @@ A fully interactive HTML prototype has been built covering all screen states, an
 
 **Image assets:** `Demo/assets/` — `gradient-bg.png`, `emily-avatar.png`
 
-**Sound effect:** `Resources/Sounds/alert.mp3`
+**Sound effects:** `Resources/Sounds/on.mp3` (open overlay), `Resources/Sounds/off.mp3` (close overlay) — pre-loaded for instant playback
 
 ---
 
@@ -50,7 +50,7 @@ A fully interactive HTML prototype has been built covering all screen states, an
   - "Find what needs to be done this week"
   - "Add a smart filter"
 - **Input bar:** rounded 24px container with placeholder "Ask anything" + sparkle icon, mic button (36pt circle, dark fill, glow pulse animation)
-- **"Tap to talk" tooltip** above mic button (auto-fades after ~10s)
+- **"Tap to talk" tooltip** above mic button (0.8s fade-in, then persistent gentle float animation ±3px at 1.5s loop)
 - **iOS 26-style glass pill tab bar** at bottom (Inbox, To-do, AI tabs + compose FAB)
 
 ### 2. Talk Overlay (Listening State)
@@ -133,7 +133,8 @@ A fully interactive HTML prototype has been built covering all screen states, an
 | Waveform bars          | 1.2s ease-in-out infinite           | 5 bars, scaleY(0.5→1), 0.1s stagger    |
 | Onboarding pill appear | 0.4s ease + cubic-bezier(0.2,0,0,1) | translateY(12→0), scale(0.95→1)        |
 | Message appear         | 0.35s ease                          | translateY(8→0), opacity(0→1)          |
-| Tooltip auto-fade      | 13s total                           | Fade in at 15%, fade out at 85%        |
+| Tooltip fade-in        | 0.8s ease                           | Opacity 0→1, translateY(4→0)           |
+| Tooltip float          | 1.5s ease-in-out infinite           | Persistent ±3px vertical float         |
 
 
 ---
@@ -264,7 +265,128 @@ User speaks → AVAudioEngine (mic input)
 
 ---
 
+## Android Implementation Guide (Kotlin / Jetpack Compose)
+
+### Recommended File Structure
+
+```
+filo-talk/  (or feature module)
+├── ui/
+│   ├── AITabScreen.kt                 (container: switches Idle / Talk / Conversation)
+│   ├── IdleStateScreen.kt             (gradient blobs + quick commands + input bar)
+│   ├── TalkOverlayScreen.kt           (full-screen listening overlay)
+│   ├── ConversationScreen.kt         (message list + gradient + stop button)
+│   ├── OnboardingFlowScreen.kt        (first-time tutorial)
+│   ├── ErrorPermissionScreen.kt       (mic permission denied screen)
+│   └── components/
+│       ├── GradientBlob.kt             (animated gaussian blur circles)
+│       ├── WaveformBars.kt            (5-bar waveform animation)
+│       ├── WordRevealText.kt          (word-by-word gradient text reveal)
+│       ├── VoiceMenu.kt               (dropdown / popup for voice selection)
+│       ├── QuickCommandPill.kt        (icon + text pill button)
+│       ├── DraftCard.kt               (AI draft with Send/Edit actions)
+│       └── ErrorCard.kt               (error card with retry)
+├── viewmodel/
+│   ├── FiloTalkViewModel.kt           (state: idle → listening → processing → responding)
+│   └── VoiceSessionManager.kt         (audio recording + STT + TTS orchestration)
+├── domain/ or model/
+│   ├── TalkState.kt                   (enum: idle, listening, processing, responding, error)
+│   ├── ConversationMessage.kt         (model for AI/user messages)
+│   └── VoiceConfig.kt                 (selected voice, settings)
+└── data/ or service/
+    ├── SpeechRecognizer.kt             (android.speech.SpeechRecognizer wrapper)
+    ├── AudioPlayer.kt                 (ExoPlayer or MediaPlayer for TTS streaming)
+    └── HapticHelper.kt                (performHapticFeedback)
+```
+
+### Key Technical Decisions
+
+#### 1. Gradient Blob Animation
+
+The HTML uses CSS `blur()` + keyframe animations. For Android (Compose):
+
+- **Recommended:** `Canvas` + `Animatable` (or `infiniteRepeatable` with `tween`) for position/scale. Draw 3 circles with `drawCircle`; apply `RenderEffect.createBlurEffect()` (API 31+) or use a `BlurredEdgeTreatment` / custom `Modifier.blur()`-style effect. Use `LaunchedEffect` + `animateFloat` in a loop for 60fps-friendly updates.
+- **Performance option:** RenderScript blur (deprecated) or custom RenderEffect; prefer `RenderEffect.createBlurEffect` on API 31+.
+- **Blob states:** Same as iOS — idle (0.24f, 1f), quiet (0.55f, 0.9f), active (1f, 1.15f). Transition with `animateFloatAsState` (0.8s, FastOutSlowInEasing).
+- **Audio reactivity:** Use `AudioRecord` with `read()` in a coroutine; compute RMS amplitude and feed into blob scale/alpha state.
+
+#### 2. Talk Overlay Transition (clip-path circle → Compose)
+
+The HTML uses `clip-path: circle()`. In Compose:
+
+- Use `Modifier.clip(CircleShape)` with an `Animatable` for scale (0.001f → 3f) and offset so the circle expands from the mic button coordinates. Animate with `Animatable` or `animateFloatAsState`; duration 550ms, FastOutSlowInEasing.
+- Alternative: `androidx.compose.animation.AnimatedContent` or a custom `GraphicLayer` with `clip = true` and a circular path that grows from the tap point (e.g. `Path().addCircle` with animated radius).
+
+```kotlin
+// Concept: overlay with clip that animates from button position
+val scale by animateFloatAsState(if (visible) 3f else 0.001f, animationSpec = tween(550))
+val offsetX = buttonCenter.x - screenWidth / 2f
+val offsetY = buttonCenter.y - screenHeight / 2f
+Box(
+    modifier = Modifier
+        .fillMaxSize()
+        .graphicsLayer {
+            clip = true
+            shape = CircleShape
+            scaleX = scale
+            scaleY = scale
+            translationX = offsetX
+            translationY = offsetY
+        }
+) { /* overlay content */ }
+```
+
+#### 3. Word-by-Word Text Reveal
+
+- Split string into words; use `FlowRow` or `Row(modifier = Modifier.wrapContentWidth())` with each word as a `Text` composable.
+- Use `Brush.linearGradient` or `Brush.horizontalGradient` with `Modifier.drawWithContent` / `Modifier.graphicsLayer` to mask from secondary to primary color; animate gradient stop or use per-word `alpha` / color driven by a staggered delay (~220ms per word) via `LaunchedEffect` + `delay`.
+- Sync with `ExoPlayer`/`MediaPlayer` current position for word-level alignment if needed.
+
+#### 4. Voice I/O Pipeline
+
+```
+User speaks → AudioRecord (mic input)
+           → SpeechRecognizer (android.speech) or Google ML Kit Speech-to-Text
+           → Real-time transcription (onResult callbacks)
+           → Send to AI backend
+           → Stream response text + TTS audio (server-side)
+           → ExoPlayer or MediaPlayer (sentence-by-sentence playback)
+           → Word-by-word text reveal synced to playback
+```
+
+- Use `android.speech.SpeechRecognizer` with `RecognizerIntent`; for on-device low latency consider ML Kit or device OEM APIs where available.
+- `AudioManager.STREAM_MUSIC` / `AudioAttributes` for playback; `MODIFY_AUDIO_SETTINGS` and `RECORD_AUDIO` permissions.
+- Handle `AudioManager` focus and interruptions (e.g. `OnAudioFocusChangeListener`).
+- Silence detection: compute level from `AudioRecord.read()` buffer, trigger timeout after 10s below threshold.
+
+#### 5. Permission Handling
+
+- Microphone: `ActivityResultContracts.RequestPermission()` for `Manifest.permission.RECORD_AUDIO`.
+- (Optional) Speech: if using a cloud STT API, no special Android permission beyond network; if using on-device, RECORD_AUDIO covers it.
+- Show custom pre-permission screen before calling `Activity.requestPermissions()` / `rememberLauncherForActivityResult` (same as Error State B design).
+- If permanently denied: `Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)` with package URI, or `ACTION_APPLICATION_SETTINGS`.
+
+#### 6. Bottom Navigation (Material 3)
+
+- Use `NavigationBar` (Material 3) or custom composable with `Surface(shape = RoundedCornerShape(percent = 50))` + `Modifier.blur()` (API 31+) or semi-transparent background to approximate glass pill. Same structure: Inbox, To-do, AI tabs + FAB for compose.
+
+#### 7. Accessibility
+
+- Respect `Settings.Global.getFloat(ANIMATOR_DURATION_SCALE, 1f)` or check for reduced motion — use static gradient and opacity-only transitions.
+- `ContentDescription` on all interactive elements; ` semantics { liveRegion = LiveRegionMode.Polite }` for state changes ("Recording", "Filo is thinking", "Response: ...").
+- `Modifier.minimumInteractiveComponentSize()` (48.dp) for tap targets; support large font / display size.
+
+#### 8. Haptics
+
+- Mic button tap: `view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)` or `HapticFeedbackConstants.CONTEXT_CLICK`
+- Stop button: `HapticFeedbackConstants.CONTEXT_CLICK` (light)
+- Error card appear: `HapticFeedbackConstants.REJECT` or `CONFIRM` as appropriate
+
+---
+
 ## Acceptance Criteria
+
+(Applies to both **iOS** and **Android**.)
 
 1. All 6 screen states render correctly in both Light and Dark mode
 2. Talk Overlay opens with circle-reveal animation from mic button position

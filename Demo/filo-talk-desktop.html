@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <title>Filo Talk - Desktop (Template)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Filo Design Guidelines — Colors (colors.json) */
+            --filo-01: #1F9EFA;
+            --filo-02: #22A0FB;
+            --filo-05: #E8EEF2;
+            --filo-06: #000000;
+            --filo-07: #707070;
+            --filo-08: #999999;
+            --filo-09: #F5F5F5;
+            --filo-10: #FFFFFF;
+            --filo-14: rgba(0, 0, 0, 0.04);
+            --filo-25: #9E9E9E;
+            --bg: #F5F5F5;
+
+            /* Filo Design Guidelines — Typography (typography.json) */
+            --font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', 'Segoe UI', Roboto, system-ui, sans-serif;
+            --H2-size: 32px;
+            --H2-weight: 700;
+            --H2-lh: 1.3;
+            --H2-ls: 0.2px;
+            --H5-size: 22px;
+            --H5-weight: 700;
+            --H5-lh: 1.2;
+            --H5-ls: 0;
+            --P1_1_R-size: 17px;
+            --P1_1_R-weight: 400;
+            --P1_1_R-lh: 1.4;
+            --P1_1_R-ls: -0.2px;
+            --P2_R-size: 16px;
+            --P2_R-weight: 400;
+            --P2_R-lh: 1.3;
+            --P2_R-ls: -0.2px;
+            --P2_M-size: 16px;
+            --P2_M-weight: 510;
+            --P2_M-lh: 1.3;
+            --P2_M-ls: -0.2px;
+            --P3_R-size: 15px;
+            --P3_R-weight: 400;
+            --P3_R-lh: 1.35;
+            --P3_R-ls: -0.2px;
+            --P4_R-size: 13px;
+            --P4_R-weight: 400;
+            --P4_R-lh: 1.2;
+            --P4_R-ls: 0;
+        }
+
+        body.dark-mode {
+            --filo-01: #6CC1FF;
+            --filo-02: #45B1FF;
+            --filo-05: #344352;
+            --filo-06: #FFFFFF;
+            --filo-07: #8B8B8B;
+            --filo-08: #414149;
+            --filo-09: #2A2A30;
+            --filo-10: #1D1D21;
+            --filo-14: rgba(255, 255, 255, 0.06);
+            --filo-25: #727272;
+            --bg: #121212;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--bg);
+            min-height: 100vh;
+            padding: 60px 80px 60px;
+            color: var(--filo-06);
+        }
+
+        /* Page header - same as Filo Talk Mobile */
+        .page-header {
+            margin-bottom: 40px;
+        }
+
+        .page-header h1 {
+            font-size: var(--H2-size);
+            font-weight: var(--H2-weight);
+            line-height: var(--H2-lh);
+            letter-spacing: var(--H2-ls);
+            margin-bottom: 20px;
+            color: var(--filo-06);
+        }
+
+        .page-subtitle {
+            font-size: var(--P3_R-size);
+            font-weight: var(--P3_R-weight);
+            line-height: var(--P3_R-lh);
+            letter-spacing: var(--P3_R-ls);
+            color: var(--filo-07);
+            margin-bottom: 16px;
+            max-width: 800px;
+            line-height: 1.5;
+        }
+
+        .page-meta {
+            display: flex;
+            gap: 16px;
+            font-size: var(--P4_R-size);
+            font-weight: var(--P4_R-weight);
+            line-height: var(--P4_R-lh);
+            letter-spacing: var(--P4_R-ls);
+            color: var(--filo-07);
+            align-items: center;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .meta-link {
+            color: var(--filo-02);
+            text-decoration: none;
+        }
+
+        .meta-link:hover {
+            text-decoration: underline;
+        }
+
+        .screen-nav {
+            display: flex;
+            gap: 72px;
+            margin-top: 8px;
+            border-bottom: 0.5px solid var(--filo-08);
+        }
+
+        .screen-nav .mode-btn {
+            background: none;
+            font-size: var(--P3_R-size);
+            font-weight: var(--P3_R-weight);
+            padding: 8px 0;
+            color: var(--filo-07);
+            border: none;
+            border-bottom: 2px solid transparent;
+            border-radius: 0;
+            margin-bottom: -1px;
+            transition: color 0.1s, border-color 0.1s;
+        }
+
+        .screen-nav .mode-btn.active {
+            background: none;
+            color: var(--filo-06);
+            font-weight: var(--H5-weight);
+            box-shadow: none;
+            border-bottom-color: var(--filo-02);
+        }
+
+        /* Controls - same as Filo Talk Mobile */
+        .controls {
+            position: fixed;
+            top: 20px;
+            right: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+            z-index: 100;
+        }
+
+        .toggle-group {
+            display: flex;
+            background: var(--filo-14);
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        .mode-btn {
+            padding: 6px 12px;
+            border: none;
+            background: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: var(--P4_R-size);
+            font-weight: var(--P4_R-weight);
+            color: var(--filo-07);
+            transition: all 0.2s;
+        }
+
+        .mode-btn.active {
+            background: var(--filo-10);
+            color: var(--filo-06);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Screen container - single desktop frame, same layout concept as mobile */
+        .screen-container {
+            display: flex;
+            justify-content: center;
+            padding: 40px 0;
+            align-items: flex-start;
+        }
+
+        /* Desktop frame: 1440×1024 — layout background #10 (Filo Design Guidelines) */
+        .desktop-frame {
+            width: 1440px;
+            height: 1024px;
+            background: var(--filo-10);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            position: relative;
+        }
+
+        .sidebar-upper {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            overflow-x: visible;
+        }
+
+        /* macOS traffic lights — inside sidebar */
+        .traffic-lights {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .traffic-light {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            cursor: default;
+        }
+
+        .traffic-light.close {
+            background: #FF5F57;
+        }
+
+        .traffic-light.minimize {
+            background: #FEBC2E;
+        }
+
+        .traffic-light.maximize {
+            background: #28C840;
+        }
+
+        .frame-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .drag-bar {
+            height: 0;
+            flex-shrink: 0;
+        }
+
+        /* Two-column content: left info, right card - same layout as onboarding-desktop / Look What I Found */
+        .content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 80px 60px;
+            gap: 80px;
+        }
+
+        /* Left: info/copy area (placeholder only) */
+        .info {
+            max-width: 420px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .info .title-slot {
+            font-size: var(--H2-size);
+            font-weight: var(--H2-weight);
+            line-height: var(--H2-lh);
+            letter-spacing: var(--H2-ls);
+            color: var(--filo-06);
+            margin-bottom: 16px;
+            min-height: 1.3em;
+        }
+
+        .info .subtitle-slot {
+            font-size: var(--P3_R-size);
+            font-weight: var(--P3_R-weight);
+            line-height: var(--P3_R-lh);
+            letter-spacing: var(--P3_R-ls);
+            color: var(--filo-07);
+            margin-bottom: 32px;
+            min-height: 3em;
+        }
+
+        .info .actions-slot {
+            margin-top: auto;
+            min-height: 48px;
+        }
+
+        /* Right: card area (placeholder only) */
+        .visual {
+            flex-shrink: 0;
+            width: 655px;
+            height: 491px;
+            position: relative;
+        }
+
+        .screen-wrapper {
+            width: 100%;
+            height: 100%;
+            border-radius: 28px;
+            overflow: hidden;
+            background: var(--filo-10);
+            box-shadow:
+                0 0 0 1px rgba(0, 0, 0, 0.04),
+                0 4px 6px rgba(0, 0, 0, 0.04),
+                0 24px 48px rgba(0, 0, 0, 0.12);
+            display: flex;
+            flex-direction: column;
+        }
+
+        body.dark-mode .screen-wrapper {
+            box-shadow:
+                0 0 0 1px rgba(255, 255, 255, 0.06),
+                0 4px 6px rgba(0, 0, 0, 0.2),
+                0 24px 48px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Placeholder hint (optional - remove when adding content) */
+        .placeholder-hint {
+            font-size: var(--P4_R-size);
+            font-weight: var(--P4_R-weight);
+            color: var(--filo-25);
+            margin: auto;
+            padding: 24px;
+        }
+
+        /* ========== Idle Screen — Full layout (Sidebar + List + AI panel) ========== */
+        .desktop-idle-wrap {
+            flex: 1;
+            display: flex;
+            align-items: stretch;
+            min-height: 0;
+            overflow: hidden;
+            background: var(--filo-10);
+        }
+
+        /* Sidebar 250px */
+        .app-sidebar {
+            width: 250px;
+            flex-shrink: 0;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .app-sidebar-inner {
+            flex: 1;
+            min-height: 0;
+            background: var(--filo-14);
+            border-radius: 20px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow: visible;
+        }
+
+        .sidebar-compose {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 11px;
+            background: var(--filo-10);
+            border: none;
+            border-radius: 999px;
+            cursor: pointer;
+            font-family: var(--font-family);
+            font-size: var(--P2_R-size);
+            font-weight: var(--P2_R-weight);
+            line-height: var(--P2_R-lh);
+            letter-spacing: var(--P2_R-ls);
+            color: var(--filo-06);
+            width: fit-content;
+        }
+
+        /* Filo icon library — inline SVGs so icons work without external file loading */
+        .filo-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            color: inherit;
+        }
+        .filo-icon svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .sidebar-compose .filo-icon,
+        .sidebar-item .filo-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-family);
+            font-size: var(--P2_R-size);
+            font-weight: var(--P2_R-weight);
+            line-height: var(--P2_R-lh);
+            letter-spacing: var(--P2_R-ls);
+            color: var(--filo-06);
+            width: 100%;
+            text-align: left;
+        }
+
+        .sidebar-item.selected {
+            color: var(--filo-02);
+            background: var(--filo-14);
+            border-radius: 10px;
+            margin: -10px -8px -10px -16px;
+            padding: 10px 8px 10px 16px;
+        }
+
+        .sidebar-item .filo-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .sidebar-item .label {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sidebar-item .badge {
+            font-size: var(--P4_R-size);
+            font-weight: var(--P4_R-weight);
+            line-height: 1;
+            letter-spacing: var(--P4_R-ls);
+            color: var(--filo-02);
+            align-self: center;
+        }
+
+        .sidebar-item:not(.selected) .badge {
+            color: var(--filo-07);
+        }
+
+        .sidebar-section-title {
+            font-size: var(--P4_R-size);
+            font-weight: var(--P4_R-weight);
+            line-height: var(--P4_R-lh);
+            letter-spacing: var(--P4_R-ls);
+            color: var(--filo-07);
+            padding-top: 20px;
+            margin-bottom: 4px;
+        }
+
+        .sidebar-account {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding-top: 16px;
+            border-top: 0.5px solid var(--filo-08);
+        }
+
+        .sidebar-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--filo-05);
+            flex-shrink: 0;
+        }
+
+        .sidebar-account-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .sidebar-account-name {
+            font-size: var(--P2_M-size);
+            font-weight: var(--P2_M-weight);
+            line-height: var(--P2_M-lh);
+            letter-spacing: var(--P2_M-ls);
+            color: var(--filo-06);
+        }
+
+        .sidebar-account-plan {
+            font-size: var(--P4_R-size);
+            font-weight: var(--P4_R-weight);
+            line-height: var(--P4_R-lh);
+            color: var(--filo-07);
+        }
+
+        .sidebar-account .icon-btn {
+            width: 20px;
+            height: 20px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: var(--filo-07);
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Main area: header + list + AI */
+        .app-main {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            background: var(--filo-10);
+        }
+
+        body.dark-mode .app-main {
+            background: var(--filo-10);
+        }
+
+        .list-header {
+            height: 56px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 26px 12px 26px;
+            gap: 12px;
+        }
+
+        .list-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .list-header .search-wrap {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 12px;
+            background: var(--filo-10);
+            border: 0.5px solid var(--filo-14);
+            border-radius: 100px;
+            box-shadow: 0 -1px 12px 0 rgba(0, 0, 0, 0.06);
+            width: 240px;
+        }
+
+        .list-header .search-wrap .filo-icon {
+            width: 20px;
+            height: 20px;
+            color: var(--filo-25);
+        }
+
+        .list-header .search-placeholder {
+            font-size: var(--P3_R-size);
+            font-weight: var(--P3_R-weight);
+            line-height: var(--P3_R-lh);
+            letter-spacing: var(--P3_R-ls);
+            color: var(--filo-25);
+        }
+
+        .list-header .icon-btn-header {
+            width: 44px;
+            height: 44px;
+            border-radius: 100px;
+            background: var(--filo-10);
+            border: 0.5px solid var(--filo-14);
+            box-shadow: 0 -1px 12px 0 rgba(0, 0, 0, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--filo-06);
+        }
+
+        body.dark-mode .list-header .icon-btn-header {
+            box-shadow: 0 -1px 12px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .list-header .icon-btn-header .filo-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .list-header .ai-pill {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            border-radius: 78px;
+            border: 0.4px solid var(--filo-14);
+            background: var(--filo-02);
+            box-shadow: 0 16px 31px rgba(0, 0, 0, 0.07), 0 8px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark-mode .list-header .ai-pill {
+            box-shadow: 0 16px 31px rgba(0, 0, 0, 0.2), 0 8px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .list-header .ai-pill .filo-icon {
+            width: 19px;
+            height: 19px;
+            color: var(--filo-10);
+        }
+
+        .list-body {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+        }
+
+        .list-emails {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .list-tabs {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            padding: 20px 26px 0;
+            position: relative;
+        }
+        .list-tabs::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 23px;
+            right: 0;
+            height: 0.5px;
+            background: var(--filo-08);
+        }
+
+        .list-tabs .tab {
+            padding: 8px 0;
+            font-size: var(--P3_R-size);
+            font-weight: var(--P3_R-weight);
+            line-height: var(--P3_R-lh);
+            letter-spacing: var(--P3_R-ls);
+            color: var(--filo-07);
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -0.5px;
+            cursor: pointer;
+            font-family: var(--font-family);
+        }
+
+        .list-tabs .tab.active {
+            font-weight: var(--H5-weight);
+            color: var(--filo-06);
+            border-bottom-color: var(--filo-02);
+        }
+
+        .list-tabs .tab .count {
+            margin-left: 4px;
+            font-weight: 400;
+        }
+
+        .list-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 26px;
+        }
+
+        .list-timeline {
+            font-size: var(--P4_R-size);
+            font-weight: var(--P4_R-weight);
+            line-height: var(--P4_R-lh);
+            color: var(--filo-07);
+            padding: 12px 0 8px;
+        }
+
+        .email-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 0.5px solid var(--filo-08);
+            cursor: pointer;
+            min-height: 22px;
+        }
+
+        .email-row:hover {
+            background: var(--filo-14);
+        }
+
+        .email-row .avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            object-fit: cover;
+            background: var(--filo-14);
+        }
+
+        .email-row .email-row-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .email-row .sender {
+            font-size: var(--P3_R-size);
+            font-weight: var(--P3_R-weight);
+            line-height: var(--P3_R-lh);
+            letter-spacing: var(--P3_R-ls);
+            color: var(--filo-06);
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .email-row .subject {
+            font-size: var(--P4_R-size);
+            font-weight: var(--P4_R-weight);
+            line-height: var(--P4_R-lh);
+            color: var(--filo-07);
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .email-row .meta {
+            flex-shrink: 0;
+            font-size: var(--P4_R-size);
+            font-weight: var(--P4_R-weight);
+            color: var(--filo-07);
+        }
+
+        .ai-panel {
+            width: 380px;
+            flex-shrink: 0;
+            background: var(--filo-10);
+            border: 0.5px solid var(--filo-14);
+            border-radius: 30px;
+            margin: 8px 8px 8px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            overflow: hidden;
+            position: relative;
+        }
+
+        body.dark-mode .ai-panel {
+            background: var(--filo-10);
+            border-color: var(--filo-14);
+        }
+
+        .ai-panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            height: 36px;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .ai-panel-title {
+            font-size: var(--H5-size);
+            font-weight: var(--H5-weight);
+            line-height: var(--H5-lh);
+            letter-spacing: var(--H5-ls);
+            color: var(--filo-02);
+        }
+
+        .ai-panel-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ai-panel-controls .icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 100px;
+            background: var(--filo-14);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--filo-06);
+        }
+
+        .ai-panel-controls .icon-btn .filo-icon {
+            width: 16px;
+            height: 16px;
+            color: currentColor;
+        }
+
+        .ai-panel-controls .icon-group {
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+
+        .ai-panel-controls .icon-group .icon-btn {
+            border-radius: 0;
+        }
+
+        .ai-panel-controls .icon-group .icon-btn:first-child {
+            border-radius: 100px 0 0 100px;
+        }
+
+        .ai-panel-controls .icon-group .icon-btn:last-child {
+            border-radius: 0 100px 100px 0;
+        }
+
+        .ai-panel-controls .divider {
+            width: 0.5px;
+            height: 16px;
+            background: var(--filo-08);
+        }
+
+        .ai-panel-gradient {
+            position: absolute;
+            left: 50%;
+            top: 154px;
+            transform: translate(-50%, 0) rotate(-90deg);
+            width: 366px;
+            height: 240px;
+            border-radius: 50%;
+            background: radial-gradient(ellipse 80% 50%, rgba(157, 222, 255, 0.5) 0%, rgba(127, 110, 255, 0.25) 50%, transparent 70%);
+            filter: blur(30px);
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        body.dark-mode .ai-panel-gradient {
+            background: radial-gradient(ellipse 80% 50%, rgba(69, 177, 255, 0.2) 0%, rgba(127, 110, 255, 0.12) 50%, transparent 70%);
+        }
+
+        .ai-panel-chat {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 36px;
+            min-height: 0;
+            position: relative;
+            z-index: 5;
+        }
+
+        .ai-panel-greeting {
+            text-align: center;
+            max-width: 280px;
+            margin: 0 auto;
+        }
+
+        .ai-panel-greeting h2 {
+            font-size: var(--H5-size);
+            font-weight: var(--H5-weight);
+            line-height: var(--H5-lh);
+            letter-spacing: var(--H5-ls);
+            color: var(--filo-06);
+            margin-bottom: 4px;
+        }
+
+        .ai-panel-greeting p {
+            font-size: var(--P2_R-size);
+            font-weight: var(--P2_R-weight);
+            line-height: var(--P2_R-lh);
+            letter-spacing: var(--P2_R-ls);
+            color: var(--filo-07);
+        }
+
+        .ai-panel-suggestions {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 16px;
+            padding: 0 20px;
+            margin-top: auto;
+            padding-bottom: 12px;
+        }
+
+        .ai-panel-suggestions .suggestion-pill {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 10px 12px;
+            background: var(--filo-14);
+            border: none;
+            border-radius: 999px;
+            cursor: pointer;
+            font-family: var(--font-family);
+            font-size: var(--P2_R-size);
+            font-weight: var(--P2_R-weight);
+            line-height: var(--P2_R-lh);
+            letter-spacing: var(--P2_R-ls);
+            color: var(--filo-06);
+        }
+
+        .ai-panel-suggestions .suggestion-pill:hover {
+            background: rgba(0, 0, 0, 0.06);
+        }
+
+        body.dark-mode .ai-panel-suggestions .suggestion-pill:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .ai-panel-suggestions .suggestion-pill .filo-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            color: currentColor;
+        }
+
+        .ai-panel-input-wrap {
+            padding: 12px 20px 20px;
+            background: linear-gradient(to bottom, transparent 0%, var(--filo-10) 32%);
+            position: relative;
+            z-index: 10;
+        }
+
+        .ai-panel-input-inner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--filo-10);
+            border: 0.5px solid var(--filo-08);
+            border-radius: 24px;
+            min-height: 48px;
+        }
+
+        body.dark-mode .ai-panel-input-inner {
+            border-color: var(--filo-08);
+        }
+
+        .ai-panel-input-inner .placeholder {
+            flex: 1;
+            font-size: var(--P2_R-size);
+            font-weight: var(--P2_R-weight);
+            line-height: var(--P2_R-lh);
+            letter-spacing: var(--P2_R-ls);
+            color: var(--filo-25);
+        }
+
+        .ai-panel-mic {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--filo-06);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .ai-panel-mic:hover {
+            opacity: 0.9;
+        }
+
+        .ai-panel-mic .filo-icon {
+            width: 16px;
+            height: 16px;
+            color: var(--filo-10);
+        }
+
+        .list-header .icon-btn-header .filo-icon {
+            color: currentColor;
+        }
+
+        .list-header .search-wrap .filo-icon {
+            color: var(--filo-25);
+        }
+
+        .list-header .ai-pill .filo-icon {
+            color: var(--filo-10);
+        }
+
+        body.dark-mode .ai-panel-mic {
+            background: var(--filo-06);
+        }
+
+        /* Screen switching: only Idle has content for now */
+        .desktop-screen {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .desktop-screen.active {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <div class="toggle-group">
+            <button type="button" class="mode-btn active" data-mode="light" aria-pressed="true">Light</button>
+            <button type="button" class="mode-btn" data-mode="dark" aria-pressed="false">Dark</button>
+        </div>
+    </div>
+
+    <div class="page-header">
+        <h1>Filo Talk - Desktop</h1>
+        <p class="page-subtitle">A voice-driven AI conversation between you and Filo. You speak, Filo acts on your email (search, archive, compose, reply, create tasks, set rules), and responds with voice. The conversation is continuous, no re-tapping, no re-prompting, until you decide to end it. &nbsp;&nbsp; <a href="https://xindong.atlassian.net/browse/FILO-1741" target="_blank" rel="noopener" class="meta-link">Jira-1741</a> &nbsp;·&nbsp; <a href="https://www.figma.com/design/Q5SuGKvcf9zcwftxOEXYGf/%F0%9F%8D%8F--Desktop?node-id=22526-154339" target="_blank" rel="noopener" class="meta-link">Figma</a></p>
+        <div class="screen-nav">
+            <button type="button" class="mode-btn active" data-screen="idle">Idle</button>
+            <button type="button" class="mode-btn" data-screen="conversation">Conversation</button>
+            <button type="button" class="mode-btn" data-screen="onboarding">Onboarding</button>
+            <button type="button" class="mode-btn" data-screen="error">Error</button>
+        </div>
+    </div>
+
+    <div class="screen-container">
+        <div class="desktop-frame" id="mainFrame">
+            <div class="frame-content">
+                <div class="drag-bar"></div>
+
+                <!-- Idle screen (full layout: Sidebar + List + AI panel) -->
+                <div class="desktop-screen active" id="desktop-screen-idle">
+                    <div class="desktop-idle-wrap">
+                        <!-- Sidebar -->
+                        <aside class="app-sidebar">
+                            <div class="app-sidebar-inner">
+                                <div class="sidebar-upper">
+                                    <div class="traffic-lights" aria-hidden="true">
+                                        <span class="traffic-light close"></span>
+                                        <span class="traffic-light minimize"></span>
+                                        <span class="traffic-light maximize"></span>
+                                    </div>
+                                    <nav class="sidebar-nav">
+                                    <button type="button" class="sidebar-compose">
+                                        <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.71 13.7982C17.8755 13.3135 18.5601 13.3135 18.7256 13.7982L19.21 15.2162C19.5324 16.1603 20.2746 16.9025 21.2188 17.2249L22.6367 17.7093C23.1214 17.8748 23.1214 18.5594 22.6367 18.7249L21.2188 19.2093C20.2746 19.5317 19.5324 20.274 19.21 21.2181L18.7256 22.6361C18.5601 23.1207 17.8755 23.1207 17.71 22.6361L17.2256 21.2181C16.9032 20.274 16.1609 19.5317 15.2168 19.2093L13.7988 18.7249C13.3142 18.5594 13.3142 17.8748 13.7988 17.7093L15.2168 17.2249C16.1609 16.9025 16.9032 16.1603 17.2256 15.2162L17.71 13.7982ZM14.458 1.97299C15.7559 0.675233 17.8603 0.675256 19.1582 1.97299C20.456 3.27086 20.456 5.3753 19.1582 6.67319L7.77734 18.054L7.58594 18.2249C7.38489 18.3839 7.15646 18.5067 6.91211 18.5882L2.45996 20.0726L2.29785 20.1136C1.49528 20.257 0.788402 19.4817 1.05859 18.6703L2.54297 14.2201C2.62446 13.9756 2.74822 13.7474 2.90723 13.5462L3.07812 13.3539L14.458 1.97299ZM3.16016 17.971L6.3252 16.9164L4.21484 14.805L3.16016 17.971ZM17.9053 3.22592C17.2997 2.62052 16.3176 2.62074 15.7119 3.22592L5.40918 13.5277L7.60254 15.722L17.9053 5.42026C18.5109 4.81458 18.5109 3.83158 17.9053 3.22592Z" fill="currentColor"/></svg></span>
+                                        Compose
+                                    </button>
+                                    <button type="button" class="sidebar-item selected">
+                                        <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22.8408 6.35156C22.9069 6.30354 22.9998 6.35104 23 6.43262V18C23 19.6523 21.6523 21 20 21H4C2.34772 21 1.00001 19.6523 1 18V6.43262C1.00019 6.35104 1.09315 6.30354 1.15918 6.35156L10.8232 13.3809C11.5245 13.8909 12.4755 13.8909 13.1768 13.3809L22.8408 6.35156Z" fill="currentColor"/><path d="M20 3C20.9056 3 21.7197 3.40498 22.2705 4.04297C22.3435 4.12754 22.3238 4.2546 22.2334 4.32031L13.1768 10.9082C12.4755 11.4182 11.5245 11.4182 10.8232 10.9082L1.7666 4.32031C1.67624 4.2546 1.65647 4.12754 1.72949 4.04297C2.28034 3.40497 3.09438 3.00002 4 3H20Z" fill="currentColor"/></svg></span>
+                                        <span class="label">Inbox</span>
+                                        <span class="badge">4</span>
+                                    </button>
+                                    <button type="button" class="sidebar-item">
+                                        <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.04466 4C1.5073 4 1.07168 4.49055 1.07168 5.09565C1.07168 5.70076 1.5073 6.1913 2.04466 6.1913H21.0987C21.636 6.1913 22.0717 5.70076 22.0717 5.09565C22.0717 4.49055 21.636 4 21.0987 4H2.04466Z" fill="currentColor"/><path d="M15.0177 11.1043C14.4803 11.1043 14.0447 11.5949 14.0447 12.2C14.0447 12.8051 14.4803 13.2957 15.0177 13.2957H21.0987C21.6361 13.2957 22.0717 12.8051 22.0717 12.2C22.0717 11.5949 21.6361 11.1043 21.0987 11.1043H15.0177Z" fill="currentColor"/><path d="M15.0177 18.2087C14.4803 18.2087 14.0447 18.6993 14.0447 19.3043C14.0447 19.9094 14.4803 20.4 15.0177 20.4H21.0987C21.6361 20.4 22.0717 19.9094 22.0717 19.3043C22.0717 18.6993 21.6361 18.2087 21.0987 18.2087H15.0177Z" fill="currentColor"/><path d="M11.5716 12.589C11.9383 12.1066 11.8545 11.4105 11.3842 11.0344C10.9139 10.658 10.2353 10.7441 9.86835 11.2265L5.07288 17.5322L2.90699 14.8875C2.52337 14.4192 1.84211 14.3583 1.38535 14.7519C0.928725 15.1454 0.869397 15.8441 1.25301 16.3124L4.277 20.0047C4.48666 20.2607 4.7977 20.4059 5.12357 20.3998C5.44944 20.3938 5.75515 20.2372 5.9556 19.9736L11.5716 12.589Z" fill="currentColor"/></svg></span>
+                                        <span class="label">To-do</span>
+                                        <span class="badge">3</span>
+                                    </button>
+                                    <button type="button" class="sidebar-item">
+                                        <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.9079 2C17.2376 2 17.511 2.03425 17.7356 2.09394C17.9602 2.15362 18.1766 2.25314 18.3755 2.40085C18.5744 2.54856 18.8016 2.74723 19.0572 2.99702C19.3128 3.24681 20.7518 4.67669 21.002 4.93246C21.2521 5.18821 21.4513 5.42178 21.599 5.62349C21.7468 5.82521 21.8463 6.03802 21.906 6.26244C21.9657 6.48685 21.9999 6.76247 21.9999 7.09763C21.9999 7.43278 21.9999 9.96221 21.9999 10.3203C21.9999 10.6783 21.9994 10.9526 21.9404 11.2243C21.8814 11.4959 21.8215 11.6431 21.7097 11.8976C21.598 12.1521 21.3914 12.6084 21.0475 12.9523C20.5713 13.4285 20.3624 13.5867 20.0951 13.4285C19.8766 13.2992 19.7426 12.7907 19.619 12.4761C19.4953 12.1616 19.2246 11.3694 19.4218 11.2085C19.619 11.0476 19.5664 11.0648 19.6459 10.9853C19.7255 10.9057 19.7792 10.8231 19.8161 10.7379C19.8531 10.6526 19.8766 10.5421 19.8766 10.4058C19.8766 10.2695 19.8766 7.42516 19.8766 7.20923C19.8766 6.99331 19.7994 6.80835 19.6459 6.65492C19.4924 6.50143 17.4966 4.50646 17.3431 4.35304C17.1896 4.19962 17.0021 4.12241 16.7804 4.12238C16.5586 4.12236 13.7153 4.12236 13.5904 4.12238C13.4654 4.12241 13.363 4.14859 13.2834 4.19121C13.2039 4.23383 13.1185 4.29305 13.0277 4.37815C12.9363 4.46375 5.016 12.3778 4.77158 12.6221C4.52715 12.8665 4.40237 13.1172 4.39677 13.3643C4.39116 13.6114 4.51876 13.8585 4.77995 14.114C5.04114 14.3695 9.46672 18.7983 9.89804 19.2293C10.3293 19.6602 10.8448 19.5957 11.1843 19.4125C11.5238 19.2293 12 19.4575 12.4761 19.6189C12.9523 19.7804 13.3207 19.8138 13.4285 20.0951C13.5364 20.3765 13.0694 20.7293 12.7552 20.9852C12.0471 21.5617 11.3735 21.997 10.6486 21.9999C9.92373 22.0028 9.2207 21.6645 8.53272 20.9768C7.84471 20.2891 3.72023 16.1743 3.03238 15.4867C2.34453 14.7992 1.99724 14.0917 2.00002 13.3643C2.00279 12.637 2.34675 11.9349 3.02308 11.2587C3.6994 10.5825 11.2198 3.07392 11.4587 2.83519C11.6974 2.59663 11.9135 2.41786 12.1153 2.29855C12.3171 2.17923 12.5415 2.09931 12.7803 2.05952C13.0191 2.01974 13.3177 2 13.6759 2H16.9079Z" fill="currentColor"/><path d="M17.2585 13.754C17.4068 13.3198 18.0216 13.3198 18.1699 13.754L18.6033 15.0254C18.8922 15.8714 19.557 16.5362 20.403 16.8251L21.6744 17.2585C22.1086 17.4068 22.1086 18.0216 21.6744 18.1699L20.403 18.6033C19.557 18.8922 18.8922 19.557 18.6033 20.403L18.1699 21.6744C18.0216 22.1085 17.4068 22.1085 17.2585 21.6744L16.8251 20.403C16.5362 19.557 15.8714 18.8922 15.0254 18.6033L13.754 18.1699C13.3199 18.0216 13.3199 17.4068 13.754 17.2585L15.0254 16.8251C15.8714 16.5362 16.5362 15.8714 16.8251 15.0254L17.2585 13.754Z" fill="currentColor"/><path d="M15.7397 6.9358C16.115 6.9358 16.428 7.06416 16.6781 7.31991C16.9338 7.56994 17.0613 7.88241 17.0613 8.2574C17.0613 8.62108 16.9339 8.9308 16.6781 9.18653C16.428 9.44227 16.115 9.57064 15.7397 9.57064C15.3702 9.57061 15.0571 9.44225 14.8013 9.18653C14.5513 8.93082 14.4265 8.62102 14.4265 8.2574C14.4265 7.88246 14.5513 7.56992 14.8013 7.31991C15.0571 7.06418 15.3702 6.93582 15.7397 6.9358Z" fill="currentColor"/></svg></span>
+                                        <span class="label">Business</span>
+                                    </button>
+                                    <button type="button" class="sidebar-item">
+                                        <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.9079 2C17.2376 2 17.511 2.03425 17.7356 2.09394C17.9602 2.15362 18.1766 2.25314 18.3755 2.40085C18.5744 2.54856 18.8016 2.74723 19.0572 2.99702C19.3128 3.24681 20.7518 4.67669 21.002 4.93246C21.2521 5.18821 21.4513 5.42178 21.599 5.62349C21.7468 5.82521 21.8463 6.03802 21.906 6.26244C21.9657 6.48685 21.9999 6.76247 21.9999 7.09763C21.9999 7.43278 21.9999 9.96221 21.9999 10.3203C21.9999 10.6783 21.9994 10.9526 21.9404 11.2243C21.8814 11.4959 21.8215 11.6431 21.7097 11.8976C21.598 12.1521 21.3914 12.6084 21.0475 12.9523C20.5713 13.4285 20.3624 13.5867 20.0951 13.4285C19.8766 13.2992 19.7426 12.7907 19.619 12.4761C19.4953 12.1616 19.2246 11.3694 19.4218 11.2085C19.619 11.0476 19.5664 11.0648 19.6459 10.9853C19.7255 10.9057 19.7792 10.8231 19.8161 10.7379C19.8531 10.6526 19.8766 10.5421 19.8766 10.4058C19.8766 10.2695 19.8766 7.42516 19.8766 7.20923C19.8766 6.99331 19.7994 6.80835 19.6459 6.65492C19.4924 6.50143 17.4966 4.50646 17.3431 4.35304C17.1896 4.19962 17.0021 4.12241 16.7804 4.12238C16.5586 4.12236 13.7153 4.12236 13.5904 4.12238C13.4654 4.12241 13.363 4.14859 13.2834 4.19121C13.2039 4.23383 13.1185 4.29305 13.0277 4.37815C12.9363 4.46375 5.016 12.3778 4.77158 12.6221C4.52715 12.8665 4.40237 13.1172 4.39677 13.3643C4.39116 13.6114 4.51876 13.8585 4.77995 14.114C5.04114 14.3695 9.46672 18.7983 9.89804 19.2293C10.3293 19.6602 10.8448 19.5957 11.1843 19.4125C11.5238 19.2293 12 19.4575 12.4761 19.6189C12.9523 19.7804 13.3207 19.8138 13.4285 20.0951C13.5364 20.3765 13.0694 20.7293 12.7552 20.9852C12.0471 21.5617 11.3735 21.997 10.6486 21.9999C9.92373 22.0028 9.2207 21.6645 8.53272 20.9768C7.84471 20.2891 3.72023 16.1743 3.03238 15.4867C2.34453 14.7992 1.99724 14.0917 2.00002 13.3643C2.00279 12.637 2.34675 11.9349 3.02308 11.2587C3.6994 10.5825 11.2198 3.07392 11.4587 2.83519C11.6974 2.59663 11.9135 2.41786 12.1153 2.29855C12.3171 2.17923 12.5415 2.09931 12.7803 2.05952C13.0191 2.01974 13.3177 2 13.6759 2H16.9079Z" fill="currentColor"/><path d="M17.2585 13.754C17.4068 13.3198 18.0216 13.3198 18.1699 13.754L18.6033 15.0254C18.8922 15.8714 19.557 16.5362 20.403 16.8251L21.6744 17.2585C22.1086 17.4068 22.1086 18.0216 21.6744 18.1699L20.403 18.6033C19.557 18.8922 18.8922 19.557 18.6033 20.403L18.1699 21.6744C18.0216 22.1085 17.4068 22.1085 17.2585 21.6744L16.8251 20.403C16.5362 19.557 15.8714 18.8922 15.0254 18.6033L13.754 18.1699C13.3199 18.0216 13.3199 17.4068 13.754 17.2585L15.0254 16.8251C15.8714 16.5362 16.5362 15.8714 16.8251 15.0254L17.2585 13.754Z" fill="currentColor"/><path d="M15.7397 6.9358C16.115 6.9358 16.428 7.06416 16.6781 7.31991C16.9338 7.56994 17.0613 7.88241 17.0613 8.2574C17.0613 8.62108 16.9339 8.9308 16.6781 9.18653C16.428 9.44227 16.115 9.57064 15.7397 9.57064C15.3702 9.57061 15.0571 9.44225 14.8013 9.18653C14.5513 8.93082 14.4265 8.62102 14.4265 8.2574C14.4265 7.88246 14.5513 7.56992 14.8013 7.31991C15.0571 7.06418 15.3702 6.93582 15.7397 6.9358Z" fill="currentColor"/></svg></span>
+                                        <span class="label">Financial</span>
+                                    </button>
+                                    <button type="button" class="sidebar-item">
+                                        <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.9079 2C17.2376 2 17.511 2.03425 17.7356 2.09394C17.9602 2.15362 18.1766 2.25314 18.3755 2.40085C18.5744 2.54856 18.8016 2.74723 19.0572 2.99702C19.3128 3.24681 20.7518 4.67669 21.002 4.93246C21.2521 5.18821 21.4513 5.42178 21.599 5.62349C21.7468 5.82521 21.8463 6.03802 21.906 6.26244C21.9657 6.48685 21.9999 6.76247 21.9999 7.09763C21.9999 7.43278 21.9999 9.96221 21.9999 10.3203C21.9999 10.6783 21.9994 10.9526 21.9404 11.2243C21.8814 11.4959 21.8215 11.6431 21.7097 11.8976C21.598 12.1521 21.3914 12.6084 21.0475 12.9523C20.5713 13.4285 20.3624 13.5867 20.0951 13.4285C19.8766 13.2992 19.7426 12.7907 19.619 12.4761C19.4953 12.1616 19.2246 11.3694 19.4218 11.2085C19.619 11.0476 19.5664 11.0648 19.6459 10.9853C19.7255 10.9057 19.7792 10.8231 19.8161 10.7379C19.8531 10.6526 19.8766 10.5421 19.8766 10.4058C19.8766 10.2695 19.8766 7.42516 19.8766 7.20923C19.8766 6.99331 19.7994 6.80835 19.6459 6.65492C19.4924 6.50143 17.4966 4.50646 17.3431 4.35304C17.1896 4.19962 17.0021 4.12241 16.7804 4.12238C16.5586 4.12236 13.7153 4.12236 13.5904 4.12238C13.4654 4.12241 13.363 4.14859 13.2834 4.19121C13.2039 4.23383 13.1185 4.29305 13.0277 4.37815C12.9363 4.46375 5.016 12.3778 4.77158 12.6221C4.52715 12.8665 4.40237 13.1172 4.39677 13.3643C4.39116 13.6114 4.51876 13.8585 4.77995 14.114C5.04114 14.3695 9.46672 18.7983 9.89804 19.2293C10.3293 19.6602 10.8448 19.5957 11.1843 19.4125C11.5238 19.2293 12 19.4575 12.4761 19.6189C12.9523 19.7804 13.3207 19.8138 13.4285 20.0951C13.5364 20.3765 13.0694 20.7293 12.7552 20.9852C12.0471 21.5617 11.3735 21.997 10.6486 21.9999C9.92373 22.0028 9.2207 21.6645 8.53272 20.9768C7.84471 20.2891 3.72023 16.1743 3.03238 15.4867C2.34453 14.7992 1.99724 14.0917 2.00002 13.3643C2.00279 12.637 2.34675 11.9349 3.02308 11.2587C3.6994 10.5825 11.2198 3.07392 11.4587 2.83519C11.6974 2.59663 11.9135 2.41786 12.1153 2.29855C12.3171 2.17923 12.5415 2.09931 12.7803 2.05952C13.0191 2.01974 13.3177 2 13.6759 2H16.9079Z" fill="currentColor"/><path d="M17.2585 13.754C17.4068 13.3198 18.0216 13.3198 18.1699 13.754L18.6033 15.0254C18.8922 15.8714 19.557 16.5362 20.403 16.8251L21.6744 17.2585C22.1086 17.4068 22.1086 18.0216 21.6744 18.1699L20.403 18.6033C19.557 18.8922 18.8922 19.557 18.6033 20.403L18.1699 21.6744C18.0216 22.1085 17.4068 22.1085 17.2585 21.6744L16.8251 20.403C16.5362 19.557 15.8714 18.8922 15.0254 18.6033L13.754 18.1699C13.3199 18.0216 13.3199 17.4068 13.754 17.2585L15.0254 16.8251C15.8714 16.5362 16.5362 15.8714 16.8251 15.0254L17.2585 13.754Z" fill="currentColor"/><path d="M15.7397 6.9358C16.115 6.9358 16.428 7.06416 16.6781 7.31991C16.9338 7.56994 17.0613 7.88241 17.0613 8.2574C17.0613 8.62108 16.9339 8.9308 16.6781 9.18653C16.428 9.44227 16.115 9.57064 15.7397 9.57064C15.3702 9.57061 15.0571 9.44225 14.8013 9.18653C14.5513 8.93082 14.4265 8.62102 14.4265 8.2574C14.4265 7.88246 14.5513 7.56992 14.8013 7.31991C15.0571 7.06418 15.3702 6.93582 15.7397 6.9358Z" fill="currentColor"/></svg></span>
+                                        <span class="label">Family</span>
+                                    </button>
+                                    <button type="button" class="sidebar-item">
+                                        <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12C4 11.7069 4.10514 11.4552 4.31541 11.2449C4.52569 11.0283 4.77738 10.92 5.07049 10.92H10.9295V5.07049C10.9295 4.77738 11.0346 4.52569 11.2449 4.31541C11.4552 4.10514 11.7069 4 12 4C12.2995 4 12.5544 4.10514 12.7646 4.31541C12.9749 4.52569 13.08 4.77738 13.08 5.07049V10.92H18.9295C19.2226 10.92 19.4743 11.0283 19.6846 11.2449C19.8949 11.4552 20 11.7069 20 12C20 12.2995 19.8949 12.5544 19.6846 12.7646C19.4743 12.9685 19.2226 13.0705 18.9295 13.0705H13.08V18.9391C13.08 19.2258 12.9749 19.4743 12.7646 19.6846C12.5544 19.8949 12.2995 20 12 20C11.7069 20 11.4552 19.8949 11.2449 19.6846C11.0346 19.4743 10.9295 19.2258 10.9295 18.9391V13.0705H5.07049C4.77738 13.0705 4.52569 12.9685 4.31541 12.7646C4.10514 12.5544 4 12.2995 4 12Z" fill="currentColor"/></svg></span>
+                                        <span class="label" style="color: var(--filo-07);">New Smart Label</span>
+                                    </button>
+                                    <span class="sidebar-section-title">Mailboxes</span>
+                                    <button type="button" class="sidebar-item">
+                                        <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.8271 14.5732C14.01 14.5732 14.1607 14.6357 14.2783 14.7598C14.4025 14.8774 14.4648 15.0248 14.4648 15.2012C14.4648 15.3774 14.4023 15.5306 14.2783 15.6611C14.1607 15.7853 14.0101 15.8477 13.8271 15.8477H8.33984C8.16998 15.8477 8.01934 15.7853 7.88867 15.6611C7.76478 15.5306 7.70318 15.3773 7.70312 15.2012C7.70312 15.0248 7.76454 14.8774 7.88867 14.7598C8.01934 14.6356 8.16998 14.5732 8.33984 14.5732H13.8271Z" fill="currentColor"/><path d="M15.6504 12.0156C15.8333 12.0156 15.9872 12.078 16.1113 12.2021C16.2353 12.3262 16.2969 12.477 16.2969 12.6533C16.2968 12.8294 16.2352 12.9795 16.1113 13.1035C15.9872 13.2276 15.8333 13.29 15.6504 13.29H8.33984C8.16998 13.29 8.01934 13.2276 7.88867 13.1035C7.76476 12.9795 7.70321 12.8295 7.70312 12.6533C7.70312 12.477 7.76459 12.3263 7.88867 12.2021C8.01934 12.078 8.16998 12.0156 8.33984 12.0156H15.6504Z" fill="currentColor"/><path d="M19.8838 6.3418C20.1125 6.3418 20.2987 6.41712 20.4424 6.56738C20.5861 6.71111 20.6582 6.89086 20.6582 7.10645V8.95801C20.6582 9.18008 20.586 9.36636 20.4424 9.5166C20.2987 9.66033 20.1125 9.73242 19.8838 9.73242H17.3555C17.1334 9.7324 16.9471 9.66031 16.7969 9.5166C16.6533 9.36638 16.5811 9.18002 16.5811 8.95801V7.10645C16.5811 6.89092 16.6532 6.71109 16.7969 6.56738C16.9471 6.41714 17.1334 6.34182 17.3555 6.3418H19.8838Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M20.2061 3.00488C22.3194 3.11211 24 4.85996 24 7V16C24 18.14 22.3194 19.8879 20.2061 19.9951L20 20H4C1.85996 20 0.112115 18.3194 0.00488281 16.2061L0 16V7C0 4.79086 1.79086 3 4 3H20L20.2061 3.00488ZM4 4.7998C2.78497 4.7998 1.7998 5.78497 1.7998 7V16C1.7998 17.215 2.78497 18.2002 4 18.2002H20C21.215 18.2002 22.2002 17.215 22.2002 16V7C22.2002 5.78497 21.215 4.7998 20 4.7998H4Z" fill="currentColor"/></svg></span>
+                                        <span class="label">All Mail</span>
+                                    </button>
+                                    <button type="button" class="sidebar-item">
+                                        <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.1639 3.2736C11.42 2.53678 11.5481 2.16839 11.7375 2.06628C11.9013 1.97791 12.0986 1.97791 12.2626 2.06628C12.4519 2.16839 12.5799 2.53678 12.8361 3.2736L14.5293 8.14471C14.6022 8.35442 14.6386 8.45926 14.7044 8.53735C14.7623 8.60632 14.8364 8.66009 14.9199 8.69395C15.0144 8.73228 15.1254 8.73454 15.3473 8.73907L20.5033 8.84414C21.2832 8.86003 21.6731 8.86798 21.8288 9.01653C21.9635 9.14509 22.0244 9.33278 21.991 9.51595C21.9525 9.72763 21.6417 9.9632 21.0201 10.4346L16.9106 13.55C16.7336 13.6842 16.6452 13.7513 16.5912 13.8378C16.5435 13.9144 16.5153 14.0014 16.5089 14.0912C16.5017 14.193 16.5338 14.2992 16.5981 14.5118L18.0915 19.4478C18.3173 20.1945 18.4303 20.5678 18.3371 20.7617C18.2565 20.9295 18.0968 21.0455 17.9122 21.0704C17.699 21.099 17.3789 20.8763 16.7386 20.4307L12.5056 17.4852C12.3234 17.3584 12.2323 17.295 12.1333 17.2703C12.0457 17.2486 11.9542 17.2486 11.8668 17.2703C11.7678 17.295 11.6766 17.3584 11.4944 17.4852L7.26143 20.4307C6.62114 20.8763 6.301 21.099 6.08778 21.0704C5.90325 21.0455 5.74359 20.9295 5.66294 20.7617C5.56975 20.5678 5.6827 20.1945 5.90859 19.4478L7.40193 14.5118C7.46622 14.2992 7.49836 14.193 7.49112 14.0912C7.48473 14.0014 7.45647 13.9144 7.40879 13.8378C7.35483 13.7513 7.26637 13.6842 7.08945 13.55L2.97999 10.4346C2.35837 9.9632 2.04757 9.72763 2.00898 9.51595C1.97558 9.33278 2.03657 9.14509 2.17126 9.01653C2.32687 8.86798 2.71682 8.86004 3.49672 8.84414L8.65265 8.73907C8.87461 8.73454 8.9856 8.73228 9.08016 8.69395C9.16368 8.66009 9.23768 8.60632 9.2957 8.53735C9.36138 8.45926 9.39782 8.35442 9.47072 8.14471L11.1639 3.2736Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
+                                        <span class="label">Starred</span>
+                                    </button>
+                                    <button type="button" class="sidebar-item">
+                                        <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.0589 13.0265C17.2462 13.0265 17.401 13.0913 17.5234 13.2209C17.653 13.3434 17.7178 13.4982 17.7178 13.6854C17.7178 13.8726 17.653 14.0311 17.5234 14.1607C17.401 14.2903 17.2462 14.3551 17.0589 14.3551H8.86064C8.66622 14.3551 8.5042 14.2903 8.37458 14.1607C8.24496 14.0311 8.18015 13.8726 8.18015 13.6854C8.18015 13.4982 8.24496 13.3434 8.37458 13.2209C8.5042 13.0913 8.66622 13.0265 8.86064 13.0265H17.0589ZM17.0589 16.7962C17.2462 16.7962 17.401 16.861 17.5234 16.9906C17.653 17.1203 17.7178 17.2823 17.7178 17.4767C17.7178 17.6567 17.653 17.8116 17.5234 17.9412C17.401 18.0636 17.2462 18.1248 17.0589 18.1248H8.86064C8.66622 18.1248 8.5042 18.0636 8.37458 17.9412C8.24496 17.8116 8.18015 17.6567 8.18015 17.4767C8.18015 17.2823 8.24496 17.1203 8.37458 16.9906C8.5042 16.861 8.66622 16.7962 8.86064 16.7962H17.0589ZM7.34844 23.1583C6.2323 23.1583 5.39338 22.8774 4.83171 22.3157C4.27724 21.7541 4 20.908 4 19.7774V3.39165C4 2.2683 4.27724 1.42219 4.83171 0.853313C5.39338 0.284438 6.2323 0 7.34844 0H12.4791C12.8824 0 13.2352 0.0288038 13.5377 0.0864114C13.8473 0.136818 14.1317 0.237631 14.391 0.388851C14.6502 0.53287 14.9166 0.745298 15.1903 1.02614L21.1419 7.08574C21.4299 7.38098 21.6459 7.66181 21.79 7.92825C21.9412 8.18748 22.042 8.47552 22.0924 8.79236C22.1428 9.1092 22.168 9.50166 22.168 9.96972V19.7774C22.168 20.9008 21.8872 21.7433 21.3255 22.3049C20.771 22.8738 19.9357 23.1583 18.8196 23.1583H7.34844ZM7.42405 21.4192H18.7331C19.2948 21.4192 19.7161 21.2752 19.9969 20.9872C20.285 20.6991 20.429 20.2851 20.429 19.745V10.0453H14.2722C13.5953 10.0453 13.0876 9.8761 12.7492 9.53766C12.4107 9.19921 12.2415 8.69155 12.2415 8.01466V1.73903H7.43485C6.87318 1.73903 6.44832 1.88665 6.16029 2.18189C5.87945 2.47713 5.73903 2.89118 5.73903 3.42405V19.745C5.73903 20.2851 5.87945 20.6991 6.16029 20.9872C6.44832 21.2752 6.86958 21.4192 7.42405 21.4192ZM14.4666 8.41431H20.0941L13.8725 2.07387V7.80943C13.8725 8.02546 13.9157 8.18028 14.0021 8.27389C14.0957 8.36751 14.2506 8.41431 14.4666 8.41431Z" fill="currentColor"/></svg></span>
+                                        <span class="label">Draft</span>
+                                    </button>
+                                    <button type="button" class="sidebar-item">
+                                        <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.9523 20C11.5068 20 11.1854 19.8409 10.9881 19.5227C10.7908 19.2045 10.6221 18.8067 10.4821 18.3294L8.47733 11.5227L1.58473 9.49881C1.12649 9.35879 0.747812 9.19332 0.448687 9.00239C0.149562 8.80509 0 8.48687 0 8.04773C0 7.70406 0.136834 7.40811 0.410501 7.1599C0.684169 6.91169 1.02148 6.71122 1.42243 6.55847L17.8425 0.267303C18.0652 0.184566 18.2721 0.120923 18.463 0.0763723C18.6603 0.0254574 18.8385 0 18.9976 0C19.3095 0 19.5545 0.089101 19.7327 0.267303C19.9109 0.445505 20 0.690533 20 1.00239C20 1.16786 19.9745 1.34606 19.9236 1.53699C19.8791 1.72792 19.8154 1.93477 19.7327 2.15752L13.4797 18.4916C13.3015 18.9499 13.0883 19.3158 12.8401 19.5895C12.5919 19.8632 12.2959 20 11.9523 20ZM8.90692 10.0716L15.4749 3.50358C15.7359 3.24264 16.0446 2.96579 16.401 2.67303C16.7574 2.38027 17.0947 2.1066 17.4129 1.85203C17.0565 2.0175 16.6937 2.18934 16.3246 2.36754C15.9618 2.53938 15.5895 2.69849 15.2076 2.84487L2.30072 7.7327C2.23071 7.75815 2.18298 7.78679 2.15752 7.81862C2.13206 7.84407 2.11933 7.87271 2.11933 7.90453C2.11933 7.93636 2.13206 7.965 2.15752 7.99045C2.18934 8.01591 2.24344 8.03819 2.31981 8.05728L8.90692 10.0716ZM12.105 17.8998C12.1368 17.8998 12.1655 17.8839 12.1909 17.852C12.2164 17.8202 12.2418 17.7693 12.2673 17.6993L17.1551 4.79236C17.3015 4.40414 17.4638 4.02546 17.642 3.65632C17.8202 3.28719 17.992 2.92124 18.1575 2.55847C17.9029 2.88306 17.6261 3.22673 17.327 3.5895C17.0342 3.95227 16.7574 4.26412 16.4964 4.52506L9.9284 11.0931L11.9427 17.6802C11.9682 17.7566 11.9905 17.8107 12.0095 17.8425C12.035 17.8807 12.0668 17.8998 12.105 17.8998Z" fill="currentColor"/></svg></span>
+                                        <span class="label">Sent</span>
+                                    </button>
+                                    <button type="button" class="sidebar-item">
+                                        <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M18.998 0C19.3097 8.24043e-05 19.5543 0.0894587 19.7324 0.267578C19.9105 0.445698 19.9999 0.690306 20 1.00195C20 1.16743 19.9747 1.34618 19.9238 1.53711C19.8793 1.72797 19.8151 1.93456 19.7324 2.15723L15.9639 12C15.9759 11.9999 15.9879 12 16 12C18.2091 12 20 13.7909 20 16C20 18.2091 18.2091 20 16 20C14.9491 20 13.9931 19.5944 13.2793 18.9316C13.1468 19.1899 13.0023 19.4107 12.8398 19.5898C12.5917 19.8633 12.2957 20 11.9521 20C11.5067 20 11.1856 19.8407 10.9883 19.5225C10.791 19.2043 10.6224 18.8064 10.4824 18.3291L8.47754 11.5225L1.58496 9.49902C1.12673 9.35901 0.747367 9.19288 0.448242 9.00195C0.149484 8.80465 2.69016e-05 8.48668 0 8.04785C0 7.70431 0.136698 7.40831 0.410156 7.16016C0.683824 6.91195 1.0219 6.71134 1.42285 6.55859L17.8428 0.267578C18.0654 0.184881 18.272 0.120711 18.4629 0.0761719C18.6602 0.025257 18.8389 0 18.998 0ZM18.1572 2.55859C17.9027 2.88311 17.6262 3.22716 17.3271 3.58984C17.0344 3.95256 16.757 4.26448 16.4961 4.52539L9.92871 11.0928L11.9424 17.6807C11.9678 17.7569 11.9907 17.811 12.0098 17.8428C12.0352 17.8808 12.0674 17.8994 12.1055 17.8994C12.1371 17.8993 12.1661 17.8832 12.1914 17.8516C12.2167 17.8197 12.2423 17.7688 12.2676 17.6992L12.3174 17.5645C12.113 17.0839 12 16.5551 12 16C12 14.4073 12.931 13.0322 14.2783 12.3887L17.1553 4.79199C17.3016 4.40393 17.4635 4.02523 17.6416 3.65625C17.8198 3.28719 17.9918 2.92129 18.1572 2.55859ZM15.7041 14C15.481 14.0002 15.3 14.1812 15.2998 14.4043V16.4023C15.3 16.6255 15.481 16.8064 15.7041 16.8066H16.9033C17.1264 16.8064 17.3074 16.6254 17.3076 16.4023C17.3076 16.1791 17.1265 15.9973 16.9033 15.9971H16.1094V14.4043C16.1092 14.1811 15.9274 14 15.7041 14ZM16.3242 2.36719C15.9616 2.53894 15.5897 2.69841 15.208 2.84473L2.30078 7.73242C2.23078 7.75788 2.18269 7.78654 2.15723 7.81836C2.13184 7.84375 2.1192 7.87258 2.11914 7.9043C2.11914 7.93601 2.13194 7.96484 2.15723 7.99023C2.189 8.01565 2.24316 8.03854 2.31934 8.05762L8.90723 10.0713L15.4746 3.50391C15.7355 3.24297 16.045 2.96561 16.4014 2.67285C16.7576 2.38019 17.095 2.10606 17.4131 1.85156C17.0567 2.01704 16.6934 2.18899 16.3242 2.36719Z" fill="currentColor"/></svg></span>
+                                        <span class="label">Scheduled</span>
+                                    </button>
+                                    <button type="button" class="sidebar-item">
+                                        <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.51226 22.4192C5.5251 22.4192 4.77472 22.1691 4.26113 21.6688C3.74754 21.1686 3.49075 20.4249 3.49075 19.4377V8.75238H5.10155V19.5178C5.10155 19.9646 5.22161 20.3082 5.46173 20.5483C5.70185 20.7884 6.04536 20.9085 6.49225 20.9085H17.5078C17.948 20.9085 18.2881 20.7884 18.5283 20.5483C18.7751 20.3082 18.8984 19.9646 18.8984 19.5178V8.75238H20.5093V19.4377C20.5093 20.4182 20.2525 21.1586 19.7389 21.6588C19.2253 22.1658 18.4749 22.4192 17.4877 22.4192H6.51226ZM8.70335 13.5348C8.48991 13.5348 8.31649 13.4681 8.18309 13.3347C8.05636 13.2013 7.993 13.0245 7.993 12.8044V12.4842C7.993 12.2641 8.05636 12.0907 8.18309 11.964C8.31649 11.8306 8.48991 11.7639 8.70335 11.7639H15.3067C15.5201 11.7639 15.6935 11.8306 15.8269 11.964C15.9603 12.0907 16.027 12.2641 16.027 12.4842V12.8044C16.027 13.0245 15.9603 13.2013 15.8269 13.3347C15.6935 13.4681 15.5201 13.5348 15.3067 13.5348H8.70335ZM3.90095 9.50275C3.28731 9.50275 2.81708 9.32266 2.49025 8.96248C2.16342 8.6023 2 8.11873 2 7.51176V5.991C2 5.37736 2.17009 4.89378 2.51026 4.54027C2.85043 4.18009 3.31399 4 3.90095 4H20.0991C20.7127 4 21.1829 4.18009 21.5098 4.54027C21.8366 4.89378 22 5.37736 22 5.991V7.51176C22 8.11873 21.8366 8.6023 21.5098 8.96248C21.1829 9.32266 20.7127 9.50275 20.0991 9.50275H3.90095ZM4.31116 7.992H19.6989C19.9523 7.992 20.1291 7.9353 20.2291 7.82191C20.3358 7.70852 20.3892 7.52843 20.3892 7.28164V6.22111C20.3892 5.96765 20.3358 5.78756 20.2291 5.68084C20.1291 5.56745 19.9523 5.51076 19.6989 5.51076H4.31116C4.0577 5.51076 3.87761 5.56745 3.77089 5.68084C3.66417 5.78756 3.61081 5.96765 3.61081 6.22111V7.28164C3.61081 7.52843 3.66417 7.70852 3.77089 7.82191C3.87761 7.9353 4.0577 7.992 4.31116 7.992Z" fill="currentColor"/></svg></span>
+                                        <span class="label">Archive</span>
+                                    </button>
+                                    <button type="button" class="sidebar-item">
+                                        <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.0002 22.8C10.5108 22.8 9.11314 22.5177 7.80725 21.953C6.50137 21.3953 5.35431 20.6224 4.36608 19.6341C3.37784 18.6459 2.60137 17.4988 2.03667 16.193C1.47902 14.8871 1.2002 13.4894 1.2002 12C1.2002 10.5106 1.47902 9.11295 2.03667 7.80707C2.60137 6.50119 3.37784 5.35413 4.36608 4.36589C5.35431 3.3706 6.50137 2.59413 7.80725 2.03648C9.11314 1.47884 10.5108 1.20001 12.0002 1.20001C13.4896 1.20001 14.8873 1.47884 16.1931 2.03648C17.499 2.59413 18.6461 3.3706 19.6343 4.36589C20.6225 5.35413 21.3955 6.50119 21.9531 7.80707C22.5178 9.11295 22.8002 10.5106 22.8002 12C22.8002 13.4894 22.5178 14.8871 21.9531 16.193C21.3955 17.4988 20.6225 18.6459 19.6343 19.6341C18.6461 20.6224 17.499 21.3953 16.1931 21.953C14.8873 22.5177 13.4896 22.8 12.0002 22.8ZM12.0002 21C13.2425 21 14.4073 20.7671 15.4943 20.3012C16.5814 19.8353 17.5378 19.1894 18.3637 18.3635C19.1896 17.5377 19.8355 16.5812 20.3014 15.4941C20.7673 14.4071 21.0002 13.2424 21.0002 12C21.0002 10.7577 20.7673 9.59295 20.3014 8.50589C19.8355 7.41178 19.1896 6.45531 18.3637 5.63648C17.5378 4.8106 16.5814 4.16472 15.4943 3.69884C14.4073 3.23295 13.2425 3.00001 12.0002 3.00001C10.7578 3.00001 9.59314 3.23295 8.50608 3.69884C7.41902 4.16472 6.46255 4.8106 5.63667 5.63648C4.81078 6.45531 4.1649 7.41178 3.69902 8.50589C3.23314 9.59295 3.0002 10.7577 3.0002 12C3.0002 13.2424 3.23314 14.4071 3.69902 15.4941C4.1649 16.5812 4.81078 17.5377 5.63667 18.3635C6.46255 19.1894 7.41902 19.8353 8.50608 20.3012C9.59314 20.7671 10.7578 21 12.0002 21ZM11.9896 13.9059C11.4461 13.9059 11.1673 13.6271 11.1531 13.0694L11.0155 7.46825C11.0084 7.20001 11.0931 6.97766 11.2696 6.80119C11.4531 6.62472 11.6896 6.53648 11.979 6.53648C12.2614 6.53648 12.4943 6.62825 12.6778 6.81178C12.8684 6.98825 12.9602 7.2106 12.9531 7.47884L12.7943 13.0694C12.7873 13.6271 12.519 13.9059 11.9896 13.9059ZM11.9896 17.3471C11.679 17.3471 11.4108 17.2412 11.1849 17.0294C10.959 16.8106 10.8461 16.5494 10.8461 16.2459C10.8461 15.9424 10.959 15.6847 11.1849 15.473C11.4108 15.2541 11.679 15.1447 11.9896 15.1447C12.3002 15.1447 12.5684 15.2506 12.7943 15.4624C13.0202 15.6741 13.1331 15.9353 13.1331 16.2459C13.1331 16.5565 13.0167 16.8177 12.7837 17.0294C12.5578 17.2412 12.2931 17.3471 11.9896 17.3471Z" fill="currentColor"/></svg></span>
+                                        <span class="label">Spam</span>
+                                    </button>
+                                    <button type="button" class="sidebar-item">
+                                        <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.1001 10.8999C9.1001 10.4028 9.50293 10 10 10C10.4971 10 10.9001 10.4028 10.9001 10.8999V16.1001C10.9001 16.5972 10.4971 17 10 17C9.50293 17 9.1001 16.5972 9.1001 16.1001V10.8999Z" fill="currentColor"/><path d="M14 10C13.5029 10 13.1001 10.4028 13.1001 10.8999V16.1001C13.1001 16.5972 13.5029 17 14 17C14.4971 17 14.9001 16.5972 14.9001 16.1001V10.8999C14.9001 10.4028 14.4971 10 14 10Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M21 5H17V3.5C17 2.11938 15.8806 1 14.5 1H9.5C8.11938 1 7 2.11938 7 3.5V5H3C2.44775 5 2 5.44775 2 6C2 6.55225 2.44775 7 3 7H4.1001V19C4.1001 21.1538 5.84619 22.8999 8 22.8999H16C18.1541 22.8999 19.9001 21.1538 19.9001 19V7H21C21.5522 7 22 6.55225 22 6C22 5.44775 21.5522 5 21 5ZM18.1001 7H5.90015V19C5.90015 20.1599 6.84033 21.1001 8 21.1001H16C17.1599 21.1001 18.1001 20.1599 18.1001 19V7ZM9.5 2.80005H14.5C14.8867 2.80005 15.2 3.11328 15.2 3.5V5H8.80005V3.5C8.80005 3.11328 9.11328 2.80005 9.5 2.80005Z" fill="currentColor"/></svg></span>
+                                        <span class="label">Trash</span>
+                                    </button>
+                                    <button type="button" class="sidebar-item">
+                                        <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="19" cy="12" r="2" fill="currentColor"/></svg></span>
+                                        <span class="label">More</span>
+                                    </button>
+                                    </nav>
+                                </div>
+                                <div class="sidebar-account">
+                                    <div class="sidebar-avatar"></div>
+                                    <div class="sidebar-account-text">
+                                        <div class="sidebar-account-name">Adam Neumann</div>
+                                        <div class="sidebar-account-plan">Free Plan</div>
+                                    </div>
+                                    <button type="button" class="icon-btn" aria-label="Settings">
+                                        <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.9909 8.06397C14.1645 8.06397 15.9269 9.82641 15.9269 12C15.9269 14.1736 14.1645 15.936 11.9909 15.936C9.81727 15.936 8.05483 14.1736 8.05483 12C8.05483 9.82641 9.81727 8.06397 11.9909 8.06397ZM11.9909 9.8812C10.8205 9.8812 9.87207 10.8296 9.87207 12C9.87207 13.1704 10.8205 14.1188 11.9909 14.1188C13.1613 14.1188 14.1097 13.1704 14.1097 12C14.1097 10.8296 13.1613 9.8812 11.9909 9.8812Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M11.9909 1C12.7316 1 13.4033 1.20499 14.1244 1.54005C14.8273 1.86663 15.6403 2.34842 16.6483 2.94535L17.3411 3.35531C18.3494 3.95245 19.1632 4.43383 19.79 4.89464C20.4334 5.36768 20.9371 5.85926 21.3027 6.50887C21.6677 7.15738 21.8296 7.84706 21.9068 8.65033C21.9822 9.43473 21.9817 10.3949 21.9817 11.59V12.41C21.9817 13.6052 21.9822 14.5653 21.9068 15.3497C21.8296 16.1529 21.6677 16.8426 21.3027 17.4911C20.9371 18.1407 20.4334 18.6323 19.79 19.1054C19.1632 19.5661 18.3493 20.0466 17.3411 20.6437L16.6483 21.0546C15.6403 21.6516 14.8273 22.1334 14.1244 22.46C13.4033 22.795 12.7316 23 11.9909 23C11.2501 23 10.5784 22.795 9.85728 22.46C9.15441 22.1334 8.34144 21.6516 7.33345 21.0546L6.64066 20.6437C5.63245 20.0466 4.8185 19.5661 4.19172 19.1054C3.54834 18.6323 3.04464 18.1407 2.679 17.4911C2.31399 16.8426 2.1521 16.1529 2.0749 15.3497C1.99951 14.5653 2 13.6052 2 12.41V11.59C2 10.3949 1.99951 9.43473 2.0749 8.65033C2.1521 7.84706 2.314 7.15738 2.679 6.50887C3.04464 5.85927 3.54834 5.36768 4.19172 4.89464C4.81855 4.43383 5.63232 3.95245 6.64066 3.35531L7.33345 2.94535C8.34143 2.34842 9.15441 1.86663 9.85728 1.54005C10.5784 1.20499 11.2501 1 11.9909 1ZM11.9909 2.81724C11.6077 2.81724 11.2055 2.91569 10.622 3.18679C10.0204 3.46634 9.29769 3.89311 8.25882 4.50833L7.56603 4.91829C6.52711 5.53354 5.80517 5.9631 5.26787 6.35809C4.74752 6.74066 4.45794 7.05109 4.26169 7.39975C4.06482 7.74956 3.94657 8.16541 3.88326 8.82378C3.81814 9.50139 3.81724 10.3604 3.81724 11.59V12.41C3.81724 13.6396 3.81814 14.4986 3.88326 15.1762C3.94657 15.8346 4.06482 16.2505 4.26169 16.6003C4.45794 16.9489 4.74751 17.2593 5.26787 17.6419C5.80517 18.0369 6.5271 18.4665 7.56603 19.0817L8.25882 19.4917C9.29769 20.1069 10.0204 20.5337 10.622 20.8132C11.2055 21.0843 11.6077 21.1828 11.9909 21.1828C12.374 21.1828 12.7762 21.0843 13.3597 20.8132C13.9613 20.5337 14.684 20.1069 15.7229 19.4917L16.4157 19.0817C17.4546 18.4665 18.1765 18.0369 18.7139 17.6419C19.2342 17.2593 19.5238 16.9489 19.72 16.6003C19.9169 16.2504 20.0352 15.8346 20.0985 15.1762C20.1636 14.4986 20.1645 13.6396 20.1645 12.41V11.59C20.1645 10.3604 20.1636 9.50139 20.0985 8.82378C20.0352 8.16541 19.9169 7.74956 19.72 7.39975C19.5238 7.0511 19.2342 6.74067 18.7139 6.35809C18.1765 5.96309 17.4546 5.53355 16.4157 4.91829L15.7229 4.50833C14.684 3.89311 13.9613 3.46635 13.3597 3.18679C12.7762 2.91569 12.374 2.81724 11.9909 2.81724Z" fill="currentColor"/></svg></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </aside>
+
+                        <!-- Main: header + list + AI panel -->
+                        <main class="app-main">
+                            <header class="list-header">
+                                <div class="list-header-left">
+                                    <button type="button" class="icon-btn-header" aria-label="History">
+                                        <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.124 2.46812C12.3886 2.01495 14.7403 2.36137 16.7783 3.44761C18.2184 4.21514 19.4377 5.31983 20.3428 6.65366L21.6397 5.77378C21.9131 5.58833 22.2787 5.80748 22.2441 6.13609L21.835 10.0326C21.8098 10.2717 21.5753 10.4312 21.3438 10.3666L17.5703 9.30894C17.2525 9.2196 17.184 8.79929 17.457 8.61362L18.8535 7.66441C18.1115 6.57079 17.1122 5.66473 15.9316 5.0355C14.261 4.14518 12.3328 3.86222 10.4766 4.23374C8.62044 4.60536 6.95015 5.60889 5.75098 7.07359C4.55186 8.53838 3.89817 10.3739 3.9004 12.2669C3.90267 14.1599 4.56111 15.9935 5.76368 17.4554C6.96642 18.9174 8.63889 19.9174 10.4961 20.2845C12.3533 20.6517 14.2807 20.3635 15.9492 19.4691C17.6176 18.5747 18.9241 17.1291 19.6465 15.3792C19.8363 14.92 20.3629 14.7014 20.8223 14.891C21.2816 15.0807 21.5001 15.6074 21.3106 16.0667C20.4293 18.2014 18.8352 19.9649 16.7998 21.056C14.7643 22.1471 12.4131 22.4979 10.1475 22.0501C7.88172 21.6023 5.84134 20.3826 4.37403 18.599C2.90676 16.8154 2.10236 14.5785 2.09962 12.2689C2.09692 9.95937 2.89537 7.72 4.35841 5.93296C5.82147 4.14595 7.8594 2.92138 10.124 2.46812Z" fill="currentColor"/><path d="M12.2041 7.7103C12.7012 7.7103 13.1045 8.11364 13.1045 8.61069V12.806L15.4453 14.4779C15.8496 14.7668 15.9431 15.3293 15.6543 15.7337C15.3654 16.138 14.8029 16.2315 14.3984 15.9427L11.7461 14.0482C11.4689 13.8502 11.3039 13.5304 11.3037 13.1898V8.61069C11.3037 8.11364 11.7071 7.71031 12.2041 7.7103Z" fill="currentColor"/></svg></span>
+                                    </button>
+                                    <div class="search-wrap">
+                                        <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 10.243C2 9.10886 2.21266 8.04557 2.63797 7.05316C3.07004 6.05401 3.66413 5.17637 4.42025 4.42025C5.17637 3.65738 6.05063 3.06329 7.04304 2.63797C8.04219 2.21266 9.10886 2 10.243 2C11.384 2 12.4506 2.21266 13.443 2.63797C14.4422 3.06329 15.3198 3.65738 16.0759 4.42025C16.8321 5.17637 17.4228 6.05401 17.8481 7.05316C18.2802 8.04557 18.4962 9.10886 18.4962 10.243C18.4962 11.1342 18.3578 11.9814 18.081 12.7848C17.811 13.5882 17.4363 14.3207 16.957 14.9823L21.5747 19.6203C21.7165 19.7553 21.8211 19.9139 21.8886 20.0962C21.9629 20.2785 22 20.4709 22 20.6734C22 20.957 21.9359 21.2135 21.8076 21.443C21.6793 21.6726 21.5038 21.8515 21.281 21.9797C21.0582 22.1148 20.8017 22.1823 20.5114 22.1823C20.3089 22.1823 20.1131 22.1451 19.924 22.0709C19.7418 22.0034 19.5764 21.8954 19.4278 21.7468L14.7797 17.0987C14.1316 17.5308 13.4228 17.8717 12.6532 18.1215C11.8903 18.3646 11.0869 18.4861 10.243 18.4861C9.10886 18.4861 8.04219 18.2734 7.04304 17.8481C6.05063 17.4228 5.17637 16.8321 4.42025 16.0759C3.66413 15.3198 3.07004 14.4456 2.63797 13.4532C2.21266 12.454 2 11.384 2 10.243ZM4.11646 10.243C4.11646 11.0937 4.27173 11.8903 4.58228 12.6329C4.89958 13.3688 5.3384 14.0169 5.89873 14.5772C6.46582 15.1376 7.12068 15.5797 7.86329 15.9038C8.60591 16.2211 9.39916 16.3797 10.243 16.3797C11.0937 16.3797 11.8869 16.2211 12.6228 15.9038C13.3654 15.5797 14.0169 15.1376 14.5772 14.5772C15.1376 14.0169 15.5764 13.3688 15.8937 12.6329C16.2177 11.8903 16.3797 11.0937 16.3797 10.243C16.3797 9.39916 16.2177 8.60591 15.8937 7.86329C15.5764 7.12068 15.1376 6.4692 14.5772 5.90886C14.0169 5.34177 13.3654 4.90295 12.6228 4.5924C11.8869 4.27511 11.0937 4.11646 10.243 4.11646C9.39916 4.11646 8.60591 4.27511 7.86329 4.5924C7.12068 4.90295 6.46582 5.34177 5.89873 5.90886C5.3384 6.4692 4.89958 7.12068 4.58228 7.86329C4.27173 8.60591 4.11646 9.39916 4.11646 10.243Z" fill="currentColor"/></svg></span>
+                                        <span class="search-placeholder">Search</span>
+                                    </div>
+                                    <button type="button" class="icon-btn-header" aria-label="Menu">
+                                        <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 6C3 5.44772 3.44772 5 4 5H20C20.5523 5 21 5.44772 21 6C21 6.55228 20.5523 7 20 7H4C3.44772 7 3 6.55228 3 6Z" fill="currentColor"/><path d="M3 12C3 11.4477 3.44772 11 4 11H20C20.5523 11 21 11.4477 21 12C21 12.5523 20.5523 13 20 13H4C3.44772 13 3 12.5523 3 12Z" fill="currentColor"/><path d="M4 17C3.44772 17 3 17.4477 3 18C3 18.5523 3.44772 19 4 19H20C20.5523 19 21 18.5523 21 18C21 17.4477 20.5523 17 20 17H4Z" fill="currentColor"/></svg></span>
+                                    </button>
+                                </div>
+                                <button type="button" class="ai-pill" aria-label="Filo AI">
+                                    <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.59668 7.64636C7.89082 6.78501 9.1082 6.78501 9.40234 7.64636L10.2637 10.1669C10.8366 11.8447 12.1543 13.1632 13.832 13.7362L16.3535 14.5966C17.2149 14.8907 17.2149 16.1091 16.3535 16.4032L13.832 17.2645C12.1544 17.8376 10.8366 19.1552 10.2637 20.8329L9.40234 23.3544C9.10797 24.2151 7.89104 24.2151 7.59668 23.3544L6.73535 20.8329C6.16241 19.1551 4.84467 17.8376 3.16699 17.2645L0.645508 16.4032C-0.215783 16.109 -0.215821 14.8907 0.645508 14.5966L3.16699 13.7362C4.8448 13.1632 6.16239 11.8447 6.73535 10.1669L7.59668 7.64636ZM19.0215 0.341675C19.1774 -0.113881 19.8216 -0.113867 19.9775 0.341675L20.4336 1.67664C20.7369 2.56495 21.4349 3.26294 22.3232 3.56628L23.6572 4.02136C24.1132 4.17708 24.1132 4.82267 23.6572 4.97839L22.3232 5.43347C21.435 5.73679 20.737 6.43491 20.4336 7.32312L19.9775 8.65808C19.8217 9.11391 19.1773 9.11392 19.0215 8.65808L18.5654 7.32312C18.262 6.43492 17.564 5.73679 16.6758 5.43347L15.3418 4.97839C14.8858 4.82267 14.8858 4.17708 15.3418 4.02136L16.6758 3.56628C17.5641 3.26294 18.2621 2.56494 18.5654 1.67664L19.0215 0.341675Z" fill="currentColor"/></svg></span>
+                                </button>
+                            </header>
+
+                            <div class="list-body">
+                                <div class="list-emails">
+                                    <div class="list-tabs">
+                                        <button type="button" class="tab active">Important <span class="count">2</span></button>
+                                        <button type="button" class="tab">Updates <span class="count">2</span></button>
+                                        <button type="button" class="tab">Promotions <span class="count">35</span></button>
+                                        <button type="button" class="tab">Bills <span class="count">14</span></button>
+                                        <button type="button" class="tab">Travel <span class="count">7</span></button>
+                                        <button type="button" class="tab">All <span class="count">54</span></button>
+                                    </div>
+                                    <div class="list-scroll">
+                                        <div class="list-timeline">Today</div>
+                                        <div class="email-row">
+                                            <img class="avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=VerizonWireless" alt="" width="28" height="28">
+                                            <div class="email-row-body">
+                                                <div class="sender">Zack</div>
+                                                <div class="subject">Thanks for your payment</div>
+                                            </div>
+                                            <div class="meta">9:03 AM</div>
+                                        </div>
+                                        <div class="email-row">
+                                            <img class="avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=JuliaDavis" alt="" width="28" height="28">
+                                            <div class="email-row-body">
+                                                <div class="sender">Julia Davis</div>
+                                                <div class="subject">Hola</div>
+                                            </div>
+                                            <div class="meta">8:41 AM</div>
+                                        </div>
+                                        <div class="email-row">
+                                            <img class="avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=NYTimes" alt="" width="28" height="28">
+                                            <div class="email-row-body">
+                                                <div class="sender">Maya Reid</div>
+                                                <div class="subject">The Morning Briefing</div>
+                                            </div>
+                                            <div class="meta">7:22 AM</div>
+                                        </div>
+                                        <div class="email-row">
+                                            <img class="avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=EmmaWilson" alt="" width="28" height="28">
+                                            <div class="email-row-body">
+                                                <div class="sender">Emma Wilson</div>
+                                                <div class="subject">Lunch tomorrow?</div>
+                                            </div>
+                                            <div class="meta">6:15 AM</div>
+                                        </div>
+                                        <div class="email-row">
+                                            <img class="avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=DavidKim" alt="" width="28" height="28">
+                                            <div class="email-row-body">
+                                                <div class="sender">David Kim</div>
+                                                <div class="subject">Q1 report attached</div>
+                                            </div>
+                                            <div class="meta">5:48 AM</div>
+                                        </div>
+                                        <div class="list-timeline">Yesterday</div>
+                                        <div class="email-row">
+                                            <img class="avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=SarahChen" alt="" width="28" height="28">
+                                            <div class="email-row-body">
+                                                <div class="sender">Sarah Chen</div>
+                                                <div class="subject">Benefits enrollment deadline</div>
+                                            </div>
+                                            <div class="meta">Yesterday</div>
+                                        </div>
+                                        <div class="email-row">
+                                            <img class="avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=MikeTorres" alt="" width="28" height="28">
+                                            <div class="email-row-body">
+                                                <div class="sender">Mike Torres</div>
+                                                <div class="subject">Project timeline</div>
+                                            </div>
+                                            <div class="meta">Yesterday</div>
+                                        </div>
+                                        <div class="email-row">
+                                            <img class="avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=LisaPark" alt="" width="28" height="28">
+                                            <div class="email-row-body">
+                                                <div class="sender">Lisa Park</div>
+                                                <div class="subject">Re: Design review notes</div>
+                                            </div>
+                                            <div class="meta">Yesterday</div>
+                                        </div>
+                                        <div class="email-row">
+                                            <img class="avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=JamesNg" alt="" width="28" height="28">
+                                            <div class="email-row-body">
+                                                <div class="sender">James Ng</div>
+                                                <div class="subject">Team offsite agenda</div>
+                                            </div>
+                                            <div class="meta">Yesterday</div>
+                                        </div>
+                                        <div class="list-timeline">3 days ago</div>
+                                        <div class="email-row">
+                                            <img class="avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=DesignTeam" alt="" width="28" height="28">
+                                            <div class="email-row-body">
+                                                <div class="sender">Design Team</div>
+                                                <div class="subject">Figma feedback</div>
+                                            </div>
+                                            <div class="meta">Mar 28</div>
+                                        </div>
+                                        <div class="email-row">
+                                            <img class="avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=OliviaBrown" alt="" width="28" height="28">
+                                            <div class="email-row-body">
+                                                <div class="sender">Olivia Brown</div>
+                                                <div class="subject">Invoice #2847</div>
+                                            </div>
+                                            <div class="meta">Mar 28</div>
+                                        </div>
+                                        <div class="email-row">
+                                            <img class="avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=RyanFoster" alt="" width="28" height="28">
+                                            <div class="email-row-body">
+                                                <div class="sender">Ryan Foster</div>
+                                                <div class="subject">Quick question about the API</div>
+                                            </div>
+                                            <div class="meta">Mar 27</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="ai-panel">
+                            <div class="ai-panel-gradient" aria-hidden="true"></div>
+
+                            <div class="ai-panel-header">
+                                <span class="ai-panel-title">Filo AI</span>
+                                <div class="ai-panel-controls">
+                                    <button type="button" class="icon-btn" aria-label="Settings">
+                                        <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.9909 8.06397C14.1645 8.06397 15.9269 9.82641 15.9269 12C15.9269 14.1736 14.1645 15.936 11.9909 15.936C9.81727 15.936 8.05483 14.1736 8.05483 12C8.05483 9.82641 9.81727 8.06397 11.9909 8.06397ZM11.9909 9.8812C10.8205 9.8812 9.87207 10.8296 9.87207 12C9.87207 13.1704 10.8205 14.1188 11.9909 14.1188C13.1613 14.1188 14.1097 13.1704 14.1097 12C14.1097 10.8296 13.1613 9.8812 11.9909 9.8812Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M11.9909 1C12.7316 1 13.4033 1.20499 14.1244 1.54005C14.8273 1.86663 15.6403 2.34842 16.6483 2.94535L17.3411 3.35531C18.3494 3.95245 19.1632 4.43383 19.79 4.89464C20.4334 5.36768 20.9371 5.85926 21.3027 6.50887C21.6677 7.15738 21.8296 7.84706 21.9068 8.65033C21.9822 9.43473 21.9817 10.3949 21.9817 11.59V12.41C21.9817 13.6052 21.9822 14.5653 21.9068 15.3497C21.8296 16.1529 21.6677 16.8426 21.3027 17.4911C20.9371 18.1407 20.4334 18.6323 19.79 19.1054C19.1632 19.5661 18.3493 20.0466 17.3411 20.6437L16.6483 21.0546C15.6403 21.6516 14.8273 22.1334 14.1244 22.46C13.4033 22.795 12.7316 23 11.9909 23C11.2501 23 10.5784 22.795 9.85728 22.46C9.15441 22.1334 8.34144 21.6516 7.33345 21.0546L6.64066 20.6437C5.63245 20.0466 4.8185 19.5661 4.19172 19.1054C3.54834 18.6323 3.04464 18.1407 2.679 17.4911C2.31399 16.8426 2.1521 16.1529 2.0749 15.3497C1.99951 14.5653 2 13.6052 2 12.41V11.59C2 10.3949 1.99951 9.43473 2.0749 8.65033C2.1521 7.84706 2.314 7.15738 2.679 6.50887C3.04464 5.85927 3.54834 5.36768 4.19172 4.89464C4.81855 4.43383 5.63232 3.95245 6.64066 3.35531L7.33345 2.94535C8.34143 2.34842 9.15441 1.86663 9.85728 1.54005C10.5784 1.20499 11.2501 1 11.9909 1ZM11.9909 2.81724C11.6077 2.81724 11.2055 2.91569 10.622 3.18679C10.0204 3.46634 9.29769 3.89311 8.25882 4.50833L7.56603 4.91829C6.52711 5.53354 5.80517 5.9631 5.26787 6.35809C4.74752 6.74066 4.45794 7.05109 4.26169 7.39975C4.06482 7.74956 3.94657 8.16541 3.88326 8.82378C3.81814 9.50139 3.81724 10.3604 3.81724 11.59V12.41C3.81724 13.6396 3.81814 14.4986 3.88326 15.1762C3.94657 15.8346 4.06482 16.2505 4.26169 16.6003C4.45794 16.9489 4.74751 17.2593 5.26787 17.6419C5.80517 18.0369 6.5271 18.4665 7.56603 19.0817L8.25882 19.4917C9.29769 20.1069 10.0204 20.5337 10.622 20.8132C11.2055 21.0843 11.6077 21.1828 11.9909 21.1828C12.374 21.1828 12.7762 21.0843 13.3597 20.8132C13.9613 20.5337 14.684 20.1069 15.7229 19.4917L16.4157 19.0817C17.4546 18.4665 18.1765 18.0369 18.7139 17.6419C19.2342 17.2593 19.5238 16.9489 19.72 16.6003C19.9169 16.2504 20.0352 15.8346 20.0985 15.1762C20.1636 14.4986 20.1645 13.6396 20.1645 12.41V11.59C20.1645 10.3604 20.1636 9.50139 20.0985 8.82378C20.0352 8.16541 19.9169 7.74956 19.72 7.39975C19.5238 7.0511 19.2342 6.74067 18.7139 6.35809C18.1765 5.96309 17.4546 5.53355 16.4157 4.91829L15.7229 4.50833C14.684 3.89311 13.9613 3.46635 13.3597 3.18679C12.7762 2.91569 12.374 2.81724 11.9909 2.81724Z" fill="currentColor"/></svg></span>
+                                    </button>
+                                    <div class="icon-group">
+                                        <button type="button" class="icon-btn" aria-label="Add"><span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12C4 11.7069 4.10514 11.4552 4.31541 11.2449C4.52569 11.0283 4.77738 10.92 5.07049 10.92H10.9295V5.07049C10.9295 4.77738 11.0346 4.52569 11.2449 4.31541C11.4552 4.10514 11.7069 4 12 4C12.2995 4 12.5544 4.10514 12.7646 4.31541C12.9749 4.52569 13.08 4.77738 13.08 5.07049V10.92H18.9295C19.2226 10.92 19.4743 11.0283 19.6846 11.2449C19.8949 11.4552 20 11.7069 20 12C20 12.2995 19.8949 12.5544 19.6846 12.7646C19.4743 12.9685 19.2226 13.0705 18.9295 13.0705H13.08V18.9391C13.08 19.2258 12.9749 19.4743 12.7646 19.6846C12.5544 19.8949 12.2995 20 12 20C11.7069 20 11.4552 19.8949 11.2449 19.6846C11.0346 19.4743 10.9295 19.2258 10.9295 18.9391V13.0705H5.07049C4.77738 13.0705 4.52569 12.9685 4.31541 12.7646C4.10514 12.5544 4 12.2995 4 12Z" fill="currentColor"/></svg></span></button>
+                                        <span class="divider"></span>
+                                        <button type="button" class="icon-btn" aria-label="Refresh"><span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 13.3501C20 14.8391 19.64 16.1998 18.9199 17.4325C18.1998 18.6529 17.2357 19.6232 16.0275 20.3433C14.8192 21.0633 13.4767 21.4233 12 21.4233C10.5111 21.4233 9.16247 21.0633 7.95423 20.3433C6.746 19.6232 5.78185 18.659 5.06178 17.4508C4.35393 16.2304 4 14.8757 4 13.3867C4 13.1182 4.09764 12.8924 4.29291 12.7094C4.48818 12.5141 4.72006 12.4165 4.98856 12.4165C5.26926 12.4165 5.50725 12.5141 5.70252 12.7094C5.89779 12.8924 5.99542 13.1182 5.99542 13.3867C5.99542 14.5095 6.25782 15.5286 6.78261 16.4439C7.3196 17.3471 8.03966 18.0732 8.94279 18.6224C9.85812 19.1594 10.8772 19.4279 12 19.4279C13.1106 19.4279 14.1175 19.1594 15.0206 18.6224C15.9359 18.0732 16.6621 17.3471 17.1991 16.4439C17.7361 15.5286 18.0046 14.5095 18.0046 13.3867C18.0046 12.2761 17.7361 11.2693 17.1991 10.3661C16.6621 9.4508 15.9359 8.73074 15.0206 8.20595C14.1175 7.66896 13.1106 7.40046 12 7.40046C11.4752 7.40046 11.0481 7.43707 10.7185 7.5103L13.0801 9.83524C13.2876 10.0427 13.3913 10.2868 13.3913 10.5675C13.3913 10.8238 13.2998 11.0435 13.1167 11.2265C12.9336 11.4096 12.714 11.5011 12.4577 11.5011C12.2014 11.5011 11.9878 11.4096 11.8169 11.2265L8.11899 7.47368C7.92372 7.29062 7.82609 7.05873 7.82609 6.77803C7.83829 6.48513 7.93593 6.24104 8.11899 6.04577L11.762 2.32952C11.8474 2.21968 11.9512 2.14035 12.0732 2.09153C12.1953 2.03051 12.3234 2 12.4577 2C12.7262 2 12.9458 2.09153 13.1167 2.2746C13.2998 2.45767 13.3913 2.67735 13.3913 2.93364C13.3913 3.05568 13.3669 3.17773 13.3181 3.29977C13.2815 3.42182 13.2204 3.53166 13.135 3.62929L11.2311 5.53318C11.3776 5.52098 11.5362 5.50877 11.7071 5.49657C11.878 5.47216 12.0488 5.45995 12.2197 5.45995C13.611 5.45995 14.8924 5.81388 16.0641 6.52174C17.2479 7.21739 18.1998 8.16323 18.9199 9.35927C19.64 10.5431 20 11.8734 20 13.3501Z" fill="currentColor"/></svg></span></button>
+                                        <span class="divider"></span>
+                                        <button type="button" class="icon-btn" aria-label="More"><span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="19" cy="12" r="2" fill="currentColor"/></svg></span></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="ai-panel-chat">
+                                <div class="ai-panel-greeting">
+                                    <h2>Hi Adam</h2>
+                                    <p>Need help with an email?</p>
+                                </div>
+
+                                <div class="ai-panel-suggestions">
+                                    <button type="button" class="suggestion-pill">
+                                        <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.876 17.7998C13.3727 17.8002 13.7754 18.2034 13.7754 18.7002C13.7754 19.197 13.3727 19.6002 12.876 19.6006H7.10059C6.60355 19.6006 6.20023 19.1972 6.2002 18.7002C6.2002 18.2031 6.60353 17.7998 7.10059 17.7998H12.876Z" fill="currentColor"/><path d="M15.501 14.125C15.9977 14.1254 16.4004 14.5286 16.4004 15.0254C16.4003 15.5221 15.9976 15.9254 15.501 15.9258H7.10059C6.60361 15.9258 6.20033 15.5223 6.2002 15.0254C6.2002 14.5283 6.60353 14.125 7.10059 14.125H15.501Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M14.9756 1C16.2191 1.00013 17.2454 1.91832 17.4209 3.11328C18.1853 3.13106 18.8543 3.17441 19.4307 3.28027C20.2406 3.4291 20.9415 3.71508 21.5137 4.28711C22.1699 4.94344 22.4484 5.76719 22.5771 6.72461C22.7023 7.65617 22.7002 8.84169 22.7002 10.3008V16.6006C22.7002 18.0598 22.7024 19.2461 22.5771 20.1777C22.4484 21.1349 22.1698 21.9581 21.5137 22.6143C20.8573 23.2705 20.0336 23.549 19.0762 23.6777C18.1446 23.8029 16.9592 23.8008 15.5 23.8008H9.2002C7.74083 23.8008 6.55567 23.803 5.62402 23.6777C4.66656 23.549 3.84288 23.2705 3.18652 22.6143C2.53052 21.9582 2.2528 21.1348 2.12402 20.1777C1.99878 19.2461 2 18.0598 2 16.6006V10.3008C2 8.84169 1.99883 7.65617 2.12402 6.72461C2.25276 5.76722 2.53034 4.94342 3.18652 4.28711C3.75877 3.71489 4.46035 3.4291 5.27051 3.28027C5.84664 3.17447 6.51531 3.13108 7.2793 3.11328C7.45487 1.91824 8.4819 1 9.72559 1H14.9756Z" fill="currentColor"/></svg></span>
+                                        Summarize this week's emails
+                                    </button>
+                                    <button type="button" class="suggestion-pill">
+                                        <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.04466 4C1.5073 4 1.07168 4.49055 1.07168 5.09565C1.07168 5.70076 1.5073 6.1913 2.04466 6.1913H21.0987C21.636 6.1913 22.0717 5.70076 22.0717 5.09565C22.0717 4.49055 21.636 4 21.0987 4H2.04466Z" fill="currentColor"/><path d="M15.0177 11.1043C14.4803 11.1043 14.0447 11.5949 14.0447 12.2C14.0447 12.8051 14.4803 13.2957 15.0177 13.2957H21.0987C21.6361 13.2957 22.0717 12.8051 22.0717 12.2C22.0717 11.5949 21.6361 11.1043 21.0987 11.1043H15.0177Z" fill="currentColor"/><path d="M15.0177 18.2087C14.4803 18.2087 14.0447 18.6993 14.0447 19.3043C14.0447 19.9094 14.4803 20.4 15.0177 20.4H21.0987C21.6361 20.4 22.0717 19.9094 22.0717 19.3043C22.0717 18.6993 21.6361 18.2087 21.0987 18.2087H15.0177Z" fill="currentColor"/><path d="M11.5716 12.589C11.9383 12.1066 11.8545 11.4105 11.3842 11.0344C10.9139 10.658 10.2353 10.7441 9.86835 11.2265L5.07288 17.5322L2.90699 14.8875C2.52337 14.4192 1.84211 14.3583 1.38535 14.7519C0.928725 15.1454 0.869397 15.8441 1.25301 16.3124L4.277 20.0047C4.48666 20.2607 4.7977 20.4059 5.12357 20.3998C5.44944 20.3938 5.75515 20.2372 5.9556 19.9736L11.5716 12.589Z" fill="currentColor"/></svg></span>
+                                        Find what needs to be done this week
+                                    </button>
+                                    <button type="button" class="suggestion-pill">
+                                        <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12C4 11.7069 4.10514 11.4552 4.31541 11.2449C4.52569 11.0283 4.77738 10.92 5.07049 10.92H10.9295V5.07049C10.9295 4.77738 11.0346 4.52569 11.2449 4.31541C11.4552 4.10514 11.7069 4 12 4C12.2995 4 12.5544 4.10514 12.7646 4.31541C12.9749 4.52569 13.08 4.77738 13.08 5.07049V10.92H18.9295C19.2226 10.92 19.4743 11.0283 19.6846 11.2449C19.8949 11.4552 20 11.7069 20 12C20 12.2995 19.8949 12.5544 19.6846 12.7646C19.4743 12.9685 19.2226 13.0705 18.9295 13.0705H13.08V18.9391C13.08 19.2258 12.9749 19.4743 12.7646 19.6846C12.5544 19.8949 12.2995 20 12 20C11.7069 20 11.4552 19.8949 11.2449 19.6846C11.0346 19.4743 10.9295 19.2258 10.9295 18.9391V13.0705H5.07049C4.77738 13.0705 4.52569 12.9685 4.31541 12.7646C4.10514 12.5544 4 12.2995 4 12Z" fill="currentColor"/></svg></span>
+                                        Add a smart filter
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="ai-panel-input-wrap">
+                                <div class="ai-panel-input-inner">
+                                    <span class="placeholder">Ask anything...</span>
+                                    <button type="button" class="ai-panel-mic" aria-label="Tap to talk">
+                                        <span class="filo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.59961 11.5517V9.57081C3.59961 9.21633 3.72819 8.91746 3.98536 8.6742C4.24948 8.42398 4.56225 8.29887 4.92368 8.29887C5.2851 8.29887 5.59787 8.42398 5.86199 8.6742C6.12611 8.91746 6.25817 9.21633 6.25817 9.57081V11.4683C6.25817 12.6499 6.51881 13.6785 7.0401 14.5543C7.56833 15.4301 8.28771 16.1112 9.19822 16.5977C10.1157 17.0773 11.1617 17.3171 12.3364 17.3171C13.511 17.3171 14.5536 17.0773 15.4641 16.5977C16.3815 16.1112 17.1009 15.4301 17.6222 14.5543C18.1504 13.6785 18.4146 12.6499 18.4146 11.4683V9.57081C18.4146 9.21633 18.5431 8.91746 18.8003 8.6742C19.0644 8.42398 19.3807 8.29887 19.749 8.29887C20.1105 8.29887 20.4198 8.42398 20.6769 8.6742C20.9411 8.91746 21.0731 9.21633 21.0731 9.57081V11.5517C21.0731 13.1017 20.7499 14.4639 20.1035 15.6386C19.4641 16.8063 18.5814 17.7446 17.4554 18.4535C16.3294 19.1625 15.0401 19.5969 13.5874 19.7567V21.3936H17.3407C17.7021 21.3936 18.0149 21.5187 18.279 21.7689C18.5501 22.0261 18.6856 22.3388 18.6856 22.7072C18.6856 23.0547 18.5501 23.3571 18.279 23.6142C18.0149 23.8714 17.7021 24 17.3407 24H7.33202C6.97059 24 6.65434 23.8714 6.38328 23.6142C6.11916 23.3571 5.9871 23.0547 5.9871 22.7072C5.9871 22.3388 6.11916 22.0261 6.38328 21.7689C6.65434 21.5187 6.97059 21.3936 7.33202 21.3936H11.0853V19.7567C9.63262 19.5969 8.34331 19.1625 7.21733 18.4535C6.09136 17.7446 5.20517 16.8063 4.55878 15.6386C3.91933 14.4639 3.59961 13.1017 3.59961 11.5517ZM12.3364 15.2945C11.6135 15.2945 10.9497 15.1242 10.345 14.7837C9.74036 14.4431 9.25382 13.967 8.88545 13.3553C8.52402 12.7368 8.34331 12.0174 8.34331 11.1972V4.09731C8.34331 3.27715 8.52402 2.56125 8.88545 1.94961C9.25382 1.33797 9.74036 0.861859 10.345 0.521286C10.9497 0.173762 11.6135 0 12.3364 0C13.0592 0 13.723 0.173762 14.3277 0.521286C14.9324 0.861859 15.4119 1.34144 15.7664 1.96003C16.1278 2.57168 16.3086 3.28758 16.3086 4.10773V11.1972C16.3086 12.0174 16.1278 12.7368 15.7664 13.3553C15.4119 13.967 14.9324 14.4431 14.3277 14.7837C13.723 15.1242 13.0592 15.2945 12.3364 15.2945Z" fill="currentColor"/></svg></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                            </div>
+                        </main>
+                    </div>
+                </div>
+
+                <!-- Conversation / Onboarding / Error screens: placeholder for later -->
+                <div class="desktop-screen" id="desktop-screen-conversation"></div>
+                <div class="desktop-screen" id="desktop-screen-onboarding"></div>
+                <div class="desktop-screen" id="desktop-screen-error"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            var toggleGroup = document.querySelector('.controls .toggle-group');
+            if (toggleGroup) {
+                toggleGroup.addEventListener('click', function (e) {
+                    var btn = e.target.closest('.mode-btn');
+                    if (!btn) return;
+                    var mode = btn.getAttribute('data-mode');
+                    document.body.classList.toggle('dark-mode', mode === 'dark');
+                    toggleGroup.querySelectorAll('.mode-btn').forEach(function (b) {
+                        b.classList.toggle('active', b === btn);
+                        b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+                    });
+                });
+            }
+
+            var screenNav = document.querySelector('.page-header .screen-nav');
+            if (screenNav) {
+                screenNav.addEventListener('click', function (e) {
+                    var btn = e.target.closest('.mode-btn[data-screen]');
+                    if (!btn) return;
+                    var screen = btn.getAttribute('data-screen');
+                    screenNav.querySelectorAll('.mode-btn').forEach(function (b) {
+                        b.classList.toggle('active', b === btn);
+                    });
+                    document.querySelectorAll('.desktop-screen').forEach(function (el) {
+                        el.classList.toggle('active', el.id === 'desktop-screen-' + screen);
+                    });
+                });
+            }
+        })();
+    </script>
+
+    <footer style="padding: 60px 0 40px; max-width: 50%;">
+        <p style="font-size: 9px; line-height: 1.2; color: var(--filo-08); font-weight: 400; letter-spacing: 0;">Internal Use Only. This is a feature preview for Filo, an AI-native email client developed by XD Inc. All designs, interactions, and content shown are proprietary and subject to change. Filo, FiloMail, and the Filo logo are trademarks of XD Inc. &copy; 2026 XD Inc. All rights reserved.</p>
+    </footer>
+</body>
+</html>
