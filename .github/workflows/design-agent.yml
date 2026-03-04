@@ -1,0 +1,83 @@
+name: Design Agent
+
+on:
+  issues:
+    types: [opened, labeled]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: "Issue number to process"
+        required: true
+        type: string
+
+concurrency:
+  group: design-agent-${{ github.event.issue.number || github.event.inputs.issue_number }}
+  cancel-in-progress: false
+
+jobs:
+  evaluate:
+    if: >
+      (github.event_name == 'workflow_dispatch') ||
+      (github.event_name == 'issues' && contains(github.event.issue.labels.*.name, 'design-review'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+    steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: FiloAI
+
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Fetch issue details
+        id: issue
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          ISSUE_NUM: ${{ github.event.issue.number || github.event.inputs.issue_number }}
+        run: |
+          ISSUE_DATA=$(gh api "repos/${{ github.repository }}/issues/$ISSUE_NUM")
+          TITLE=$(echo "$ISSUE_DATA" | jq -r .title)
+          BODY=$(echo "$ISSUE_DATA" | jq -r .body)
+          echo "title=$TITLE" >> "$GITHUB_OUTPUT"
+          echo "number=$ISSUE_NUM" >> "$GITHUB_OUTPUT"
+          cat <<ISSUEEOF > /tmp/issue_body.md
+          $BODY
+          ISSUEEOF
+
+      - name: Run Design Agent
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            You are the Filo Design Agent. Your job is to evaluate proposed
+            changes to Filo's design system and either approve them or push back.
+
+            Read DESIGN-AGENT.md for your full operating rules.
+
+            ISSUE #${{ steps.issue.outputs.number }}: "${{ steps.issue.outputs.title }}"
+
+            The issue body is in /tmp/issue_body.md — read it now.
+
+            Follow the evaluation workflow in DESIGN-AGENT.md exactly.
+          claude_args: "--max-turns 20"
+          settings: |
+            {
+              "permissions": {
+                "allow": [
+                  "Read", "Edit", "Write", "Glob", "Grep",
+                  "Bash(git *)", "Bash(gh *)", "Bash(cat *)"
+                ]
+              }
+            }
