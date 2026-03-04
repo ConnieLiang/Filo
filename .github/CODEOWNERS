@@ -1,8 +1,8 @@
 # Design system ownership
-# Changes to these files require approval from the design lead.
+# Changes to these files require approval from the design team.
 
-tokens.json          @ConnieLiang
-principles.md        @ConnieLiang
-SKILL.md             @ConnieLiang
-CLAUDE.md            @ConnieLiang
-platform-notes/      @ConnieLiang
+tokens.json          @FiloAI/design
+principles.md        @FiloAI/design
+SKILL.md             @FiloAI/design
+CLAUDE.md            @FiloAI/design
+platform-notes/      @FiloAI/design
