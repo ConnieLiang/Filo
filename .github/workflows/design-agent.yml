@@ -5,13 +5,13 @@ on:
     types: [opened, labeled]
   workflow_dispatch:
     inputs:
-      issue_number:
-        description: "Issue number to process"
+      issue_url:
+        description: "Issue to evaluate (e.g. FiloAI/filo-doc/issues/18 or just 5 for this repo)"
         required: true
         type: string
 
 concurrency:
-  group: design-agent-${{ github.event.issue.number || github.event.inputs.issue_number }}
+  group: design-agent-${{ github.event.issue.number || github.event.inputs.issue_url }}
   cancel-in-progress: false
 
 jobs:
@@ -41,22 +41,55 @@ jobs:
           fetch-depth: 0
           token: ${{ steps.app-token.outputs.token }}
 
-      - name: Fetch issue details
+      - name: Resolve issue location
         id: issue
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          ISSUE_NUM: ${{ github.event.issue.number || github.event.inputs.issue_number }}
+          INPUT_URL: ${{ github.event.inputs.issue_url }}
+          LOCAL_NUM: ${{ github.event.issue.number }}
         run: |
-          ISSUE_DATA=$(gh api "repos/${{ github.repository }}/issues/$ISSUE_NUM")
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            INPUT="${INPUT_URL}"
+            # Strip leading https://github.com/ if pasted as full URL
+            INPUT=$(echo "$INPUT" | sed 's|^https://github.com/||')
+            # Check if it's just a number (local issue)
+            if echo "$INPUT" | grep -qE '^[0-9]+$'; then
+              REPO="${{ github.repository }}"
+              NUM="$INPUT"
+            else
+              # Expect format: owner/repo/issues/number
+              REPO=$(echo "$INPUT" | sed 's|/issues/.*||')
+              NUM=$(echo "$INPUT" | grep -oE '[0-9]+$')
+            fi
+          else
+            REPO="${{ github.repository }}"
+            NUM="$LOCAL_NUM"
+          fi
+          echo "repo=$REPO" >> "$GITHUB_OUTPUT"
+          echo "number=$NUM" >> "$GITHUB_OUTPUT"
+
+          ISSUE_DATA=$(gh api "repos/$REPO/issues/$NUM")
           TITLE=$(echo "$ISSUE_DATA" | jq -r .title)
           BODY=$(echo "$ISSUE_DATA" | jq -r .body)
           echo "title=$TITLE" >> "$GITHUB_OUTPUT"
-          echo "number=$ISSUE_NUM" >> "$GITHUB_OUTPUT"
-          cat <<ISSUEEOF > /tmp/issue_body.md
+
+          # Fetch comments too
+          COMMENTS=$(gh api "repos/$REPO/issues/$NUM/comments" --jq '.[] | "### \(.user.login) (\(.created_at))\n\(.body)\n"')
+
+          cat > /tmp/issue_context.md <<CTXEOF
+          # Issue #$NUM from $REPO
+          ## Title: $TITLE
+
+          ## Body
           $BODY
-          ISSUEEOF
+
+          ## Comments
+          $COMMENTS
+          CTXEOF
 
       - name: Run Design Agent
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -66,11 +99,18 @@ jobs:
 
             Read DESIGN-AGENT.md for your full operating rules.
 
-            ISSUE #${{ steps.issue.outputs.number }}: "${{ steps.issue.outputs.title }}"
+            The issue context (title, body, and all comments) is in /tmp/issue_context.md — read it now.
 
-            The issue body is in /tmp/issue_body.md — read it now.
+            The issue is from repo: ${{ steps.issue.outputs.repo }}
+            Issue number: #${{ steps.issue.outputs.number }}
+            Issue title: "${{ steps.issue.outputs.title }}"
 
             Follow the evaluation workflow in DESIGN-AGENT.md exactly.
+
+            IMPORTANT: When you need to comment on the issue, use:
+              gh api repos/${{ steps.issue.outputs.repo }}/issues/${{ steps.issue.outputs.number }}/comments -f body="YOUR COMMENT"
+
+            When you need to create a PR in filo-design, create it in this repo as usual.
           claude_args: "--max-turns 20"
           settings: |
             {
