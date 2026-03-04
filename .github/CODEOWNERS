@@ -1,8 +1,8 @@
 # Design system ownership
 # Changes to these files require approval from the design lead.
 
-tokens.json          @AlinaLiang
-principles.md        @AlinaLiang
-SKILL.md             @AlinaLiang
-CLAUDE.md            @AlinaLiang
-platform-notes/      @AlinaLiang
+tokens.json          @ConnieLiang
+principles.md        @ConnieLiang
+SKILL.md             @ConnieLiang
+CLAUDE.md            @ConnieLiang
+platform-notes/      @ConnieLiang
