@@ -31,12 +31,12 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
-          token: ${{ secrets.FILO_GIT_DEPLOY_TOKEN_OPS }}
+          token: ${{ secrets.DESIGN_AGENT_TOKEN }}
 
       - name: Resolve issue location
         id: issue
         env:
-          GH_TOKEN: ${{ secrets.FILO_GIT_DEPLOY_TOKEN_OPS }}
+          GH_TOKEN: ${{ secrets.DESIGN_AGENT_TOKEN }}
           INPUT_URL: ${{ github.event.inputs.issue_url }}
           LOCAL_NUM: ${{ github.event.issue.number }}
         run: |
@@ -77,7 +77,7 @@ jobs:
 
       - name: Run Design Agent
         env:
-          GH_TOKEN: ${{ secrets.FILO_GIT_DEPLOY_TOKEN_OPS }}
+          GH_TOKEN: ${{ secrets.DESIGN_AGENT_TOKEN }}
         uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
