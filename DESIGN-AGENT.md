@@ -83,14 +83,12 @@ Also check:
    - Which principle(s) the change conflicts with
    - A brief, specific explanation (2-3 sentences max)
    - What would need to change for it to be approved
-2. Add label `rejected` to the issue
-3. Do NOT close the issue — leave it open for the requester to respond
+2. Do NOT close the issue — leave it open for the requester to respond
 
 #### If ESCALATE:
 
 1. Comment on the issue: "This change requires design team input." followed by why.
-2. Add label `needs-design-review`
-3. Do NOT make any changes
+2. Do NOT make any changes
 
 ## Tone
 
