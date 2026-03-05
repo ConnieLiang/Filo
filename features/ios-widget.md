@@ -1,6 +1,8 @@
 # Feature Spec: Filo iOS Home Screen Widget
 
-Medium-sized home screen widget for Filo iOS. Surfaces at-a-glance info (unread important count, latest todo) and one-tap compose. Calm, scannable, and aligned with Apple's Widget guidelines.
+Filo's home screen widget lets people check what matters and start writing without opening the app — so email stays useful without demanding attention.
+
+**Size:** Medium (`WidgetFamily.systemMedium`)
 
 **References:**
 - [Apple HIG: Widgets](https://developer.apple.com/design/human-interface-guidelines/widgets/)
@@ -10,149 +12,165 @@ Medium-sized home screen widget for Filo iOS. Surfaces at-a-glance info (unread 
 
 ---
 
-## Requirements (from feature request)
+## Layout
 
-| Requirement | Implementation |
-|-------------|----------------|
-| Display latest todo | One primary todo line (or “No tasks” empty state) |
-| Numbers of unread important emails | Prominent count next to Important / inbox icon |
-| Compose email directly | Tappable compose control that opens app to compose |
-| Widget size | **Medium** only (this spec) |
-| Follow Apple's Guidelines | See Compliance section below |
-
----
-
-## Widget Size: Medium
-
-- **System size:** Use `WidgetFamily.systemMedium`.
-- **Approximate dimensions:** ~364×170 pt (device-dependent; use SwiftUI layout, not fixed pt).
-- Single configuration for this spec; small/large can be added later if needed.
-
----
-
-## Layout (Medium)
-
-Layout is inspired by common email widgets (e.g. Spark, Gmail) but uses Filo tokens and only the three requested elements. No decorative clutter.
+Two-column layout. Left column is narrow (icon + count + compose). Right column fills remaining space (up to 3 todos).
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│  [envelope icon]   [Unread important count]    [compose]  │  ← Top row: icon + count (left), compose (right)
-│       (primary)         e.g. "12"                        │
-│                                                          │
-│  ─────────────────────────────────────────────────────  │  ← Divider (token 08)
-│                                                          │
-│  Latest todo line (one line, truncate with …)            │  ← P2_R or P3_R, single line
-│  or "No tasks" / "Nothing due" if empty                  │
-│                                                          │
-│  ─────────────────────────────────────────────────────  │
-│                                                          │
-│  [Email 1] Sender · Subject…            Date              │  ← Optional: 1–2 recent important emails
-│  [Email 2] Sender · Subject…            Date              │     (same style as list in app)
-└─────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────┐
+│                                                                │
+│   [inbox icon]     │  ☐  Review NDA from Legal      Mar 5     │
+│       12           │  ──────────────────────────────────────   │
+│                    │  ☐  Submit expense report                 │
+│  ┌──────────┐      │  ──────────────────────────────────────   │
+│  │ [compose] │      │  ☐  Reply to Sarah's proposal   Mar 7   │
+│  │  (blue)  │      │                                          │
+│  └──────────┘      │                                          │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘
+     Column 1                    Column 2
 ```
 
-**Priority order for content:**
-1. Unread important count + compose (always visible).
-2. Latest todo (one line; empty state if none).
-3. Optional: up to 2 latest “important” email previews (sender, subject truncated, date) for density. If data or space is limited, omit and keep only count + todo.
+### Column 1 (left, ~80 pt wide)
+
+| Element | Spec |
+|---------|------|
+| Inbox icon | `inbox-before` or `envelope`, tinted 02-primary (#22A0FB). ~24×24 pt. |
+| Unread important count | Below icon. **P1.1_B** (17 pt bold), color 02-primary. |
+| Compose button | Blue circle (02-primary fill, ~44×44 pt) with white `compose` icon (~20×20 pt). Bottom of column. |
+
+Column 1 uses `VStack` with spacer between count area and compose button, vertically centered.
+
+### Column 2 (right, fills remaining width)
+
+Up to **3 todos**, separated by horizontal dividers (0.5 px, token 14-overlay-light).
+
+Each todo row:
+
+| Element | Spec |
+|---------|------|
+| Checkbox | `checkbox-unchecked` icon, 20×20 pt, color 08-text-tertiary. Leading edge. |
+| Description | One line, truncated with `…`. **P3_R** (15 pt), color 06-text-primary. |
+| Date (optional) | Trailing. **P4_R** (13 pt), color 08-text-tertiary. Only if the task has a due date. |
+
+### Empty state (no todos)
+
+When there are zero tasks, Column 2 shows a single line of **short, light, friendly copy** centered vertically. **P3_R**, color 07-text-secondary.
+
+Rotate daily so the message feels alive. Examples:
+
+| Day | Copy |
+|-----|------|
+| Mon | "Clean slate. Nice." |
+| Tue | "Nothing here. You're ahead." |
+| Wed | "All done. Go outside." |
+| Thu | "Inbox zero energy." |
+| Fri | "No tasks. Weekend's calling." |
+| Sat | "Rest mode: on." |
+| Sun | "You earned this quiet." |
+
+Select by day-of-week (or hash of date) so it's deterministic, not random.
 
 ---
 
-## Design Tokens (from tokens.json)
+## Interactions
 
-| Use | Token | Value (light) |
-|-----|--------|----------------|
-| Background | 10-background | #FFFFFF |
-| Text primary | 06-text-primary | #000000 |
-| Text secondary | 07-text-secondary | #707070 |
-| Text tertiary | 08-text-tertiary | #999999 |
-| Divider | 08-text-tertiary or 14-overlay-light | #999999 / rgba(0,0,0,0.04) |
-| Primary (count, compose accent) | 02-primary | #22A0FB |
-| Surface (optional row bg) | 09-surface-tertiary | #F5F5F5 |
+| # | Tap target | Behavior |
+|---|------------|----------|
+| 1 | **Inbox icon / count** | Open app → **Inbox** tab (Important filter if available). Use `Link` with deep link URL. |
+| 2 | **Compose button** | Open app → **Compose** (new message). Use `Link` with deep link URL. |
+| 3 | **Todo section** (background of Column 2) | Open app → **To-do** tab. Use `Link` wrapping the entire column. |
+| 4 | **Individual todo checkbox** | Toggle: checked icon + strikethrough → hold 2 s → row disappears. See below. |
 
-**Typography (widget-appropriate):**
-- Unread count: **P2_B** or **P1.1_B** (16–17 pt, bold).
-- Todo line / email subject: **P2_R** or **P3_R** (15–16 pt regular).
-- Date / meta: **P4_R** (13 pt).
-- Empty state (“No tasks”): **P3_R**, color **07-text-secondary**.
+### Checkbox interaction (iOS 17+ interactive widgets)
 
-**Spacing:** Use `space-2` (8) to `space-4` (16) for internal padding and gaps; align with existing list/card padding where possible.
+Apple supports **`Button` and `Toggle` in widgets via AppIntents** (iOS 17+). This means the checkbox can work directly in the widget without opening the app.
 
-**Radius:** Widget container uses system corner radius; internal elements (e.g. compose button) use **radius-1** (16) or pill if single-line.
+**Implementation:**
+- Use a `Button` (or `Toggle`) backed by an `AppIntent` that marks the task as done in the shared data store.
+- On tap:
+  1. Immediately swap icon to `checkbox-checked` (tinted 02-primary).
+  2. Apply `strikethrough` + color 08-text-tertiary to the description text.
+  3. After ~2 seconds, the next timeline refresh removes the completed row and shows the next task (or empty state).
+- The 2-second "stay" is visual only; the intent completes the task immediately. The widget timeline reloads after a short delay to update the view.
+- If targeting < iOS 17, fall back to opening the app (same as interaction #3).
 
----
-
-## Icons (Filo library)
-
-| Purpose | Icon name | Source |
-|---------|-----------|--------|
-| Important / Inbox (with count) | `inbox-before` or `envelope` | Resources/Icons/Library/Property 1=*.svg |
-| Compose | `compose` | Same |
-| Todo (if shown next to todo line) | `todo` | Same |
-
-Export SVGs to **@1x, @2x, @3x** PNGs for the widget extension target and add to `FiloApp/Assets.xcassets/` (or widget-specific asset catalog). Use template rendering so tint (e.g. primary blue) applies.
+**Accessibility:** Label the checkbox as "Complete: [task name]".
 
 ---
 
-## Copy
+## Design Tokens
 
-| Context | Copy (English) |
-|---------|----------------|
-| Unread important | Show number only (e.g. `12`). No “unread” label if space is tight; icon + number is sufficient. |
-| Empty todo | “No tasks” or “Nothing due” |
-| Compose | No label required; icon only. Accessibility: “Compose email” or “New email”. |
-| Email row | Sender name (bold) · Subject (truncated) — Date (e.g. “Feb 20” or “7:20 AM”) |
+| Use | Token | Light | Dark |
+|-----|-------|-------|------|
+| Widget background | 10-background | #FFFFFF | #1D1D21 |
+| Text primary | 06-text-primary | #000000 | #FFFFFF |
+| Text secondary | 07-text-secondary | #707070 | #8B8B8B |
+| Text tertiary / date | 08-text-tertiary | #999999 | #414149 |
+| Divider (between todos) | 14-overlay-light | rgba(0,0,0,0.04) | rgba(255,255,255,0.06) |
+| Primary (count, compose bg) | 02-primary | #22A0FB | #45B1FF |
+| Compose icon (on blue) | 10-background | #FFFFFF | #1D1D21 |
+
+**Typography:**
+- Unread count: **P1.1_B** (17 pt, 700).
+- Todo description: **P3_R** (15 pt, 400).
+- Todo date: **P4_R** (13 pt, 400).
+- Empty state: **P3_R** (15 pt, 400), color 07-text-secondary.
+
+**Spacing:** `space-3` (12) internal padding; `space-2` (8) gaps between todo rows and between icon elements.
+
+**Radius:** Compose button uses **pill** (999). Widget container uses system radius.
 
 ---
 
-## Deep Links / Actions
+## Icons
 
-| Control | Behavior |
-|---------|----------|
-| Compose button | Open app into **compose** (new message). Use WidgetKit URL or app URL scheme that the app handles. |
-| Unread count / envelope | Open app to **Important** or **Inbox** filtered to important. |
-| Todo line | Open app to **To-do** tab or the specific task if supported. |
-| Email row (if present) | Open app to that **email’s thread**. |
+| Purpose | Icon name | Notes |
+|---------|-----------|-------|
+| Inbox | `inbox-before` or `envelope` | Template image, tinted 02-primary |
+| Compose | `compose` | White on 02-primary circle |
+| Checkbox (unchecked) | `checkbox-unchecked` | Template, tinted 08-text-tertiary |
+| Checkbox (checked) | `checkbox-checked` | Template, tinted 02-primary |
+| Todo (optional section label) | `todo` | Only if adding a section header |
 
-Implement via `widgetURL` / `Link` in SwiftUI and handle in the main app.
-
----
-
-## Apple Guidelines Compliance
-
-- **Relevance:** Widget shows only useful, up-to-date info (unread count, one todo, optional recent emails). No vanity metrics. *(Filo: Reduce cognitive friction.)*
-- **Clarity:** One primary number (unread important), one primary action (compose), one todo line. No overcrowding. *(Filo: Scanning > reading.)*
-- **Consistency:** Use system widget container; interior uses Filo tokens and SF Pro so it feels native but on-brand.
-- **Respect system:** Support Dynamic Type where applicable; avoid tiny fixed font sizes. Prefer semantic colors (e.g. primary for actionable elements) and support appearance (light/dark) via tokens.
-- **No misleading urgency:** Unread count is factual; avoid “99+” unless product rule is to cap. *(Filo: Respect attention.)*
-
-Reference [Human Interface Guidelines – Widgets](https://developer.apple.com/design/human-interface-guidelines/widgets/) and [SwiftUI Widget](https://developer.apple.com/documentation/swiftui/widget) for:
-- Widget family and size
-- Timeline provider and refresh policy
-- Accessibility labels and widget URL handling
+Export SVGs → **@1x, @2x, @3x** PNG. Render As: **Template Image** in asset catalog.
 
 ---
 
 ## Data and Refresh
 
-- **Unread important count:** From app’s sync/model (e.g. “Important” or equivalent filter). Refresh on timeline (e.g. every 15–30 min or when app foregrounds).
-- **Latest todo:** Single “next” or “most relevant” task from app’s todo model; same refresh strategy.
-- **Recent emails (optional):** Up to 2 from Important or Inbox; same source as list in app.
+| Data | Type | Example |
+|------|------|---------|
+| Unread important count | `Int` | `12` |
+| Todos | `[{ title, dueDate?, id }]` | Up to 3; sorted by relevance/due date |
 
-Prefer a shared container (App Group) so the widget extension can read the same data the app uses, without duplicating network logic in the extension.
+- Use **App Group** shared container. App writes on sync; widget reads via `TimelineProvider`.
+- Refresh policy: every 15–30 min, or when app enters foreground.
+- Checkbox intent writes completion back to the same shared store; request timeline reload after.
+
+---
+
+## Apple Guidelines Compliance
+
+- **Interactive widgets (iOS 17+):** Checkbox uses `Button` with `AppIntent`. Compliant — Apple explicitly supports this pattern for task-completion actions. [(Ref: HIG)](https://developer.apple.com/design/human-interface-guidelines/widgets/)
+- **Relevance:** Shows only actionable info — unread count, upcoming tasks. No vanity metrics.
+- **Glanceable:** Two-column layout, max 3 todo rows. Nothing to scroll, nothing to figure out.
+- **Respect system:** Support Dynamic Type, light/dark via tokens, system widget container radius.
+- **No misleading urgency:** Count is factual; no "99+", no red badges.
 
 ---
 
 ## Platform Notes (iOS)
 
 - **Repo:** Filo iOS (Swift/SwiftUI).
-- **Implementation:** New Widget Extension target; use `WidgetKit` and SwiftUI. No Figma; implement from this spec and tokens.
+- **Target:** New Widget Extension. Use `WidgetKit`, SwiftUI, and `AppIntents` (for checkbox).
+- **Minimum:** iOS 17+ (for interactive widgets). If supporting iOS 16, checkbox falls back to open-app.
 
 ---
 
-## Developer handoff
+## Developer Handoff
 
-### Required materials (in repo)
+### Materials
 
 | Item | Location |
 |------|----------|
@@ -163,40 +181,27 @@ Prefer a shared container (App Group) so the widget extension can read the same 
 | iOS platform notes | `platform-notes/ios.md` |
 | Design principles | `principles.md` |
 
-### Assets to generate
+### Assets
 
-Export from Filo’s SVG library at **@1x, @2x, @3x** PNG. Add to `FiloApp/Assets.xcassets/` (or widget extension catalog) with **Render As: Template Image**.
+| Asset | Source SVG | Catalog name | Size |
+|-------|------------|--------------|------|
+| Inbox | `Property 1=inbox-before.svg` | `iconInbox` | 24×24 pt |
+| Compose | `Property 1=compose.svg` | `iconCompose` | 20×20 pt (inside 44×44 circle) |
+| Checkbox unchecked | `Property 1=checkbox-unchecked.svg` | `iconCheckboxOff` | 20×20 pt |
+| Checkbox checked | `Property 1=checkbox-checked.svg` | `iconCheckboxOn` | 20×20 pt |
 
-| Asset | Source SVG | Catalog name |
-|-------|------------|--------------|
-| Envelope / Inbox | `Property 1=inbox-before.svg` or `Property 1=envelope.svg` | `iconEnvelope` |
-| Compose | `Property 1=compose.svg` | `iconCompose` |
-| Todo (optional) | `Property 1=todo.svg` | `iconTodo` |
+Export @1x, @2x, @3x. Template Image.
 
-Export at 24×24 pt (or 44×44 for compose button); tint with 02-primary in SwiftUI.
+### Checklist
 
-### Implementation checklist
-
-- [ ] Create **Widget Extension** target (SwiftUI, WidgetKit).
-- [ ] Implement **medium** only (`WidgetFamily.systemMedium`).
-- [ ] **Timeline provider:** Unread important count, latest todo, optional 2 recent emails (from App Group).
-- [ ] **UI:** Top row = envelope + count (left), compose (right). Divider. One todo line or “No tasks”. Optional 1–2 email rows.
-- [ ] **Tokens:** Map `tokens.json` to SwiftUI; support light/dark.
-- [ ] **Deep links:** Compose → compose; count → Important; todo → To-do; email row → thread.
-- [ ] **Accessibility:** “Compose email”; “X unread important emails”.
-- [ ] **Refresh:** Timeline policy (e.g. 15–30 min or on app foreground).
-- [ ] **Assets:** 1x/2x/3x PNGs, Template Image.
-
-### Data (App Group)
-
-| Data | Type | Notes |
-|------|------|--------|
-| Unread important count | `Int` | From Important filter |
-| Latest todo | `String?` or `{ title, id }` | `nil` → “No tasks” |
-| Recent emails (optional) | Up to 2 × (sender, subject, date, threadId) | For optional rows |
-
-App writes to shared container; widget reads on timeline.
-
-### Reference (design intent)
-
-Spark/Gmail references: Filo widget is **simpler** — unread **important** count (not all inbox), **one** todo line, **one** compose. Optional 1–2 email rows; no avatars or extra actions. Clarity and Filo principles first.
+- [ ] Widget Extension target (SwiftUI, WidgetKit).
+- [ ] `WidgetFamily.systemMedium` only.
+- [ ] Two-column layout: left = inbox icon + count + compose; right = up to 3 todos.
+- [ ] Todo rows: checkbox + description (1 line) + optional date, separated by dividers.
+- [ ] Empty state: daily-rotating friendly copy.
+- [ ] Deep links: inbox → Inbox tab; compose → Compose; todo area → To-do tab.
+- [ ] Checkbox `AppIntent` (iOS 17+): mark done, strikethrough, reload timeline after ~2 s.
+- [ ] Tokens: colors, type, spacing from `tokens.json`. Light + dark.
+- [ ] Accessibility labels on all interactive elements.
+- [ ] Timeline refresh: 15–30 min + on app foreground.
+- [ ] Assets: 4 icons, 1x/2x/3x, Template Image.
