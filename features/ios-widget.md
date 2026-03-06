@@ -1,101 +1,175 @@
-# Feature Spec: Filo iOS Home Screen Widget
+# Feature Spec: Filo iOS Home Screen Widgets
 
-Filo's home screen widget lets people check what matters and start writing without opening the app — so email stays useful without demanding attention.
+Filo's home screen widgets let people check what matters and start writing without opening the app — so email stays useful without demanding attention.
 
-**Size:** Medium (`WidgetFamily.systemMedium`)
+**Sizes:** Small, Medium, Large  
+**Prototype:** `filo-ios/FiloWidget/FiloWidget.swift`
 
 **References:**
 - [Apple HIG: Widgets](https://developer.apple.com/design/human-interface-guidelines/widgets/)
 - [SwiftUI: Widget](https://developer.apple.com/documentation/swiftui/widget)
-- **Design tokens:** `tokens.json` (repo root)
-- **Icons:** `Resources/Icons/Library/` (see icons.json)
+- **Design tokens:** `tokens.json` (this repo)
+- **Icons:** Filo app repo `Resources/Icons/Library/` (see icons.json)
 
 ---
 
-## Layout
+## Small Widget (~170×170 pt)
 
-Two-column layout. Left column is narrow (icon + count + compose). Right column fills remaining space (up to 3 todos).
+Todo list only. Entire widget taps to To-do tab.
 
 ```
-┌────────────────────────────────────────────────────────────────┐
-│                                                                │
-│   [inbox icon]     │  ☐  Review NDA from Legal      Mar 5     │
-│       12           │  ──────────────────────────────────────   │
-│                    │  ☐  Submit expense report                 │
-│  ┌──────────┐      │  ──────────────────────────────────────   │
-│  │ [compose] │      │  ☐  Reply to Sarah's proposal   Mar 7   │
-│  │  (blue)  │      │                                          │
-│  └──────────┘      │                                          │
-│                                                                │
-└────────────────────────────────────────────────────────────────┘
-     Column 1                    Column 2
+┌──────────────────────┐
+│  📋 To-do  4         │
+│  ────────────────    │
+│  ☐  Review NDA f…    │
+│  ☐  Submit expen…    │
+│  ☐  Reply to Sar…    │
+└──────────────────────┘
 ```
 
-### Column 1 (left, ~80 pt wide)
+### Layout
 
 | Element | Spec |
 |---------|------|
-| Inbox icon | `inbox-before` or `envelope`, tinted 02-primary (#22A0FB). ~24×24 pt. |
-| Unread important count | Below icon. **P1.1_B** (17 pt bold), color 02-primary. |
-| Compose button | Blue circle (02-primary fill, ~44×44 pt) with white `compose` icon (~20×20 pt). Bottom of column. |
+| Title row | Todo icon (18×18, 02-primary) + "To-do" (P2_B) + count (P4_R, 07-text-secondary) |
+| Divider | 0.5pt, 14-overlay-light |
+| Todo rows | Up to **3**. Checkbox (SF Symbol `square`, 14pt, 08-text-tertiary) + title (P4_R, 06-text-primary, 1 line) + optional date (P4_R, 08-text-tertiary or 02-primary if "Today") |
+| Padding | 16pt all sides |
 
-Column 1 uses `VStack` with spacer between count area and compose button, vertically centered.
+### Interaction
 
-### Column 2 (right, fills remaining width)
+| Tap target | Behavior |
+|------------|----------|
+| Entire widget | Open app → **To-do** tab |
 
-Up to **3 todos**, separated by horizontal dividers (0.5 px, token 14-overlay-light).
+---
 
-Each todo row:
+## Medium Widget (~364×170 pt)
+
+Two-column layout. Todo list on the left, blue action panel on the right.
+
+```
+┌──────────────────────────────────────────────────────┐
+│                                    ┌───────────────┐ │
+│  📋 To-do  4                       │   ✉ (white)   │ │
+│  ─────────────────────             │      12       │ │
+│  ☐  Review NDA from Legal  Today   │───────────────│ │
+│  ☐  Submit expense report          │   ✏ (white)   │ │
+│  ☐  Reply to Sarah's pro…  Mar 7   │   Compose     │ │
+│                                    └───────────────┘ │
+└──────────────────────────────────────────────────────┘
+         Column 1 (todos)           Column 2 (actions)
+                    ← 16pt gap →
+```
+
+### Column 1 — Todo list
 
 | Element | Spec |
 |---------|------|
-| Checkbox | `checkbox-unchecked` icon, 20×20 pt, color 08-text-tertiary. Leading edge. |
-| Description | One line, truncated with `…`. **P3_R** (15 pt), color 06-text-primary. |
-| Date (optional) | Trailing. **P4_R** (13 pt), color 08-text-tertiary. Only if the task has a due date. |
+| Title row | Todo icon (18×18, 02-primary) + "To-do" (P2_B) + count (P4_R, 07-text-secondary) |
+| Divider | 0.5pt, 14-overlay-light |
+| Todo rows | Up to **3**. Same spec as small widget. |
+| Padding | 16pt leading, 14pt vertical |
 
-### Empty state (no todos)
+### Column 2 — Action panel (vertical)
 
-When there are zero tasks, Column 2 shows a single line of **short, light, friendly copy** centered vertically. **P3_R**, color 07-text-secondary.
+Blue rounded rectangle (02-primary fill, 20pt continuous radius). 80pt wide, 8pt inset from top/right/bottom edges.
 
-Rotate daily so the message feels alive. Examples:
+| Element | Spec |
+|---------|------|
+| **Inbox (top half)** | Envelope icon (22×22, white) + unread count (P1.1_B 17pt bold, white) |
+| **Divider** | 0.5pt, white (#10-background), 22pt horizontal padding |
+| **Compose (bottom half)** | Compose icon (22×22, white) + "Compose" label (P5_R 10pt, white 90%) |
+
+Gap between columns: **16pt**.
+
+### Interactions
+
+| Tap target | Behavior |
+|------------|----------|
+| Column 1 (entire todo column) | Open app → **To-do** tab |
+| Inbox (panel top) | Open app → **Inbox** tab |
+| Compose (panel bottom) | Open app → **Compose** screen |
+
+---
+
+## Large Widget (~364×382 pt)
+
+Two-row layout. Horizontal action panel on top, todo list below.
+
+```
+┌──────────────────────────────────────────────────────┐
+│  ┌────────────────────────────────────────────────┐  │
+│  │  ✉  12          │          ✏  Compose          │  │
+│  └────────────────────────────────────────────────┘  │
+│                                                      │
+│  📋 To-do  4                                         │
+│  ────────────────────────────────────────────────    │
+│  ☐  Review NDA from Legal                    Today   │
+│  ☐  Submit expense report                            │
+│  ☐  Reply to Sarah's proposal about the…    Mar 7    │
+│  ☐  Book flight to SF for next week          Mar 10  │
+│  ☐  Update project timeline                          │
+│  ☐  Send invoice to client                   Mar 12  │
+└──────────────────────────────────────────────────────┘
+         Row 1 (actions)
+         Row 2 (todos)
+```
+
+### Row 1 — Action panel (horizontal)
+
+Blue rounded rectangle (02-primary fill, 20pt continuous radius). 52pt tall, 8pt inset from top and sides. 12pt gap below.
+
+| Element | Spec |
+|---------|------|
+| **Inbox (left half)** | Envelope icon (22×22, white) + unread count (P1.1_B 17pt bold, white), horizontal layout, 8pt gap |
+| **Divider** | 0.5pt wide, white, 16pt vertical padding |
+| **Compose (right half)** | Compose icon (22×22, white) + "Compose" label (P4_R 13pt, white 90%), horizontal layout, 8pt gap |
+
+### Row 2 — Todo list
+
+| Element | Spec |
+|---------|------|
+| Title row | Todo icon (18×18, 02-primary) + "To-do" (P2_B) + count (P4_R, 07-text-secondary) |
+| Divider | 0.5pt, 14-overlay-light |
+| Todo rows | Up to **6**. Same row spec as small/medium. |
+| Padding | 16pt horizontal, 14pt top |
+
+### Interactions
+
+| Tap target | Behavior |
+|------------|----------|
+| Todo section (row 2) | Open app → **To-do** tab |
+| Inbox (panel left) | Open app → **Inbox** tab |
+| Compose (panel right) | Open app → **Compose** screen |
+
+---
+
+## Empty State (all sizes)
+
+When there are zero todos, the todo area shows centered:
+- Checkmark circle icon (SF Symbol `checkmark.circle`, 20pt light, 08-text-tertiary)
+- Daily-rotating copy (P3_R 15pt, 07-text-secondary)
 
 | Day | Copy |
 |-----|------|
+| Sun | "You earned this quiet." |
 | Mon | "Clean slate. Nice." |
 | Tue | "Nothing here. You're ahead." |
 | Wed | "All done. Go outside." |
 | Thu | "Inbox zero energy." |
 | Fri | "No tasks. Weekend's calling." |
 | Sat | "Rest mode: on." |
-| Sun | "You earned this quiet." |
-
-Select by day-of-week (or hash of date) so it's deterministic, not random.
 
 ---
 
-## Interactions
+## Checkbox Interaction (iOS 17+, all sizes)
 
-| # | Tap target | Behavior |
-|---|------------|----------|
-| 1 | **Inbox icon / count** | Open app → **Inbox** tab (Important filter if available). Use `Link` with deep link URL. |
-| 2 | **Compose button** | Open app → **Compose** (new message). Use `Link` with deep link URL. |
-| 3 | **Todo section** (background of Column 2) | Open app → **To-do** tab. Use `Link` wrapping the entire column. |
-| 4 | **Individual todo checkbox** | Toggle: checked icon + strikethrough → hold 2 s → row disappears. See below. |
-
-### Checkbox interaction (iOS 17+ interactive widgets)
-
-Apple supports **`Button` and `Toggle` in widgets via AppIntents** (iOS 17+). This means the checkbox can work directly in the widget without opening the app.
-
-**Implementation:**
-- Use a `Button` (or `Toggle`) backed by an `AppIntent` that marks the task as done in the shared data store.
-- On tap:
-  1. Immediately swap icon to `checkbox-checked` (tinted 02-primary).
-  2. Apply `strikethrough` + color 08-text-tertiary to the description text.
-  3. After ~2 seconds, the next timeline refresh removes the completed row and shows the next task (or empty state).
-- The 2-second "stay" is visual only; the intent completes the task immediately. The widget timeline reloads after a short delay to update the view.
-- If targeting < iOS 17, fall back to opening the app (same as interaction #3).
-
-**Accessibility:** Label the checkbox as "Complete: [task name]".
+- Use `Button` backed by `AppIntent` that marks the task done in the shared data store.
+- On tap: swap to checked icon (tinted 02-primary), apply strikethrough + 08-text-tertiary color.
+- After ~2 seconds, timeline reloads and the completed row disappears.
+- Falls back to opening app on iOS 16.
+- Accessibility: "Complete: [task name]".
 
 ---
 
@@ -103,37 +177,66 @@ Apple supports **`Button` and `Toggle` in widgets via AppIntents** (iOS 17+). Th
 
 | Use | Token | Light | Dark |
 |-----|-------|-------|------|
-| Widget background | 10-background | #FFFFFF | #1D1D21 |
+| Widget background | System `.fill.tertiary` | (system) | (system) |
 | Text primary | 06-text-primary | #000000 | #FFFFFF |
 | Text secondary | 07-text-secondary | #707070 | #8B8B8B |
-| Text tertiary / date | 08-text-tertiary | #999999 | #414149 |
-| Divider (between todos) | 14-overlay-light | rgba(0,0,0,0.04) | rgba(255,255,255,0.06) |
-| Primary (count, compose bg) | 02-primary | #22A0FB | #45B1FF |
-| Compose icon (on blue) | 10-background | #FFFFFF | #1D1D21 |
+| Text tertiary | 08-text-tertiary | #999999 | #65656A |
+| Divider (todos, title) | 14-overlay-light | rgba(0,0,0,0.08) | rgba(255,255,255,0.08) |
+| Divider (action panel) | 10-background | #FFFFFF | #FFFFFF |
+| Primary (panel bg, "Today") | 02-primary | #22A0FB | #45B1FF |
+| Panel icons + text | 10-background | #FFFFFF | (white) |
 
-**Typography:**
-- Unread count: **P1.1_B** (17 pt, 700).
-- Todo description: **P3_R** (15 pt, 400).
-- Todo date: **P4_R** (13 pt, 400).
-- Empty state: **P3_R** (15 pt, 400), color 07-text-secondary.
+### Typography
 
-**Spacing:** `space-3` (12) internal padding; `space-2` (8) gaps between todo rows and between icon elements.
-
-**Radius:** Compose button uses **pill** (999). Widget container uses system radius.
+| Element | Token | Size | Weight |
+|---------|-------|------|--------|
+| "To-do" title | P2_B | 16pt | Bold (700) |
+| Todo count | P4_R | 13pt | Regular (400) |
+| Todo title | P4_R | 13pt | Regular (400) |
+| Todo date | P4_R | 13pt | Regular (400) |
+| Unread count (panel) | P1.1_B | 17pt | Bold (700) |
+| "Compose" (medium, vertical) | P5_R | 10pt | Regular (400) |
+| "Compose" (large, horizontal) | P4_R | 13pt | Regular (400) |
+| Empty state copy | P3_R | 15pt | Regular (400) |
 
 ---
 
 ## Icons
 
-| Purpose | Icon name | Notes |
-|---------|-----------|-------|
-| Inbox | `inbox-before` or `envelope` | Template image, tinted 02-primary |
-| Compose | `compose` | White on 02-primary circle |
-| Checkbox (unchecked) | `checkbox-unchecked` | Template, tinted 08-text-tertiary |
-| Checkbox (checked) | `checkbox-checked` | Template, tinted 02-primary |
-| Todo (optional section label) | `todo` | Only if adding a section header |
+| Purpose | Icon name | Rendering | Size |
+|---------|-----------|-----------|------|
+| Todo title | `todo` (Filo library) | Template, 02-primary | 18×18 pt |
+| Inbox (panel) | `inbox-before` (Filo library) | Template, white | 22×22 pt |
+| Compose (panel) | `compose` (Filo library) | Template, white | 22×22 pt |
+| Checkbox | SF Symbol `square` | 14pt, 08-text-tertiary | — |
+| Empty state | SF Symbol `checkmark.circle` | 20pt light, 08-text-tertiary | — |
 
-Export SVGs → **@1x, @2x, @3x** PNG. Render As: **Template Image** in asset catalog.
+Filo icons stored in widget asset catalog (`FiloWidget/Assets.xcassets/` in filo-ios).
+
+---
+
+## Widget Configuration
+
+- **Families:** `.systemSmall`, `.systemMedium`, `.systemLarge`
+- **Content margins:** Disabled via `.contentMarginsDisabled()`
+- **Container background:** `.fill.tertiary` (system-provided)
+- **Display name:** "Filo"
+- **Description:** "Emails and tasks at a glance."
+- Deep links: `filopreview://todo`, `filopreview://inbox`, `filopreview://compose`
+
+---
+
+## Shared Components
+
+Reusable across all three sizes:
+
+| Component | Used by |
+|-----------|---------|
+| `FiloTodoTitle` | Small, Medium, Large |
+| `FiloTodoRow` | Small, Medium, Large |
+| `FiloTodoList` (accepts `maxItems`) | Small (3), Medium (3), Large (6) |
+| `FiloEmptyState` | Small, Medium, Large |
+| `FiloActionPanel` (accepts `axis`) | Medium (`.vertical`), Large (`.horizontal`) |
 
 ---
 
@@ -142,29 +245,30 @@ Export SVGs → **@1x, @2x, @3x** PNG. Render As: **Template Image** in asset ca
 | Data | Type | Example |
 |------|------|---------|
 | Unread important count | `Int` | `12` |
-| Todos | `[{ title, dueDate?, id }]` | Up to 3; sorted by relevance/due date |
+| Todos | `[{ title, dueDate?, id }]` | Up to 6; sorted by relevance/due date |
 
-- Use **App Group** shared container. App writes on sync; widget reads via `TimelineProvider`.
-- Refresh policy: every 15–30 min, or when app enters foreground.
-- Checkbox intent writes completion back to the same shared store; request timeline reload after.
+- **App Group** shared container. App writes on sync; widget reads via `TimelineProvider`.
+- Refresh: every 15–30 min, or on app foreground.
+- Checkbox intent writes completion back; requests timeline reload.
 
 ---
 
 ## Apple Guidelines Compliance
 
-- **Interactive widgets (iOS 17+):** Checkbox uses `Button` with `AppIntent`. Compliant — Apple explicitly supports this pattern for task-completion actions. [(Ref: HIG)](https://developer.apple.com/design/human-interface-guidelines/widgets/)
-- **Relevance:** Shows only actionable info — unread count, upcoming tasks. No vanity metrics.
-- **Glanceable:** Two-column layout, max 3 todo rows. Nothing to scroll, nothing to figure out.
-- **Respect system:** Support Dynamic Type, light/dark via tokens, system widget container radius.
-- **No misleading urgency:** Count is factual; no "99+", no red badges.
+- **Interactive widgets (iOS 17+):** Checkbox via `Button` + `AppIntent`.
+- **Glanceable:** Small = todo only; Medium = todos + actions; Large = more todos + actions. No scrolling.
+- **Content margins:** `.contentMarginsDisabled()` for edge-to-edge action panel.
+- **Adaptive:** Light/dark via tokens. System container background.
+- **No misleading urgency:** Count is factual. No red badges.
 
 ---
 
 ## Platform Notes (iOS)
 
 - **Repo:** Filo iOS (Swift/SwiftUI).
-- **Target:** New Widget Extension. Use `WidgetKit`, SwiftUI, and `AppIntents` (for checkbox).
-- **Minimum:** iOS 17+ (for interactive widgets). If supporting iOS 16, checkbox falls back to open-app.
+- **Target:** Widget Extension (`FiloWidget`).
+- **Minimum:** iOS 17+ (for `.contentMarginsDisabled()` and interactive widgets).
+- **Prototype:** `filo-ios/FiloWidget/FiloWidget.swift`
 
 ---
 
@@ -174,34 +278,35 @@ Export SVGs → **@1x, @2x, @3x** PNG. Render As: **Template Image** in asset ca
 
 | Item | Location |
 |------|----------|
-| This spec | `features/ios-widget.md` |
-| Design tokens | `tokens.json` |
-| Icon library (SVG) | In main Filo repo: `Resources/Icons/Library/` |
-| Icon index | In main Filo repo: `Design Guidelines/Icons/icons.json` |
-| iOS platform notes | `platform-notes/ios.md` |
-| Design principles | `principles.md` |
+| This spec | `features/ios-widget.md` (this repo: [FiloAI/filo-design](https://github.com/FiloAI/filo-design)) |
+| Working prototype | `filo-ios/FiloWidget/FiloWidget.swift` |
+| Design tokens | `tokens.json` (this repo) |
+| Icon library (SVG) | Filo app repo: `Resources/Icons/Library/` |
+| Widget asset catalog | `filo-ios/FiloWidget/Assets.xcassets/` |
 
-### Assets
+### Assets (in widget catalog)
 
-| Asset | Source SVG | Catalog name | Size |
-|-------|------------|--------------|------|
-| Inbox | `Property 1=inbox-before.svg` | `iconInbox` | 24×24 pt |
-| Compose | `Property 1=compose.svg` | `iconCompose` | 20×20 pt (inside 44×44 circle) |
-| Checkbox unchecked | `Property 1=checkbox-unchecked.svg` | `iconCheckboxOff` | 20×20 pt |
-| Checkbox checked | `Property 1=checkbox-checked.svg` | `iconCheckboxOn` | 20×20 pt |
-
-Export @1x, @2x, @3x. Template Image.
+| Asset | Source SVG | Catalog name |
+|-------|------------|--------------|
+| Envelope | `Property 1=inbox-before.svg` | `iconEnvelope` |
+| Compose | `Property 1=compose.svg` | `iconCompose` |
+| Todo | `Property 1=todo.svg` | `iconTodo` |
 
 ### Checklist
 
-- [ ] Widget Extension target (SwiftUI, WidgetKit).
-- [ ] `WidgetFamily.systemMedium` only.
-- [ ] Two-column layout: left = inbox icon + count + compose; right = up to 3 todos.
-- [ ] Todo rows: checkbox + description (1 line) + optional date, separated by dividers.
-- [ ] Empty state: daily-rotating friendly copy.
-- [ ] Deep links: inbox → Inbox tab; compose → Compose; todo area → To-do tab.
-- [ ] Checkbox `AppIntent` (iOS 17+): mark done, strikethrough, reload timeline after ~2 s.
-- [ ] Tokens: colors, type, spacing from `tokens.json`. Light + dark.
-- [ ] Accessibility labels on all interactive elements.
+- [x] Widget Extension target (`FiloWidget`).
+- [x] All three sizes: `.systemSmall`, `.systemMedium`, `.systemLarge`.
+- [x] Small: todo list only, entire widget taps to To-do.
+- [x] Medium: two columns — todo list + vertical blue action panel.
+- [x] Large: two rows — horizontal blue action panel on top + todo list below (up to 6).
+- [x] Shared components: `FiloTodoTitle`, `FiloTodoRow`, `FiloTodoList`, `FiloEmptyState`, `FiloActionPanel`.
+- [x] Empty state: daily-rotating friendly copy.
+- [x] Typography: all Filo tokens.
+- [x] Colors: adaptive light/dark from tokens.
+- [x] Filo icons from asset catalog.
+- [x] `.contentMarginsDisabled()` for edge-to-edge panel.
+- [ ] Deep links: wire to actual app navigation.
+- [ ] Checkbox `AppIntent` (iOS 17+): mark done, strikethrough, reload timeline.
+- [ ] App Group shared container for live data.
 - [ ] Timeline refresh: 15–30 min + on app foreground.
-- [ ] Assets: 4 icons, 1x/2x/3x, Template Image.
+- [ ] Accessibility labels on all interactive elements.
