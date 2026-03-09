@@ -21,11 +21,11 @@ All links below point to **[Filo Design / features](https://github.com/FiloAI/fi
 | Item | Path |
 |------|------|
 | **This feature doc** | [features/desktop-widget-preview.md](https://github.com/FiloAI/filo-design/blob/main/features/desktop-widget-preview.md) |
-| Widget preview page | [filo-desktop/src/pages/widget-preview.tsx](https://github.com/FiloAI/filo-design/blob/main/features/filo-desktop/src/pages/widget-preview.tsx) |
-| Route | `/widget-preview` (see [filo-desktop/src/router/routes/index.ts](https://github.com/FiloAI/filo-design/blob/main/features/filo-desktop/src/router/routes/index.ts)) |
-| Entry from app | Login page: "Preview widget" link (Electron only; see [filo-desktop/src/pages/login.tsx](https://github.com/FiloAI/filo-design/blob/main/features/filo-desktop/src/pages/login.tsx)) |
+| Widget preview page (implementation) | [filo-desktop/src/pages/widget-preview.tsx](https://github.com/FiloAI/filo-desktop/blob/main/src/pages/widget-preview.tsx) |
+| Route | `/widget-preview` (see [filo-desktop/src/router/routes/index.ts](https://github.com/FiloAI/filo-desktop/blob/main/src/router/routes/index.ts)) |
+| Entry from app | Login page: "Preview widget" link (Electron only; see [filo-desktop/src/pages/login.tsx](https://github.com/FiloAI/filo-desktop/blob/main/src/pages/login.tsx)) |
 | Specs | [ios-widget.md](https://github.com/FiloAI/filo-design/blob/main/features/ios-widget.md), [desktop-widgets.md](https://github.com/FiloAI/filo-design/blob/main/features/desktop-widgets.md) |
-| Design tokens (source of truth) | [Dev/tokens.json](https://github.com/FiloAI/filo-design/blob/main/features/Dev/tokens.json), [filo-desktop/design/tokens.json](https://github.com/FiloAI/filo-design/blob/main/features/filo-desktop/design/tokens.json) |
+| Design tokens (source of truth) | [tokens.json](https://github.com/FiloAI/filo-design/blob/main/tokens.json) (repo root) |
 | Preview runbook | [preview-desktop.md](https://github.com/FiloAI/filo-design/blob/main/features/preview-desktop.md) |
 
 ---
