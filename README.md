@@ -10,6 +10,13 @@ filo-design/
 ├── SKILL.md               # AI agent design skill — enforces Filo tokens when generating UI code
 ├── tokens.json            # Colors, typography, spacing, radius, dividers (all platforms)
 ├── principles.md          # Product design principles, visual direction, copy & voice
+├── resources/             # Design assets (icons, illustrations) — source of truth for product UI
+│   ├── README.md          # What lives here and why
+│   ├── DESIGNER-WORKFLOW.md  # How designers add and maintain assets
+│   ├── icons/             # SVG icons (naming: {name}.svg)
+│   │   ├── icons.json     # Catalog and categories
+│   │   └── *.svg
+│   └── illustrations/     # Spot illustrations, empty states (planned)
 ├── features/              # Feature interaction specs
 │   ├── email-list.md      # Email list — layout, smart labels, swipe/hover, per-platform notes
 │   └── compose.md         # Compose — fields, Instant Write, tone controls, per-platform notes
@@ -43,5 +50,8 @@ filo-design/
 | Visual tokens | `tokens.json` |
 | Design principles | `principles.md` |
 | AI design skill | `SKILL.md` |
+| **Icons & illustrations** | `resources/icons/`, `resources/illustrations/` |
 | Feature behavior | `features/*.md` |
 | Platform details | `platform-notes/*.md` |
+
+**Designers:** See `resources/DESIGNER-WORKFLOW.md` for how to add and maintain assets. You own what goes in `resources/`; engineering consumes from here.
