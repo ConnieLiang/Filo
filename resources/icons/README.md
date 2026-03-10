@@ -7,14 +7,6 @@
 - **Naming:** `{icon-name}.svg` (e.g. `inbox-before.svg`, `send-email.svg`)
 - **Catalog:** `icons.json` (categories, state variants, path template)
 
-## Quick reference
-
-| Resource | Path |
-|----------|------|
-| Icon file | `resources/icons/{name}.svg` |
-| Catalog | `resources/icons/icons.json` |
-| Figma (source) | [Filo Components → Icons](https://www.figma.com/design/Pmns0wqmroGCQmqFPeSrwd) |
-
 ## Usage in apps
 
 - **HTML:** `<img src="resources/icons/inbox-before.svg" alt="Inbox">`
