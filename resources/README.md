@@ -6,14 +6,19 @@ Design and product assets that live in **filo-design** as the single source of t
 
 ```
 resources/
-├── README.md           ← You are here
-├── icons/              ← Product icons (SVG)
-│   ├── icons.json      ← Catalog and categories
+├── README.md             ← You are here
+├── DESIGNER-WORKFLOW.md  ← How to add and maintain assets
+├── icons/                ← Product icons (SVG)
+│   ├── icons.json        ← Catalog and categories
 │   ├── README.md
 │   └── *.svg
-├── illustrations/      ← (Planned) Spot illustrations, empty states, onboarding
+├── illustrations/        ← Spot illustrations, empty states, onboarding
 │   └── README.md
-└── DESIGNER-WORKFLOW.md  ← How to add and maintain assets
+└── logos/                 ← Brand logos (SVG)
+    ├── Default-Horizontal.svg
+    ├── Default-Vertical.svg
+    ├── Mono-Horizontal.svg
+    └── Mono-Vertical.svg
 ```
 
 ## What goes here
@@ -22,6 +27,7 @@ resources/
 |------|--------|--------|-----|
 | **Icons** | `icons/` | SVG | UI icons (nav, actions, email, settings, etc.) |
 | **Illustrations** | `illustrations/` | SVG, PNG (2x) | Empty states, onboarding, marketing |
+| **Logos** | `logos/` | SVG | Brand mark: default and mono, horizontal and vertical |
 | *(Future)* | — | — | Lottie, sounds, or other asset types as needed |
 
 ## Why this lives in filo-design

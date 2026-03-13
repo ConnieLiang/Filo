@@ -1,12 +1,12 @@
 # Designer workflow: assets in filo-design
 
-This doc is for **you as the designer**: how to add and maintain icons, illustrations, and other resources in filo-design so they ship cleanly to all Filo apps.
+This doc is for **you as the designer**: how to add and maintain icons, illustrations, logos, and other resources in filo-design so they ship cleanly to all Filo apps.
 
 ---
 
 ## Your role
 
-- **You own** what goes in `resources/`: icons, illustrations, and future asset types.
+- **You own** what goes in `resources/`: icons, illustrations, logos, and future asset types.
 - **You decide** naming, categorization, and when something is ready to ship.
 - **Engineering** consumes from here (submodule or sync); they don’t invent asset names or locations.
 
@@ -37,6 +37,17 @@ Later we can add an `illustrations.json` catalog like icons if the set grows.
 
 ---
 
+## Adding or updating logos
+
+1. **Add or replace** SVGs in `resources/logos/`.
+2. **Naming:** Use `{Variant}-{Orientation}.svg` in Pascal-Case (e.g. `Default-Horizontal.svg`, `Mono-Vertical.svg`). Current set: Default and Mono, each in Horizontal and Vertical.
+3. **Format:** Export as SVG; keep artboards consistent so apps can scale cleanly.
+4. **Commit** (e.g. “Add Logos” or “Update Mono-Vertical logo”) and push.
+
+No catalog file is required for logos unless the set grows; keep filenames predictable so engineering can reference them.
+
+---
+
 ## Changing an existing icon
 
 1. Replace the SVG in `resources/icons/{name}.svg` (keep the same filename so apps don’t break).
@@ -51,9 +62,10 @@ Later we can add an `illustrations.json` catalog like icons if the set grows.
 |-------------|--------------|------------------------|
 | Icons       | kebab-case   | `inbox-before.svg`     |
 | Illustrations | kebab-case | `empty-inbox.svg`      |
-| Multi-state | `-before` / `-after`, `-on` / `-off` | `star-before.svg`, `notification-off.svg` |
+| Logos       | Pascal-Case, `{Variant}-{Orientation}.svg` | `Default-Horizontal.svg`, `Mono-Vertical.svg` |
+| Multi-state (icons) | `-before` / `-after`, `-on` / `-off` | `star-before.svg`, `notification-off.svg` |
 
-Stick to one naming style so engineering can rely on it in code and config.
+Stick to one naming style per asset type so engineering can rely on it in code and config.
 
 ---
 
@@ -66,9 +78,9 @@ Stick to one naming style so engineering can rely on it in code and config.
 
 ## Checklist before you commit
 
-- [ ] File is in the right folder (`icons/` or `illustrations/`).
-- [ ] Filename is kebab-case and matches the convention above.
-- [ ] Catalog (e.g. `icons.json`) is updated if you added or renamed something.
+- [ ] File is in the right folder (`icons/`, `illustrations/`, or `logos/`).
+- [ ] Filename matches the convention for that type (kebab-case for icons/illustrations, Pascal-Case for logos).
+- [ ] Catalog (e.g. `icons.json`) is updated if you added or renamed an icon.
 - [ ] README in that folder is updated if you changed how things are organized or used.
 
 ---
