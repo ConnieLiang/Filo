@@ -12,7 +12,7 @@ resources/
 │   ├── icons.json        ← Catalog and categories
 │   ├── README.md
 │   └── *.svg
-├── illustrations/        ← Spot illustrations, empty states, onboarding
+├── illustrations/        ← Spot illustrations, empty/error states, onboarding
 │   └── README.md
 └── logos/                 ← Brand logos (SVG)
     ├── Default-Horizontal.svg
@@ -26,7 +26,7 @@ resources/
 | Type | Folder | Format | Use |
 |------|--------|--------|-----|
 | **Icons** | `icons/` | SVG | UI icons (nav, actions, email, settings, etc.) |
-| **Illustrations** | `illustrations/` | SVG, PNG (2x) | Empty states, onboarding, marketing |
+| **Illustrations** | `illustrations/` | SVG, PNG (2x+) | Empty/error states, onboarding, marketing |
 | **Logos** | `logos/` | SVG | Brand mark: default and mono, horizontal and vertical |
 | *(Future)* | — | — | Lottie, sounds, or other asset types as needed |
 
@@ -45,3 +45,9 @@ resources/
 4. **Apps** pull from filo-design (submodule or sync) and use the new paths.
 
 See **DESIGNER-WORKFLOW.md** for step-by-step and conventions.
+
+## Current illustration packs
+
+- `illustrations/Empty & Error/`
+  - 9 PNG assets (`01.png` … `09.png`)
+  - Used for app empty/error state visuals across platforms

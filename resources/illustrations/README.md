@@ -1,17 +1,38 @@
 # Illustrations
 
-Placeholder for **spot illustrations** used across Filo: empty states, onboarding, marketing, etc.
+Spot illustrations used across Filo: empty states, error states, onboarding, and marketing.
 
-## Planned
+## Current packs
 
-- Illustrations will live here as the design source of truth (same idea as `resources/icons/`).
-- Naming: `{context}-{description}.svg` or `.png` (e.g. `empty-inbox.svg`, `onboarding-welcome.png`).
-- For PNG: provide at least 2x; 3x if needed for iOS.
+### `Empty & Error`
 
-## When you add illustrations
+Path: `resources/illustrations/Empty & Error/`
 
-1. Put files in `resources/illustrations/`.
-2. Add a short note in this README: filename, format, and where it’s used (e.g. “Empty state for Inbox”).
-3. Commit in filo-design.
+Files:
+- `01.png`
+- `02.png`
+- `03.png`
+- `04.png`
+- `05.png`
+- `06.png`
+- `07.png`
+- `08.png`
+- `09.png`
 
-A fuller catalog (e.g. `illustrations.json`) can be added when the set grows.
+Format:
+- PNG
+
+Primary use:
+- Empty-state visuals
+- Error/failure-state visuals
+
+## Conventions for new additions
+
+- Put new assets in a clearly named pack folder under `resources/illustrations/`.
+- Prefer descriptive filenames for future packs (example: `empty-inbox.png`, `error-network.png`).
+- For PNG assets, provide at least 2x quality sources.
+- Update this README with:
+  - folder name
+  - file list
+  - format
+  - intended product usage
