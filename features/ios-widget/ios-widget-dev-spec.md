@@ -9,6 +9,7 @@
 1. HIG Widgets: [https://developer.apple.com/design/human-interface-guidelines/widgets/](https://developer.apple.com/design/human-interface-guidelines/widgets/)
 2. WidgetKit: [https://developer.apple.com/documentation/widgetkit](https://developer.apple.com/documentation/widgetkit)
 3. 设计资源（颜色/字体/图标统一来源）: [https://github.com/FiloAI/filo-design/tree/main/resources](https://github.com/FiloAI/filo-design/tree/main/resources)
+4. Demo HTML: [https://github.com/FiloAI/filo-design/blob/main/features/ios-widget/ios-widget.html](https://github.com/FiloAI/filo-design/blob/main/features/ios-widget/ios-widget.html)
 
 ## 3. 平台与范围
 
@@ -169,4 +170,3 @@ Todo：
 4. 深链接全部正确。
 5. Todo checkbox（iOS 17+）可执行并刷新。
 6. 空态文案逐字匹配。
-
