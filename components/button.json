@@ -1,0 +1,88 @@
+{
+  "name": "Button",
+  "description": "Filo button system: pills (action buttons), labels (tags/filters), and special buttons. All use pill shape (borderRadius: 100).",
+  "ios": {
+    "component": "FiloButton",
+    "colorTokens": "Color.C_01–C_25 (see tokens.json)",
+    "fontModifiers": ".themeFontP2_M() for 15px/510w, .themeFontP2_B() for 15px/700w, .themeFontP4_B() for 13px/700w"
+  },
+  "pills": {
+    "description": "Primary action buttons",
+    "borderRadius": 100,
+    "defaults": {
+      "fontSize": 15,
+      "letterSpacing": -0.2
+    },
+    "sizes": {
+      "small": { "paddingX": 12, "paddingY": 8, "fontWeight": 510, "lineHeight": 1.3 },
+      "medium": { "paddingX": 30, "paddingY": 12, "fontWeight": 510, "lineHeight": 1.3 },
+      "large": { "paddingX": 34, "paddingY": 16, "fontWeight": 700, "lineHeight": 1.35, "width": 350 }
+    },
+    "variants": {
+      "outlined": {
+        "light": { "background": "#FFFFFF", "border": "0.5px solid #D5D5D5", "textColor": "#000000" },
+        "dark": { "background": "#1D1D21", "border": "0.5px solid #414149", "textColor": "#FFFFFF" }
+      },
+      "ghost": {
+        "light": { "background": "rgba(0,0,0,0.04)", "textColor": "#22A0FB" },
+        "dark": { "background": "rgba(255,255,255,0.06)", "textColor": "#45B1FF" }
+      },
+      "tinted": {
+        "light": { "background": "rgba(76,180,255,0.12)", "textColor": "#22A0FB" },
+        "dark": { "background": "rgba(76,180,255,0.16)", "textColor": "#45B1FF" }
+      },
+      "filled": {
+        "light": { "background": "#22A0FB", "textColor": "#FFFFFF" },
+        "dark": { "background": "#45B1FF", "textColor": "#000000" }
+      },
+      "filledBlack": {
+        "description": "High-emphasis actions — inverts in dark mode",
+        "light": { "background": "#000000", "textColor": "#FFFFFF" },
+        "dark": { "background": "#FFFFFF", "textColor": "#000000" }
+      }
+    }
+  },
+  "labels": {
+    "description": "Smart filter labels / tags",
+    "borderRadius": 100,
+    "sizes": {
+      "mobile": { "paddingX": 8, "paddingY": 4, "fontSize": 13, "fontWeight": 700, "lineHeight": 1.2 },
+      "desktop": { "paddingX": 10, "paddingY": 6, "fontSize": 15, "fontWeight": 700, "lineHeight": 1.35, "letterSpacing": -0.2 }
+    },
+    "colors": {
+      "blue": { "light": "#22A0FB", "dark": "#45B1FF" },
+      "green": { "light": "#7EBA02", "dark": "#9AD803" },
+      "yellow": { "light": "#F7A501", "dark": "#FFBA2E" },
+      "red": { "light": "#EF4A68", "dark": "#FF6B85" },
+      "purple": { "light": "#6450F9", "dark": "#8577FF" },
+      "cyan": { "light": "#BF3EE2", "dark": "#D65FF7" },
+      "gray": { "light": "#707070", "dark": "#8B8B8B" }
+    },
+    "background": { "light": "rgba(0,0,0,0.04)", "dark": "rgba(255,255,255,0.06)" }
+  },
+  "specialButtons": {
+    "labelPrompt": {
+      "description": "Label with icon for prompt suggestions",
+      "padding": { "top": 6, "right": 12, "bottom": 6, "left": 8 },
+      "gap": 2,
+      "fontSize": 15,
+      "fontWeight": 510,
+      "letterSpacing": -0.2,
+      "iconSize": 16,
+      "borderRadius": 100,
+      "background": { "light": "rgba(0,0,0,0.04)", "dark": "rgba(255,255,255,0.06)" }
+    },
+    "googleSignIn": {
+      "description": "Sign in with Google — outlined pill, large size, with Google icon",
+      "base": "pills.outlined.large",
+      "iconSize": 20,
+      "gap": 8
+    }
+  },
+  "states": {
+    "default": { "opacity": 1 },
+    "hover": { "opacity": 0.9 },
+    "pressed": { "opacity": 0.8, "scale": 0.98 },
+    "disabled": { "opacity": 0.5 }
+  }
+}
