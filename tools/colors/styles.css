@@ -543,6 +543,15 @@ code {
   word-break: break-all;
 }
 
+.generate-dialog-link {
+  display: inline-block;
+  margin-top: 14px;
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
 .generate-dialog-status {
   margin: 14px 0 0;
   color: #8a3b2d;

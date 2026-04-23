@@ -24,6 +24,7 @@ const elements = {
   generateButton: document.querySelector("#generate-button"),
   generateDialog: document.querySelector("#generate-dialog"),
   generateDialogFilename: document.querySelector("#generate-dialog-filename"),
+  generateDialogLink: document.querySelector("#generate-dialog-link"),
   generateDialogStatus: document.querySelector("#generate-dialog-status"),
   generateCancel: document.querySelector("#generate-cancel"),
   generateConfirm: document.querySelector("#generate-confirm"),
@@ -77,6 +78,7 @@ function wireEvents() {
     const filename = `${slugify(selectedScheme.name)}-v${nextVersion}.json`;
     state.pendingExport = { version: nextVersion, filename, schemeId: selectedScheme.id };
     elements.generateDialogFilename.textContent = filename;
+    resetExportFeedback();
     elements.generateDialogStatus.hidden = true;
     elements.generateDialogStatus.textContent = "";
     elements.generateDialog.showModal();
@@ -84,6 +86,7 @@ function wireEvents() {
 
   elements.generateCancel.addEventListener("click", () => {
     state.pendingExport = null;
+    resetExportFeedback();
     elements.generateDialog.close();
   });
 
@@ -96,11 +99,24 @@ function wireEvents() {
     const payload = buildExportScheme(scheme, version);
 
     try {
-      await saveJsonFile(payload, filename);
+      const result = await saveJsonFile(payload, filename);
       state.exportVersion = version;
       localStorage.setItem(EXPORT_VERSION_KEY, version);
+
+      if (result.mode === "picker") {
+        state.pendingExport = null;
+        resetExportFeedback();
+        elements.generateDialog.close();
+        return;
+      }
+
+      elements.generateDialogLink.hidden = false;
+      elements.generateDialogLink.href = result.url;
+      elements.generateDialogLink.download = filename;
+      elements.generateDialogLink.dataset.objectUrl = result.url;
+      elements.generateDialogStatus.hidden = false;
+      elements.generateDialogStatus.textContent = "If the download did not start, use the manual link above.";
       state.pendingExport = null;
-      elements.generateDialog.close();
     } catch (error) {
       if (error?.name === "AbortError") {
         return;
@@ -108,10 +124,22 @@ function wireEvents() {
 
       console.error(error);
       elements.generateDialogStatus.hidden = false;
-      elements.generateDialogStatus.textContent = "Save failed. Try again.";
+      elements.generateDialogStatus.textContent = "Save failed. Use the manual download link if it appears, or try again.";
     }
   });
 
+}
+
+function resetExportFeedback() {
+  if (elements.generateDialogLink.dataset.objectUrl) {
+    URL.revokeObjectURL(elements.generateDialogLink.dataset.objectUrl);
+  }
+  elements.generateDialogLink.hidden = true;
+  elements.generateDialogLink.href = "#";
+  elements.generateDialogLink.removeAttribute("download");
+  delete elements.generateDialogLink.dataset.objectUrl;
+  elements.generateDialogStatus.hidden = true;
+  elements.generateDialogStatus.textContent = "";
 }
 
 function render() {
@@ -637,10 +665,13 @@ function downloadJson(payload, filename) {
   const anchor = document.createElement("a");
   anchor.href = url;
   anchor.download = filename;
+  anchor.target = "_blank";
+  anchor.rel = "noopener";
   document.body.append(anchor);
   anchor.click();
   anchor.remove();
-  URL.revokeObjectURL(url);
+  setTimeout(() => URL.revokeObjectURL(url), 60_000);
+  return url;
 }
 
 async function saveJsonFile(payload, filename) {
@@ -661,10 +692,10 @@ async function saveJsonFile(payload, filename) {
     const writable = await handle.createWritable();
     await writable.write(contents);
     await writable.close();
-    return;
+    return { mode: "picker" };
   }
 
-  downloadJson(payload, filename);
+  return { mode: "download", url: downloadJson(payload, filename) };
 }
 
 function slugify(value) {
