@@ -76,6 +76,10 @@ input {
   text-transform: uppercase;
 }
 
+.rail-header h1 span {
+  display: block;
+}
+
 .rail-copy {
   max-width: 24ch;
   margin: 14px 0 0;
