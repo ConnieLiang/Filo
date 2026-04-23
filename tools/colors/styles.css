@@ -73,11 +73,18 @@ input {
 .rail-header h1 {
   font-size: clamp(2.2rem, 5vw, 3.4rem);
   line-height: 0.95;
-  text-transform: uppercase;
 }
 
 .rail-header h1 span {
   display: block;
+}
+
+.title-brand {
+  text-transform: none;
+}
+
+.title-subbrand {
+  text-transform: uppercase;
 }
 
 .rail-copy {
