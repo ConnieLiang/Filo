@@ -156,8 +156,9 @@ input {
 
 .cta-row {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: flex-end;
+  align-items: stretch;
   gap: 12px;
 }
 
@@ -173,7 +174,7 @@ input {
   display: flex;
   align-items: center;
   gap: 18px;
-  min-width: 270px;
+  flex: 0 0 270px;
   padding: 14px 16px;
   border-radius: 18px;
 }
@@ -233,8 +234,8 @@ input {
 .action-bar {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+  flex: 0 0 420px;
   align-items: stretch;
-  inline-size: min(420px, 100%);
   border-radius: 18px;
   overflow: hidden;
   transition: grid-template-columns 220ms ease;
@@ -647,13 +648,17 @@ code {
   }
 
   .cta-row {
+    flex-wrap: wrap;
     width: 100%;
     justify-content: stretch;
   }
 
-  .toggle-card,
+  .toggle-card {
+    flex: 1 1 100%;
+  }
+
   .action-bar {
-    width: 100%;
+    flex: 1 1 100%;
   }
 
   .token-row {
