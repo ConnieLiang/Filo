@@ -201,6 +201,11 @@ function renderTokenTable(container, scheme, mode) {
       rgbElement,
     });
 
+    hexElement.readOnly = !state.editMode;
+    rgbElement.readOnly = !state.editMode;
+    hexElement.dataset.invalid = "false";
+    rgbElement.dataset.invalid = "false";
+
     swatch.dataset.editable = String(state.editMode);
     picker.hidden = !(state.editMode && state.openPickerId === pickerId);
 
@@ -211,6 +216,38 @@ function renderTokenTable(container, scheme, mode) {
       if (!state.editMode) return;
       state.openPickerId = state.openPickerId === pickerId ? null : pickerId;
       renderTables();
+    });
+
+    bindValueInput({
+      input: hexElement,
+      scheme,
+      token,
+      mode,
+      swatch,
+      sv,
+      svHandle,
+      hueHandle,
+      alphaSlider,
+      alphaValue,
+      hexElement,
+      rgbElement,
+      formatter: formatHex,
+    });
+
+    bindValueInput({
+      input: rgbElement,
+      scheme,
+      token,
+      mode,
+      swatch,
+      sv,
+      svHandle,
+      hueHandle,
+      alphaSlider,
+      alphaValue,
+      hexElement,
+      rgbElement,
+      formatter: formatRgb,
     });
 
     bindDrag(sv, (clientX, clientY) => {
@@ -568,8 +605,94 @@ function syncRowColor({
   hueHandle.style.left = `${(pickerState.h / 360) * 100}%`;
   alphaSlider.value = String(Math.round(color.alpha * 100));
   alphaValue.textContent = `${Math.round(color.alpha * 100)}%`;
-  hexElement.textContent = formatHex(color);
-  rgbElement.textContent = formatRgb(color);
+  hexElement.value = formatHex(color);
+  rgbElement.value = formatRgb(color);
+  hexElement.dataset.invalid = "false";
+  rgbElement.dataset.invalid = "false";
+}
+
+function bindValueInput({
+  input,
+  scheme,
+  token,
+  mode,
+  swatch,
+  sv,
+  svHandle,
+  hueHandle,
+  alphaSlider,
+  alphaValue,
+  hexElement,
+  rgbElement,
+  formatter,
+}) {
+  const syncFromInput = (rawValue, { resetOnInvalid = false } = {}) => {
+    const value = rawValue.trim();
+    if (!value) {
+      input.dataset.invalid = "true";
+      if (resetOnInvalid) {
+        const current = parseColor(token[mode]);
+        syncRowColor({
+          color: current,
+          pickerState: colorToPickerState(current),
+          swatch,
+          sv,
+          svHandle,
+          hueHandle,
+          alphaSlider,
+          alphaValue,
+          hexElement,
+          rgbElement,
+        });
+      }
+      return;
+    }
+
+    try {
+      const nextColor = parseColor(value);
+      const normalized = formatter(nextColor);
+      const nextPickerState = colorToPickerState(nextColor);
+      setTokenColor(scheme.id, token.key, mode, normalized);
+      syncRowColor({
+        color: nextColor,
+        pickerState: nextPickerState,
+        swatch,
+        sv,
+        svHandle,
+        hueHandle,
+        alphaSlider,
+        alphaValue,
+        hexElement,
+        rgbElement,
+      });
+    } catch {
+      input.dataset.invalid = "true";
+      if (resetOnInvalid) {
+        const current = parseColor(token[mode]);
+        syncRowColor({
+          color: current,
+          pickerState: colorToPickerState(current),
+          swatch,
+          sv,
+          svHandle,
+          hueHandle,
+          alphaSlider,
+          alphaValue,
+          hexElement,
+          rgbElement,
+        });
+      }
+    }
+  };
+
+  input.addEventListener("input", (event) => {
+    if (!state.editMode) return;
+    syncFromInput(event.target.value);
+  });
+
+  input.addEventListener("blur", (event) => {
+    syncFromInput(event.target.value, { resetOnInvalid: true });
+  });
 }
 
 function bindDrag(element, onMove) {
