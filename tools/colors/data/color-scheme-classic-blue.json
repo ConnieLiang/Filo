@@ -5,7 +5,7 @@
   "purpose": "Baseline Filo Desktop palette derived from the current shared design tokens.",
   "notes": [
     "This is the current production-oriented blue system from filo-design/tokens.json.",
-    "The page uses this as the control scheme against newer variants like Ophelia.",
+    "The page uses this as the control scheme against newer variants like Hugo.",
     "Appearance settings in Desktop currently only switch light, dark, and system. This scheme catalog is the scalable layer that does not exist yet in the app."
   ],
   "semanticAliases": {
