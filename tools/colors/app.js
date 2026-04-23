@@ -1,5 +1,6 @@
 const MANIFEST_PATH = "./data/schemes.manifest.json";
 const EXPORT_VERSION_KEY = "filo-colors-export-version";
+const SCHEME_OVERRIDES_KEY = "filo-colors-scheme-overrides";
 
 const state = {
   schemes: [],
@@ -40,7 +41,7 @@ async function boot() {
   const manifest = await fetchJson(MANIFEST_PATH);
   const schemeFiles = manifest.schemeFiles || [];
   const rawSchemes = await Promise.all(schemeFiles.map((file) => fetchJson(`./data/${file}`)));
-  state.schemes = rawSchemes.map(normalizeScheme);
+  state.schemes = applyPersistedOverrides(rawSchemes.map(normalizeScheme));
   state.originalSchemes = structuredClone(state.schemes);
   state.selectedSchemeId = state.schemes[0]?.id ?? null;
   render();
@@ -66,6 +67,7 @@ function wireEvents() {
   elements.applyButton.addEventListener("click", () => {
     if (!state.dirty) return;
     state.originalSchemes = structuredClone(state.schemes);
+    persistSchemeOverrides(state.originalSchemes);
     state.dirty = false;
     syncActionState();
   });
@@ -356,6 +358,52 @@ function normalizeScheme(rawScheme) {
     raw: structuredClone(rawScheme),
     tokens,
   };
+}
+
+function applyPersistedOverrides(schemes) {
+  const stored = loadSchemeOverrides();
+  if (!stored) return schemes;
+
+  for (const scheme of schemes) {
+    const schemeOverrides = stored[scheme.id];
+    if (!schemeOverrides) continue;
+
+    for (const token of scheme.tokens) {
+      const tokenOverride = schemeOverrides[token.key];
+      if (!tokenOverride) continue;
+      if (tokenOverride.light) token.light = tokenOverride.light;
+      if (tokenOverride.dark) token.dark = tokenOverride.dark;
+    }
+  }
+
+  return schemes;
+}
+
+function loadSchemeOverrides() {
+  try {
+    const raw = localStorage.getItem(SCHEME_OVERRIDES_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function persistSchemeOverrides(schemes) {
+  const overrides = {};
+
+  for (const scheme of schemes) {
+    overrides[scheme.id] = {};
+    for (const token of scheme.tokens) {
+      overrides[scheme.id][token.key] = {
+        light: token.light,
+        dark: token.dark,
+      };
+    }
+  }
+
+  localStorage.setItem(SCHEME_OVERRIDES_KEY, JSON.stringify(overrides));
 }
 
 function buildExportScheme(scheme, version = state.exportVersion) {
