@@ -440,6 +440,10 @@ function parseColor(value) {
 
 function parseHexColor(hex) {
   const raw = hex.replace("#", "");
+  if (![3, 4, 6, 8].includes(raw.length) || !/^[\da-f]+$/i.test(raw)) {
+    throw new Error(`Invalid hex color: ${hex}`);
+  }
+
   const expanded = raw.length === 3 || raw.length === 4
     ? raw.split("").map((char) => char + char).join("")
     : raw;
@@ -457,6 +461,9 @@ function parseRgbColor(rgbString) {
   const matches = rgbString.match(/rgba?\(([^)]+)\)/i);
   if (!matches) throw new Error(`Invalid rgb color: ${rgbString}`);
   const parts = matches[1].split(",").map((part) => part.trim());
+  if (parts.length !== 3 && parts.length !== 4) {
+    throw new Error(`Invalid rgb color: ${rgbString}`);
+  }
   const [r, g, b] = parts.slice(0, 3).map((part) => Number.parseFloat(part));
   const alpha = parts[3] === undefined ? 1 : Number.parseFloat(parts[3]);
   return buildColorObject(r, g, b, alpha);
@@ -464,17 +471,24 @@ function parseRgbColor(rgbString) {
 
 function buildColorObject(r, g, b, alpha) {
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+  if (![r, g, b, alpha].every(Number.isFinite)) {
+    throw new Error("Invalid color channel");
+  }
+
+  const safeR = clamp(Math.round(r), 0, 255);
+  const safeG = clamp(Math.round(g), 0, 255);
+  const safeB = clamp(Math.round(b), 0, 255);
   const safeAlpha = clamp(alpha, 0, 1);
-  const hex6 = `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
-  const hex8 = `#${toHex(r)}${toHex(g)}${toHex(b)}${toHex(Math.round(safeAlpha * 255))}`.toUpperCase();
+  const hex6 = `#${toHex(safeR)}${toHex(safeG)}${toHex(safeB)}`.toUpperCase();
+  const hex8 = `#${toHex(safeR)}${toHex(safeG)}${toHex(safeB)}${toHex(Math.round(safeAlpha * 255))}`.toUpperCase();
   return {
-    r,
-    g,
-    b,
+    r: safeR,
+    g: safeG,
+    b: safeB,
     alpha: safeAlpha,
     hex6,
     hex8,
-    css: safeAlpha < 1 ? `rgba(${r}, ${g}, ${b}, ${round(safeAlpha, 2)})` : hex6,
+    css: safeAlpha < 1 ? `rgba(${safeR}, ${safeG}, ${safeB}, ${round(safeAlpha, 2)})` : hex6,
   };
 }
 
