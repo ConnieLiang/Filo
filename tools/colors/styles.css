@@ -234,7 +234,8 @@ input {
 .action-bar {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  flex: 0 0 420px;
+  flex: 0 0 auto;
+  min-width: 420px;
   align-items: stretch;
   border-radius: 18px;
   overflow: hidden;
@@ -267,6 +268,7 @@ input {
 
 .action-bar[data-edit-mode="false"] {
   grid-template-columns: 0fr 0fr 1fr;
+  min-width: 160px;
 }
 
 .action-bar[data-edit-mode="false"] #reset-button,
