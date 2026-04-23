@@ -101,17 +101,9 @@ function wireEvents() {
       const result = await saveJsonFile(payload, filename);
       state.exportVersion = version;
       localStorage.setItem(EXPORT_VERSION_KEY, version);
-
-      if (result.mode === "picker") {
-        state.pendingExport = null;
-        resetExportFeedback();
-        elements.generateDialog.close();
-        return;
-      }
-
-      elements.generateDialogStatus.hidden = false;
-      elements.generateDialogStatus.textContent = "Download started.";
       state.pendingExport = null;
+      resetExportFeedback();
+      elements.generateDialog.close();
     } catch (error) {
       if (error?.name === "AbortError") {
         return;
@@ -647,16 +639,17 @@ async function fetchJson(path) {
   return response.json();
 }
 
-function downloadJson(payload, filename) {
-  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+function createExportBlob(payload) {
+  return new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+}
+
+function downloadJson(blob, filename) {
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
   anchor.download = filename;
-  anchor.target = "_blank";
-  anchor.rel = "noopener";
   document.body.append(anchor);
-  anchor.click();
+  requestAnimationFrame(() => anchor.click());
   anchor.remove();
   setTimeout(() => URL.revokeObjectURL(url), 60_000);
   return url;
@@ -664,6 +657,7 @@ function downloadJson(payload, filename) {
 
 async function saveJsonFile(payload, filename) {
   const contents = JSON.stringify(payload, null, 2);
+  const blob = createExportBlob(payload);
 
   if (typeof window.showSaveFilePicker === "function") {
     const handle = await window.showSaveFilePicker({
@@ -683,7 +677,17 @@ async function saveJsonFile(payload, filename) {
     return { mode: "picker" };
   }
 
-  return { mode: "download", url: downloadJson(payload, filename) };
+  const file = new File([blob], filename, { type: "application/json" });
+  if (typeof navigator.canShare === "function" && navigator.canShare({ files: [file] })) {
+    await navigator.share({
+      title: filename,
+      text: "Filo Colors export",
+      files: [file],
+    });
+    return { mode: "share" };
+  }
+
+  return { mode: "download", url: downloadJson(blob, filename) };
 }
 
 function slugify(value) {
