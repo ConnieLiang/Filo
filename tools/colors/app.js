@@ -24,7 +24,6 @@ const elements = {
   generateButton: document.querySelector("#generate-button"),
   generateDialog: document.querySelector("#generate-dialog"),
   generateDialogFilename: document.querySelector("#generate-dialog-filename"),
-  generateDialogLink: document.querySelector("#generate-dialog-link"),
   generateDialogStatus: document.querySelector("#generate-dialog-status"),
   generateCancel: document.querySelector("#generate-cancel"),
   generateConfirm: document.querySelector("#generate-confirm"),
@@ -110,12 +109,8 @@ function wireEvents() {
         return;
       }
 
-      elements.generateDialogLink.hidden = false;
-      elements.generateDialogLink.href = result.url;
-      elements.generateDialogLink.download = filename;
-      elements.generateDialogLink.dataset.objectUrl = result.url;
       elements.generateDialogStatus.hidden = false;
-      elements.generateDialogStatus.textContent = "If the download did not start, use the manual link above.";
+      elements.generateDialogStatus.textContent = "Download started.";
       state.pendingExport = null;
     } catch (error) {
       if (error?.name === "AbortError") {
@@ -131,13 +126,6 @@ function wireEvents() {
 }
 
 function resetExportFeedback() {
-  if (elements.generateDialogLink.dataset.objectUrl) {
-    URL.revokeObjectURL(elements.generateDialogLink.dataset.objectUrl);
-  }
-  elements.generateDialogLink.hidden = true;
-  elements.generateDialogLink.href = "#";
-  elements.generateDialogLink.removeAttribute("download");
-  delete elements.generateDialogLink.dataset.objectUrl;
   elements.generateDialogStatus.hidden = true;
   elements.generateDialogStatus.textContent = "";
 }
