@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Filo Colors</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="scheme-rail" aria-label="Color schemes">
+        <div class="rail-header">
+          <h1>Filo Colors</h1>
+        </div>
+        <div id="scheme-list" class="scheme-list"></div>
+      </aside>
+
+      <main class="workspace">
+        <header class="workspace-header">
+          <div>
+            <h2 id="scheme-title">Loading</h2>
+          </div>
+
+          <div class="cta-row">
+            <label class="toggle-card" for="edit-mode-toggle">
+              <div>
+                <span class="toggle-label">Edit mode</span>
+              </div>
+              <span class="toggle-control">
+                <input id="edit-mode-toggle" type="checkbox" />
+                <span class="toggle-track"></span>
+              </span>
+            </label>
+
+            <div id="action-bar" class="action-bar" role="group" aria-label="Color actions">
+              <button id="reset-button" class="action-button" type="button">Reset</button>
+              <button id="apply-button" class="action-button" type="button" disabled>Apply Changes</button>
+              <button id="generate-button" class="action-button" type="button" title="Generate JSON export">
+                Export
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <section class="mode-columns">
+          <section class="panel">
+            <div class="panel-header">
+              <p class="eyebrow">Light Mode</p>
+            </div>
+            <div id="light-table" class="token-table"></div>
+          </section>
+
+          <section class="panel panel-dark-mode">
+            <div class="panel-header">
+              <p class="eyebrow">Dark Mode</p>
+            </div>
+            <div id="dark-table" class="token-table"></div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <template id="token-row-template">
+      <article class="token-row">
+        <div class="token-meta">
+          <span class="token-key"></span>
+          <div class="token-values">
+            <div>
+              <span class="value-label">Hex</span>
+              <code class="token-hex"></code>
+            </div>
+            <div>
+              <span class="value-label">RGB</span>
+              <code class="token-rgb"></code>
+            </div>
+          </div>
+        </div>
+        <div class="token-swatch-stack">
+          <button class="token-swatch" type="button" aria-label="Adjust color"></button>
+          <div class="token-picker" hidden>
+            <div class="token-picker-surface">
+              <div class="token-picker-field">
+                <div class="token-picker-sv" role="application" aria-label="Saturation and brightness">
+                  <span class="token-picker-sv-handle"></span>
+                </div>
+                <div class="token-picker-hue" role="slider" aria-label="Hue">
+                  <span class="token-picker-hue-handle"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <label class="token-alpha">
+            <span>Opacity</span>
+            <input class="token-alpha-slider" type="range" min="0" max="100" step="1" />
+            <strong class="token-alpha-value"></strong>
+          </label>
+        </div>
+      </article>
+    </template>
+
+    <dialog id="generate-dialog" class="generate-dialog">
+      <form method="dialog" class="generate-dialog-card">
+        <div class="generate-dialog-copy">
+          <h3>Export</h3>
+          <p>The file can be used to generate new color schemes in Filo AI. Have fun!</p>
+          <code id="generate-dialog-filename" class="generate-dialog-filename"></code>
+          <code id="generate-dialog-path" class="generate-dialog-path" hidden></code>
+          <p id="generate-dialog-status" class="generate-dialog-status" hidden></p>
+        </div>
+        <div class="generate-dialog-actions">
+          <button id="generate-cancel" class="dialog-button" type="button" value="cancel">Cancel</button>
+          <button id="generate-confirm" class="dialog-button dialog-button-primary" type="button" value="default">
+            Okay
+          </button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>
