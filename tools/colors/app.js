@@ -1,6 +1,5 @@
 const MANIFEST_PATH = "./data/schemes.manifest.json";
 const EXPORT_VERSION_KEY = "filo-colors-export-version";
-const EXPORT_SERVER_URL = "http://127.0.0.1:4174/save-json";
 
 const state = {
   schemes: [],
@@ -25,7 +24,6 @@ const elements = {
   generateButton: document.querySelector("#generate-button"),
   generateDialog: document.querySelector("#generate-dialog"),
   generateDialogFilename: document.querySelector("#generate-dialog-filename"),
-  generateDialogPath: document.querySelector("#generate-dialog-path"),
   generateDialogStatus: document.querySelector("#generate-dialog-status"),
   generateCancel: document.querySelector("#generate-cancel"),
   generateConfirm: document.querySelector("#generate-confirm"),
@@ -79,8 +77,6 @@ function wireEvents() {
     const filename = `${slugify(selectedScheme.name)}-v${nextVersion}.json`;
     state.pendingExport = { version: nextVersion, filename, schemeId: selectedScheme.id };
     elements.generateDialogFilename.textContent = filename;
-    elements.generateDialogPath.hidden = true;
-    elements.generateDialogPath.textContent = "";
     elements.generateDialogStatus.hidden = true;
     elements.generateDialogStatus.textContent = "";
     elements.generateDialog.showModal();
@@ -100,11 +96,9 @@ function wireEvents() {
     const payload = buildExportScheme(scheme, version);
 
     try {
-      const result = await saveJsonFile(payload, filename);
+      await saveJsonFile(payload, filename);
       state.exportVersion = version;
       localStorage.setItem(EXPORT_VERSION_KEY, version);
-      elements.generateDialogPath.hidden = false;
-      elements.generateDialogPath.textContent = result.path;
       state.pendingExport = null;
       elements.generateDialog.close();
     } catch (error) {
@@ -114,8 +108,7 @@ function wireEvents() {
 
       console.error(error);
       elements.generateDialogStatus.hidden = false;
-      elements.generateDialogStatus.textContent =
-        "Local export server is unavailable. Start the export server and try again.";
+      elements.generateDialogStatus.textContent = "Save failed. Try again.";
     }
   });
 
@@ -651,24 +644,27 @@ function downloadJson(payload, filename) {
 }
 
 async function saveJsonFile(payload, filename) {
-  const response = await fetch(EXPORT_SERVER_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ filename, payload }),
-  });
+  const contents = JSON.stringify(payload, null, 2);
 
-  if (!response.ok) {
-    throw new Error(`Export server failed with status ${response.status}`);
+  if (typeof window.showSaveFilePicker === "function") {
+    const handle = await window.showSaveFilePicker({
+      suggestedName: filename,
+      types: [
+        {
+          description: "JSON files",
+          accept: {
+            "application/json": [".json"],
+          },
+        },
+      ],
+    });
+    const writable = await handle.createWritable();
+    await writable.write(contents);
+    await writable.close();
+    return;
   }
 
-  const result = await response.json();
-  if (!result.ok || !result.path || !result.size) {
-    throw new Error(result.error || "Export server returned an invalid response");
-  }
-
-  return result;
+  downloadJson(payload, filename);
 }
 
 function slugify(value) {
