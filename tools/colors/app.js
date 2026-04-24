@@ -560,38 +560,43 @@ async function updateRepoFile(path, payload, token, schemeName) {
   const encodedPath = encodeURIComponent(repoPath).replaceAll("%2F", "/");
   const endpoint = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${encodedPath}`;
   const readUrl = `${endpoint}?ref=${GITHUB_BRANCH}&t=${Date.now()}`;
-  const readHeaders = {
-    Accept: "application/vnd.github+json",
-    "Cache-Control": "no-cache",
-    Pragma: "no-cache",
-  };
+  const readHeaders = {};
   const writeHeaders = {
     Authorization: `Bearer ${token}`,
-    Accept: "application/vnd.github+json",
     "Content-Type": "application/json",
-    "X-GitHub-Api-Version": "2022-11-28",
   };
 
-  const current = await fetch(readUrl, {
-    headers: readHeaders,
-    cache: "no-store",
-  });
+  let current;
+  try {
+    current = await fetch(readUrl, {
+      headers: readHeaders,
+      cache: "no-store",
+    });
+  } catch (error) {
+    throw new Error(`GitHub read request was blocked by the browser for ${schemeName}. Try Chrome or Safari.`);
+  }
+
   if (!current.ok) {
     const details = await safeReadResponse(current);
     throw new Error(`GitHub read failed for ${schemeName} (${current.status}). ${details}`);
   }
 
   const currentJson = await current.json();
-  const response = await fetch(endpoint, {
-    method: "PUT",
-    headers: writeHeaders,
-    body: JSON.stringify({
-      message: `Update ${schemeName} color scheme`,
-      content: utf8ToBase64(JSON.stringify(payload, null, 2)),
-      sha: currentJson.sha,
-      branch: GITHUB_BRANCH,
-    }),
-  });
+  let response;
+  try {
+    response = await fetch(endpoint, {
+      method: "PUT",
+      headers: writeHeaders,
+      body: JSON.stringify({
+        message: `Update ${schemeName} color scheme`,
+        content: utf8ToBase64(JSON.stringify(payload, null, 2)),
+        sha: currentJson.sha,
+        branch: GITHUB_BRANCH,
+      }),
+    });
+  } catch (error) {
+    throw new Error(`GitHub write request was blocked by the browser for ${schemeName}. Try Chrome or Safari.`);
+  }
 
   if (!response.ok) {
     const details = await safeReadResponse(response);
