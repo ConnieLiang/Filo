@@ -351,7 +351,7 @@ function normalizeScheme(rawScheme) {
     name: rawScheme.name || "Untitled Scheme",
     version: rawScheme.version || "1.0.0",
     notes: rawScheme.notes || [],
-    target: rawScheme.target || "Filo Desktop",
+    target: rawScheme.target || "Cross-platform",
     purpose: rawScheme.purpose || "",
     semanticAliases: rawScheme.semanticAliases || defaultSemanticAliases(),
     applicationOrder: rawScheme.applicationOrder || [],
