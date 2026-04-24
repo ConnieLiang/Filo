@@ -1,0 +1,154 @@
+{
+  "name": "Mia",
+  "target": "Cross-platform",
+  "version": "1.0.0",
+  "purpose": "Pink romantic palette for Filo. Soft, affectionate, and gentle on the eyes while preserving token discipline across light and dark mode.",
+  "notes": [
+    "Mia uses the supplied pink ramp directly for light tokens 01 through 05.",
+    "The rest of the light system keeps text and surfaces readable so the palette feels romantic without becoming sugary or low contrast.",
+    "Dark mode translates the same rose character into wine-tinted surfaces, soft blush text, and restrained accent overlays for comfortable low-light use."
+  ],
+  "semanticAliases": {
+    "filoPrimary": "02-primary",
+    "filoSecondary": "01-primary-light",
+    "background": "10-background",
+    "surface": "09-surface-tertiary",
+    "textPrimary": "06-text-primary",
+    "textSecondary": "07-text-secondary",
+    "textTertiary": "08-text-tertiary",
+    "error": "11-error",
+    "warning": "12-important",
+    "success": "18-success",
+    "info": "13-info",
+    "overlay": "14-overlay-light"
+  },
+  "tokenReplacements": {
+    "color": {
+      "01-primary-light": {
+        "light": "#FFE5EC",
+        "dark": "#F5B6C8",
+        "usage": "Primary accent, lighter variant"
+      },
+      "02-primary": {
+        "light": "#FFC2D1",
+        "dark": "#E987A3",
+        "usage": "Primary brand color, active states, links"
+      },
+      "03-primary-dark": {
+        "light": "#FFB3C6",
+        "dark": "#4A2632",
+        "usage": "Primary accent backgrounds"
+      },
+      "04-primary-darker": {
+        "light": "#FF8FAB",
+        "dark": "#5C3040",
+        "usage": "Darker primary accent"
+      },
+      "05-surface-secondary": {
+        "light": "#FB6F92",
+        "dark": "#2B2026",
+        "usage": "Secondary surface color"
+      },
+      "06-text-primary": {
+        "light": "#251D21",
+        "dark": "#FFF1F5",
+        "usage": "Primary text color"
+      },
+      "07-text-secondary": {
+        "light": "#6F5D64",
+        "dark": "#CDB6BE",
+        "usage": "Secondary text, placeholders"
+      },
+      "08-text-tertiary": {
+        "light": "#D8B9C3",
+        "dark": "#7B6470",
+        "usage": "Tertiary text, disabled, standard divider color"
+      },
+      "09-surface-tertiary": {
+        "light": "#FFF8FA",
+        "dark": "#211920",
+        "usage": "Tertiary surface"
+      },
+      "10-background": {
+        "light": "#FFFCFD",
+        "dark": "#171116",
+        "usage": "Primary background"
+      },
+      "11-error": {
+        "light": "#D9506A",
+        "dark": "#E86A80",
+        "usage": "Error states, destructive actions"
+      },
+      "12-important": {
+        "light": "#D59A50",
+        "dark": "#E7BE73",
+        "usage": "Important states, caution"
+      },
+      "13-info": {
+        "light": "#6F9FBB",
+        "dark": "#8DBDD4",
+        "usage": "Information, links"
+      },
+      "14-overlay-light": {
+        "light": "rgba(37, 29, 33, 0.05)",
+        "dark": "rgba(255, 241, 245, 0.08)",
+        "usage": "Light overlays, selection backgrounds, subtle divider color"
+      },
+      "15-overlay-primary": {
+        "light": "rgba(255, 143, 171, 0.16)",
+        "dark": "rgba(233, 135, 163, 0.18)",
+        "usage": "Primary color overlays"
+      },
+      "16-overlay-subtle": {
+        "light": "rgba(255, 194, 209, 0.12)",
+        "dark": "rgba(245, 182, 200, 0.10)",
+        "usage": "Subtle overlays"
+      },
+      "17-success-light": {
+        "light": "#E8F3E0",
+        "dark": "#2C3E31",
+        "usage": "Success backgrounds"
+      },
+      "18-success": {
+        "light": "#7DA65F",
+        "dark": "#91C478",
+        "usage": "Success states"
+      },
+      "19-warning": {
+        "light": "#C67E3A",
+        "dark": "#DFA058",
+        "usage": "Warning states"
+      },
+      "20-error-light": {
+        "light": "#FBE5EA",
+        "dark": "#4A2530",
+        "usage": "Error backgrounds"
+      },
+      "21-purple-light": {
+        "light": "#EDE3F4",
+        "dark": "#C9A8DB",
+        "usage": "Purple accent light"
+      },
+      "22-purple": {
+        "light": "#9E6DB3",
+        "dark": "#B88DCE",
+        "usage": "Purple accent"
+      },
+      "23-pink-light": {
+        "light": "#FFE5F2",
+        "dark": "#F0B5D4",
+        "usage": "Pink accent light"
+      },
+      "24-pink": {
+        "light": "#E85F93",
+        "dark": "#EA7FA9",
+        "usage": "Pink accent"
+      },
+      "25-neutral": {
+        "light": "#C7B9BE",
+        "dark": "#8B7C83",
+        "usage": "Neutral gray"
+      }
+    }
+  }
+}
