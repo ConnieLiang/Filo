@@ -601,7 +601,9 @@ async function updateRepoFile(path, payload, token, schemeName) {
   const encodedPath = encodeURIComponent(repoPath).replaceAll("%2F", "/");
   const endpoint = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${encodedPath}`;
   const readUrl = `${endpoint}?ref=${GITHUB_BRANCH}&t=${Date.now()}`;
-  const readHeaders = {};
+  const readHeaders = {
+    Authorization: `Bearer ${token}`,
+  };
   const writeHeaders = {
     Authorization: `Bearer ${token}`,
     "Content-Type": "application/json",
