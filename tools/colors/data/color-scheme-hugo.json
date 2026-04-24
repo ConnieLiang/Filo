@@ -42,7 +42,7 @@
       "16-overlay-subtle": { "light": "rgba(199, 213, 228, 0.10)", "dark": "rgba(82, 90, 100, 0.10)", "usage": "Subtle overlays" },
       "17-success-light": { "light": "#E8F0E2", "dark": "#344033", "usage": "Success backgrounds" },
       "18-success": { "light": "#76955C", "dark": "#8CAB72", "usage": "Success states" },
-      "19-warning-alt": { "light": "#C88F42", "dark": "#D5A35A", "usage": "Alternative warning" },
+      "19-warning": { "light": "#C88F42", "dark": "#D5A35A", "usage": "Warning states" },
       "20-error-light": { "light": "#F7E8E6", "dark": "#462D2C", "usage": "Error backgrounds" },
       "21-purple-light": { "light": "#E7E2F1", "dark": "#B8B0CC", "usage": "Purple accent light" },
       "22-purple": { "light": "#7C739E", "dark": "#968DB6", "usage": "Purple accent" },
