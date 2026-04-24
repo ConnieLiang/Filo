@@ -1,6 +1,7 @@
 const MANIFEST_PATH = "./data/schemes.manifest.json";
 const EXPORT_VERSION_KEY = "filo-colors-export-version";
 const SCHEME_OVERRIDES_KEY = "filo-colors-scheme-overrides";
+const SESSION_TOKEN_KEY = "filo-colors-session-github-token";
 const APPLY_CODE = "UNITED";
 const GITHUB_OWNER = "ConnieLiang";
 const GITHUB_REPO = "Filo";
@@ -48,6 +49,7 @@ boot().catch((error) => {
 
 async function boot() {
   wireEvents();
+  hydrateSessionToken();
   const manifest = await fetchJson(MANIFEST_PATH);
   const schemeFiles = manifest.schemeFiles || [];
   const rawSchemes = await Promise.all(
@@ -113,6 +115,7 @@ function wireEvents() {
   });
 
   elements.applyTokenInput.addEventListener("input", (event) => {
+    sessionStorage.setItem(SESSION_TOKEN_KEY, event.target.value);
     event.target.dataset.invalid = "false";
     elements.applyCodeStatus.hidden = true;
     elements.applyCodeStatus.textContent = "";
@@ -173,10 +176,16 @@ function resetExportFeedback() {
 function resetApplyFeedback() {
   elements.applyCodeInput.value = "";
   elements.applyCodeInput.dataset.invalid = "false";
-  elements.applyTokenInput.value = "";
   elements.applyTokenInput.dataset.invalid = "false";
   elements.applyCodeStatus.hidden = true;
   elements.applyCodeStatus.textContent = "";
+}
+
+function hydrateSessionToken() {
+  const token = sessionStorage.getItem(SESSION_TOKEN_KEY);
+  if (token) {
+    elements.applyTokenInput.value = token;
+  }
 }
 
 function render() {
