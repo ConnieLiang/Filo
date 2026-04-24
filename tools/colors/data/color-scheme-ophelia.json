@@ -1,7 +1,7 @@
 {
   "name": "Ophelia",
   "target": "Filo Desktop",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "purpose": "Warm Sage variant for Filo Desktop. Tinted, classic, and easy on the eyes.",
   "notes": [
     "Warm Sage introduces a softer green cast without breaking the low-noise Desktop structure.",
@@ -65,7 +65,7 @@
         "usage": "Tertiary text, disabled, standard divider color"
       },
       "09-surface-tertiary": {
-        "light": "#FFFCF6",
+        "light": "#F9F6F3",
         "dark": "#1D242A",
         "usage": "Tertiary surface"
       },
