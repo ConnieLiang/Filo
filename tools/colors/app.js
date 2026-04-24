@@ -13,7 +13,7 @@ const state = {
   originalSchemes: [],
   selectedSchemeId: null,
   editMode: false,
-  exportVersion: loadExportVersion(),
+  exportVersions: loadExportVersions(),
   dirty: false,
   openPickerId: null,
   pendingExport: null,
@@ -136,7 +136,7 @@ function wireEvents() {
   elements.generateButton.addEventListener("click", () => {
     const selectedScheme = getSelectedScheme();
     if (!selectedScheme) return;
-    const nextVersion = bumpPatchVersion(state.exportVersion);
+    const nextVersion = getNextExportVersion(selectedScheme);
     const filename = `${slugify(selectedScheme.name)}-v${nextVersion}.json`;
     state.pendingExport = { version: nextVersion, filename, schemeId: selectedScheme.id };
     elements.generateDialogFilename.textContent = filename;
@@ -162,8 +162,8 @@ function wireEvents() {
 
     try {
       const result = await saveJsonFile(payload, filename);
-      state.exportVersion = version;
-      localStorage.setItem(EXPORT_VERSION_KEY, version);
+      state.exportVersions[scheme.id] = version;
+      localStorage.setItem(EXPORT_VERSION_KEY, JSON.stringify(state.exportVersions));
       state.pendingExport = null;
       resetExportFeedback();
       elements.generateDialog.close();
@@ -495,7 +495,7 @@ function persistSchemeOverrides(schemes) {
   localStorage.setItem(SCHEME_OVERRIDES_KEY, JSON.stringify(overrides));
 }
 
-function buildExportScheme(scheme, version = state.exportVersion) {
+function buildExportScheme(scheme, version = scheme.version) {
   const color = {};
   for (const token of scheme.tokens) {
     color[token.key] = {
@@ -560,10 +560,14 @@ async function applyChangesToRepo(token) {
 
   try {
     for (const scheme of state.schemes) {
+      if (!isSchemeDirty(scheme)) continue;
+      scheme.version = bumpPatchVersion(getSchemeVersionBase(scheme));
       const nextSource = buildSchemeSource(scheme);
       await updateRepoFile(scheme.sourceFile, nextSource, token, scheme.name);
       scheme.raw = structuredClone(nextSource);
+      state.exportVersions[scheme.id] = scheme.version;
     }
+    localStorage.setItem(EXPORT_VERSION_KEY, JSON.stringify(state.exportVersions));
     state.originalSchemes = structuredClone(state.schemes);
     state.dirty = false;
     syncActionState();
@@ -989,12 +993,40 @@ function defaultSemanticAliases() {
   };
 }
 
-function loadExportVersion() {
-  return localStorage.getItem(EXPORT_VERSION_KEY) || "1.0.0";
+function loadExportVersions() {
+  try {
+    const stored = localStorage.getItem(EXPORT_VERSION_KEY);
+    if (!stored) return {};
+
+    const parsed = JSON.parse(stored);
+    if (parsed && typeof parsed === "object") return parsed;
+    if (typeof parsed === "string") return { legacy: parsed };
+  } catch {
+    const legacyVersion = localStorage.getItem(EXPORT_VERSION_KEY);
+    if (legacyVersion) return { legacy: legacyVersion };
+  }
+
+  return {};
 }
 
 function isDirty() {
   return JSON.stringify(state.schemes) !== JSON.stringify(state.originalSchemes);
+}
+
+function isSchemeDirty(scheme) {
+  const originalScheme = state.originalSchemes.find((item) => item.id === scheme.id);
+  if (!originalScheme) return true;
+
+  return JSON.stringify(scheme.tokens) !== JSON.stringify(originalScheme.tokens);
+}
+
+function getSchemeVersionBase(scheme) {
+  return maxVersion(scheme.version, state.exportVersions[scheme.id] || state.exportVersions.legacy);
+}
+
+function getNextExportVersion(scheme) {
+  const baseVersion = getSchemeVersionBase(scheme);
+  return isSchemeDirty(scheme) ? bumpPatchVersion(baseVersion) : baseVersion;
 }
 
 function syncActionState() {
@@ -1003,10 +1035,30 @@ function syncActionState() {
 }
 
 function bumpPatchVersion(version) {
-  const parts = version.split(".").map((part) => Number.parseInt(part, 10));
+  const parts = String(version || "1.0.0").split(".").map((part) => Number.parseInt(part, 10));
   while (parts.length < 3) parts.push(0);
   parts[2] += 1;
   return parts.join(".");
+}
+
+function maxVersion(left, right) {
+  if (!right) return left || "1.0.0";
+  if (!left) return right;
+
+  const leftParts = parseVersion(left);
+  const rightParts = parseVersion(right);
+  for (let index = 0; index < 3; index += 1) {
+    if (rightParts[index] > leftParts[index]) return right;
+    if (rightParts[index] < leftParts[index]) return left;
+  }
+
+  return left;
+}
+
+function parseVersion(version) {
+  const parts = String(version || "1.0.0").split(".").map((part) => Number.parseInt(part, 10));
+  while (parts.length < 3) parts.push(0);
+  return parts.slice(0, 3).map((part) => (Number.isFinite(part) ? part : 0));
 }
 
 async function fetchJson(path) {
