@@ -1,7 +1,7 @@
 {
   "name": "Tetris",
   "target": "Cross-platform",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "purpose": "Programming-friendly palette inspired by One Dark Pro. Built for engineers who prefer calm contrast, readable surfaces, and familiar syntax-theme accents.",
   "notes": [
     "Tetris uses One Dark Pro's dark-editor language as the anchor: charcoal surfaces, blue primary actions, purple/pink category accents, green success, yellow important states, and red errors.",
@@ -25,22 +25,22 @@
   "tokenReplacements": {
     "color": {
       "01-primary-light": {
-        "light": "#8FC7F2",
+        "light": "#66DBA5",
         "dark": "#8FC7F2",
         "usage": "Primary accent, lighter variant"
       },
       "02-primary": {
-        "light": "#4F95CF",
+        "light": "#43B983",
         "dark": "#61AFEF",
         "usage": "Primary brand color, active states, links"
       },
       "03-primary-dark": {
-        "light": "#D8EAF8",
+        "light": "#93E8C1",
         "dark": "#22384D",
         "usage": "Primary accent backgrounds"
       },
       "04-primary-darker": {
-        "light": "#C7E0F4",
+        "light": "#D6F5E7",
         "dark": "#2B4862",
         "usage": "Darker primary accent"
       },
@@ -75,17 +75,17 @@
         "usage": "Primary background"
       },
       "11-error": {
-        "light": "#D85C66",
-        "dark": "#E06C75",
+        "light": "#EC6C77",
+        "dark": "#DD5863",
         "usage": "Error states, destructive actions"
       },
       "12-important": {
-        "light": "#D49A45",
-        "dark": "#E5C07B",
+        "light": "#FAC77C",
+        "dark": "#E6BB6B",
         "usage": "Important states, caution"
       },
       "13-info": {
-        "light": "#43A6B2",
+        "light": "#57CBDA",
         "dark": "#56B6C2",
         "usage": "Information, links"
       },
@@ -115,8 +115,8 @@
         "usage": "Success states"
       },
       "19-warning": {
-        "light": "#C98232",
-        "dark": "#D19A66",
+        "light": "#FBA13B",
+        "dark": "#F09A4A",
         "usage": "Warning states"
       },
       "20-error-light": {
