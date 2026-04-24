@@ -26,127 +26,127 @@
     "color": {
       "01-primary-light": {
         "light": "#87BADF",
-        "dark": "#8DBBDA",
+        "dark": "#8CB6D4",
         "usage": "Primary accent, lighter variant"
       },
       "02-primary": {
         "light": "#6BA2C9",
-        "dark": "#79A9CC",
+        "dark": "#6F9EC1",
         "usage": "Primary brand color, active states, links"
       },
       "03-primary-dark": {
         "light": "#ABD1ED",
-        "dark": "#21384A",
+        "dark": "#22384A",
         "usage": "Primary accent backgrounds"
       },
       "04-primary-darker": {
         "light": "#D5EAF9",
-        "dark": "#2B465A",
+        "dark": "#2D4354",
         "usage": "Darker primary accent"
       },
       "05-surface-secondary": {
         "light": "#EDF6FB",
-        "dark": "#242A2F",
+        "dark": "#22272B",
         "usage": "Secondary surface color"
       },
       "06-text-primary": {
         "light": "rgb(60, 58, 57)",
-        "dark": "#F6F1E8",
+        "dark": "#F5F0E8",
         "usage": "Primary text color"
       },
       "07-text-secondary": {
         "light": "#6A6766",
-        "dark": "#B5B0A9",
+        "dark": "#B8B1A9",
         "usage": "Secondary text, placeholders"
       },
       "08-text-tertiary": {
         "light": "#ADA7A6",
-        "dark": "#6E6A66",
+        "dark": "#77716A",
         "usage": "Tertiary text, disabled, standard divider color"
       },
       "09-surface-tertiary": {
         "light": "#FFFCF6",
-        "dark": "#20262B",
+        "dark": "#1E2327",
         "usage": "Tertiary surface"
       },
       "10-background": {
         "light": "#FEFDFB",
-        "dark": "#161A1D",
+        "dark": "#151719",
         "usage": "Primary background"
       },
       "11-error": {
         "light": "#FF6D73",
-        "dark": "#D96A70",
+        "dark": "#E06D73",
         "usage": "Error states, destructive actions"
       },
       "12-important": {
         "light": "#FFD37A",
-        "dark": "#EFC66F",
+        "dark": "#E9BE65",
         "usage": "Important states, caution"
       },
       "13-info": {
         "light": "#83CBD4",
-        "dark": "#85C8D4",
+        "dark": "#7EC9D4",
         "usage": "Information, links"
       },
       "14-overlay-light": {
         "light": "#6BA2C90D",
-        "dark": "rgba(246, 241, 232, 0.08)",
+        "dark": "rgba(245, 240, 232, 0.08)",
         "usage": "Light overlays, selection backgrounds, subtle divider color"
       },
       "15-overlay-primary": {
         "light": "#6BA2C90D",
-        "dark": "rgba(121, 169, 204, 0.18)",
+        "dark": "rgba(111, 158, 193, 0.20)",
         "usage": "Primary color overlays"
       },
       "16-overlay-subtle": {
         "light": "#6BA2C90D",
-        "dark": "rgba(121, 169, 204, 0.10)",
+        "dark": "rgba(111, 158, 193, 0.10)",
         "usage": "Subtle overlays"
       },
       "17-success-light": {
         "light": "#DFF2DB",
-        "dark": "#2D4235",
+        "dark": "#2D4034",
         "usage": "Success backgrounds"
       },
       "18-success": {
         "light": "#7DBE6B",
-        "dark": "#8AC878",
+        "dark": "#89C576",
         "usage": "Success states"
       },
       "19-warning": {
         "light": "#EFA93E",
-        "dark": "#E2A64B",
+        "dark": "#E4A34A",
         "usage": "Warning states"
       },
       "20-error-light": {
         "light": "#F8E7E8",
-        "dark": "#4A2A2D",
+        "dark": "#48292D",
         "usage": "Error backgrounds"
       },
       "21-purple-light": {
         "light": "#D6D5FC",
-        "dark": "#B6B4EC",
+        "dark": "#B4B2EA",
         "usage": "Purple accent light"
       },
       "22-purple": {
         "light": "#7977F6",
-        "dark": "#9A97EF",
+        "dark": "#9794EA",
         "usage": "Purple accent"
       },
       "23-pink-light": {
         "light": "#FADEFE",
-        "dark": "#E7BCE1",
+        "dark": "#E5BADE",
         "usage": "Pink accent light"
       },
       "24-pink": {
         "light": "#EC90F8",
-        "dark": "#D38ADE",
+        "dark": "#D088DB",
         "usage": "Pink accent"
       },
       "25-neutral": {
         "light": "#D8D8D8",
-        "dark": "#8B8A86",
+        "dark": "#8C8984",
         "usage": "Neutral gray"
       }
     }
