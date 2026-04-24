@@ -53,12 +53,13 @@ boot().catch((error) => {
 async function boot() {
   wireEvents();
   hydrateSessionToken();
+  localStorage.removeItem(SCHEME_OVERRIDES_KEY);
   const manifest = await fetchJson(MANIFEST_PATH);
   const schemeFiles = manifest.schemeFiles || [];
   const rawSchemes = await Promise.all(
     schemeFiles.map(async (file) => ({ file, raw: await fetchJson(`./data/${file}`) })),
   );
-  state.schemes = applyPersistedOverrides(rawSchemes.map(({ file, raw }) => normalizeScheme(raw, file)));
+  state.schemes = rawSchemes.map(({ file, raw }) => normalizeScheme(raw, file));
   state.originalSchemes = structuredClone(state.schemes);
   state.selectedSchemeId = state.schemes[0]?.id ?? null;
   render();
@@ -564,7 +565,6 @@ async function applyChangesToRepo(token) {
       scheme.raw = structuredClone(nextSource);
     }
     state.originalSchemes = structuredClone(state.schemes);
-    persistSchemeOverrides(state.originalSchemes);
     state.dirty = false;
     syncActionState();
     elements.applyDialog.dataset.mode = "success";
