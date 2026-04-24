@@ -25,22 +25,22 @@
   "tokenReplacements": {
     "color": {
       "01-primary-light": {
-        "light": "#B9D8C8",
+        "light": "#A2C5B5",
         "dark": "#8DB7A0",
         "usage": "Primary accent, lighter variant"
       },
       "02-primary": {
-        "light": "#5E8F78",
+        "light": "#7FAF99",
         "dark": "#77A78F",
         "usage": "Primary brand color, active states, links"
       },
       "03-primary-dark": {
-        "light": "#DCEBE3",
+        "light": "#CADFD5",
         "dark": "#243A31",
         "usage": "Primary accent backgrounds"
       },
       "04-primary-darker": {
-        "light": "#D2E4DA",
+        "light": "#E2EDE8",
         "dark": "#2D473C",
         "usage": "Darker primary accent"
       },
@@ -50,27 +50,27 @@
         "usage": "Secondary surface color"
       },
       "06-text-primary": {
-        "light": "#171A18",
+        "light": "rgb(60, 58, 57)",
         "dark": "#F6F5F1",
         "usage": "Primary text color"
       },
       "07-text-secondary": {
-        "light": "#66706A",
+        "light": "#6A6766",
         "dark": "#99A19C",
         "usage": "Secondary text, placeholders"
       },
       "08-text-tertiary": {
-        "light": "#D6DBD7",
+        "light": "#ADA7A6",
         "dark": "#484F4A",
         "usage": "Tertiary text, disabled, standard divider color"
       },
       "09-surface-tertiary": {
-        "light": "#FBFBF8",
+        "light": "#F9F5EB",
         "dark": "#232725",
         "usage": "Tertiary surface"
       },
       "10-background": {
-        "light": "#FDFCF8",
+        "light": "#FFFCF6",
         "dark": "#1B1E1C",
         "usage": "Primary background"
       },
@@ -90,32 +90,32 @@
         "usage": "Information, links"
       },
       "14-overlay-light": {
-        "light": "rgba(23, 26, 24, 0.05)",
+        "light": "#81B09A0D",
         "dark": "rgba(255, 255, 255, 0.08)",
         "usage": "Light overlays, selection backgrounds, subtle divider color"
       },
       "15-overlay-primary": {
-        "light": "rgba(94, 143, 120, 0.12)",
+        "light": "#81B09A1F",
         "dark": "rgba(119, 167, 143, 0.14)",
         "usage": "Primary color overlays"
       },
       "16-overlay-subtle": {
-        "light": "rgba(185, 216, 200, 0.10)",
+        "light": "#81B09A1A",
         "dark": "rgba(77, 93, 85, 0.10)",
         "usage": "Subtle overlays"
       },
       "17-success-light": {
-        "light": "#E7F1E7",
+        "light": "#DFF2DB",
         "dark": "#2F4036",
         "usage": "Success backgrounds"
       },
       "18-success": {
-        "light": "#6C9A5F",
+        "light": "#7DBE6B",
         "dark": "#84AE79",
         "usage": "Success states"
       },
       "19-warning": {
-        "light": "#C99742",
+        "light": "#F3BC4B",
         "dark": "#D3A95D",
         "usage": "Warning states"
       },
@@ -125,22 +125,22 @@
         "usage": "Error backgrounds"
       },
       "21-purple-light": {
-        "light": "#E6E0F0",
+        "light": "#D6D5FC",
         "dark": "#B7A9CC",
         "usage": "Purple accent light"
       },
       "22-purple": {
-        "light": "#7A6894",
+        "light": "#7977F6",
         "dark": "#9382AB",
         "usage": "Purple accent"
       },
       "23-pink-light": {
-        "light": "#F2DFE7",
+        "light": "#FADEFE",
         "dark": "#D7B8C3",
         "usage": "Pink accent light"
       },
       "24-pink": {
-        "light": "#B67A94",
+        "light": "#EC90F8",
         "dark": "#34DC14",
         "usage": "Pink accent"
       },
