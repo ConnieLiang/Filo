@@ -559,8 +559,11 @@ async function updateRepoFile(path, payload, token, schemeName) {
   const repoPath = `${REPO_DATA_DIR}/${path}`;
   const encodedPath = encodeURIComponent(repoPath).replaceAll("%2F", "/");
   const endpoint = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${encodedPath}`;
+  const readUrl = `${endpoint}?ref=${GITHUB_BRANCH}&t=${Date.now()}`;
   const readHeaders = {
     Accept: "application/vnd.github+json",
+    "Cache-Control": "no-cache",
+    Pragma: "no-cache",
   };
   const writeHeaders = {
     Authorization: `Bearer ${token}`,
@@ -569,7 +572,10 @@ async function updateRepoFile(path, payload, token, schemeName) {
     "X-GitHub-Api-Version": "2022-11-28",
   };
 
-  const current = await fetch(`${endpoint}?ref=${GITHUB_BRANCH}`, { headers: readHeaders });
+  const current = await fetch(readUrl, {
+    headers: readHeaders,
+    cache: "no-store",
+  });
   if (!current.ok) {
     const details = await safeReadResponse(current);
     throw new Error(`GitHub read failed for ${schemeName} (${current.status}). ${details}`);
