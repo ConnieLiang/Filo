@@ -598,6 +598,26 @@ code {
   word-break: break-all;
 }
 
+.apply-code-input {
+  display: block;
+  width: 100%;
+  margin-top: 18px;
+  padding: 14px 16px;
+  border: 1px solid rgba(17, 17, 17, 0.12);
+  border-radius: 14px;
+  background: #f6f6f6;
+  color: var(--ink);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  outline: none;
+}
+
+.apply-code-input[data-invalid="true"] {
+  border-color: rgba(184, 87, 92, 0.4);
+  box-shadow: inset 0 0 0 1px rgba(184, 87, 92, 0.18);
+}
+
 .generate-dialog-status {
   margin: 14px 0 0;
   color: #8a3b2d;

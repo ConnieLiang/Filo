@@ -1,6 +1,7 @@
 const MANIFEST_PATH = "./data/schemes.manifest.json";
 const EXPORT_VERSION_KEY = "filo-colors-export-version";
 const SCHEME_OVERRIDES_KEY = "filo-colors-scheme-overrides";
+const APPLY_CODE = "UNITED";
 
 const state = {
   schemes: [],
@@ -28,6 +29,11 @@ const elements = {
   generateDialogStatus: document.querySelector("#generate-dialog-status"),
   generateCancel: document.querySelector("#generate-cancel"),
   generateConfirm: document.querySelector("#generate-confirm"),
+  applyDialog: document.querySelector("#apply-dialog"),
+  applyCodeInput: document.querySelector("#apply-code-input"),
+  applyCodeStatus: document.querySelector("#apply-code-status"),
+  applyCancel: document.querySelector("#apply-cancel"),
+  applyConfirm: document.querySelector("#apply-confirm"),
   tokenRowTemplate: document.querySelector("#token-row-template"),
 };
 
@@ -66,10 +72,37 @@ function wireEvents() {
 
   elements.applyButton.addEventListener("click", () => {
     if (!state.dirty) return;
+    resetApplyFeedback();
+    elements.applyDialog.showModal();
+    elements.applyCodeInput.focus();
+  });
+
+  elements.applyCancel.addEventListener("click", () => {
+    resetApplyFeedback();
+    elements.applyDialog.close();
+  });
+
+  elements.applyConfirm.addEventListener("click", () => {
+    if (elements.applyCodeInput.value.trim().toUpperCase() !== APPLY_CODE) {
+      elements.applyCodeInput.dataset.invalid = "true";
+      elements.applyCodeStatus.hidden = false;
+      elements.applyCodeStatus.textContent = "Incorrect code.";
+      return;
+    }
+
     state.originalSchemes = structuredClone(state.schemes);
     persistSchemeOverrides(state.originalSchemes);
     state.dirty = false;
     syncActionState();
+    resetApplyFeedback();
+    elements.applyDialog.close();
+  });
+
+  elements.applyCodeInput.addEventListener("input", (event) => {
+    event.target.value = event.target.value.toUpperCase();
+    event.target.dataset.invalid = "false";
+    elements.applyCodeStatus.hidden = true;
+    elements.applyCodeStatus.textContent = "";
   });
 
   elements.generateButton.addEventListener("click", () => {
@@ -122,6 +155,13 @@ function wireEvents() {
 function resetExportFeedback() {
   elements.generateDialogStatus.hidden = true;
   elements.generateDialogStatus.textContent = "";
+}
+
+function resetApplyFeedback() {
+  elements.applyCodeInput.value = "";
+  elements.applyCodeInput.dataset.invalid = "false";
+  elements.applyCodeStatus.hidden = true;
+  elements.applyCodeStatus.textContent = "";
 }
 
 function render() {

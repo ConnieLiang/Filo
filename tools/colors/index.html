@@ -115,6 +115,21 @@
       </form>
     </dialog>
 
+    <dialog id="apply-dialog" class="generate-dialog">
+      <form method="dialog" class="generate-dialog-card">
+        <div class="generate-dialog-copy">
+          <h3>Apply Changes</h3>
+          <p>Enter the confirmation code to save changes permanently.</p>
+          <input id="apply-code-input" class="apply-code-input" type="text" autocomplete="off" spellcheck="false" />
+          <p id="apply-code-status" class="generate-dialog-status" hidden></p>
+        </div>
+        <div class="generate-dialog-actions">
+          <button id="apply-cancel" class="dialog-button" type="button">Cancel</button>
+          <button id="apply-confirm" class="dialog-button dialog-button-primary" type="button">Confirm</button>
+        </div>
+      </form>
+    </dialog>
+
     <script src="./app.js" type="module"></script>
   </body>
 </html>
