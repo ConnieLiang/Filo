@@ -624,6 +624,14 @@ code {
   line-height: 1.45;
 }
 
+.generate-dialog-status[data-tone="neutral"] {
+  color: var(--muted);
+}
+
+.generate-dialog-status[data-tone="success"] {
+  color: #2b6a3c;
+}
+
 .generate-dialog-actions {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -35,6 +35,8 @@ const elements = {
   generateCancel: document.querySelector("#generate-cancel"),
   generateConfirm: document.querySelector("#generate-confirm"),
   applyDialog: document.querySelector("#apply-dialog"),
+  applyDialogTitle: document.querySelector("#apply-dialog-title"),
+  applyDialogCopy: document.querySelector("#apply-dialog-copy"),
   applyCodeInput: document.querySelector("#apply-code-input"),
   applyTokenInput: document.querySelector("#apply-token-input"),
   applyCodeStatus: document.querySelector("#apply-code-status"),
@@ -92,15 +94,23 @@ function wireEvents() {
   });
 
   elements.applyConfirm.addEventListener("click", () => {
+    if (elements.applyDialog.dataset.mode === "success") {
+      resetApplyFeedback();
+      elements.applyDialog.close();
+      return;
+    }
+
     if (elements.applyCodeInput.value.trim().toUpperCase() !== APPLY_CODE) {
       elements.applyCodeInput.dataset.invalid = "true";
       elements.applyCodeStatus.hidden = false;
+      elements.applyCodeStatus.dataset.tone = "error";
       elements.applyCodeStatus.textContent = "Incorrect code.";
       return;
     }
     if (!elements.applyTokenInput.value.trim()) {
       elements.applyTokenInput.dataset.invalid = "true";
       elements.applyCodeStatus.hidden = false;
+      elements.applyCodeStatus.dataset.tone = "error";
       elements.applyCodeStatus.textContent = "GitHub token required.";
       return;
     }
@@ -175,11 +185,23 @@ function resetExportFeedback() {
 }
 
 function resetApplyFeedback() {
+  elements.applyDialog.dataset.mode = "form";
+  elements.applyDialogTitle.textContent = "Apply Changes";
+  elements.applyDialogCopy.textContent = "Enter the confirmation code and a GitHub token with write access to update the shared site data.";
   elements.applyCodeInput.value = "";
   elements.applyCodeInput.dataset.invalid = "false";
+  elements.applyCodeInput.hidden = false;
+  elements.applyCodeInput.disabled = false;
   elements.applyTokenInput.dataset.invalid = "false";
+  elements.applyTokenInput.hidden = false;
+  elements.applyTokenInput.disabled = false;
   elements.applyCodeStatus.hidden = true;
+  elements.applyCodeStatus.dataset.tone = "error";
   elements.applyCodeStatus.textContent = "";
+  elements.applyCancel.hidden = false;
+  elements.applyCancel.disabled = false;
+  elements.applyConfirm.textContent = "Confirm";
+  elements.applyConfirm.disabled = false;
 }
 
 function hydrateSessionToken() {
@@ -532,6 +554,7 @@ async function applyChangesToRepo(token) {
   elements.applyConfirm.disabled = true;
   elements.applyCancel.disabled = true;
   elements.applyCodeStatus.hidden = false;
+  elements.applyCodeStatus.dataset.tone = "neutral";
   elements.applyCodeStatus.textContent = "Updating shared data...";
 
   try {
@@ -544,14 +567,28 @@ async function applyChangesToRepo(token) {
     persistSchemeOverrides(state.originalSchemes);
     state.dirty = false;
     syncActionState();
-    resetApplyFeedback();
-    elements.applyDialog.close();
+    elements.applyDialog.dataset.mode = "success";
+    elements.applyDialogTitle.textContent = "Changes Applied";
+    elements.applyDialogCopy.textContent = "Changes saved to GitHub. The live site usually updates in 1 to 2 minutes after GitHub Pages redeploys.";
+    elements.applyCodeInput.hidden = true;
+    elements.applyCodeInput.disabled = true;
+    elements.applyTokenInput.hidden = true;
+    elements.applyTokenInput.disabled = true;
+    elements.applyCodeStatus.hidden = false;
+    elements.applyCodeStatus.dataset.tone = "success";
+    elements.applyCodeStatus.textContent = "Shared color data updated successfully.";
+    elements.applyCancel.hidden = true;
+    elements.applyConfirm.disabled = false;
+    elements.applyConfirm.textContent = "Okay";
   } catch (error) {
     console.error(error);
+    elements.applyCodeStatus.dataset.tone = "error";
     elements.applyCodeStatus.textContent = error?.message || "Failed to update shared data.";
   } finally {
-    elements.applyConfirm.disabled = false;
-    elements.applyCancel.disabled = false;
+    if (elements.applyDialog.dataset.mode !== "success") {
+      elements.applyConfirm.disabled = false;
+      elements.applyCancel.disabled = false;
+    }
   }
 }
 
