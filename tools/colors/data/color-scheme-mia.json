@@ -1,7 +1,7 @@
 {
   "name": "Mia",
   "target": "Cross-platform",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "purpose": "Pink romantic palette for Filo. Soft, affectionate, and gentle on the eyes while preserving token discipline across light and dark mode.",
   "notes": [
     "Mia uses the supplied pink ramp directly for light tokens 01 through 05.",
@@ -25,27 +25,27 @@
   "tokenReplacements": {
     "color": {
       "01-primary-light": {
-        "light": "#FFE5EC",
+        "light": "#FF9AB3",
         "dark": "#F5B6C8",
         "usage": "Primary accent, lighter variant"
       },
       "02-primary": {
-        "light": "#FFC2D1",
+        "light": "#FB6F92",
         "dark": "#E987A3",
         "usage": "Primary brand color, active states, links"
       },
       "03-primary-dark": {
-        "light": "#FFB3C6",
+        "light": "#FFBACB",
         "dark": "#4A2632",
         "usage": "Primary accent backgrounds"
       },
       "04-primary-darker": {
-        "light": "#FF8FAB",
+        "light": "#FFE0E8",
         "dark": "#5C3040",
         "usage": "Darker primary accent"
       },
       "05-surface-secondary": {
-        "light": "#FB6F92",
+        "light": "#FFF0F4",
         "dark": "#2B2026",
         "usage": "Secondary surface color"
       },
@@ -75,17 +75,17 @@
         "usage": "Primary background"
       },
       "11-error": {
-        "light": "#D9506A",
+        "light": "#ED4968",
         "dark": "#E86A80",
         "usage": "Error states, destructive actions"
       },
       "12-important": {
-        "light": "#D59A50",
+        "light": "#FBBF73",
         "dark": "#E7BE73",
         "usage": "Important states, caution"
       },
       "13-info": {
-        "light": "#6F9FBB",
+        "light": "#5CA3CD",
         "dark": "#8DBDD4",
         "usage": "Information, links"
       },
@@ -110,17 +110,17 @@
         "usage": "Success backgrounds"
       },
       "18-success": {
-        "light": "#7DA65F",
+        "light": "#75B446",
         "dark": "#91C478",
         "usage": "Success states"
       },
       "19-warning": {
-        "light": "#C67E3A",
+        "light": "#EE913A",
         "dark": "#DFA058",
         "usage": "Warning states"
       },
       "20-error-light": {
-        "light": "#FBE5EA",
+        "light": "#FFE7EB",
         "dark": "#4A2530",
         "usage": "Error backgrounds"
       },
@@ -140,7 +140,7 @@
         "usage": "Pink accent light"
       },
       "24-pink": {
-        "light": "#E85F93",
+        "light": "#E04F86",
         "dark": "#EA7FA9",
         "usage": "Pink accent"
       },
