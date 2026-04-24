@@ -25,27 +25,27 @@
   "tokenReplacements": {
     "color": {
       "01-primary-light": {
-        "light": "#A2C5B5",
+        "light": "#87BADF",
         "dark": "#9BC6B4",
         "usage": "Primary accent, lighter variant"
       },
       "02-primary": {
-        "light": "#7FAF99",
+        "light": "#6BA2C9",
         "dark": "#81B09A",
         "usage": "Primary brand color, active states, links"
       },
       "03-primary-dark": {
-        "light": "#CADFD5",
+        "light": "#ABD1ED",
         "dark": "#223A31",
         "usage": "Primary accent backgrounds"
       },
       "04-primary-darker": {
-        "light": "#E2EDE8",
+        "light": "#D5EAF9",
         "dark": "#2D4B3F",
         "usage": "Darker primary accent"
       },
       "05-surface-secondary": {
-        "light": "#F3F7F3",
+        "light": "#EDF6FB",
         "dark": "#252B28",
         "usage": "Secondary surface color"
       },
@@ -65,12 +65,12 @@
         "usage": "Tertiary text, disabled, standard divider color"
       },
       "09-surface-tertiary": {
-        "light": "#F9F5EB",
+        "light": "#FFFCF6",
         "dark": "#202522",
         "usage": "Tertiary surface"
       },
       "10-background": {
-        "light": "#FFFCF6",
+        "light": "#FEFDFB",
         "dark": "#171B19",
         "usage": "Primary background"
       },
@@ -85,22 +85,22 @@
         "usage": "Important states, caution"
       },
       "13-info": {
-        "light": "#71D8E5",
+        "light": "#83CBD4",
         "dark": "#82C9D6",
         "usage": "Information, links"
       },
       "14-overlay-light": {
-        "light": "#81B09A0D",
+        "light": "#6BA2C90D",
         "dark": "rgba(247, 242, 234, 0.08)",
         "usage": "Light overlays, selection backgrounds, subtle divider color"
       },
       "15-overlay-primary": {
-        "light": "#81B09A1F",
+        "light": "#6BA2C90D",
         "dark": "rgba(129, 176, 154, 0.18)",
         "usage": "Primary color overlays"
       },
       "16-overlay-subtle": {
-        "light": "#81B09A1A",
+        "light": "#6BA2C90D",
         "dark": "rgba(129, 176, 154, 0.10)",
         "usage": "Subtle overlays"
       },
