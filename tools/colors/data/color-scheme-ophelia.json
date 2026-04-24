@@ -75,17 +75,17 @@
         "usage": "Primary background"
       },
       "11-error": {
-        "light": "#D96A6E",
+        "light": "#FF6D73",
         "dark": "#B8575C",
         "usage": "Error states, destructive actions"
       },
       "12-important": {
-        "light": "#E7C97A",
+        "light": "#FFD37A",
         "dark": "#E9D28F",
         "usage": "Important states, caution"
       },
       "13-info": {
-        "light": "#6A98B6",
+        "light": "#71D8E5",
         "dark": "#86AFC8",
         "usage": "Information, links"
       },
@@ -115,7 +115,7 @@
         "usage": "Success states"
       },
       "19-warning": {
-        "light": "#F3BC4B",
+        "light": "#EFA93E",
         "dark": "#D3A95D",
         "usage": "Warning states"
       },
