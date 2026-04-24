@@ -6,6 +6,7 @@ const APPLY_CODE = "UNITED";
 const GITHUB_OWNER = "ConnieLiang";
 const GITHUB_REPO = "Filo";
 const GITHUB_BRANCH = "main";
+const REPO_DATA_DIR = "tools/colors/data";
 
 const state = {
   schemes: [],
@@ -555,7 +556,8 @@ async function applyChangesToRepo(token) {
 }
 
 async function updateRepoFile(path, payload, token, schemeName) {
-  const encodedPath = encodeURIComponent(path).replaceAll("%2F", "/");
+  const repoPath = `${REPO_DATA_DIR}/${path}`;
+  const encodedPath = encodeURIComponent(repoPath).replaceAll("%2F", "/");
   const endpoint = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${encodedPath}`;
   const headers = {
     Authorization: `Bearer ${token}`,
