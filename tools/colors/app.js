@@ -659,6 +659,8 @@ function syncRowColor({
   alphaValue,
   hexElement,
   rgbElement,
+  preserveHexInput = false,
+  preserveRgbInput = false,
 }) {
   swatch.style.setProperty("--swatch-color", color.css);
   sv.style.setProperty("--picker-hue", `hsl(${pickerState.h} 100% 50%)`);
@@ -667,10 +669,14 @@ function syncRowColor({
   hueHandle.style.left = `${(pickerState.h / 360) * 100}%`;
   alphaSlider.value = String(Math.round(color.alpha * 100));
   alphaValue.textContent = `${Math.round(color.alpha * 100)}%`;
-  hexElement.value = formatHex(color);
-  rgbElement.value = formatRgb(color);
-  hexElement.dataset.invalid = "false";
-  rgbElement.dataset.invalid = "false";
+  if (!preserveHexInput) {
+    hexElement.value = formatHex(color);
+    hexElement.dataset.invalid = "false";
+  }
+  if (!preserveRgbInput) {
+    rgbElement.value = formatRgb(color);
+    rgbElement.dataset.invalid = "false";
+  }
 }
 
 function bindValueInput({
@@ -726,6 +732,8 @@ function bindValueInput({
         alphaValue,
         hexElement,
         rgbElement,
+        preserveHexInput: input === hexElement,
+        preserveRgbInput: input === rgbElement,
       });
     } catch {
       input.dataset.invalid = "true";
