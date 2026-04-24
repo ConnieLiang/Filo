@@ -26,22 +26,22 @@
     "color": {
       "01-primary-light": {
         "light": "#66DBA5",
-        "dark": "#8FC7F2",
+        "dark": "#7EE2B5",
         "usage": "Primary accent, lighter variant"
       },
       "02-primary": {
         "light": "#43B983",
-        "dark": "#61AFEF",
+        "dark": "#58C993",
         "usage": "Primary brand color, active states, links"
       },
       "03-primary-dark": {
         "light": "#93E8C1",
-        "dark": "#22384D",
+        "dark": "#213C30",
         "usage": "Primary accent backgrounds"
       },
       "04-primary-darker": {
         "light": "#D6F5E7",
-        "dark": "#2B4862",
+        "dark": "#2B503E",
         "usage": "Darker primary accent"
       },
       "05-surface-secondary": {
@@ -95,23 +95,23 @@
         "usage": "Light overlays, selection backgrounds, subtle divider color"
       },
       "15-overlay-primary": {
-        "light": "rgba(79, 149, 207, 0.13)",
-        "dark": "rgba(97, 175, 239, 0.16)",
+        "light": "rgba(67, 185, 131, 0.13)",
+        "dark": "rgba(88, 201, 147, 0.17)",
         "usage": "Primary color overlays"
       },
       "16-overlay-subtle": {
-        "light": "rgba(143, 199, 242, 0.10)",
-        "dark": "rgba(97, 175, 239, 0.10)",
+        "light": "rgba(102, 219, 165, 0.10)",
+        "dark": "rgba(126, 226, 181, 0.10)",
         "usage": "Subtle overlays"
       },
       "17-success-light": {
         "light": "#E7F2DC",
-        "dark": "#2B3E2C",
+        "dark": "#263F31",
         "usage": "Success backgrounds"
       },
       "18-success": {
         "light": "#76A957",
-        "dark": "#98C379",
+        "dark": "#8DD46F",
         "usage": "Success states"
       },
       "19-warning": {
