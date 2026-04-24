@@ -559,23 +559,26 @@ async function updateRepoFile(path, payload, token, schemeName) {
   const repoPath = `${REPO_DATA_DIR}/${path}`;
   const encodedPath = encodeURIComponent(repoPath).replaceAll("%2F", "/");
   const endpoint = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${encodedPath}`;
-  const headers = {
-    Authorization: `Bearer ${token}`,
+  const readHeaders = {
     Accept: "application/vnd.github+json",
   };
+  const writeHeaders = {
+    Authorization: `Bearer ${token}`,
+    Accept: "application/vnd.github+json",
+    "Content-Type": "application/json",
+    "X-GitHub-Api-Version": "2022-11-28",
+  };
 
-  const current = await fetch(`${endpoint}?ref=${GITHUB_BRANCH}`, { headers });
+  const current = await fetch(`${endpoint}?ref=${GITHUB_BRANCH}`, { headers: readHeaders });
   if (!current.ok) {
-    throw new Error(`GitHub read failed for ${schemeName}.`);
+    const details = await safeReadResponse(current);
+    throw new Error(`GitHub read failed for ${schemeName} (${current.status}). ${details}`);
   }
 
   const currentJson = await current.json();
   const response = await fetch(endpoint, {
     method: "PUT",
-    headers: {
-      ...headers,
-      "Content-Type": "application/json",
-    },
+    headers: writeHeaders,
     body: JSON.stringify({
       message: `Update ${schemeName} color scheme`,
       content: utf8ToBase64(JSON.stringify(payload, null, 2)),
@@ -585,7 +588,24 @@ async function updateRepoFile(path, payload, token, schemeName) {
   });
 
   if (!response.ok) {
-    throw new Error(`GitHub write failed for ${schemeName}.`);
+    const details = await safeReadResponse(response);
+    throw new Error(`GitHub write failed for ${schemeName} (${response.status}). ${details}`);
+  }
+}
+
+async function safeReadResponse(response) {
+  try {
+    const text = await response.text();
+    if (!text) return "No response body.";
+
+    try {
+      const json = JSON.parse(text);
+      return json.message || text;
+    } catch {
+      return text;
+    }
+  } catch {
+    return "Unable to read response body.";
   }
 }
 
