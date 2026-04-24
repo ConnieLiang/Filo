@@ -26,82 +26,82 @@
     "color": {
       "01-primary-light": {
         "light": "#FF9AB3",
-        "dark": "#F5B6C8",
+        "dark": "#FFA0B8",
         "usage": "Primary accent, lighter variant"
       },
       "02-primary": {
         "light": "#FB6F92",
-        "dark": "#E987A3",
+        "dark": "#F07898",
         "usage": "Primary brand color, active states, links"
       },
       "03-primary-dark": {
         "light": "#FFBACB",
-        "dark": "#4A2632",
+        "dark": "#4B2632",
         "usage": "Primary accent backgrounds"
       },
       "04-primary-darker": {
         "light": "#FFE0E8",
-        "dark": "#5C3040",
+        "dark": "#633145",
         "usage": "Darker primary accent"
       },
       "05-surface-secondary": {
         "light": "#FFF0F4",
-        "dark": "#2B2026",
+        "dark": "#2E2027",
         "usage": "Secondary surface color"
       },
       "06-text-primary": {
         "light": "#251D21",
-        "dark": "#FFF1F5",
+        "dark": "#FFF0F5",
         "usage": "Primary text color"
       },
       "07-text-secondary": {
         "light": "#6F5D64",
-        "dark": "#CDB6BE",
+        "dark": "#D3B4BE",
         "usage": "Secondary text, placeholders"
       },
       "08-text-tertiary": {
         "light": "#D8B9C3",
-        "dark": "#7B6470",
+        "dark": "#80636F",
         "usage": "Tertiary text, disabled, standard divider color"
       },
       "09-surface-tertiary": {
         "light": "#FFF8FA",
-        "dark": "#211920",
+        "dark": "#22181F",
         "usage": "Tertiary surface"
       },
       "10-background": {
         "light": "#FFFCFD",
-        "dark": "#171116",
+        "dark": "#181014",
         "usage": "Primary background"
       },
       "11-error": {
         "light": "#ED4968",
-        "dark": "#E86A80",
+        "dark": "#EF647C",
         "usage": "Error states, destructive actions"
       },
       "12-important": {
         "light": "#FBBF73",
-        "dark": "#E7BE73",
+        "dark": "#F0B96E",
         "usage": "Important states, caution"
       },
       "13-info": {
         "light": "#5CA3CD",
-        "dark": "#8DBDD4",
+        "dark": "#82B9D4",
         "usage": "Information, links"
       },
       "14-overlay-light": {
         "light": "rgba(37, 29, 33, 0.05)",
-        "dark": "rgba(255, 241, 245, 0.08)",
+        "dark": "rgba(255, 240, 245, 0.08)",
         "usage": "Light overlays, selection backgrounds, subtle divider color"
       },
       "15-overlay-primary": {
         "light": "rgba(255, 143, 171, 0.16)",
-        "dark": "rgba(233, 135, 163, 0.18)",
+        "dark": "rgba(240, 120, 152, 0.20)",
         "usage": "Primary color overlays"
       },
       "16-overlay-subtle": {
         "light": "rgba(255, 194, 209, 0.12)",
-        "dark": "rgba(245, 182, 200, 0.10)",
+        "dark": "rgba(255, 160, 184, 0.10)",
         "usage": "Subtle overlays"
       },
       "17-success-light": {
@@ -121,7 +121,7 @@
       },
       "20-error-light": {
         "light": "#FFE7EB",
-        "dark": "#4A2530",
+        "dark": "#4F2430",
         "usage": "Error backgrounds"
       },
       "21-purple-light": {
@@ -141,12 +141,12 @@
       },
       "24-pink": {
         "light": "#E04F86",
-        "dark": "#EA7FA9",
+        "dark": "#EA729F",
         "usage": "Pink accent"
       },
       "25-neutral": {
         "light": "#C7B9BE",
-        "dark": "#8B7C83",
+        "dark": "#8F7B84",
         "usage": "Neutral gray"
       }
     }
