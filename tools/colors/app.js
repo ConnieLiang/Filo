@@ -535,11 +535,11 @@ async function applyChangesToRepo(token) {
   elements.applyCodeStatus.textContent = "Updating shared data...";
 
   try {
-    await Promise.all(
-      state.schemes.map((scheme) =>
-        updateRepoFile(scheme.sourceFile, buildSchemeSource(scheme), token, scheme.name),
-      ),
-    );
+    for (const scheme of state.schemes) {
+      const nextSource = buildSchemeSource(scheme);
+      await updateRepoFile(scheme.sourceFile, nextSource, token, scheme.name);
+      scheme.raw = structuredClone(nextSource);
+    }
     state.originalSchemes = structuredClone(state.schemes);
     persistSchemeOverrides(state.originalSchemes);
     state.dirty = false;
