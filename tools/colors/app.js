@@ -2,6 +2,9 @@ const MANIFEST_PATH = "./data/schemes.manifest.json";
 const EXPORT_VERSION_KEY = "filo-colors-export-version";
 const SCHEME_OVERRIDES_KEY = "filo-colors-scheme-overrides";
 const APPLY_CODE = "UNITED";
+const GITHUB_OWNER = "ConnieLiang";
+const GITHUB_REPO = "Filo";
+const GITHUB_BRANCH = "main";
 
 const state = {
   schemes: [],
@@ -31,6 +34,7 @@ const elements = {
   generateConfirm: document.querySelector("#generate-confirm"),
   applyDialog: document.querySelector("#apply-dialog"),
   applyCodeInput: document.querySelector("#apply-code-input"),
+  applyTokenInput: document.querySelector("#apply-token-input"),
   applyCodeStatus: document.querySelector("#apply-code-status"),
   applyCancel: document.querySelector("#apply-cancel"),
   applyConfirm: document.querySelector("#apply-confirm"),
@@ -46,8 +50,10 @@ async function boot() {
   wireEvents();
   const manifest = await fetchJson(MANIFEST_PATH);
   const schemeFiles = manifest.schemeFiles || [];
-  const rawSchemes = await Promise.all(schemeFiles.map((file) => fetchJson(`./data/${file}`)));
-  state.schemes = applyPersistedOverrides(rawSchemes.map(normalizeScheme));
+  const rawSchemes = await Promise.all(
+    schemeFiles.map(async (file) => ({ file, raw: await fetchJson(`./data/${file}`) })),
+  );
+  state.schemes = applyPersistedOverrides(rawSchemes.map(({ file, raw }) => normalizeScheme(raw, file)));
   state.originalSchemes = structuredClone(state.schemes);
   state.selectedSchemeId = state.schemes[0]?.id ?? null;
   render();
@@ -89,17 +95,24 @@ function wireEvents() {
       elements.applyCodeStatus.textContent = "Incorrect code.";
       return;
     }
+    if (!elements.applyTokenInput.value.trim()) {
+      elements.applyTokenInput.dataset.invalid = "true";
+      elements.applyCodeStatus.hidden = false;
+      elements.applyCodeStatus.textContent = "GitHub token required.";
+      return;
+    }
 
-    state.originalSchemes = structuredClone(state.schemes);
-    persistSchemeOverrides(state.originalSchemes);
-    state.dirty = false;
-    syncActionState();
-    resetApplyFeedback();
-    elements.applyDialog.close();
+    void applyChangesToRepo(elements.applyTokenInput.value.trim());
   });
 
   elements.applyCodeInput.addEventListener("input", (event) => {
     event.target.value = event.target.value.toUpperCase();
+    event.target.dataset.invalid = "false";
+    elements.applyCodeStatus.hidden = true;
+    elements.applyCodeStatus.textContent = "";
+  });
+
+  elements.applyTokenInput.addEventListener("input", (event) => {
     event.target.dataset.invalid = "false";
     elements.applyCodeStatus.hidden = true;
     elements.applyCodeStatus.textContent = "";
@@ -160,6 +173,8 @@ function resetExportFeedback() {
 function resetApplyFeedback() {
   elements.applyCodeInput.value = "";
   elements.applyCodeInput.dataset.invalid = "false";
+  elements.applyTokenInput.value = "";
+  elements.applyTokenInput.dataset.invalid = "false";
   elements.applyCodeStatus.hidden = true;
   elements.applyCodeStatus.textContent = "";
 }
@@ -376,7 +391,7 @@ function getSelectedScheme() {
   return state.schemes.find((scheme) => scheme.id === state.selectedSchemeId) ?? null;
 }
 
-function normalizeScheme(rawScheme) {
+function normalizeScheme(rawScheme, sourceFile = "") {
   const colorSource = rawScheme.tokenReplacements?.color || rawScheme.color || {};
   const tokens = Object.entries(colorSource).map(([key, value]) => ({
     key,
@@ -395,6 +410,7 @@ function normalizeScheme(rawScheme) {
     purpose: rawScheme.purpose || "",
     semanticAliases: rawScheme.semanticAliases || defaultSemanticAliases(),
     applicationOrder: rawScheme.applicationOrder || [],
+    sourceFile,
     raw: structuredClone(rawScheme),
     tokens,
   };
@@ -474,6 +490,92 @@ function buildExportScheme(scheme, version = state.exportVersion) {
       },
     },
   };
+}
+
+function buildSchemeSource(scheme) {
+  const next = structuredClone(scheme.raw);
+  const color = {};
+
+  for (const token of scheme.tokens) {
+    color[token.key] = {
+      light: token.light,
+      dark: token.dark,
+      usage: token.usage,
+    };
+  }
+
+  if (next.tokenReplacements?.color) {
+    next.tokenReplacements.color = color;
+  } else {
+    next.color = color;
+  }
+
+  next.name = scheme.name;
+  next.version = scheme.version;
+  next.purpose = scheme.purpose;
+  next.semanticAliases = scheme.semanticAliases || defaultSemanticAliases();
+
+  return next;
+}
+
+async function applyChangesToRepo(token) {
+  elements.applyConfirm.disabled = true;
+  elements.applyCancel.disabled = true;
+  elements.applyCodeStatus.hidden = false;
+  elements.applyCodeStatus.textContent = "Updating shared data...";
+
+  try {
+    await Promise.all(
+      state.schemes.map((scheme) =>
+        updateRepoFile(scheme.sourceFile, buildSchemeSource(scheme), token, scheme.name),
+      ),
+    );
+    state.originalSchemes = structuredClone(state.schemes);
+    persistSchemeOverrides(state.originalSchemes);
+    state.dirty = false;
+    syncActionState();
+    resetApplyFeedback();
+    elements.applyDialog.close();
+  } catch (error) {
+    console.error(error);
+    elements.applyCodeStatus.textContent = error?.message || "Failed to update shared data.";
+  } finally {
+    elements.applyConfirm.disabled = false;
+    elements.applyCancel.disabled = false;
+  }
+}
+
+async function updateRepoFile(path, payload, token, schemeName) {
+  const encodedPath = encodeURIComponent(path).replaceAll("%2F", "/");
+  const endpoint = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${encodedPath}`;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    Accept: "application/vnd.github+json",
+  };
+
+  const current = await fetch(`${endpoint}?ref=${GITHUB_BRANCH}`, { headers });
+  if (!current.ok) {
+    throw new Error(`GitHub read failed for ${schemeName}.`);
+  }
+
+  const currentJson = await current.json();
+  const response = await fetch(endpoint, {
+    method: "PUT",
+    headers: {
+      ...headers,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      message: `Update ${schemeName} color scheme`,
+      content: utf8ToBase64(JSON.stringify(payload, null, 2)),
+      sha: currentJson.sha,
+      branch: GITHUB_BRANCH,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`GitHub write failed for ${schemeName}.`);
+  }
 }
 
 function parseColor(value) {
@@ -923,4 +1025,8 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
+}
+
+function utf8ToBase64(value) {
+  return btoa(unescape(encodeURIComponent(value)));
 }

@@ -119,8 +119,9 @@
       <form method="dialog" class="generate-dialog-card">
         <div class="generate-dialog-copy">
           <h3>Apply Changes</h3>
-          <p>Enter the confirmation code to save changes permanently.</p>
+          <p>Enter the confirmation code and a GitHub token with write access to update the shared site data.</p>
           <input id="apply-code-input" class="apply-code-input" type="text" autocomplete="off" spellcheck="false" />
+          <input id="apply-token-input" class="apply-code-input" type="password" autocomplete="off" spellcheck="false" placeholder="GitHub token" />
           <p id="apply-code-status" class="generate-dialog-status" hidden></p>
         </div>
         <div class="generate-dialog-actions">
