@@ -1,7 +1,7 @@
 {
   "name": "Mia",
   "target": "Cross-platform",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "purpose": "Pink romantic palette for Filo. Soft, affectionate, and gentle on the eyes while preserving token discipline across light and dark mode.",
   "notes": [
     "Mia uses the supplied pink ramp directly for light tokens 01 through 05.",
@@ -60,8 +60,8 @@
         "usage": "Secondary text, placeholders"
       },
       "08-text-tertiary": {
-        "light": "#D8B9C3",
-        "dark": "#80636F",
+        "light": "#D5D5D5",
+        "dark": "#414149",
         "usage": "Tertiary text, disabled, standard divider color"
       },
       "09-surface-tertiary": {
