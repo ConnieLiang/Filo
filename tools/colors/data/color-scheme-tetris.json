@@ -1,7 +1,7 @@
 {
   "name": "Tetris",
   "target": "Cross-platform",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "purpose": "Programming-friendly palette inspired by One Dark Pro. Built for engineers who prefer calm contrast, readable surfaces, and familiar syntax-theme accents.",
   "notes": [
     "Tetris uses One Dark Pro's dark-editor language as the anchor: charcoal surfaces, blue primary actions, purple/pink category accents, green success, yellow important states, and red errors.",
@@ -60,12 +60,12 @@
         "usage": "Secondary text, placeholders"
       },
       "08-text-tertiary": {
-        "light": "#A9B1BD",
-        "dark": "#5C6370",
+        "light": "#EDEDEE",
+        "dark": "#515661",
         "usage": "Tertiary text, disabled, standard divider color"
       },
       "09-surface-tertiary": {
-        "light": "#FAFBFC",
+        "light": "#F6F6F6",
         "dark": "#282C34",
         "usage": "Tertiary surface"
       },
