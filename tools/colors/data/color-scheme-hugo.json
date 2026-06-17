@@ -1,7 +1,7 @@
 {
   "name": "Hugo",
   "target": "Filo Desktop",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "purpose": "Soft Sepia Blue variant for Filo Desktop. Optimized for lower glare and a friendlier read.",
   "notes": [
     "Soft Sepia Blue was selected as the preferred direction.",
@@ -105,8 +105,8 @@
         "usage": "Subtle overlays"
       },
       "17-success-light": {
-        "light": "#E8F0E2",
-        "dark": "#344033",
+        "light": "rgba(118, 149, 92, 0.12)",
+        "dark": "rgba(140, 171, 114, 0.12)",
         "usage": "Success backgrounds"
       },
       "18-success": {
@@ -120,13 +120,13 @@
         "usage": "Warning states"
       },
       "20-error-light": {
-        "light": "#F7E8E6",
-        "dark": "#462D2C",
+        "light": "rgba(207, 106, 105, 0.12)",
+        "dark": "rgba(175, 87, 87, 0.12)",
         "usage": "Error backgrounds"
       },
       "21-purple-light": {
-        "light": "#E7E2F1",
-        "dark": "#B8B0CC",
+        "light": "rgba(124, 115, 158, 0.12)",
+        "dark": "rgba(150, 141, 182, 0.12)",
         "usage": "Purple accent light"
       },
       "22-purple": {
@@ -135,8 +135,8 @@
         "usage": "Purple accent"
       },
       "23-pink-light": {
-        "light": "#F3E0E3",
-        "dark": "#D9BCC4",
+        "light": "rgba(185, 122, 136, 0.12)",
+        "dark": "rgba(203, 146, 160, 0.12)",
         "usage": "Pink accent light"
       },
       "24-pink": {
