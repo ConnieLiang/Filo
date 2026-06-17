@@ -1,7 +1,7 @@
 {
   "name": "Ophelia",
   "target": "Filo Desktop",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "purpose": "Warm Sage variant for Filo Desktop. Tinted, classic, and easy on the eyes.",
   "notes": [
     "Warm Sage introduces a softer green cast without breaking the low-noise Desktop structure.",
@@ -105,8 +105,8 @@
         "usage": "Subtle overlays"
       },
       "17-success-light": {
-        "light": "#DFF2DB",
-        "dark": "#2D4034",
+        "light": "rgba(125, 190, 107, 0.12)",
+        "dark": "rgba(137, 197, 118, 0.12)",
         "usage": "Success backgrounds"
       },
       "18-success": {
@@ -120,13 +120,13 @@
         "usage": "Warning states"
       },
       "20-error-light": {
-        "light": "#F8E7E8",
-        "dark": "#48292D",
+        "light": "rgba(255, 109, 115, 0.12)",
+        "dark": "rgba(224, 109, 115, 0.12)",
         "usage": "Error backgrounds"
       },
       "21-purple-light": {
-        "light": "#D6D5FC",
-        "dark": "#B4B2EA",
+        "light": "rgba(121, 119, 246, 0.12)",
+        "dark": "rgba(151, 148, 234, 0.12)",
         "usage": "Purple accent light"
       },
       "22-purple": {
@@ -135,8 +135,8 @@
         "usage": "Purple accent"
       },
       "23-pink-light": {
-        "light": "#FADEFE",
-        "dark": "#E5BADE",
+        "light": "rgba(236, 144, 248, 0.12)",
+        "dark": "rgba(208, 136, 219, 0.12)",
         "usage": "Pink accent light"
       },
       "24-pink": {
