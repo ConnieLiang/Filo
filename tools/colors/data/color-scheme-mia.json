@@ -1,7 +1,7 @@
 {
   "name": "Mia",
   "target": "Cross-platform",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "purpose": "Pink romantic palette for Filo. Soft, affectionate, and gentle on the eyes while preserving token discipline across light and dark mode.",
   "notes": [
     "Mia uses the supplied pink ramp directly for light tokens 01 through 05.",
@@ -105,8 +105,8 @@
         "usage": "Subtle overlays"
       },
       "17-success-light": {
-        "light": "#E8F3E0",
-        "dark": "#2C3E31",
+        "light": "rgba(117, 180, 70, 0.12)",
+        "dark": "rgba(145, 196, 120, 0.12)",
         "usage": "Success backgrounds"
       },
       "18-success": {
@@ -120,13 +120,13 @@
         "usage": "Warning states"
       },
       "20-error-light": {
-        "light": "#FFE7EB",
-        "dark": "#4F2430",
+        "light": "rgba(237, 73, 104, 0.12)",
+        "dark": "rgba(239, 100, 124, 0.12)",
         "usage": "Error backgrounds"
       },
       "21-purple-light": {
-        "light": "#EDE3F4",
-        "dark": "#C9A8DB",
+        "light": "rgba(158, 109, 179, 0.12)",
+        "dark": "rgba(184, 141, 206, 0.12)",
         "usage": "Purple accent light"
       },
       "22-purple": {
@@ -135,8 +135,8 @@
         "usage": "Purple accent"
       },
       "23-pink-light": {
-        "light": "#FFE5F2",
-        "dark": "#F0B5D4",
+        "light": "rgba(224, 79, 134, 0.12)",
+        "dark": "rgba(234, 114, 159, 0.12)",
         "usage": "Pink accent light"
       },
       "24-pink": {
