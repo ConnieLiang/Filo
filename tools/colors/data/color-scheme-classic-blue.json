@@ -1,7 +1,7 @@
 {
   "name": "Classic Blue",
   "target": "Filo Desktop",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "purpose": "Baseline Filo Desktop palette derived from the current shared design tokens.",
   "notes": [
     "This is the current production-oriented blue system from filo-design/tokens.json.",
@@ -105,7 +105,7 @@
         "usage": "Subtle overlays"
       },
       "17-success-light": {
-        "light": "#E8F5CE",
+        "light": "#7EBA021F",
         "dark": "#E8F5CE",
         "usage": "Success backgrounds"
       },
