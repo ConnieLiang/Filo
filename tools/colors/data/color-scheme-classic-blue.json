@@ -1,7 +1,7 @@
 {
   "name": "Classic Blue",
   "target": "Filo Desktop",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "purpose": "Baseline Filo Desktop palette derived from the current shared design tokens.",
   "notes": [
     "This is the current production-oriented blue system from filo-design/tokens.json.",
@@ -106,7 +106,7 @@
       },
       "17-success-light": {
         "light": "#7EBA021F",
-        "dark": "#E8F5CE",
+        "dark": "rgba(126, 186, 2, 0.12)",
         "usage": "Success backgrounds"
       },
       "18-success": {
@@ -120,13 +120,13 @@
         "usage": "Warning states"
       },
       "20-error-light": {
-        "light": "#FEE9EB",
-        "dark": "#461D21",
+        "light": "rgba(239, 74, 104, 0.12)",
+        "dark": "rgba(190, 66, 77, 0.12)",
         "usage": "Error backgrounds"
       },
       "21-purple-light": {
-        "light": "#E8E5FF",
-        "dark": "#B4AEDC",
+        "light": "rgba(100, 80, 249, 0.12)",
+        "dark": "rgba(127, 110, 255, 0.12)",
         "usage": "Purple accent light"
       },
       "22-purple": {
@@ -135,8 +135,8 @@
         "usage": "Purple accent"
       },
       "23-pink-light": {
-        "light": "#F6D4FF",
-        "dark": "#F6D4FF",
+        "light": "rgba(191, 62, 226, 0.12)",
+        "dark": "rgba(191, 62, 226, 0.12)",
         "usage": "Pink accent light"
       },
       "24-pink": {
