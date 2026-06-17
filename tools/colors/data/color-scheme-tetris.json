@@ -1,7 +1,7 @@
 {
   "name": "Tetris",
   "target": "Cross-platform",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "purpose": "Programming-friendly palette inspired by One Dark Pro. Built for engineers who prefer calm contrast, readable surfaces, and familiar syntax-theme accents.",
   "notes": [
     "Tetris uses One Dark Pro's dark-editor language as the anchor: charcoal surfaces, blue primary actions, purple/pink category accents, green success, yellow important states, and red errors.",
@@ -105,8 +105,8 @@
         "usage": "Subtle overlays"
       },
       "17-success-light": {
-        "light": "#E7F2DC",
-        "dark": "#263F31",
+        "light": "rgba(118, 169, 87, 0.12)",
+        "dark": "rgba(141, 212, 111, 0.12)",
         "usage": "Success backgrounds"
       },
       "18-success": {
@@ -120,13 +120,13 @@
         "usage": "Warning states"
       },
       "20-error-light": {
-        "light": "#F7E4E6",
-        "dark": "#4A292E",
+        "light": "rgba(236, 108, 119, 0.12)",
+        "dark": "rgba(221, 88, 99, 0.12)",
         "usage": "Error backgrounds"
       },
       "21-purple-light": {
-        "light": "#ECE3F5",
-        "dark": "#D8A8E8",
+        "light": "rgba(166, 93, 194, 0.12)",
+        "dark": "rgba(198, 120, 221, 0.12)",
         "usage": "Purple accent light"
       },
       "22-purple": {
@@ -135,8 +135,8 @@
         "usage": "Purple accent"
       },
       "23-pink-light": {
-        "light": "#F5E0EA",
-        "dark": "#E6A2BE",
+        "light": "rgba(199, 107, 145, 0.12)",
+        "dark": "rgba(216, 137, 173, 0.12)",
         "usage": "Pink accent light"
       },
       "24-pink": {
